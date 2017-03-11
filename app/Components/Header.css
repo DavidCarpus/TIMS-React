@@ -1,0 +1,12 @@
+.logo {
+    max-height: 100%;
+    background: #00f;
+    background: rgba(255,255,255,0.6);
+}
+.navbar-brand > img {
+    display: inline-block;
+}
+.navbar-header {
+  background-color: #F16E10;
+  width: 100%;
+}

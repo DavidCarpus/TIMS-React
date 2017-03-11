@@ -4,3 +4,45 @@ body {
   font-family: sans-serif;
 }
 
+.basePage{
+    background-color: green;
+}
+
+main{
+    width: 80%;
+    margin-top: 80px;
+    /*background: #ccc;*/
+    float: left;
+    /*background-color: green;*/
+}
+:global(#main_notices) {
+    /*background-color: green;*/
+    display: inline-block;
+}
+
+:global(#navbar) {
+    height: 80px;
+    width: 100%;
+    background: #ccc;
+    position: fixed;
+    /*background-color: green;*/
+    display: inline-block;
+}
+
+:global(#eb2govBlock) {
+    /*background-color: blue;*/
+    display: inline-block;
+    
+}
+
+aside {
+      position: fixed;
+      width: 20%;
+      height: 100%;
+      float: left;
+      top: 80px;
+      right: 0px;
+      /*border: 1px solid red;*/
+      background-color: black;
+      color: white;
+}

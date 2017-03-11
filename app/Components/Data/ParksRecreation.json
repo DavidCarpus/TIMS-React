@@ -1,0 +1,25 @@
+{
+     "asideData":
+        [
+            {"desc": "Karen J. Brown, Recreation Director"},
+            {"desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+            {"desc": "Phone: <br/>(603) 652-4501 x8"},
+            {"desc": "Cell: <br/>(603) 834-0279"},
+            {"desc": "Email: <br/>recreation@miltonnh-us.com"}
+        ]
+        , "notices":
+        [
+            {"date": "2017-04-22","desc": "Camp Three Ponds Registration"},
+            {"date": "2017-06-10","desc": "Milton Summer Kick-Off"},
+            {"date": "2017-04-08","desc": "Easter Egg Hunt"},
+            {"date": "2017-03-16","desc": "Spaghetti Dinner"},
+            {"date": "2016-10-21","desc": " Softball Field Renovation Committee Draft"},
+            {"date": "2016-10-06","desc": " Softball Field Renovation Committee Agenda"},
+            {"date": "2016-10-27","desc": " Softball Field Renovation Committee Agenda"},
+            {"date": "2016-10-27","desc": " Softball Field Renovation Committee Draft"},
+            {"date": "2016-10-21","desc": " Softball Field Renovation Committee Agenda"},
+            {"date": "2016-10-06","desc": " Softball Field Renovation Committee Minutes"},
+            {"date": "2016-09-28","desc": " Softball Field Renovation Committee Agenda"},
+            {"date": "2016-09-28","desc": " Softball Field Renovation Committee Minutes"}
+        ]
+}

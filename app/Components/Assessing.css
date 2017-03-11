@@ -1,0 +1,9 @@
+.onlineAssessmentButton {
+    background-color: blue;
+    color: white;
+    width: 200px;
+    font-size: 4vmin;
+    text-align: center;
+    border-radius: 10px;
+    background: radial-gradient(blue, grey);
+}

@@ -1,0 +1,8 @@
+.mainNotice {
+    width: 50%;
+    min-height: 50px;
+    display: inline-block;
+    float: left;
+    border: 2px solid black;
+    /*background-color: blue;*/
+}

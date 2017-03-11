@@ -5,6 +5,28 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
+const bootstrapEntryPoints = require('./webpack.bootstrap.config.js');
+
+// eslint-disable-next-line no-console
+
+exports.bootstrap = function(TARGET) {
+    // console.log(`=> bootstrap-loader configuration: ${TARGET}`);
+    const entry = {};
+    // entry[bootstrapEntryPoints.dev] = options.entries;
+    if (TARGET == 'build') {
+        entry[bootstrapEntryPoints.prod] = bootstrapEntryPoints.prod;
+        console.log(`=> bootstrap-loader configuration: ${bootstrapEntryPoints.prod}`);
+    } else {
+        entry[bootstrapEntryPoints.dev] = bootstrapEntryPoints.dev;
+        console.log(`=> bootstrap-loader configuration: ${bootstrapEntryPoints.dev}`);
+    }
+
+    return {
+      // Define an entry point needed for splitting.
+      entry: entry,
+      }
+  }
+
 exports.notifications = function(options) {
   return {
     plugins: [
@@ -187,7 +209,18 @@ exports.setupCSS = function(paths) {
             {
               test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
               loader: "url-loader?limit=10000&mimetype=image/svg+xml"
-            }
+          },
+           {
+               test: /\.scss$/,
+               loader: "style!css!autoprefixer!sass"
+           },
+
+            // {
+            //   // When you encounter images, compress them with image-webpack (wrapper around imagemin)
+            //   // and then inline them as data64 URLs
+            //   test: /\.(png|jpg|svg)/,
+            //   loaders: ['url', 'image-webpack'],
+            // },
       ]
     }
   };
@@ -254,6 +287,11 @@ exports.extractCSS = function(paths) {
         {
           test: /\.css$/,
           loader: ExtractTextPlugin.extract('style', 'css'),
+          include: paths
+      },
+        {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract('style', 'css!sass'),
           include: paths
         }
       ]
