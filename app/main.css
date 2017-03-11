@@ -12,7 +12,7 @@ main{
     width: 80%;
     margin-top: 80px;
     /*background: #ccc;*/
-    float: left;
+    float: right;
     /*background-color: green;*/
 }
 aside {
@@ -21,22 +21,30 @@ aside {
       height: 100%;
       float: left;
       top: 80px;
-      right: 0px;
+      left: 0px;
       /*border: 1px solid red;*/
       background-color: black;
       color: white;
+      text-align: left;
 }
 
 :global(#main_notices) {
     /*background-color: green;*/
     display: inline-block;
+    width: 80%;
 }
-
+:global(#mainScreen) {
+    /*background-color: green;*/
+    margin: 10px 30px;
+    display: inline-block;
+    width: 80%;
+}
 :global(#navbar) {
     height: 80px;
     width: 100%;
     background: #ccc;
     position: fixed;
+    color: black;
     /*background-color: green;*/
     display: inline-block;
 }

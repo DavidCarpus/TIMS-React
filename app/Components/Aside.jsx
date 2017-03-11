@@ -19,15 +19,16 @@ class AsideItem extends React.Component {
 export default class MainAside extends React.Component {
     render() {
         var recentEvents = this.props.data
-        // var list = recentEvents.map((element, index) =>
-        //     <AsideItem key={index} item={element} />
-        //     )
+        var list = ''
+        if ('data' in this.props && recentEvents.length > 0) {
+            list = recentEvents.map((element, index) =>
+                <AsideItem key={index} item={element} />
+                )
+        }
         return (
             <aside className="primary-aside">
             <ul>
-                {recentEvents.map((element, index) =>
-                    <AsideItem key={index} item={element} />
-                    )}
+                {list}
 
             </ul>
 
@@ -35,3 +36,8 @@ export default class MainAside extends React.Component {
         );
     }
 }
+/*
+{recentEvents.map((element, index) =>
+    <AsideItem key={index} item={element} />
+    )}
+*/

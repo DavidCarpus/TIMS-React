@@ -5,17 +5,14 @@ import styles from './MainNotices.css'
 
 class MainNotice extends React.Component {
     render(){
-        var url=this.props.notice.link;
-        // var dump=JSON.stringify(this.props.notice);
-        // var dump='Dump';
-        var lnk = ''
-        if (url.length == 0 ){
+        // var url=this.props.notice.link;
+        var lnk = this.props.notice.link || ''
+        if (lnk.length == 0 ){
             lnk = (<p>{this.props.notice.shortDesc}</p>)
-        }
-        else if (url.startsWith('http')) {
-            lnk = (<a href={url}>{this.props.notice.shortDesc}</a>)
+        } else if (lnk.startsWith('http')) {
+            lnk = (<a href={lnk}>{this.props.notice.shortDesc}</a>)
         } else {
-            lnk = (<Link to={url}>{this.props.notice.shortDesc}</Link >)
+            lnk = (<Link to={lnk}>{this.props.notice.shortDesc}</Link >)
         }
         return (
             <div className={ styles.mainNotice }>

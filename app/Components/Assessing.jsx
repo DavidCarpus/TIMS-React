@@ -29,7 +29,7 @@ The Assessing Department is charged by State law with discovering, describing, a
     <li>Provide assistance to other departments as needed </li>
 </ul>
 
-<div  style={{width:'300px', display:'inline-block'}}>
+<div  style={{width:'48%', display:'inline-block'}}>
     <a href='http://data.avitarassociates.com/logondirect.aspx?usr=milton&pwd=milton'>
         <div className={styles.onlineAssessmentButton}>Assessment Data Review Online</div>
     </a>

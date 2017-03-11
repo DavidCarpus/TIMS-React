@@ -1,13 +1,22 @@
 import React from 'react';
 import MainNotices from './MainNotices'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
-// import ReactDOM from 'react-dom';
+import Aside from './Aside'
+
+var asideData=[
+    {'desc': '2017 Town Observed Holidays'},
+    {'desc': 'NH Solar Garden Proposal for Lockhart Field'},
+    {'desc': 'Starting Thursday, July 28, 2016 there will be a Selectman at the Town Hall Thursday mornings from 8am to 8:30am available to address questions and concerns.'},
+    {'desc': 'Notice Letter From Metrocast '},
+    {'desc': 'Employment Opportunities & Committee Vacancies'}
+]
 
 export default class About extends React.Component {
 
 render() {
     return (
         <div id="mainScreen" style={{textAlign:'center'}}>
+            <Aside data={asideData}/>
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
             <p>Milton was incorporated in 1802 and is located in the Northeast section of
                 <a href='http://nhdeeds.com/strafford/StHome.html'> Strafford County.</a>

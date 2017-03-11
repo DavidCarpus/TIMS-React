@@ -14,7 +14,7 @@ class MenuLink extends React.Component {
         return (
             ( !lnk.startsWith('http')) ?
             <LinkContainer to={lnk}>
-                <MenuItem >{this.props.desc}</MenuItem>
+                <MenuItem className={styles.navItem}>{this.props.desc}</MenuItem>
             </LinkContainer>
             : <Navbar.Text>
                     <Navbar.Link href={lnk} target="_blank">{this.props.desc}</Navbar.Link>
@@ -59,7 +59,7 @@ export default class Menu extends React.Component {
     render(){
         const logo = {height: '80px'};
         return (
-            <Navbar id='navbar' collapseOnSelect={true}
+            <Navbar id='navbar' collapseOnSelect={true} bsStyle="custom-bootstrap-menu"
                 >
             <Navbar.Header>
                 <Navbar.Brand>
@@ -73,7 +73,8 @@ export default class Menu extends React.Component {
             </Navbar.Header>
             <Navbar.Collapse>
 
-            <Nav  >
+
+            <Nav  className={styles.myNavbar} >
                 <LinkContainer to="/about">
                     <NavItem eventKey={1} >About</NavItem>
                 </LinkContainer>
