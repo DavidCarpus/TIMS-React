@@ -5,6 +5,7 @@ import TaxMapForm  from './TaxMapForm'
 import styles from './Assessing.css'
 import Aside from './Aside'
 import data from './Data/CodeEnforcement.json'
+import layoutStyles from './MainLayout.css'
 
 var helpfulInformation = data.helpfulInformation
 var asideData = data.asideData
@@ -28,25 +29,27 @@ export default class CodeEnforcement extends React.Component {
 
 render() {
     return (
-        <div id="mainScreen">
-            <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
-            <CodeEnforcementAbout />
+        <div id="CodeEnforcement">
+            <div id="contentArea"  className={layoutStyles.contentArea}>
+                <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
+                <CodeEnforcementAbout />
 
-    <h2>Helpful Information</h2>
-        {helpfulInformation.map((link, index) =>
-            <div key={index}><a href={link.link}>{link.desc}</a><br/></div>
-            )}
+                <h2>Helpful Information</h2>
+                {helpfulInformation.map((link, index) =>
+                    <div key={index}><a href={link.link}>{link.desc}</a><br/></div>
+                )}
 
-    <h2>Permits</h2>
-        {permitData.map((link, index) =>
-            <div  key={index}><a href={link.link}>{link.desc}</a><br/></div>
-            )}
+                <h2>Permits</h2>
+                {permitData.map((link, index) =>
+                    <div  key={index}><a href={link.link}>{link.desc}</a><br/></div>
+                )}
 
-<br/><br/>
-<p>Permit Notice: Fees & Fines</p>
+                <br/><br/>
+                <p>Permit Notice: Fees & Fines</p>
 
-<Aside data={asideData}/>
-</div>
+                </div>
+                <Aside data={asideData}/>
+            </div>
     );
 }
 }

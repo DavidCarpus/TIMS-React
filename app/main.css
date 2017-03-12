@@ -1,52 +1,30 @@
+@value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "./Components/breakpoints.css";
+
+
 body {
   background-color: cornsilk;
 
   font-family: sans-serif;
 }
 
-.basePage{
-    background-color: green;
-}
+@media bp-iphone5{
+    p, h3{
+      font-size: 4vmin;
+    }
+    h2{
+      font-size: 6vmin;
+    }
 
-main{
-    width: 80%;
-    margin-top: 80px;
-    /*background: #ccc;*/
-    float: right;
-    /*background-color: green;*/
-}
-aside {
-      position: fixed;
-      width: 20%;
-      height: 100%;
-      float: left;
-      top: 80px;
-      left: 0px;
-      /*border: 1px solid red;*/
-      background-color: black;
-      color: white;
-      text-align: left;
-}
+    :global(#mainArea) li{
+      font-size: 3vmin;
+    }
+    :global(#mainArea) a{
+        font-size: 3vmin;
+    }
 
-:global(#main_notices) {
-    /*background-color: green;*/
-    display: inline-block;
-    width: 80%;
-}
-:global(#mainScreen) {
-    /*background-color: green;*/
-    margin: 10px 30px;
-    display: inline-block;
-    width: 80%;
-}
-:global(#navbar) {
-    height: 80px;
-    width: 100%;
-    background: #ccc;
-    position: fixed;
-    color: black;
-    /*background-color: green;*/
-    display: inline-block;
+    :global(#navbar) a{
+        font-size: 2vmin;
+    }
 }
 
 :global(#eb2govBlock) {

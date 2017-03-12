@@ -2,6 +2,7 @@ import React from 'react';
 import MainNotices from './MainNotices'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import Aside from './Aside'
+import layoutStyles from './MainLayout.css'
 
 var asideData=[
     {'desc': '2017 Town Observed Holidays'},
@@ -17,6 +18,8 @@ render() {
     return (
         <div id="mainScreen" style={{textAlign:'center'}}>
             <Aside data={asideData}/>
+            <div id="contentArea"  className={layoutStyles.contentArea}>
+
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
             <p>Milton was incorporated in 1802 and is located in the Northeast section of
                 <a href='http://nhdeeds.com/strafford/StHome.html'> Strafford County.</a>
@@ -34,6 +37,7 @@ render() {
             <p>More information about Milton can be found on <a href='http://en.wikipedia.org/wiki/Milton,_New_Hampshire'>Wikipedia.</a>
                 </p>
 
+            </div>
         </div>
     );
 }

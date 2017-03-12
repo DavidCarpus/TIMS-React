@@ -59,6 +59,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-loader": "^2.0.0-beta.22",
     "bootstrap-sass": "^3.3.7",
+    "ejs-loader": "^0.3.0",
     "exenv": "^1.2.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",

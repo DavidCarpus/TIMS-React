@@ -46,10 +46,19 @@ exports.indexTemplate = function(options) {
   return {
     plugins: [
       new HtmlWebpackPlugin({
-        template: require('html-webpack-template'),
+        //   template: require('html-webpack-template'),
+        template: 'index.ejs',
+        // filename: 'index.html',
+        styles: options.styles,
         title: options.title,
         appMountId: options.appMountId,
-        inject: false
+        inject: false,
+        meta: [
+        {
+          name: 'description',
+          content: 'A better default template for html-webpack-plugin.'
+        }
+        ],
       })
     ]
   };

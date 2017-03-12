@@ -32,7 +32,7 @@ env:
 
 # This gets loaded after bootstrap/variables is loaded
 # So you can refer to bootstrap variables
-# bootstrapCustomizations: ./app/assets/styles/bootstrap/customizations.scss
+bootstrapCustomizations: ./app/assets/styles/bootstrap/customizations.scss
 
 # With CSS Modules we load all application styles directly in React components
 # appStyles: ./app/styles/app.scss

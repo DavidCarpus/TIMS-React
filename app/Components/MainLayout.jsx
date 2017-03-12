@@ -1,23 +1,18 @@
 import React from 'react';
 import Menu from './Menu'
-import MainAside from './MainAside'
-// import ReactDOM from 'react-dom';
+import styles from './MainLayout.css'
 
 export default class MainLayout extends React.Component {
   render() {
     return (
-      <div className="app">
-        <header className="primary-header">
+      <div id="mainLayout" className={styles.mainLayout}>
+        <header id="primary-header"  className={styles.primaryHeader}>
             <Menu/>
         </header>
-        <main>
+        <main id="primaryArea"  className={styles.primaryArea}>
           {this.props.children}
         </main>
       </div>
     );
   }
 }
-
-// <li><Link to="/">Home</Link></li>
-// <li><Link to="/users">Users</Link></li>
-// <li><Link to="/widgets">Widgets</Link></li>

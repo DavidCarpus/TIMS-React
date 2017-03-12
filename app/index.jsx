@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './Components/Home';
-import MainScreen from './Components/MainScreen';
+import HomePage from './Components/HomePage';
 import MainLayout from './Components/MainLayout';
 import About from './Components/About';
 import Calendar from './Components/Calendar'
@@ -10,21 +9,18 @@ import CodeEnforcement from './Components/CodeEnforcement'
 import ParksRecreation from './Components/ParksRecreation'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
-// import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
-// var routerHistory = Router.browserHistory;
 var routerHistory = hashHistory;
 
 // if(process.env.NODE_ENV !== 'production') {
 //   React.Perf = require('react-addons-perf');
 // }
+// <Route component={Home} >
 
 ReactDOM.render(
 (
       <Router  onUpdate={() => window.scrollTo(0, 0)} history={routerHistory}>
         <Route component={MainLayout}>
-            <Route component={Home} >
-
-                <Route path="/" component={MainScreen} />
+                <Route path="/" component={HomePage} />
                 <Route path="/about" component={About} />
                 <Route path="/calendar" component={Calendar} />
 
@@ -34,7 +30,6 @@ ReactDOM.render(
                     <Route path="ParksRecreation" component={ParksRecreation} />
 
                     </Route>
-                </Route>
         </Route>
     </Router>
 ),

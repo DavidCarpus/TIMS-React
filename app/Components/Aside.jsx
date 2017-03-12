@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './Aside.css'
+import layoutStyles from './MainLayout.css'
 
 class AsideItem extends React.Component {
     createMarkup(){
@@ -26,10 +28,9 @@ export default class MainAside extends React.Component {
                 )
         }
         return (
-            <aside className="primary-aside">
+            <aside className={layoutStyles.primaryAside}>
             <ul>
                 {list}
-
             </ul>
 
         </aside>

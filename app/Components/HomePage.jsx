@@ -2,6 +2,7 @@ import React from 'react';
 import MainNotices from './MainNotices'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import Aside from './Aside'
+import layoutStyles from './MainLayout.css'
 // import ReactDOM from 'react-dom';
 
 var asideData=[
@@ -12,23 +13,26 @@ var asideData=[
     {'desc': 'Employment Opportunities & Committee Vacancies'}
 ]
 
-export default class MainScreen extends React.Component {
+export default class HomePage extends React.Component {
 
 render() {
     return (
-        <div id="mainScreen" style={{textAlign:'center'}}>
-            <Aside data={asideData}/>
+        <div id="homePage" style={{textAlign:'center'}}>
 
-            <h1 style={{textAlign:'center'}}>Welcome to the Town of Milton <br/>New Hampshire</h1>
-            <address style={{textAlign:'center'}}>
-            424 White Mountain Highway
-            P.O. Box 310
-            Milton, NH 03851
-        </address>
-            <p>603-652-4501</p>                
-            <MainNotices/>
-            <OnlinePaymentsBlock/>
-            <Aside data={asideData}/>
+            <div id="contentArea"  className={layoutStyles.contentArea}>
+                <h1 style={{textAlign:'center'}}>Welcome to the Town of Milton <br/>New Hampshire</h1>
+                <address style={{textAlign:'center'}}>
+                    424 White Mountain Highway
+                    P.O. Box 310
+                    Milton, NH 03851
+                </address>
+
+                <p>603-652-4501</p>
+
+                <MainNotices/>
+                <OnlinePaymentsBlock/>
+            </div>
+            <Aside data={asideData} className={layoutStyles.primaryAside}/>
 
         </div>
     );
