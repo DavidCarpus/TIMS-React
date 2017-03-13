@@ -1,9 +1,8 @@
 import React from 'react';
-import MainNotices from './MainNotices'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import Aside from './Aside'
+import NoticesList from './NoticesList'
 import layoutStyles from './MainLayout.css'
-// import ReactDOM from 'react-dom';
 
 var asideData=[
     {'desc': '2017 Town Observed Holidays'},
@@ -12,33 +11,30 @@ var asideData=[
     {'desc': 'Notice Letter From Metrocast '},
     {'desc': 'Employment Opportunities & Committee Vacancies'}
 ]
+import notices from './Data/Notices.json'
 
 export default class HomePage extends React.Component {
+    render() {
+        return (
+            <div id="homePage" >
 
-render() {
-    return (
-        <div id="homePage" style={{textAlign:'center'}}>
+                <div id="contentArea"  className={layoutStyles.contentArea}>
+                    <div style={{textAlign:'center'}}>
+                        <h1>Welcome to the Town of Milton <br/>New Hampshire</h1>
+                        <address >
+                        424 White Mountain Highway
+                        P.O. Box 310
+                        Milton, NH 03851
+                        </address>
+                        603-652-4501
+                    </div>
 
-            <div id="contentArea"  className={layoutStyles.contentArea}>
-                <h1 style={{textAlign:'center'}}>Welcome to the Town of Milton <br/>New Hampshire</h1>
-                <address style={{textAlign:'center'}}>
-                    424 White Mountain Highway
-                    P.O. Box 310
-                    Milton, NH 03851
-                </address>
+                    <NoticesList notices={notices.filter((notice)=> {return notice.mainpage})}/>
+                    <OnlinePaymentsBlock/>
+                </div>
+                <Aside data={asideData} className={layoutStyles.primaryAside}/>
 
-                <p>603-652-4501</p>
-
-                <MainNotices/>
-                <OnlinePaymentsBlock/>
             </div>
-            <Aside data={asideData} className={layoutStyles.primaryAside}/>
-
-        </div>
-    );
+        );
+    }
 }
-
-}
-
-// <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-// <br/>

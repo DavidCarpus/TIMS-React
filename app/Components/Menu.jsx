@@ -12,11 +12,10 @@ export default class Menu extends React.Component {
     logoLink = () => {
         return 'images/MiltonSeal.png'
     }
-    // bsStyle="inverse"
     render(){
         const logo = {height: '90px'};
         return (
-            <Navbar id='navbar' collapseOnSelect
+            <Navbar id='custom-bootstrap-menu' collapseOnSelect
                 >
             <Navbar.Header>
                 <Navbar.Brand>

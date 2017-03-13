@@ -43,12 +43,22 @@
         float: right;
         width: 100%;
         display: block;
-        background-color: red;
+        height: unset;
+        /*background-color: red;*/
         position: relative;
         left: unset;
     }
+    .primaryAside li{
+        font-size: 3vmin;
+    }
     .contentArea {
         width: 100%;
+    }
+    .contentArea a{
+        font-size: 3vmin;
+    }
+    .contentArea li{
+        font-size: 3vmin;
     }
 }
 

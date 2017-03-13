@@ -7,6 +7,10 @@ import Calendar from './Components/Calendar'
 import Assessing from './Components/Assessing'
 import CodeEnforcement from './Components/CodeEnforcement'
 import ParksRecreation from './Components/ParksRecreation'
+import CemeteryTrustees from './Components/CemeteryTrustees'
+import Planning from './Components/Planning'
+import PublicWorks from './Components/PublicWorks'
+import TransferStationRules from './Components/TransferStationRules'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
@@ -28,8 +32,16 @@ ReactDOM.render(
                     <Route path="Assessing" component={Assessing} />
                     <Route path="CodeEnforcement" component={CodeEnforcement} />
                     <Route path="ParksRecreation" component={ParksRecreation} />
+                    <Route path="Planning" component={Planning} />
+                    <Route path="PublicWorks" component={PublicWorks} />
+                    <Route path="TransferRules" component={TransferStationRules} />
+                </Route>
 
-                    </Route>
+                <Route path="BoardsAndCommittees"  >
+                        <Route path="CemeteryTrustees" component={CemeteryTrustees} />
+
+                        </Route>
+
         </Route>
     </Router>
 ),

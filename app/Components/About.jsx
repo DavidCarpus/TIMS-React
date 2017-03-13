@@ -1,6 +1,4 @@
 import React from 'react';
-import MainNotices from './MainNotices'
-import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import Aside from './Aside'
 import layoutStyles from './MainLayout.css'
 
@@ -17,7 +15,6 @@ export default class About extends React.Component {
 render() {
     return (
         <div id="mainScreen" style={{textAlign:'center'}}>
-            <Aside data={asideData}/>
             <div id="contentArea"  className={layoutStyles.contentArea}>
 
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
@@ -38,6 +35,8 @@ render() {
                 </p>
 
             </div>
+
+            <Aside data={asideData}/>
         </div>
     );
 }

@@ -8,5 +8,11 @@
         {"desc": "Phone: <br/>(603) 652-4501 x6"},
         {"desc": "Fax: <br/>(603) 652-4120"},
         {"desc": "E-Mail: <br/>assessing@miltonnh-us.com"}
+    ],
+    "documents":
+    [
+        {"date": "2009-01-01", "dateDesc": "2009 Assessment", "desc": "Listed By Location"},
+        {"date": "2009-01-02", "dateDesc": "2009 Assessment", "desc": "Listed By Owner"},
+        {"date": "2009-01-03", "dateDesc": "2009 Valid Sales", "desc": "Valid Sales"}
     ]
 }

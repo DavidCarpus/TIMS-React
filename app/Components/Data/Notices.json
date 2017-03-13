@@ -1,0 +1,62 @@
+[
+    {"id": 1,"mainpage": true,  "date": "2017-04-22", "dept":"pw",
+        "shortDesc": "Earth Day, Clean Up Day",
+        "link":"http://miltonnh-us.com/uploads/public_works_29_656022802.pdf","dateposted":""
+    },
+    {"id": 2,"mainpage": true,  "date": "2017-06-10", "dept":"pw",
+        "shortDesc": "Class V Roads posted with 8 ton weight limit",
+        "link":"http://miltonnh-us.com/uploads/public_works_29_4040727334.pdf","dateposted":""
+    },
+    {"id": 3,"mainpage": true,  "date": "2017-06-10", "dept":"police",
+        "shortDesc":"Rabies Clinic 3/18",
+          "link":"http://miltonnh-us.com/uploads/index_602_28535122.pdf"
+      },
+    {"id": 4,"mainpage": true, "date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Bid Notice: Project Paint Phase 2 Milton Free Public Library",
+       "link":"http://miltonnh-us.com/uploads/index_603_3386137334.pdf","dateposted":""
+   },
+    {"id": 5 ,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Class V Roads posted 8 Ton weight limit as of 2/22",
+         "link":"http://miltonnh-us.com/uploads/index_599_4040727334.pdf","dateposted":""
+     },
+    {"id": 6,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Milton Three Ponds Herbicide Treatment Meeting Information",
+        "link":"http://miltonnh-us.com/uploads/index_596_3412365711.pdf","dateposted":""
+    },
+    {"id": 7,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Warrant Articles",
+       "link":"http://miltonnh-us.com/uploads/index_592_3732066310.pdf","dateposted":""
+   },
+    {"id": 8,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Tax Comparison Chart for 2016",
+         "link":"http://miltonnh-us.com/uploads/index_566_2103534360.pdf","dateposted":""
+     },
+    {"id": 9,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"CIP Documents can be found on the Planning Board's Page",
+        "link":"http://miltonnh-us.com/planning_board.php","dateposted":""
+    },
+    {"id": 10,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+        "shortDesc":"Earth Day, PWD Clean Up Day",
+        "link":"http://miltonnh-us.com/uploads/index_601_656022802.pdf","dateposted":""
+    },
+    {"id": 11,"mainpage": true,"date": "2017-06-10", "dept":"pw",
+        "shortDesc":"Snow Removal Policy",
+       "link":"http://miltonnh-us.com/uploads/index_493_3851436379.pdf","dateposted":""
+   },
+   {"id": 12,"mainpage": true,  "date": "2017-06-10", "dept":"pw",
+       "shortDesc": "2017 Transfer Station Stickers Information",
+       "link":"http://miltonnh-us.com/uploads/transfer_68_250581410.pdf","dateposted":""
+   },
+   {"id": 13,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+       "shortDesc": "Solid Waste Ordinance",
+       "link":"http://miltonnh-us.com/uploads/transfer_59_2892924232.pdf","dateposted":""
+   },
+   {"id": 14,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+       "shortDesc": "The Town of Milton Offers Compost Bins for Sale",
+       "link":"http://miltonnh-us.com/uploads/transfer_59_3926278684.pdf","dateposted":""
+   },
+   {"id": 15,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+       "shortDesc": "The Town of Milton is a member of the Northeast Resource Recovery (NRRA)",
+       "link":"http://www.nrra.net/","dateposted":""
+   }
+]

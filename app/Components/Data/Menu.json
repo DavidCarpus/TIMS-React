@@ -7,7 +7,7 @@
     {"desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"    },
     {"desc": "Parks & Recreation",        "link":"ParksRecreation"    },
     {"desc": "Planning and Land Use",        "link":"Planning"    },
-    {"desc": "Police" },
+    {"desc": "Police" ,        "link":"http://miltonnhpd.com/"},
     {"desc": "Public Works",        "link":"PublicWorks"    },
     {"desc": "Sewer Department",        "link":"Sewer"    },
     {"desc": "Tax Collector/Town Clerk",        "link":"TownClerk"    },

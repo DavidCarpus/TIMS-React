@@ -14,14 +14,6 @@ body {
     h2{
       font-size: 6vmin;
     }
-
-    :global(#mainArea) li{
-      font-size: 3vmin;
-    }
-    :global(#mainArea) a{
-        font-size: 3vmin;
-    }
-
     :global(#navbar) a{
         font-size: 2vmin;
     }
@@ -30,7 +22,6 @@ body {
 :global(#eb2govBlock) {
     /*background-color: blue;*/
     display: inline-block;
-
 }
 
 :global(.Dropdown-root) {

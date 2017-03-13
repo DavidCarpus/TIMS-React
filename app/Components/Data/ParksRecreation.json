@@ -21,5 +21,18 @@
             {"date": "2016-10-06","desc": " Softball Field Renovation Committee Minutes"},
             {"date": "2016-09-28","desc": " Softball Field Renovation Committee Agenda"},
             {"date": "2016-09-28","desc": " Softball Field Renovation Committee Minutes"}
+        ],
+        "gazette":
+        [
+            {"date": "2016-03-01","desc": "February/March 2016", "link":"parks_297_738096610.pdf"},
+            {"date": "2015-11-01","desc": "November 2015", "link":"parks_292_2482151554.pdf"},
+            {"date": "2015-10-01","desc": "October 2015", "link":"parks_286_2389011159.pdf"},
+            {"date": "2015-04-01","desc": "April 2015", "link":"parks_278_3667448753.pdf"},
+            {"date": "2015-02-01","desc": "February 2015", "link":"parks_264_1711322083.pdf"},
+            {"date": "2014-12-01","desc": "November/December 2014", "link":"parks_261_915835459.pdf"},
+            {"date": "2014-10-01","desc": "October 2014", "link":"parks_254_1502079631.pdf"},
+
+            {"date": "2001-11-01","desc": "Older?", "link":"URLURLURLURL.pdf"}
         ]
+
 }

@@ -1,0 +1,15 @@
+{
+     "asideData":
+        [
+            {"desc": "Public Works Dept. Phone: 603-652-9891"},
+            {"desc": "Transfer Station Phone: 603-652-4125"},
+            {"desc": "Highway Department Phone: 603-652-9891"},
+            {"desc": "Government Buildings<br/>Willis 'Bill' Whitten<br/>Secretary: Shawn Donell<br/>Phone: 603-652-9891"}
+        ]
+        ,
+        "notices":
+        [
+            {"date": "2017-04-22","desc": "Earth Day, Clean Up Day"},
+            {"date": "2017-06-10","desc": "Class V Roads posted with 8 ton weight limit"}
+        ]
+}
