@@ -58,5 +58,21 @@
    {"id": 15,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
        "shortDesc": "The Town of Milton is a member of the Northeast Resource Recovery (NRRA)",
        "link":"http://www.nrra.net/","dateposted":""
+   },
+   {"id": 16,"mainpage": false,  "date": "2017-03-24", "dept":"townclerk",
+       "shortDesc": "Town Clerk/Tax Collector's Office Closed 3.24.17 ",
+       "link":"http://miltonnh-us.com/uploads/taxes_245_523043089.pdf","dateposted":""
+   },
+   {"id": 17,"mainpage": false,  "date": "2017-03-18", "dept":"townclerk",
+       "shortDesc": "Rabies Clinic 3/18",
+       "link":"http://miltonnh-us.com/uploads/taxes_241_28535122.pdf","dateposted":""
+   },
+   {"id": 18,"mainpage": false,  "date": "2017-03-18", "dept":"townclerk",
+       "shortDesc": "The Town Clerk is now Registering Dogs for 2017",
+       "dateposted":""
+   },
+   {"id": 19,"mainpage": false,  "date": "2017-03-18", "dept":"townclerk",
+       "shortDesc": "2017 Saturday Office Hours",
+       "link":"http://miltonnh-us.com/uploads/taxes_228_2408480422.pdf","dateposted":""
    }
 ]

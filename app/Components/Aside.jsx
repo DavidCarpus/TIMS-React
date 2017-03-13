@@ -13,7 +13,7 @@ class AsideItem extends React.Component {
         // var desc = this.props.item.desc
         var desc = {__html: this.props.item.desc}
         return (
-            <li dangerouslySetInnerHTML={desc} ></li>
+            <li ><p dangerouslySetInnerHTML={desc} ></p></li>
         );
     }
 }

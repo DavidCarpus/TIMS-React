@@ -9,7 +9,7 @@ body {
 
 @media bp-iphone5{
     p, h3{
-      font-size: 4vmin;
+      font-size: 3vmin;
     }
     h2{
       font-size: 6vmin;

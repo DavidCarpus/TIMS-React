@@ -1,0 +1,12 @@
+{
+    "asideData":
+    [
+        {"desc": "Operator<br/>Dale Sprague"},
+        {"desc": "Secretary<br/>Dana Crossley<br/>603-652-4501 ext 5"}
+    ],
+    "documents":
+    [
+        {"date": "2009-01-01",  "desc": "Sewer Ordinance"},
+        {"date": "2009-01-03",  "desc": "Sewer Connection Permit"}
+    ]
+}

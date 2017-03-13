@@ -1,0 +1,16 @@
+{
+    "asideData":
+    [
+        {"desc": "P.O Box 180 424 White Mountain Highway<br/>Milton, NH 03851"},
+        {"desc": "Hours<br/>Mon, Tues, Wed, Fri<br/>8:30am-4:00pm<br/>Thurs - 8:30am-6:30pm <br/>Last Sat of the Month<br/>8am-12pm<br/>Except Holiday weekends"},
+        {"desc": "Town Clerk / Tax Collector<br/>Michelle Beauchamp<br/>townclerktaxcollector@miltonnh-us.com<br/>603-652-4501 x4"},
+        {"desc": "Deputy Town Clerks / <br/>Assistant Tax Collectors<br/>603-652-4501 x3<br/><br/> Diane DuBois<br/>deputytc@miltonnh-us.com<br/><br/>Diane DuBois<br/>deputytc@miltonatc@metrocast.net"},
+        {"desc": "Assistant Town Clerk / <br/>Tax Collector<br/>Jinette Sturman"},
+        {"desc": "Fax<br/>603-652-4120"}
+    ],
+    "documents":
+    [
+        {"date": "2009-01-01",  "desc": "Doc 1"},
+        {"date": "2009-01-03",  "desc": "Doc 2"}
+    ]
+}
