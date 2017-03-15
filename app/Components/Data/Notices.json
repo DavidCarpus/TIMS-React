@@ -1,11 +1,7 @@
 [
-    {"id": 1,"mainpage": true,  "date": "2017-04-22", "dept":"pw",
+    {"id": 1,"mainpage": true,  "date": "2017-04-22", "dept":"PublicWorks",
         "shortDesc": "Earth Day, Clean Up Day",
         "link":"http://miltonnh-us.com/uploads/public_works_29_656022802.pdf","dateposted":""
-    },
-    {"id": 2,"mainpage": true,  "date": "2017-06-10", "dept":"pw",
-        "shortDesc": "Class V Roads posted with 8 ton weight limit",
-        "link":"http://miltonnh-us.com/uploads/public_works_29_4040727334.pdf","dateposted":""
     },
     {"id": 3,"mainpage": true,  "date": "2017-06-10", "dept":"police",
         "shortDesc":"Rabies Clinic 3/18",
@@ -15,7 +11,7 @@
         "shortDesc":"Bid Notice: Project Paint Phase 2 Milton Free Public Library",
        "link":"http://miltonnh-us.com/uploads/index_603_3386137334.pdf","dateposted":""
    },
-    {"id": 5 ,"mainpage": true,"date": "2017-06-10", "dept":"UNK",
+    {"id": 5 ,"mainpage": true,"date": "2017-06-10", "dept":"PublicWorks",
         "shortDesc":"Class V Roads posted 8 Ton weight limit as of 2/22",
          "link":"http://miltonnh-us.com/uploads/index_599_4040727334.pdf","dateposted":""
      },
@@ -39,23 +35,23 @@
         "shortDesc":"Earth Day, PWD Clean Up Day",
         "link":"http://miltonnh-us.com/uploads/index_601_656022802.pdf","dateposted":""
     },
-    {"id": 11,"mainpage": true,"date": "2017-06-10", "dept":"pw",
+    {"id": 11,"mainpage": true,"date": "2017-06-10", "dept":"PublicWorks",
         "shortDesc":"Snow Removal Policy",
        "link":"http://miltonnh-us.com/uploads/index_493_3851436379.pdf","dateposted":""
    },
-   {"id": 12,"mainpage": true,  "date": "2017-06-10", "dept":"pw",
+   {"id": 12,"mainpage": true,  "date": "2017-06-10", "dept":"PublicWorks",
        "shortDesc": "2017 Transfer Station Stickers Information",
        "link":"http://miltonnh-us.com/uploads/transfer_68_250581410.pdf","dateposted":""
    },
-   {"id": 13,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+   {"id": 13,"mainpage": false,  "date": "2017-06-10", "dept":"PublicWorks",
        "shortDesc": "Solid Waste Ordinance",
        "link":"http://miltonnh-us.com/uploads/transfer_59_2892924232.pdf","dateposted":""
    },
-   {"id": 14,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+   {"id": 14,"mainpage": false,  "date": "2017-06-10", "dept":"PublicWorks",
        "shortDesc": "The Town of Milton Offers Compost Bins for Sale",
        "link":"http://miltonnh-us.com/uploads/transfer_59_3926278684.pdf","dateposted":""
    },
-   {"id": 15,"mainpage": false,  "date": "2017-06-10", "dept":"pw",
+   {"id": 15,"mainpage": false,  "date": "2017-06-10", "dept":"PublicWorks",
        "shortDesc": "The Town of Milton is a member of the Northeast Resource Recovery (NRRA)",
        "link":"http://www.nrra.net/","dateposted":""
    },
@@ -74,5 +70,29 @@
    {"id": 19,"mainpage": false,  "date": "2017-03-18", "dept":"townclerk",
        "shortDesc": "2017 Saturday Office Hours",
        "link":"http://miltonnh-us.com/uploads/taxes_228_2408480422.pdf","dateposted":""
-   }
+   },
+   {"id": 19,"mainpage": false, "date": "2017-04-22",
+       "shortDesc": "Camp Three Ponds Registration", "dept":"ParksRecreation"},
+   {"id": 20,"mainpage": false, "date": "2017-06-10",
+       "shortDesc": "Milton Summer Kick-Off", "dept":"ParksRecreation"},
+   {"id": 21,"mainpage": false, "date": "2017-04-08",
+       "shortDesc": "Easter Egg Hunt", "dept":"ParksRecreation"},
+   {"id": 22,"mainpage": false, "date": "2017-03-16",
+       "shortDesc": "Spaghetti Dinner", "dept":"ParksRecreation"},
+   {"id": 23,"mainpage": false, "date": "2016-10-21",
+       "shortDesc": " Softball Field Renovation Committee Draft", "dept":"ParksRecreation"},
+   {"id": 24,"mainpage": false, "date": "2016-10-06",
+       "shortDesc": " Softball Field Renovation Committee Agenda", "dept":"ParksRecreation"},
+   {"id": 25,"mainpage": false, "date": "2016-10-27",
+       "shortDesc": " Softball Field Renovation Committee Agenda", "dept":"ParksRecreation"},
+   {"id": 26,"mainpage": false, "date": "2016-10-27",
+       "shortDesc": " Softball Field Renovation Committee Draft", "dept":"ParksRecreation"},
+   {"id": 27,"mainpage": false, "date": "2016-10-21",
+       "shortDesc": " Softball Field Renovation Committee Agenda", "dept":"ParksRecreation"},
+   {"id": 28,"mainpage": false, "date": "2016-10-06",
+       "shortDesc": " Softball Field Renovation Committee Minutes", "dept":"ParksRecreation"},
+   {"id": 29,"mainpage": false, "date": "2016-09-28",
+       "shortDesc": " Softball Field Renovation Committee Agenda", "dept":"ParksRecreation"},
+   {"id": 30,"mainpage": false, "date": "2016-09-28",
+       "shortDesc": " Softball Field Renovation Committee Minutes", "dept":"ParksRecreation"}
 ]

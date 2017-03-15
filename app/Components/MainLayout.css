@@ -7,6 +7,7 @@
 .primaryHeader{
     position: fixed;
     z-index: 100;
+    width: 100%;
     /*background-color: blue;*/
     top: 0px;
 }
@@ -21,36 +22,18 @@
 
 .contentArea {
     /*background-color: green;*/
-    width: 80%;
+    width: 75%;
+    max-width: 80%;
     float: right;
     padding: 0 2%;
 }
-
-.primaryAside {
-      position: fixed;
-      width: 20%;
-      height: 100%;
-      float: left;
-      left: 0px;
-      padding:  15px 10px; /* Top, Bottom */
-      background-color: black;
-      color: white;
-      text-align: left;
+@media  (max-device-width: 840px){
+    .primaryArea {
+        margin-top: 120px;
+    }
 }
 
 @media bp-iphone5 {
-    .primaryAside {
-        float: right;
-        width: 100%;
-        display: block;
-        height: unset;
-        /*background-color: red;*/
-        position: relative;
-        left: unset;
-    }
-    .primaryAside li{
-        font-size: 3vmin;
-    }
     .contentArea {
         width: 100%;
     }
@@ -60,19 +43,4 @@
     .contentArea li{
         font-size: 3vmin;
     }
-}
-
-.primaryAside ul li:after {
-    content: "";
-    display: block;
-    height: 1px;
-    width: 80%;
-    margin: 10px;
-    background: white;
-    list-style-type: none;
-}
-.primaryAside ul  {
-    list-style-type: none;
-    display: inline-block;
-    padding-left:  0px;
 }

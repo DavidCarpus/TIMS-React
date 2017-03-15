@@ -4,11 +4,9 @@ import layoutStyles from './MainLayout.css'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import styles from './TownClerk.css'
 import NoticesList from './NoticesList'
+import DocumentList  from './DocumentList'
 
- import data from './Data/TownClerk.json'
  import notices from './Data/Notices.json'
- var asideData =  data.asideData
-// var documents = data.documents
 
 export default class TownClerk extends React.Component {
     render() {
@@ -16,15 +14,22 @@ export default class TownClerk extends React.Component {
             <div id='TownClerk'>
                 <div id="contentArea"  className={layoutStyles.contentArea}>
                     <h1 style={{textAlign:'center'}}>Tax Collector/Town Clerk</h1>
-                    <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
-
-                    <OnlinePaymentsBlock/>
 
                     <NoticesList notices={notices.filter((notice)=> {return notice.dept == 'townclerk'})}/>
 
+                    <OnlinePaymentsBlock/>
+                    <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
+
+                        <DocumentList
+                            groupName='TownClerk'
+                            />
+
                 </div>
-                <Aside data={asideData}/>
+                <Aside
+                    groupName='TownClerk'
+                    />
             </div>
         )
     }
 }
+// data={asideData}

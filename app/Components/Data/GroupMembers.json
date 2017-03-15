@@ -1,0 +1,38 @@
+[
+{ "groupName":"BudgetCommittee", "name":"Caitlin Magargee - Elected"	 ,"term":"2019"},
+{ "groupName":"BudgetCommittee", "name":"Thomas McDougall - Elected"	 ,"term":"2019"},
+{ "groupName":"BudgetCommittee", "name":"Larry Brown Chairman- Elected"	 ,"term":"2018"} ,
+ { "groupName":"BudgetCommittee", "name":"Bob Carrier - Appointed till 2017"	 ,"term":"2018"},
+{ "groupName":"BudgetCommittee", "name":"Maureen Steer - Elected"	 ,"term":"2017"},
+{ "groupName":"BudgetCommittee", "name":"Dennis Wing - Elected"	,"term":"2017"},
+{ "groupName":"BudgetCommittee", "name":"Lue Synder - School  Board Representative"	,"term":"2016"},
+{ "groupName":"BudgetCommittee", "name":"Mike Beaulieu - Selectmen's Representative"	 ,"term":"2016"},
+{ "groupName":"BudgetCommittee", "name":"Stan Nadeau- Water District Representative",	"term":"2016"}
+,
+{ "groupName":"ConservationCommittee", "office":"Chairman",	"name":"Cynthia Wyatt",	"term":"2017"},
+{ "groupName":"ConservationCommittee", "office":"Vice Chairman",	"name":"Eric Knapp",	"term":"2019"},
+{ "groupName":"ConservationCommittee", "office":"Treasurer",	"name":"Steve Panish",	"term":"2018"},
+{ "groupName":"ConservationCommittee", "office":"Commissioner",	"name":"Paul Blanc",	"term":"2017"},
+{ "groupName":"ConservationCommittee", "office":"Commissioner",	"name":"Karen Golab",	"term":"2018"},
+{ "groupName":"ConservationCommittee", "office":"Alternate",	"name":"Wayne Slyvester",	"term":"2020"},
+{ "groupName":"ConservationCommittee", "office":"Alternate",	"name":"Virginia Long",	"term":"2020"},
+{ "groupName":"ConservationCommittee", "office":"Alternate",	"name":"Barry Carr",	"term":"2018"}
+,
+{ "groupName":"EconomicDevelopment", "name":"Bob Bordeau",	"term":"2015"},
+{ "groupName":"EconomicDevelopment", "name":"Cubbi Lirette",	"term":"2016"},
+{ "groupName":"EconomicDevelopment", "name":"Eric Knapp",	"term":"2017"},
+{ "groupName":"EconomicDevelopment", "name":"Nick Marique",	"term":"2018"},
+{ "groupName":"EconomicDevelopment", "name":"Mike Beaulieu",	"term":"2019"}
+
+,
+{ "groupName":"PlanningBoard", "office":"Chairman","name":"Brian Boyers",	"term":"2017"},
+{ "groupName":"PlanningBoard", "office":"Vice Chairman","name":"Peter Hayward",	"term":"2017"},
+{ "groupName":"PlanningBoard", "office":"Member","name":"Robert Bourdeau",	"term":"2018"},
+{ "groupName":"PlanningBoard", "office":"Member","name":"Tim Long",	"term":"2018"},
+{ "groupName":"PlanningBoard", "office":"Member","name":"Joseph Michaud",	"term":"2019"},
+{ "groupName":"PlanningBoard", "office":"Member","name":"Larry Brown",	"term":"2019"},
+{ "groupName":"PlanningBoard", "office":"Alternate (Appointed)","name":"Robert Graham"},
+{ "groupName":"PlanningBoard", "office":"Ex-Officio","name":"Tom Gray",	"term":"2017"}
+
+
+]

@@ -16,17 +16,17 @@
         "img":"Custom/VitalRecord_Pink.png"
     },
     {"desc":"Beach Passes",
-        "dept":"parks",
+        "dept":"ParksRecreation",
         "lnk":"POS/Main?towncode=4916&source=PS&sourceid=848",
         "img":"Aqua/BP_btn.gif"
     },
     {"desc":"Boat Passes",
-        "dept":"parks",
+        "dept":"ParksRecreation",
         "lnk":"POS/Main?towncode=4916&source=PS&sourceid=849",
         "img":"Custom/BoatPasses.png"
     },
     {"desc":"Transfer Station",
-        "dept":"publicworks",
+        "dept":"PublicWorks",
         "lnk":"POS/Main?towncode=916&source=PS&sourceid=889",
         "img":"Green/TS_btn.gif"
     }

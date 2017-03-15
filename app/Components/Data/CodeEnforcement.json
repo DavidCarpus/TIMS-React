@@ -8,31 +8,4 @@
             {"desc": "Sign Ordinance ",
             "link":"http://miltonnh-us.com/uploads/code_31_260423228.pdf"}
         ]
-    ,
-    "permits":
-        [
-            {"desc": "Major Building Permit (new homes, commercial) ",
-            "link":"http://miltonnh-us.com/uploads/code_32_889062993.pdf"},
-            {"desc": "Minor Building Permit (Sheds, decks, alterations, demolitions) ",
-            "link":"http://miltonnh-us.com/uploads/code_32_3435455709.pdf"},
-            {"desc": "Driveway Permit ",
-            "link":"http://miltonnh-us.com/uploads/code_32_1856587109.pdf"},
-            {"desc": "Mechanical/Gas Permit ",
-            "link":"http://miltonnh-us.com/uploads/code_33_1305911895.pdf"},
-            {"desc": "Electrical Permit ",
-            "link":"http://miltonnh-us.com/uploads/code_32_2382427981.pdf"},
-            {"desc": "Plumbing Permit ",
-            "link":"http://miltonnh-us.com/uploads/code_36_1330455078.pdf"}
-        ]
-    ,
-     "asideData":
-        [
-            {"desc": "Code Enforcement/Health Officer/Building Inspector<br/>Brian Boyers"},
-            {"desc": "Business Hours: <br/>Tuesday & Wednesday <br/>8:00 am - 4:00pm"},
-            {"desc": "Phone: <br/>(603) 652-4501 x7"},
-            {"desc": " "},
-            {"desc": "Land Use Clerk: Dana Crossley"},
-            {"desc": "Phone: <br/>(603) 652-4501 x5"},
-            {"desc": "Fax: <br/>(603) 652-4120"}
-        ]
 }

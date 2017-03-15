@@ -1,0 +1,86 @@
+[
+    { "groupName":"BudgetCommittee",
+        "meetingDate": "2017-02-21",
+        "agendaLink":"http://miltonnh-us.com/uploads/budget_306_3492870537.pdf",
+        "minutesLink":"",
+        "videoLink":""
+    },
+    { "groupName":"BudgetCommittee",
+        "meetingDate": "2017-02-11",
+        "agendaLink":"http://miltonnh-us.com/uploads/budget_304_3018228619.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/budget_307_605978038.pdf",
+        "videoLink":""
+    },
+    { "groupName":"BudgetCommittee",
+        "meetingDate": "2016-12-15",
+        "agendaLink":"http://miltonnh-us.com/uploads/budget_285_1305097653.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/budget_287_3492623261.pdf",
+        "videoLink":"https://www.youtube.com/watch?v=jQSEu-xtBLs"
+    }
+
+
+
+
+    ,
+    { "groupName":"CemeteryTrustees",
+        "meetingDate": "2017-02-22",
+        "agendaLink":"http://miltonnh-us.com/uploads/cemetery_76_3184030255.pdf",
+        "minutesLink":"",
+        "videoLink":""
+    },
+    { "groupName":"CemeteryTrustees",
+        "meetingDate": "2017-01-25",
+        "agendaLink":"http://miltonnh-us.com/uploads/cemetery_74_4122925728.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/cemetery_79_1894760548.pdf",
+        "videoLink":""
+    },
+    { "groupName":"CemeteryTrustees",
+        "meetingDate": "2016-12-28",
+        "agendaLink":"http://miltonnh-us.com/uploads/cemetery_73_3676418840.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/cemetery_78_1199697270.pdf",
+        "videoLink":""
+    },
+    { "groupName":"CemeteryTrustees",
+        "meetingDate": "2016-12-28",
+        "agendaLink":"",
+        "minutesLink":"",
+        "videoLink":""
+    }
+
+
+    ,
+    { "groupName":"EconomicDevelopment",
+        "meetingDate": "2016-11-09",
+        "agendaLink":"http://miltonnh-us.com/uploads/economic_79_2381887235.pdf",
+        "minutesLink":"",
+        "minutesLabel":"No Quorum/Rescheduled",
+        "videoLink":""
+    }
+
+
+    ,
+    { "groupName":"LibraryTrustees",
+        "meetingDate": "2017-02-24",
+        "agendaLink":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_164_1789014553.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"LibraryTrustees",
+        "meetingDate": "2017-02-08",
+        "agendaLink":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_162_1672603499.pdf",
+        "minutesLink":"",
+        "minutesLabel":"Canceled",
+        "videoLink":""
+    },
+    { "groupName":"LibraryTrustees",
+        "meetingDate": "2017-01-11",
+        "agendaLink":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_160_3278473966.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_165_3816409968.pdf",
+        "minutesLabel":"Canceled",
+        "videoLink":""
+    }
+
+
+
+]

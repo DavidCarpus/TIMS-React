@@ -1,14 +1,12 @@
 import React from 'react';
 import Aside from './Aside'
-import SmartLink from './SmartLink'
+import DocumentList  from './DocumentList'
 import styles from './Assessing.css'
 import layoutStyles from './MainLayout.css'
 
+import SmartLink from './SmartLink'
 import data from './Data/CodeEnforcement.json'
-
 var helpfulInformation = data.helpfulInformation
-var asideData = data.asideData
-var permitData = data.permits
 
 export default class CodeEnforcement extends React.Component {
     render() {
@@ -27,17 +25,15 @@ export default class CodeEnforcement extends React.Component {
                         <div key={index}><SmartLink link={link.link} linkText={link.desc} /></div>
                     )}
 
-                    <h2>Permits</h2>
-                    {permitData.map((link, index) =>
-                        <div key={index}><SmartLink link={link.link} linkText={link.desc} /></div>
-                    )}
-
-                    <br/><br/>
-                    <p>Permit Notice: Fees & Fines</p>
-
-                    </div>
-                    <Aside data={asideData}/>
+                    <DocumentList
+                        groupName='CodeEnforcement'
+                        title='Milton Code Enforcement Documentation'
+                        />
                 </div>
+                <Aside
+                    groupName='CodeEnforcement'
+                    />
+            </div>
         );
     }
 }

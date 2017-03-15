@@ -1,0 +1,125 @@
+[
+    {"department":"Assessing", "date": "2009-01-01",        "desc": "2009 Assessment Listed By Location"},
+    {"department":"Assessing", "date": "2009-01-02",        "desc": "2009 Assessment Listed By Owner"},
+    {"department":"Assessing", "date": "2009-01-03",        "desc": "2009 Valid Sales"},
+    {"department":"Sewer", "date": "2009-01-01",  "desc": "Sewer Ordinance"},
+    {"department":"Sewer", "date": "2009-01-03",  "desc": "Sewer Connection Permit" } ,
+    {"department":"TownClerk", "date": "2009-01-01",  "desc": "Doc 1"},
+    {"department":"TownClerk", "date": "2009-01-03",  "desc": "Doc 2"},
+
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Town of Milton Welfare Guideline",
+        "link":"http://miltonnh-us.com/uploads/welfare_5_364208847.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Application Checklist",
+        "link":"http://miltonnh-us.com/uploads/welfare_21_636897142.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Welfare Application",
+        "link":"http://miltonnh-us.com/uploads/welfare_35_2300776825.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Doctor Verification Form (Must be completed and returned by Doctor's office)",
+        "link":"http://miltonnh-us.com/uploads/welfare_16_3311173523.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Burial Assistance Form ",
+        "link":"http://miltonnh-us.com/uploads/welfare_36_3094117116.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Landlord Verification Form",
+        "link":"http://miltonnh-us.com/uploads/welfare_35_747242113.pdf"
+    },
+    {"department":"Welfare", "date": "2009-01-03",  "desc": "Additional Public Assistance Links and Numbers",
+        "link":"http://miltonnh-us.com/uploads/welfare_38_847250403.pdf"
+    },
+
+
+
+    {"desc": "Major Building Permit (new homes, commercial) ",
+        "link":"http://miltonnh-us.com/uploads/code_32_889062993.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Minor Building Permit (Sheds, decks, alterations, demolitions) ",
+        "link":"http://miltonnh-us.com/uploads/code_32_3435455709.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Driveway Permit ",
+        "link":"http://miltonnh-us.com/uploads/code_32_1856587109.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Mechanical/Gas Permit ",
+        "link":"http://miltonnh-us.com/uploads/code_33_1305911895.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Electrical Permit ",
+        "link":"http://miltonnh-us.com/uploads/code_32_2382427981.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Plumbing Permit ",
+        "link":"http://miltonnh-us.com/uploads/code_36_1330455078.pdf",
+        "department":"CodeEnforcement"
+    },
+    {"desc": "Permit Notice: Fees & Fines",
+        "link":"http://miltonnh-us.com/uploads/code_29_2890266634.pdf",
+        "department":"CodeEnforcement"
+    }
+    ,
+    {"department":"CemeteryTrustees", "date": "2009-01-03",
+        "desc": "By-Laws",
+        "link":"http://miltonnh-us.com/uploads/cemetery_69_1639359744.pdf"
+    },
+    {"department":"CemeteryTrustees", "date": "2009-01-03",
+        "desc": "Application for Right to Inter",
+        "link":"http://miltonnh-us.com/uploads/cemetery_71_1981914058.pdf"
+    },
+    {"department":"CemeteryTrustees", "date": "2009-01-03",
+        "desc": "Adopt a Cemetery Care Guidelines",
+        "link":"http://miltonnh-us.com/uploads/cemetery_70_257066258.pdf"
+    },
+    {"department":"CemeteryTrustees", "date": "2009-01-03",
+        "desc": "Certificate of Right to Inter",
+        "link":"http://miltonnh-us.com/uploads/cemetery_71_3058841609.pdf"
+    },
+    {"department":"CemeteryTrustees", "date": "2009-01-03",
+        "desc": "Rules and Regulations",
+        "link":"http://miltonnh-us.com/uploads/cemetery_67_2997314167.pdf"
+    }
+
+    ,
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Economic Basement Assessment, 2012",
+        "link":"http://miltonnh-us.com/uploads/economic_59_4066609108.pdf"
+    }  ,
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Strategic Economic Development Plan, 2012",
+        "link":"http://miltonnh-us.com/uploads/economic_57_1979046104.pdf"
+    }  ,
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Exit 17 East Concept",
+        "link":"http://miltonnh-us.com/uploads/economic_58_4269855736.pdf"
+    },
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Exit 17 West Concept",
+        "link":"http://miltonnh-us.com/uploads/economic_58_877773245.pdf"
+    },
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Exit 18 East Concept",
+        "link":"http://miltonnh-us.com/uploads/economic_58_260802677.pdf"
+    },
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "Exit 18 West Concept",
+        "link":"http://miltonnh-us.com/uploads/economic_58_3311049264.pdf"
+    },
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "",
+        "link":"http://www.visitnh.gov/"
+    }  ,
+    {"department":"EconomicDevelopment", "date": "2009-01-03",
+        "desc": "",
+        "link":""
+    }
+
+
+    ,
+    {"department":"LibraryTrustees", "date": "2009-01-03",
+        "desc": "Milton Free Public Library Engineering Report",
+        "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_30_590377818.pdf"
+    }
+
+]

@@ -1,0 +1,68 @@
+[
+    {"desc": "P.O Box 180<br/> 424 White Mountain HWY<br/>Milton, NH 03851",
+        "department":"TownClerk"
+    },
+    {"desc": "Hours<br/>Mon, Tues, Wed, Fri<br/>8:30am-4:00pm<br/>Thurs - 8:30am-6:30pm <br/>Last Sat of the Month<br/>8am-12pm<br/>Except Holiday weekends",
+        "department":"TownClerk"
+    },
+    {"desc": "Town Clerk / Tax Collector<br/>Michelle Beauchamp<br/>townclerktaxcollector@miltonnh-us.com<br/>603-652-4501 x4",
+        "department":"TownClerk"
+    },
+    {"desc": "Deputy Town Clerks / <br/>Assistant Tax Collectors<br/>603-652-4501 x3<br/><br/> Diane DuBois<br/>deputytc@miltonnh-us.com<br/><br/>Norma Corrow<br/>miltonatc@metrocast.net",
+        "department":"TownClerk"
+    },
+    {"desc": "Assistant Town Clerk / <br/>Tax Collector<br/>Jinette Sturman",
+        "department":"TownClerk"
+    },
+    {"desc": "Fax<br/>603-652-4120",
+        "department":"TownClerk"
+    }
+    ,
+    {"department":"CodeEnforcement", "desc": "Code Enforcement/Health Officer/Building Inspector<br/>Brian Boyers"},
+    {"department":"CodeEnforcement", "desc": "Business Hours: <br/>Tuesday & Wednesday <br/>8:00 am - 4:00pm"},
+    {"department":"CodeEnforcement", "desc": "Phone: <br/>(603) 652-4501 x7"},
+    {"department":"CodeEnforcement", "desc": " "},
+    {"department":"CodeEnforcement", "desc": "Land Use Clerk: Dana Crossley"},
+    {"department":"CodeEnforcement", "desc": "Phone: <br/>(603) 652-4501 x5"},
+    {"department":"CodeEnforcement", "desc": "Fax: <br/>(603) 652-4120"    }
+    ,
+
+    {"department":"ParksRecreation","desc": "Karen J. Brown, Recreation Director"},
+    {"department":"ParksRecreation","desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+    {"department":"ParksRecreation","desc": "Phone: <br/>(603) 652-4501 x8"},
+    {"department":"ParksRecreation","desc": "Cell: <br/>(603) 834-0279"},
+    {"department":"ParksRecreation","desc": "Email: <br/>recreation@miltonnh-us.com"}
+    ,
+    {"department":"PublicWorks", "desc": "Public Works Dept. Phone: 603-652-9891"},
+    {"department":"PublicWorks", "desc": "Transfer Station Phone: 603-652-4125"},
+    {"department":"PublicWorks", "desc": "Highway Department Phone: 603-652-9891"},
+    {"department":"PublicWorks", "desc": "Government Buildings<br/>Willis 'Bill' Whitten<br/>Secretary: Shawn Donell<br/>Phone: 603-652-9891"}
+    ,
+    {"department":"Sewer", "desc": "Operator<br/>Dale Sprague"},
+    {"department":"Sewer", "desc": "Secretary<br/>Dana Crossley<br/>603-652-4501 ext 5" }
+    ,
+    {"department":"Assessing","desc": "Kathy Wallingford<br/> Assessing Director"},
+    {"department":"Assessing","desc": "Marybeth Walker<br/>Contracted Assessor"},
+    {"department":"Assessing","desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+    {"department":"Assessing","desc": "Business Hours: <br/>Monday through Friday 8:00 a.m. - 4:00 p.m."},
+    {"department":"Assessing","desc": "Phone: <br/>(603) 652-4501 x6"},
+    {"department":"Assessing","desc": "Fax: <br/>(603) 652-4120"},
+    {"department":"Assessing","desc": "E-Mail: <br/>assessing@miltonnh-us.com"}
+    ,
+    {"department":"CemeteryTrustees", "desc": "John Katwick - Chairman 2018<br/>603-652-9872"},
+    {"department":"CemeteryTrustees", "desc": "Bruce Woodruff 2019"},
+    {"department":"CemeteryTrustees", "desc": "Gordy Maness - 2017<br/>603-652-7251"}
+
+    ,
+    {"department":"Welfare", "desc": "424 White Mountain Highway<br/>Milton, NH 03851"},
+    {"department":"Welfare","desc": "Hours: <br/>By appointment only. "},
+    {"department":"Welfare","desc": "Phone: <br/>(603) 652-4501 x6"},
+    {"department":"Welfare", "desc": "Fax: <br/>(603) 652-4120"    },
+
+    {"department":"ConservationCommittee", "desc": "Conservation Commission Secretary: <br/>Dana Crossley<br/>603-652-4501 ext 5"    }
+    ,
+    {"department":"LibraryTrustees", "desc": "Milton Free Public Library<br/>13 Main Street, <br/>Milton Mills, NH<br/>603-473-8535<br/>Email: MFPL@metrocast.net"    }
+    ,
+    {"department":"PlanningBoard", "desc": "Land Use Clerk<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+
+]

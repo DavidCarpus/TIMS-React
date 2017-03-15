@@ -14,9 +14,9 @@ body {
     h2{
       font-size: 6vmin;
     }
-    :global(#navbar) a{
+    /*:global(#navbar) a{
         font-size: 2vmin;
-    }
+    }*/
 }
 
 :global(#eb2govBlock) {

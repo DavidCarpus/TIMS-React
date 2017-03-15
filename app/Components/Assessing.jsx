@@ -1,13 +1,10 @@
 import React from 'react';
 import TaxMapForm  from './TaxMapForm'
-import styles from './Assessing.css'
+import DocumentList  from './DocumentList'
 import Aside from './Aside'
 
-import data from './Data/Assessing.json'
+import styles from './Assessing.css'
 import layoutStyles from './MainLayout.css'
-
-var asideData = data.asideData
-var documents = data.documents
 
 export default class Assessing extends React.Component {
 
@@ -38,19 +35,15 @@ export default class Assessing extends React.Component {
                     <TaxMapForm />
                     </div>
 
-                    <h2>Milton Assessor's Documentation</h2>
-                    {documents.
-                        sort((a, b) => {
-                        return new Date(b.date) - new Date(a.date);
-                        }).
-                        map( (document, index) =>
-                            <div>{document.dateDesc} - {document.desc} </div>
-                        )}
-
+                    <DocumentList
+                        groupName='Assessing'
+                        title='Milton Assessors Documentation'
+                        />
                 </div>
-                <Aside data={asideData}/>
+                <Aside
+                    groupName='Assessing'
+                    />
             </div>
         );
     }
-
 }

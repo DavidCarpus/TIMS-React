@@ -6,7 +6,8 @@ import Aside from './Aside'
 import SmartLink from './SmartLink'
 import layoutStyles from './MainLayout.css'
 import NoticesList from './NoticesList'
-import EB2ServiceLink from './EB2ServiceLink'
+import EB2ServiceBlock from './EB2ServiceBlock'
+// import EB2ServiceLink from './EB2ServiceLink'
 import TransferStationRules from './TransferStationRules'
 
 import notices from './Data/Notices.json'
@@ -25,7 +26,7 @@ export default class PublicWorks extends React.Component {
                     <h1 style={{textAlign:'center'}}>Public Works Department</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
                         <NoticesList notices={notices.filter((notice)=>
-                                {return  notice.dept=='pw'})}/>
+                                {return  notice.dept=='PublicWorks'})}/>
 
                         <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
                             linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
@@ -50,18 +51,12 @@ export default class PublicWorks extends React.Component {
                             linkText='Printable Transfer Station Rules'/>
                             <hr/>
 
-
-                        <ul style={{listStyleType: 'none'}}>
-                            {services.filter( (service)=> {return service.dept == 'publicworks'} ).
-                                map( (service, index) =>
-                                    <EB2ServiceLink key={index} service={service}/>
-                                )}
-                        </ul>
+                        <EB2ServiceBlock groupName='PublicWorks'/>
                         Buy Transfer Station Stickers Online
-
                 </div>
 
-                <Aside data={asideData}/>
+                <Aside groupName='PublicWorks' />
+
             </div>
         );
     }

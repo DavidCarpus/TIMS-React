@@ -1,11 +1,9 @@
 import React from 'react';
+import DocumentList  from './DocumentList'
 import Aside from './Aside'
 import SmartLink from './SmartLink'
 import layoutStyles from './MainLayout.css'
-
-import data from './Data/CemeteryTrustees.json'
-var asideData = data.asideData
-var documents = data.documents
+import AgendasAndMinutes from './AgendasAndMinutes'
 
 export default class CemeteryTrustees extends React.Component {
 
@@ -13,26 +11,20 @@ export default class CemeteryTrustees extends React.Component {
         return (
             <div id="CemeteryTrustees">
                 <div id="contentArea"  className={layoutStyles.contentArea}>
-                    <h1 style={{textAlign:'center'}}>Cemetery Trustees Department</h1>
+                    <h1 style={{textAlign:'center'}}>Cemetery Trustees</h1>
 
-                    <h2>Cemetery Trustees Documentation</h2>
+                    <DocumentList
+                        groupName='CemeteryTrustees'
+                        title='Milton Cemetery Trustees Documentation'
+                        />
+                    <AgendasAndMinutes
+                        groupName='CemeteryTrustees'
+                        />
 
                 </div>
-                <Aside data={asideData}/>
+            <Aside groupName='CemeteryTrustees' />
             </div>
         );
     }
 
 }
-/*
-
-{documents.
-    sort((a, b) => {
-    return new Date(b.date) - new Date(a.date);
-    }).
-    map( (document, index) =>
-        <div>{document.dateDesc} - {document.desc} </div>
-    )}
-
-
-*/

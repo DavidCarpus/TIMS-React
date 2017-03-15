@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Aside.css'
-import layoutStyles from './MainLayout.css'
+import asideData from './Data/Asides.json'
+// import layoutStyles from './MainLayout.css'
 
 class AsideItem extends React.Component {
     createMarkup(){
@@ -20,15 +21,21 @@ class AsideItem extends React.Component {
 
 export default class MainAside extends React.Component {
     render() {
-        var recentEvents = this.props.data
+        var groupName= this.props.groupName || ''
+        var id = groupName + '_Asides'
+        var title = this.props.title || `Milton ${groupName} Documentation`
+        var asides = asideData.filter( (aside)=>
+                    {return aside.department == groupName } )
+
+        var recentEvents = this.props.data || asides
         var list = ''
-        if ('data' in this.props && recentEvents.length > 0) {
+        // if ('data' in this.props && recentEvents.length > 0) {
             list = recentEvents.map((element, index) =>
                 <AsideItem key={index} item={element} />
                 )
-        }
+        // }
         return (
-            <aside className={layoutStyles.primaryAside}>
+            <aside id={id} className={styles.primaryAside}>
             <ul>
                 {list}
             </ul>
@@ -37,8 +44,3 @@ export default class MainAside extends React.Component {
         );
     }
 }
-/*
-{recentEvents.map((element, index) =>
-    <AsideItem key={index} item={element} />
-    )}
-*/

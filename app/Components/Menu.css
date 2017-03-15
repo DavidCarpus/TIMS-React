@@ -1,25 +1,22 @@
+@value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "./breakpoints.css";
+
 .logo {
     max-height: 100%;
     background: #00f;
-    background: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.9);
 }
-.navbar-brand > img {
+@media bp-iphone5 {
+     :global(#navbar) a{
+            font-size: 2vmin;
+        }
+}
+/*.navbar-brand > img {
     display: inline-block;
-}
-.navbar-header {
+}*/
+/*.navbar-header {
   background-color: #F16E10;
   width: 100%;
-}
-.dropdown-header {
+}*/
+/*.dropdown-header {
     color: black;
-}
-
-:global(#navbar) {
-    height: 80px;
-    width: 100%;
-    background: #ccc;
-    position: fixed;
-    color: black;
-    font-size: 2vmin;
-    display: inline-block;
-}
+}*/

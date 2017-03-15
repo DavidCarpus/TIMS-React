@@ -1,12 +1,4 @@
 {
-     "asideData":
-        [
-            {"desc": "Public Works Dept. Phone: 603-652-9891"},
-            {"desc": "Transfer Station Phone: 603-652-4125"},
-            {"desc": "Highway Department Phone: 603-652-9891"},
-            {"desc": "Government Buildings<br/>Willis 'Bill' Whitten<br/>Secretary: Shawn Donell<br/>Phone: 603-652-9891"}
-        ]
-        ,
         "transferrules":
         {
             "wasteTypes":

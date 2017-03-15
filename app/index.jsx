@@ -7,12 +7,19 @@ import Calendar from './Components/Calendar'
 import Assessing from './Components/Assessing'
 import CodeEnforcement from './Components/CodeEnforcement'
 import ParksRecreation from './Components/ParksRecreation'
-import CemeteryTrustees from './Components/CemeteryTrustees'
 import Planning from './Components/Planning'
 import PublicWorks from './Components/PublicWorks'
 import TransferStationRules from './Components/TransferStationRules'
 import Sewer from './Components/Sewer'
+import Welfare from './Components/Welfare'
 import TownClerk from './Components/TownClerk'
+
+import CemeteryTrustees from './Components/CemeteryTrustees'
+import BudgetCommittee from './Components/BudgetCommittee'
+import ConservationCommittee from './Components/ConservationCommittee'
+import EconomicDevelopment from './Components/EconomicDevelopment'
+import LibraryTrustees from './Components/LibraryTrustees'
+import PlanningBoard from './Components/PlanningBoard'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
@@ -37,14 +44,21 @@ ReactDOM.render(
                     <Route path="Planning" component={Planning} />
                     <Route path="PublicWorks" component={PublicWorks} />
                     <Route path="TownClerk" component={TownClerk} />
-                    <Route path="Sewer" component={Sewer} />
+                    <Route path="Welfare" component={Welfare} />
                     <Route path="TransferRules" component={TransferStationRules} />
+                    <Route path="Sewer" component={Sewer} />
+
                 </Route>
 
                 <Route path="BoardsAndCommittees"  >
-                        <Route path="CemeteryTrustees" component={CemeteryTrustees} />
 
-                        </Route>
+                    <Route path="PlanningBoard" component={PlanningBoard} />
+                    <Route path="LibraryTrustees" component={LibraryTrustees} />
+                    <Route path="EconomicDevelopment" component={EconomicDevelopment} />
+                    <Route path="ConservationCommittee" component={ConservationCommittee} />
+                    <Route path="BudgetCommittee" component={BudgetCommittee} />
+                    <Route path="CemeteryTrustees" component={CemeteryTrustees} />
+                </Route>
 
         </Route>
     </Router>

@@ -15,7 +15,8 @@ export default class Menu extends React.Component {
     render(){
         const logo = {height: '90px'};
         return (
-            <Navbar id='custom-bootstrap-menu' collapseOnSelect
+            <Navbar collapseOnSelect
+                id='custom-bootstrap-menu'
                 >
             <Navbar.Header>
                 <Navbar.Brand>
@@ -25,7 +26,8 @@ export default class Menu extends React.Component {
                           src={this.logoLink()}
                           />
                   </a>
-                </Navbar.Brand>
+              </Navbar.Brand>
+              <Navbar.Toggle />
             </Navbar.Header>
 
             <Navbar.Collapse>
@@ -56,48 +58,64 @@ export default class Menu extends React.Component {
 }
 class MenuLink extends React.Component {
     render() {
-        var lnk = this.props.lnk.replace(' ','')
+        var link = this.props.link.replace(' ','')
+        var desc = this.props.desc
+        var routedPath = this.props.routePath + link
         return (
-            ( !lnk.startsWith('http')) ?
-            <LinkContainer to={lnk}>
+            ( !link.startsWith('http')) ?
+            <LinkContainer to={routedPath}>
                 <MenuItem
                     eventKey={this.props.eventKey}
-                     className={styles.navItem}>{this.props.desc}</MenuItem>
+                     className={styles.navItem}>{desc}</MenuItem>
             </LinkContainer>
             : <Navbar.Text>
-                    <Navbar.Link href={lnk}
-                    eventKey={this.props.eventKey}
-                    target="_blank">{this.props.desc}</Navbar.Link>
+                    <Navbar.Link href={link}
+                    target="_blank">{desc}</Navbar.Link>
                 </Navbar.Text>
         )
     }
 }
+// eventKey={this.props.eventKey}
 
 class DepartmentMenuLink extends React.Component {
     render() {
+        var routePath= '/Departments/'
+        var desc=this.props.department.desc
+        var link=this.props.department.link || desc
         return (
             <MenuLink
-                    lnk={('link' in this.props.department)
-                        ? '/Departments/' + this.props.department.link
-                        :'/Departments/' + this.props.department.desc}
+                    link={link}
+                    routePath={routePath}
                     eventKey={this.props.eventKey}
-                    desc={this.props.department.desc}/>
+                    desc={desc}/>
         )
     }
 }
 
 class CommitteeMenuLink extends React.Component {
     render() {
+        var routePath= '/BoardsAndCommittees/'
+        var desc=this.props.committee.desc
+        var link=this.props.committee.link || desc
         return (
-                <MenuLink
-                    lnk={('link' in this.props.committee)
-                        ? '/BoardsAndCommittees/' + this.props.committee.link
-                        :'/BoardsAndCommittees/' + this.props.committee.desc}
+            <MenuLink
+                    link={link}
+                    routePath={routePath}
                     eventKey={this.props.eventKey}
-                    desc={this.props.committee.desc}/>
+                    desc={desc}/>
         )
     }
 }
+// render() {
+// return (
+//         <MenuLink
+//             lnk={('link' in this.props.committee)
+//                 ? '/BoardsAndCommittees/' + this.props.committee.link
+//                 :'/BoardsAndCommittees/' + this.props.committee.desc}
+//             eventKey={this.props.eventKey}
+//             desc={this.props.committee.desc}/>
+// )
+// }
 
 /*
 Town meeting info (Calendar)

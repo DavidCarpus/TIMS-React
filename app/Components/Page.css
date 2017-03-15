@@ -1,8 +1,0 @@
-.mainPageArea {
-    background-color: red;
-    width: 80%;
-}
-
-.basePage {
-    composes: basePage from '../main.css';
-}
