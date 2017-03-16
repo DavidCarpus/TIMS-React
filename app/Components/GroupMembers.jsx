@@ -2,6 +2,8 @@ import React from 'react';
  import data from './Data/GroupMembers.json'
  import SmartLink from './SmartLink'
 
+ import styles from './GroupMembers.css'
+
 export default class GroupMembers extends React.Component {
     render() {
         // var groupName= 'Sewer'
@@ -11,26 +13,14 @@ export default class GroupMembers extends React.Component {
         var members = data.filter( (member)=>
                     {return member.groupName == groupName } )
 
-        var office = { float: 'left', width:'150px', }
-        var name = { float: 'left' , width:'300px', }
-        var term = { float: 'left' , width:'150px', }
-
-        var memberBlock = {
-            clear: 'left'
-        }
-        var groupMembers = {
-            // width:'500px',
-            clear: 'left',
-            display: 'inline-block'
-        }
         return (
-            <div id={id} style={groupMembers}>
+            <div id={id} className={styles.groupMembers}>
                 {members.length > 0 ? <h2>{title}</h2> : ''}
                     {members.map( (member, index) =>
-                            <div key={index} style={memberBlock}>
-                                <div style={office}>{member.office}</div>
-                                <div style={name}>{member.name}</div>
-                                <div style={term}>{member.term}</div>
+                            <div key={index} className={styles.memberBlock}>
+                                <div className={styles.office}>{member.office}</div>
+                                <div className={styles.name}>{member.name}</div>
+                                <div className={styles.term}>{member.term}</div>
                             </div>
                         )}
             </div>

@@ -1,0 +1,23 @@
+.office {
+    float: left;
+    width:150px;
+}
+.name {
+    float: left ;
+     width:300px;
+ }
+.term {
+    float: left ;
+ width:150px;
+ }
+
+.memberBlock {
+    clear: left;
+    border-bottom: 1px solid black;
+}
+.groupMembers {
+    /*width:500px;*/
+    clear: left;
+    display: inline-block;
+    border: 1px solid black;
+}

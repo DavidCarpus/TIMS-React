@@ -200,6 +200,11 @@ exports.setupCSS = function(paths) {
               }
           },
           {
+              test: /\.css$/,
+              loader: "resolve-url-loader"
+            },
+
+          {
               test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
               loader: "url-loader?limit=10000&mimetype=application/font-woff"
             },
@@ -213,6 +218,14 @@ exports.setupCSS = function(paths) {
             },
             {
               test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+              loader: "file-loader"
+            },
+            {
+              test: /\.png(\?v=\d+\.\d+\.\d+)?$/,
+              loader: "file-loader"
+            },
+            {
+              test: /\.jpg(\?v=\d+\.\d+\.\d+)?$/,
               loader: "file-loader"
             },
             {

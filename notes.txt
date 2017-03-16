@@ -1,0 +1,1 @@
+export TGT=milton && ssh A2 rm -R ./www/$TGT/*.* && scp build/* A2:./www/$TGT/ && rsync -auv images/ A2:./www/$TGT/images/

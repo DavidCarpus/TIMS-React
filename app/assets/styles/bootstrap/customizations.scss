@@ -6,6 +6,23 @@
     width: 100%;
     padding: 5px 5px;
 }
+#custom-bootstrap-menu p.navbar-text {
+    margin:  0px 20px;
+}
+#custom-bootstrap-menu p.navbar-text:after {
+    content: "";
+    // content: "";
+    display: block;
+    background: url('images/external-128.png') no-repeat;
+    // TODO: Get icon for external links in menu working with webpack
+    background-size: 100% 100%;
+    // background-color: grey;
+    color: white;
+    width: 10px;
+    height: 10px;
+    float: right;
+    margin: 0 0 0 5px;
+}
 #custom-bootstrap-menu.navbar-default {
     font-size: 22px;
     background-color: rgba(248, 248, 248, 1);
