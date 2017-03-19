@@ -14,11 +14,7 @@ import Sewer from './Components/Sewer'
 import Welfare from './Components/Welfare'
 import TownClerk from './Components/TownClerk'
 
-import CemeteryTrustees from './Components/CemeteryTrustees'
-import BudgetCommittee from './Components/BudgetCommittee'
-import ConservationCommittee from './Components/ConservationCommittee'
-import EconomicDevelopment from './Components/EconomicDevelopment'
-import LibraryTrustees from './Components/LibraryTrustees'
+import Committees from './Components/Committees'
 import PlanningBoard from './Components/PlanningBoard'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
@@ -51,23 +47,22 @@ ReactDOM.render(
                 </Route>
 
                 <Route path="BoardsAndCommittees"  >
-
                     <Route path="PlanningBoard" component={PlanningBoard} />
-                    <Route path="LibraryTrustees" component={LibraryTrustees} />
-                    <Route path="EconomicDevelopment" component={EconomicDevelopment} />
-                    <Route path="ConservationCommittee" component={ConservationCommittee} />
-                    <Route path="BudgetCommittee" component={BudgetCommittee} />
-                    <Route path="CemeteryTrustees" component={CemeteryTrustees} />
                 </Route>
+                <Route path="/BoardsAndCommittees/:commitee" component={Committees}/>
 
         </Route>
     </Router>
 ),
  document.getElementById('app') );
- // <Route path="/TeamMember/:teamMemberID" component={TeamMember}/>
- // <Route path="/weProjects/:projectID" component={Project}/>
+
+/*
+<Route path="/TeamMember/:teamMemberID" component={TeamMember}/>
+<Route path="/weProjects/:projectID" component={Project}/>
 
 //   <Router  onUpdate={() => window.scrollTo(0, 0)} history={hashHistory}>
 // <Route path="/" component={Home}/>
 // <Route path="/contact" component={Contact}/>
 // </Router>
+
+*/

@@ -122,4 +122,31 @@
         "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_30_590377818.pdf"
     }
 
+    ,
+    {"department":"TrustFunds", "date": "2013-12-03",
+        "desc": "2013 Year End Report",
+        "link":"http://miltonnh-us.com/uploads/trust_funds_109_1781681865.pdf"
+    },
+    {"department":"TrustFunds", "date": "2012-12-03",
+        "desc": "2012 Year End Report",
+        "link":"http://miltonnh-us.com/uploads/trust_funds_88_1324231147.pdf"
+    }
+    ,
+    {"department":"Zoning", "date": "2012-12-03",
+        "desc": "Special Exception Application",
+        "link":"http://miltonnh-us.com/uploads/zba_77_4192905869.pdf"
+    },
+    {"department":"Zoning", "date": "2012-12-03",
+        "desc": "Equitable Waiver",
+        "link":"http://miltonnh-us.com/uploads/zba_77_3422119116.pdf"
+    },
+    {"department":"Zoning", "date": "2012-12-03",
+        "desc": "Appeal from an Administrative Decision",
+        "link":"http://miltonnh-us.com/uploads/zba_77_2338509314.pdf"
+    },
+    {"department":"Zoning", "date": "2012-12-03",
+        "desc": "Variance",
+        "link":"http://miltonnh-us.com/uploads/zba_77_4002501668.pdf"
+    }
+
 ]

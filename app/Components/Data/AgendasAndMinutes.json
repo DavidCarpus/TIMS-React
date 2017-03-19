@@ -80,7 +80,72 @@
         "minutesLabel":"Canceled",
         "videoLink":""
     }
+    ,
+    { "groupName":"Recreation",
+        "meetingDate": "2016-06-15",
+        "agendaLink":"http://miltonnh-us.com/uploads/recreation_126_4290273043.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"Recreation",
+        "meetingDate": "2016-05-18",
+        "agendaLink":"",
+        "minutesLink":"",
+        "minutesLabel":"No agenda or minutes",
+        "videoLink":""
+    },
+    { "groupName":"Recreation",
+        "meetingDate": "2016-05-04",
+        "agendaLink":"http://miltonnh-us.com/uploads/recreation_121_3562022071.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/recreation_127_56013468.pdf",
+        "minutesLabel":"",
+        "videoLink":""
+    }
 
-
-
+    ,
+    { "groupName":"SewerCommission",
+        "meetingDate": "2012-05-06",
+        "agendaLink":"http://miltonnh-us.com/uploads/sewer_comm_5_4094455831.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"SewerCommission",
+        "meetingDate": "2011-10-04",
+        "agendaLink":"http://miltonnh-us.com/uploads/sewer_comm_3_1306836267.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"SewerCommission",
+        "meetingDate": "2011-11-01",
+        "agendaLink":"",
+        "minutesLink":"",
+        "minutesLabel":"No Agenda or Minutes availible",
+        "videoLink":""
+    }
+    ,
+    { "groupName":"TrustFunds",
+        "meetingDate": "2017-02-15",
+        "agendaLink":"http://miltonnh-us.com/uploads/trust_funds_146_1296104008.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/trust_funds_147_3711713556.pdf",
+        "minutesLabel":"Draft Minutes",
+        "videoLink":""
+    }
+    ,
+    { "groupName":"Zoning",
+        "meetingDate": "2017-02-23",
+        "agendaLink":"http://miltonnh-us.com/uploads/zba_104_2759952083.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"Zoning",
+        "meetingDate": "2017-01-26",
+        "agendaLink":"http://miltonnh-us.com/uploads/zba_101_1941484346.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/zba_106_1612429798.pdf",
+        "minutesLabel":"",
+        "videoLink":""
+    }
 ]

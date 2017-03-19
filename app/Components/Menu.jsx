@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import styles from './Menu.css'
-import data from './Data/Menu.json'
 
-var departments = data.departments
-var committees = data.committees
+import organizations from './Data/OrganizationalUnits.json'
+var departments = organizations.filter( (organization)=>
+            {return organization.mainMenu == 'Departments' } )
+var committees = organizations.filter( (organization)=>
+            {return organization.mainMenu == 'Committees' } )
 
 export default class Menu extends React.Component {
     logoLink = () => {
@@ -41,12 +43,12 @@ export default class Menu extends React.Component {
 
                     <NavDropdown eventKey={3} title="Departments" id="basic-nav-dropdown">
                         {departments.map((department, index) =>
-                             <DepartmentMenuLink  department={department} eventKey={3+0.1*index} key={3+index}/>
+                             <DepartmentMenuLink  department={department} eventKey={department.id} key={3+index}/>
                             )}
                     </NavDropdown>
                     <NavDropdown eventKey={4} title="Committees" id="basic-nav-dropdown">
                         {committees.map((committee, index) =>
-                             <CommitteeMenuLink  committee={committee} eventKey={4+0.1*index}  key={10+index}/>
+                            <CommitteeMenuLink  committee={committee} eventKey={committee.id}  key={10+index}/>
                             )}
                     </NavDropdown>
 
@@ -66,7 +68,7 @@ class MenuLink extends React.Component {
             <LinkContainer to={routedPath}>
                 <MenuItem
                     eventKey={this.props.eventKey}
-                     className={styles.navItem}>{desc}</MenuItem>
+                     className={styles.navItem}>{this.props.eventKey} - {desc}</MenuItem>
             </LinkContainer>
             : <Navbar.Text>
                     <Navbar.Link href={link}

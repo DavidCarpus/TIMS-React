@@ -34,5 +34,22 @@
 { "groupName":"PlanningBoard", "office":"Alternate (Appointed)","name":"Robert Graham"},
 { "groupName":"PlanningBoard", "office":"Ex-Officio","name":"Tom Gray",	"term":"2017"}
 
+,
+{ "groupName":"Recreation", "office":"Selectman Liaison","name":"Andrew Rawson",	"term":""},
+{ "groupName":"Recreation", "office":"School Board Liaison","name":"Douglas Shute",	"term":"2015"},
+{ "groupName":"Recreation", "office":"Chairman","name":"Christopher Jacobs",	"term":"2015"},
+{ "groupName":"Recreation", "office":"Commissioner","name":"Stefanie Berry",	"term":"2017"},
+{ "groupName":"Recreation", "office":"Commissioner","name":"Sarah Rogers",	"term":"2016"}
+,
+{ "groupName":"TrustFunds", "office":"Trustee Treasurer","name":"Marion Trafton - 603-652-9768",	"term":""},
+{ "groupName":"TrustFunds", "office":"Trustee","name":"Karen Brown - 603-652-4501 x8",	"term":""}
+,
+{ "groupName":"Zoning", "office":"Chairman","name":"Michael Tabory",	"term":"2017"},
+{ "groupName":"Zoning", "office":"Member","name":"Luella Snyder",	"term":"2017"},
+{ "groupName":"Zoning", "office":"Appointed until 2017","name":"Larry Brown",	"term":"2019"},
+{ "groupName":"Zoning", "office":"Member","name":"Bruce Woodruff",	"term":"2018"},
+{ "groupName":"Zoning", "office":"Member","name":"Stan Nadeau",	"term":"2018"},
+{ "groupName":"Zoning", "office":"Alternate","name":"Sean Skillings",	"term":""}
+
 
 ]

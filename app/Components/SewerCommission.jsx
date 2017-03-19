@@ -7,29 +7,29 @@ import layoutStyles from './MainLayout.css'
 import GroupMembers from './GroupMembers'
 import AgendasAndMinutes from './AgendasAndMinutes'
 
-export default class BudgetCommittee extends React.Component {
+export default class SewerCommission extends React.Component {
 
     render() {
         return (
-            <div id="BudgetCommittee">
+            <div id="SewerCommission">
                 <div id="contentArea"  className={layoutStyles.contentArea}>
-                    <h1 style={{textAlign:'center'}}>Budget Committee</h1>
+                    <h1 style={{textAlign:'center'}}>Sewer Commission</h1>
 
                     <GroupMembers
-                        groupName='BudgetCommittee'
-                        title='Budget Committee Members'
+                        groupName='SewerCommission'
+                        title='Sewer Commission Members'
                         />
                     <AgendasAndMinutes
-                        groupName='BudgetCommittee'
+                        groupName='SewerCommission'
                         />
 
 
                     <DocumentList
-                        groupName='BudgetCommittee'
-                        title='Budget Committee Documentation'
+                        groupName='SewerCommission'
+                        title='Sewer Commission Documentation'
                         />
                 </div>
-            <Aside groupName='BudgetCommittee' />
+            <Aside groupName='SewerCommission' />
             </div>
         );
     }

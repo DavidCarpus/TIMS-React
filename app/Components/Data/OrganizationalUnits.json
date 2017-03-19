@@ -1,0 +1,26 @@
+[
+    {"id": 1, "desc":"Budget Committee", "link": "BudgetCommittee", "mainMenu":"Committees"},
+    {"id": 2, "desc": "Cemetery Trustees", "link":"CemeteryTrustees"    ,"mainMenu":"Committees" },
+    {"id": 3, "desc": "Conservation Committee", "link":"ConservationCommittee", "label": "Conservation Committee", "mainMenu":"Committees" },
+    {"id": 4, "desc": "Economic Development" , "link":"EconomicDevelopment", "label": "Economic Development ","mainMenu":"Committees"},
+    {"id": 5, "desc": "Milton Free Public Library Board of Trustees" , "link":"LibraryTrustees", "mainMenu":"Committees"},
+    {"id": 6, "desc": "Planning Board" , "label": "Planning Board", "link":"PlanningBoard", "mainMenu":"Committees"},
+    {"id": 7, "desc": "Recreation Commission" , "label": "Recreation Committee", "link":"Recreation", "mainMenu":"Committees"},
+    {"id": 8, "desc": "Sewer Commission", "label": "Sewer Commission", "link":"SewerCommission" , "mainMenu":"Committees"},
+    {"id": 9, "desc": "Supervisors of the Checklist" , "label": "Supervisors of the Checklist", "link":"ChecklistSupervisors", "mainMenu":"Committees"},
+    {"id": 11, "desc": "Town House Committee", "label": "Town House Commitee", "link":"TownHouse" , "mainMenu":"Committees"},
+    {"id": 12, "desc": "Trustees of Trust Funds" , "label": "Trustees of Trust  Funds", "link":"TrustFunds", "mainMenu":"Committees"},
+    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA" , "label": "Zoning Board of Adjustment (ZBA)", "link":"Zoning", "mainMenu":"Committees"}
+    ,
+    {"id": 16, "desc": "Assessing", "mainMenu":"Departments"},
+    {"id": 17, "desc": "Code Enforcement",        "link":"CodeEnforcement"    , "mainMenu":"Departments"}    ,
+    {"id": 18, "desc": "Fire / Emergency Management", "link":"http://www.miltonfirerescue.com/"  , "mainMenu":"Departments"}    ,
+    {"id": 19, "desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"    , "mainMenu":"Departments"},
+    {"id": 20, "desc": "Parks & Recreation",        "link":"ParksRecreation"    , "mainMenu":"Departments"},
+    {"id": 21, "desc": "Planning and Land Use",        "link":"Planning"    , "mainMenu":"Departments"},
+    {"id": 22, "desc": "Police" ,        "link":"http://miltonnhpd.com/", "mainMenu":"Departments"},
+    {"id": 23, "desc": "Public Works",        "link":"PublicWorks"    , "mainMenu":"Departments"},
+    {"id": 24, "desc": "Sewer Department",        "link":"Sewer"    , "mainMenu":"Departments"},
+    {"id": 25, "desc": "Tax Collector/Town Clerk",        "link":"TownClerk"    , "mainMenu":"Departments"},
+    {"id": 26, "desc": "Welfare" }
+]

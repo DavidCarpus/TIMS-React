@@ -95,4 +95,10 @@
        "shortDesc": " Softball Field Renovation Committee Agenda", "dept":"ParksRecreation"},
    {"id": 30,"mainpage": false, "date": "2016-09-28",
        "shortDesc": " Softball Field Renovation Committee Minutes", "dept":"ParksRecreation"}
+
+   ,
+   {"id": 31,"mainpage": false, "date": "2017-03-04",  "shortDesc": "Session scheduled for Saturday, March 4, 2017 ", "dept":"ChecklistSupervisors",
+       "link":"http://miltonnh-us.com/uploads/checklist_22_2475623.pdf","dateposted":""
+   }
+
 ]

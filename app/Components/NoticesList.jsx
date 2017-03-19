@@ -14,7 +14,12 @@ class NoticeListElement extends React.Component {
 }
 export default class NoticesList extends React.Component {
 render(){
+    var text1 = ''
+    // text1 = JSON.stringify(this.props.notices);
     return (
+        this.props.notices.length == 0
+        ? <div>{text1}</div>
+        :
         <section id='notices'>
             <h2>Notices</h2>
             <ul>{this.props.notices.

@@ -14,6 +14,9 @@ export default class GroupMembers extends React.Component {
                     {return member.groupName == groupName } )
 
         return (
+            members.length == 0
+            ? <div id={id} className={styles.groupMembersEmpty}></div>
+            :
             <div id={id} className={styles.groupMembers}>
                 {members.length > 0 ? <h2>{title}</h2> : ''}
                     {members.map( (member, index) =>

@@ -64,5 +64,9 @@
     {"department":"LibraryTrustees", "desc": "Milton Free Public Library<br/>13 Main Street, <br/>Milton Mills, NH<br/>603-473-8535<br/>Email: MFPL@metrocast.net"    }
     ,
     {"department":"PlanningBoard", "desc": "Land Use Clerk<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+    ,
+    {"department":"Recreation", "desc": "Director<br/>Karen Brown" }
+    ,
+    {"department":"Zoning", "desc": "Zoning Board of Adjustment Secretary<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
 
 ]

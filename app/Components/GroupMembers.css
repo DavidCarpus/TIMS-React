@@ -15,9 +15,13 @@
     clear: left;
     border-bottom: 1px solid black;
 }
+.groupMembersEmpty {
+    clear: left;
+    display: inline-block;
+}
 .groupMembers {
     /*width:500px;*/
-    clear: left;
+    clear: both;
     display: inline-block;
     border: 1px solid black;
 }
