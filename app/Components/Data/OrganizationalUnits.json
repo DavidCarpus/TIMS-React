@@ -12,7 +12,7 @@
     {"id": 12, "desc": "Trustees of Trust Funds" , "label": "Trustees of Trust  Funds", "link":"TrustFunds", "mainMenu":"Committees"},
     {"id": 13, "desc": "Zoning Board of Adjustment (ZBA" , "label": "Zoning Board of Adjustment (ZBA)", "link":"Zoning", "mainMenu":"Committees"}
     ,
-    {"id": 16, "desc": "Assessing", "mainMenu":"Departments"},
+    {"id": 16, "desc": "Assessing", "link":"Assessing"    , "mainMenu":"Departments"},
     {"id": 17, "desc": "Code Enforcement",        "link":"CodeEnforcement"    , "mainMenu":"Departments"}    ,
     {"id": 18, "desc": "Fire / Emergency Management", "link":"http://www.miltonfirerescue.com/"  , "mainMenu":"Departments"}    ,
     {"id": 19, "desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"    , "mainMenu":"Departments"},
@@ -22,5 +22,5 @@
     {"id": 23, "desc": "Public Works",        "link":"PublicWorks"    , "mainMenu":"Departments"},
     {"id": 24, "desc": "Sewer Department",        "link":"Sewer"    , "mainMenu":"Departments"},
     {"id": 25, "desc": "Tax Collector/Town Clerk",        "link":"TownClerk"    , "mainMenu":"Departments"},
-    {"id": 26, "desc": "Welfare" }
+    {"id": 26, "desc": "Welfare" , "link":"Welfare"    }
 ]

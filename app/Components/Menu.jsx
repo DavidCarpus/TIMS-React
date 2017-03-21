@@ -10,67 +10,102 @@ var departments = organizations.filter( (organization)=>
 var committees = organizations.filter( (organization)=>
             {return organization.mainMenu == 'Committees' } )
 
+// <DropdownButton title={buttonTitle} onSelect={() => null}>
+
 export default class Menu extends React.Component {
     logoLink = () => {
         return 'images/MiltonSeal.png'
     }
+
     render(){
         const logo = {height: '90px'};
         return (
-            <Navbar collapseOnSelect
+            <div>
+            <Navbar
                 id='custom-bootstrap-menu'
-                >
-            <Navbar.Header>
-                <Navbar.Brand>
-                  <a href="#" style={logo}>
-                      <img
-                          className={styles.logo}
-                          src={this.logoLink()}
-                          />
-                  </a>
-              </Navbar.Brand>
-              <Navbar.Toggle />
-            </Navbar.Header>
+            >
+                <Navbar.Header>
+                    <Navbar.Brand>
+                      <a href="#" style={logo}>
+                          <img
+                              className={styles.logo}
+                              src={this.logoLink()}
+                              />
+                      </a>
+                  </Navbar.Brand>
+                  <Navbar.Toggle />
+                </Navbar.Header>
 
-            <Navbar.Collapse>
-                <Nav  className={styles.myNavbar} >
+                <Navbar.Collapse>
+                <Nav>
                     <LinkContainer to="/about">
                         <NavItem eventKey={1} >About</NavItem>
                     </LinkContainer>
                     <LinkContainer to="/calendar">
                         <NavItem eventKey={2} >Town Calendar</NavItem>
                     </LinkContainer>
-
-                    <NavDropdown eventKey={3} title="Departments" id="basic-nav-dropdown">
-                        {departments.map((department, index) =>
-                             <DepartmentMenuLink  department={department} eventKey={department.id} key={3+index}/>
-                            )}
-                    </NavDropdown>
-                    <NavDropdown eventKey={4} title="Committees" id="basic-nav-dropdown">
-                        {committees.map((committee, index) =>
-                            <CommitteeMenuLink  committee={committee} eventKey={committee.id}  key={10+index}/>
-                            )}
-                    </NavDropdown>
-
+                  <NavDropdown eventKey={'3'} title="Departments" id={33}>
+                    {departments.map((department, index) =>
+                        ( !department.link.startsWith('http'))
+                        ?
+                        <LinkContainer to={'Departments/' + department.link}
+                            key={index}>
+                            <MenuItem
+                                eventKey={'3.'+index}
+                                 className={styles.navItem}>{index} - {department.desc}</MenuItem>
+                        </LinkContainer>
+                        :
+                        <Navbar.Text key={index}>
+                               <Navbar.Link href={department.link}  target="_blank"> {department.desc}</Navbar.Link>
+                           </Navbar.Text>
+                        )}
+                  </NavDropdown>
+                  <NavDropdown eventKey={'4'} title="Committees" id={44}>
+                      {committees.map((committee, index) =>
+                          ( !committee.link.startsWith('http'))
+                          ?
+                          <LinkContainer to={'BoardsAndCommittees/' + committee.link}
+                              key={index}
+                              >
+                              <MenuItem
+                                  eventKey={'4.'+index}
+                                  className={styles.navItem}>{index} - {committee.desc}</MenuItem>
+                          </LinkContainer>
+                          :
+                          <Navbar.Text
+                              key={index}
+                              >
+                              <Navbar.Link href={committee.link}
+                                  target="_blank">{committee.desc}</Navbar.Link>
+                          </Navbar.Text>
+                      )}
+                  </NavDropdown>
                 </Nav>
-            </Navbar.Collapse>
+              </Navbar.Collapse>
             </Navbar>
-        );
-    }
-}
+            </div>
+          )
+      }
+  }
+
 class MenuLink extends React.Component {
     render() {
         var link = this.props.link.replace(' ','')
         var desc = this.props.desc
         var routedPath = this.props.routePath + link
         return (
-            ( !link.startsWith('http')) ?
+            ( !link.startsWith('http'))
+            ?
+
             <LinkContainer to={routedPath}>
                 <MenuItem
                     eventKey={this.props.eventKey}
                      className={styles.navItem}>{this.props.eventKey} - {desc}</MenuItem>
             </LinkContainer>
-            : <Navbar.Text>
+
+            :
+
+             <Navbar.Text>
                     <Navbar.Link href={link}
                     target="_blank">{desc}</Navbar.Link>
                 </Navbar.Text>
@@ -81,19 +116,32 @@ class MenuLink extends React.Component {
 
 class DepartmentMenuLink extends React.Component {
     render() {
-        var routePath= '/Departments/'
+        // var routePath= '/Departments/'
         var desc=this.props.department.desc
         var link=this.props.department.link || desc
+        var index=this.props.index
         return (
-            <MenuLink
-                    link={link}
-                    routePath={routePath}
-                    eventKey={this.props.eventKey}
-                    desc={desc}/>
+            <LinkContainer to={'Departments/' + link}>
+                <MenuItem
+                    key={index}
+                    eventKey={index}
+                     className={styles.navItem}>{index} - {desc}</MenuItem>
+            </LinkContainer>
         )
     }
 }
-
+/*
+var routePath= '/Departments/'
+var desc=this.props.department.desc
+var link=this.props.department.link || desc
+return (
+    <MenuLink
+            link={link}
+            routePath={routePath}
+            eventKey={this.props.eventKey}
+            desc={desc}/>
+)
+*/
 class CommitteeMenuLink extends React.Component {
     render() {
         var routePath= '/BoardsAndCommittees/'
@@ -131,4 +179,8 @@ Search
 Contact us
 Residents
 Business
+
+
+onClick={  () => console.log('MenuItem clicked') }
+
 */
