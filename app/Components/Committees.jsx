@@ -3,6 +3,7 @@ import DocumentList  from './DocumentList'
 import Aside from './Aside'
 import SmartLink from './SmartLink'
 import layoutStyles from './MainLayout.css'
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import NoticesList from './NoticesList'
 import GroupMembers from './GroupMembers'
@@ -50,33 +51,34 @@ export default class Committees extends React.Component {
         var groupLabel = group.desc || 'missing desc'
 
         return (
-            <div id={groupName}>
-                <div id="contentArea"  className={layoutStyles.contentArea}>
-                    <h1 style={{textAlign:'center'}}>{groupLabel}</h1>
+<div>
+    <Col md={10}  mdPush={2} id="contentArea"  className={layoutStyles.contentArea}>
 
-                    <RawText groupPageText={groupPageText} block='desc' />
+        <h1 style={{textAlign:'center'}}>{groupLabel}</h1>
 
-                    <RawText groupPageText={groupPageText} block='text1' />
+        <RawText groupPageText={groupPageText} block='desc' />
 
-                    <NoticesList notices={notices.filter((notice)=> {return notice.dept == groupName})}/>
+        <RawText groupPageText={groupPageText} block='text1' />
 
-                    <GroupMembers
-                        groupName={groupName}
-                        title={groupLabel + ' Members'}
-                        />
+        <NoticesList notices={notices.filter((notice)=> {return notice.dept == groupName})}/>
 
-                    <AgendasAndMinutes
-                        groupName={groupName}
-                        />
+        <GroupMembers
+            groupName={groupName}
+            title={groupLabel + ' Members'}
+            />
+
+        <AgendasAndMinutes
+            groupName={groupName}
+            />
 
 
-                    <DocumentList
-                        groupName={groupName}
-                        title={groupLabel + ' Documentation'}
-                        />
-                </div>
-            <Aside groupName={groupName} />
-            </div>
+        <DocumentList
+            groupName={groupName}
+            title={groupLabel + ' Documentation'}
+            />
+    </Col>
+    <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+</div>
         );
     }
 

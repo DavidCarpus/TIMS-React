@@ -2,14 +2,14 @@
 
 .logo {
     max-height: 100%;
-    background: #00f;
     background: rgba(255,255,255,0.9);
 }
-@media bp-iphone5 {
+/*@media bp-iphone5 {
      :global(#navbar) a{
             font-size: 2vmin;
         }
-}
+}*/
+
 /*.navbar-brand > img {
     display: inline-block;
 }*/

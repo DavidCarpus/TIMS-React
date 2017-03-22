@@ -8,12 +8,12 @@ body {
 }
 
 @media bp-iphone5{
-    p, h3{
+    /*p, h3{
       font-size: 3vmin;
     }
     h2{
       font-size: 6vmin;
-    }
+    }*/
     /*:global(#navbar) a{
         font-size: 2vmin;
     }*/

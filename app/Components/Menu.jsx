@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import styles from './Menu.css'
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import organizations from './Data/OrganizationalUnits.json'
 var departments = organizations.filter( (organization)=>
@@ -20,8 +21,9 @@ export default class Menu extends React.Component {
     render(){
         const logo = {height: '90px'};
         return (
-            <div>
+            <Col md={12}>
             <Navbar
+                collapseOnSelect
                 id='custom-bootstrap-menu'
             >
                 <Navbar.Header>
@@ -32,58 +34,60 @@ export default class Menu extends React.Component {
                               src={this.logoLink()}
                               />
                       </a>
-                  </Navbar.Brand>
+                    </Navbar.Brand>
                   <Navbar.Toggle />
                 </Navbar.Header>
 
-                <Navbar.Collapse>
-                <Nav>
-                    <LinkContainer to="/about">
-                        <NavItem eventKey={1} >About</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/calendar">
-                        <NavItem eventKey={2} >Town Calendar</NavItem>
-                    </LinkContainer>
-                  <NavDropdown eventKey={'3'} title="Departments" id={33}>
-                    {departments.map((department, index) =>
-                        ( !department.link.startsWith('http'))
-                        ?
-                        <LinkContainer to={'Departments/' + department.link}
-                            key={index}>
-                            <MenuItem
-                                eventKey={'3.'+index}
-                                 className={styles.navItem}>{index} - {department.desc}</MenuItem>
+                <Navbar.Collapse
+                    className="bs-navbar-collapse">
+                    <Nav>
+                        <LinkContainer to="/about">
+                            <NavItem eventKey={1} >About</NavItem>
                         </LinkContainer>
-                        :
-                        <Navbar.Text key={index}>
-                               <Navbar.Link href={department.link}  target="_blank"> {department.desc}</Navbar.Link>
-                           </Navbar.Text>
-                        )}
-                  </NavDropdown>
-                  <NavDropdown eventKey={'4'} title="Committees" id={44}>
-                      {committees.map((committee, index) =>
-                          ( !committee.link.startsWith('http'))
-                          ?
-                          <LinkContainer to={'BoardsAndCommittees/' + committee.link}
-                              key={index}
-                              >
-                              <MenuItem
-                                  eventKey={'4.'+index}
-                                  className={styles.navItem}>{index} - {committee.desc}</MenuItem>
-                          </LinkContainer>
-                          :
-                          <Navbar.Text
-                              key={index}
-                              >
-                              <Navbar.Link href={committee.link}
-                                  target="_blank">{committee.desc}</Navbar.Link>
-                          </Navbar.Text>
-                      )}
-                  </NavDropdown>
-                </Nav>
-              </Navbar.Collapse>
+                        <LinkContainer to="/calendar">
+                            <NavItem eventKey={2} >Town Calendar</NavItem>
+                        </LinkContainer>
+                        <NavDropdown eventKey={'3'} title="Departments" id={33}>
+                            {departments.map((department, index) =>
+                                ( !department.link.startsWith('http'))
+                                ?
+                                <LinkContainer to={'Departments/' + department.link}
+                                    key={index}>
+                                    <MenuItem
+                                        eventKey={'3.'+index}
+                                         className={styles.navItem}>{department.desc}</MenuItem>
+                                </LinkContainer>
+                                :
+                                <Navbar.Text key={index}>
+                                       <Navbar.Link href={department.link}  target="_blank"> {department.desc}</Navbar.Link>
+                                   </Navbar.Text>
+                                )}
+                        </NavDropdown>
+                        <NavDropdown eventKey={'4'} title="Committees" id={44}>
+                            {committees.map((committee, index) =>
+                              ( !committee.link.startsWith('http'))
+                              ?
+                              <LinkContainer to={'BoardsAndCommittees/' + committee.link}
+                                  key={index}
+                                  >
+                                  <MenuItem
+                                      eventKey={'4.'+index}
+                                      className={styles.navItem}>{committee.desc}</MenuItem>
+                              </LinkContainer>
+                              :
+                              <Navbar.Text
+                                  key={index}
+                                  >
+                                  <Navbar.Link href={committee.link}
+                                      target="_blank">{committee.desc}</Navbar.Link>
+                              </Navbar.Text>
+                                )
+                            }
+                        </NavDropdown>
+                    </Nav>
+                  </Navbar.Collapse>
             </Navbar>
-            </div>
+            </Col>
           )
       }
   }

@@ -3,13 +3,15 @@ import Aside from './Aside'
 import SmartLink from './SmartLink'
 
 import layoutStyles from './MainLayout.css'
+import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Planning extends React.Component {
 
     render() {
         return (
-            <div id="Planning">
-                <div id="contentArea"  className={layoutStyles.contentArea}>
+            <div>
+                <Col md={2}><Aside groupName={'Planning'} /></Col>
+                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
                     <h1 style={{textAlign:'center'}}>Planning and Land Use</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>
@@ -25,10 +27,7 @@ export default class Planning extends React.Component {
                     <br/>
                     <p>If you should have any questions please do not hesitate to contact Dana Crossley, Land Use Clerk, at 603-652-4501 x5 or
                         landuse@miltonnh-us.com</p>
-                </div>
-                <Aside
-                    groupName='Planning'
-                    />
+                </Col>
             </div>
         );
     }

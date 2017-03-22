@@ -1,16 +1,12 @@
 @value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "./breakpoints.css";
 
 .primaryAside {
-      /*position: fixed;*/
-      width: 20%;
-      /*min-width: 220px;*/
       height: 100%;
-      /*max-height: 100%;*/
       float: left;
       left: 0px;
-      padding:  25px 10px; /* Top, Bottom */
-      background-color: black;
+      width: 100%;
       color: white;
+      background-color: black;
       text-align: left;
 }
 

@@ -8,6 +8,7 @@ import NoticesList from './NoticesList'
 
 import styles from './Assessing.css'
 import layoutStyles from './MainLayout.css'
+import { Grid, Row, Col } from 'react-bootstrap';
 
 import data from './Data/ParksRecreation.json'
 import notices from './Data/Notices.json'
@@ -43,8 +44,9 @@ class GazetteListing extends React.Component {
 export default class ParksRecreation extends React.Component {
     render() {
         return (
-            <div id="CodeEnforcement">
-                <div id="contentArea"  className={layoutStyles.contentArea}>
+            <div>
+                <Col md={2}><Aside groupName={'ParksRecreation'} /></Col>
+                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
                     <h1 style={{textAlign:'center'}}>Parks and Recreation</h1>
                     <p>Town Beach is open Saturday's & Sunday's weather permitting 10-5pm.
                     Please call ahead to verify that the gatehouse is open.
@@ -53,9 +55,7 @@ export default class ParksRecreation extends React.Component {
                     <EB2ServiceBlock groupName='ParksRecreation'/>
                     <NoticesList notices={notices.filter((notice)=> {return notice.dept == 'ParksRecreation'})}/>
                     <GazetteListing />
-                </div>
-                
-            <Aside groupName='ParksRecreation' />
+                </Col>
             </div>
         );
     }

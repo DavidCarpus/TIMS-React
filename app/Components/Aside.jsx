@@ -13,8 +13,16 @@ class AsideItem extends React.Component {
         // var desc = this.createMarkup()
         // var desc = this.props.item.desc
         var desc = {__html: this.props.item.desc}
+        var hasLink  = (this.props.item.link != null)
         return (
-            <li ><p dangerouslySetInnerHTML={desc} ></p></li>
+            <li >
+            {hasLink
+            ?
+            (<a href={this.props.item.link} dangerouslySetInnerHTML={desc} ></a>)
+            :
+            (<p dangerouslySetInnerHTML={desc} ></p>)
+            }
+            </li>
         );
     }
 }

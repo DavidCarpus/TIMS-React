@@ -4,7 +4,10 @@ import TaxMapForm  from './TaxMapForm'
 import styles from './PublicWorks.css'
 import Aside from './Aside'
 import SmartLink from './SmartLink'
+
 import layoutStyles from './MainLayout.css'
+import { Grid, Row, Col } from 'react-bootstrap';
+
 import NoticesList from './NoticesList'
 import EB2ServiceBlock from './EB2ServiceBlock'
 // import EB2ServiceLink from './EB2ServiceLink'
@@ -21,8 +24,9 @@ export default class PublicWorks extends React.Component {
 
     render() {
         return (
-            <div id="PublicWorks">
-                <div id="contentArea"  className={layoutStyles.contentArea}>
+            <div>
+                <Col md={2}><Aside groupName={'PublicWorks'} /></Col>
+                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
                     <h1 style={{textAlign:'center'}}>Public Works Department</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
                         <NoticesList notices={notices.filter((notice)=>
@@ -30,8 +34,7 @@ export default class PublicWorks extends React.Component {
 
                         <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
                             linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
-
-
+                
                         <hr/>
                         <h2>Transfer Station</h2>
                         <p>
@@ -53,10 +56,7 @@ export default class PublicWorks extends React.Component {
 
                         <EB2ServiceBlock groupName='PublicWorks'/>
                         Buy Transfer Station Stickers Online
-                </div>
-
-                <Aside groupName='PublicWorks' />
-
+                </Col>
             </div>
         );
     }
