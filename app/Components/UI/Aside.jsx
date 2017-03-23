@@ -1,7 +1,6 @@
 import React from 'react';
-import styles from './Aside.css'
+import styles from './Styles/Aside.css'
 import asideData from '../Data/Asides.json'
-// import layoutStyles from './MainLayout.css'
 
 class AsideItem extends React.Component {
     createMarkup(){

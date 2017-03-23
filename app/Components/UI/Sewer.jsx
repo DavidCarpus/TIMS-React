@@ -1,7 +1,6 @@
 import React from 'react';
 import SmartLink from './SmartLink'
 import Aside from './Aside'
-import layoutStyles from './MainLayout.css'
 import DocumentList  from './DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -10,7 +9,7 @@ export default class Sewer extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'Sewer'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea" >
                         <h1 style={{textAlign:'center'}}>Sewer Department</h1>
 
                         <p>The wastewater facility services approximately 300 units in the town of Milton and treated approximately 22,593,000 gallons of sewerage at an average daily flow of 62,000 gallons. We continue to operate around 62% of plant design capacity allowing future growth within the community.</p>

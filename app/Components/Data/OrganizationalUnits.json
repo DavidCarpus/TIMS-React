@@ -22,5 +22,6 @@
     {"id": 23, "desc": "Public Works",        "link":"PublicWorks"    , "mainMenu":"Departments"},
     {"id": 24, "desc": "Sewer Department",        "link":"Sewer"    , "mainMenu":"Departments"},
     {"id": 25, "desc": "Tax Collector/Town Clerk",        "link":"TownClerk"    , "mainMenu":"Departments"},
-    {"id": 26, "desc": "Welfare" , "link":"Welfare"    }
+    {"id": 26, "desc": "Welfare" , "link":"Welfare" ,"mainMenu":"Departments"}
+
 ]

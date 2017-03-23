@@ -1,7 +1,6 @@
 import React from 'react';
-import layoutStyles from './MainLayout.css'
 
-import styles from './PublicWorks.css'
+import styles from './Styles/PublicWorks.css'
 
 import data from '../Data/PublicWorks.json'
 var wasteTypes = data.transferrules.wasteTypes
@@ -34,7 +33,6 @@ export default class TransferStationRules extends React.Component {
         return (
             <div id='TransferStationRules'>
                 <div id="contentArea"
-                    className={layoutStyles.contentArea}
                     style={{width:'100%'}}
                     >
 

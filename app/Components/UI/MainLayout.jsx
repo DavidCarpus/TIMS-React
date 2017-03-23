@@ -1,6 +1,5 @@
 import React from 'react';
 import Menu from './Menu'
-import styles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class MainLayout extends React.Component {

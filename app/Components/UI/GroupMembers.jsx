@@ -2,7 +2,7 @@ import React from 'react';
  import data from '../Data/GroupMembers.json'
  import SmartLink from './SmartLink'
 
- import styles from './GroupMembers.css'
+ import styles from './Styles/GroupMembers.css'
 
 export default class GroupMembers extends React.Component {
     render() {

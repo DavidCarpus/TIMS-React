@@ -6,8 +6,6 @@ import EB2ServiceLink from './EB2ServiceLink'
 import EB2ServiceBlock from './EB2ServiceBlock'
 import NoticesList from './NoticesList'
 
-import styles from './Assessing.css'
-import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import data from '../Data/ParksRecreation.json'
@@ -46,7 +44,7 @@ export default class ParksRecreation extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'ParksRecreation'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea" >
                     <h1 style={{textAlign:'center'}}>Parks and Recreation</h1>
                     <p>Town Beach is open Saturday's & Sunday's weather permitting 10-5pm.
                     Please call ahead to verify that the gatehouse is open.

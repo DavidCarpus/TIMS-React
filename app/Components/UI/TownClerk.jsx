@@ -1,8 +1,6 @@
 import React from 'react';
 import Aside from './Aside'
-import layoutStyles from './MainLayout.css'
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
-import styles from './TownClerk.css'
 import NoticesList from './NoticesList'
 import DocumentList  from './DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -14,7 +12,7 @@ export default class TownClerk extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'TownClerk'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Tax Collector/Town Clerk</h1>
 
                     <NoticesList notices={notices.filter((notice)=> {return notice.dept == 'townclerk'})}/>

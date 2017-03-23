@@ -1,6 +1,5 @@
 import React from 'react';
 import Aside from './Aside'
-import layoutStyles from './MainLayout.css'
 import {  Col } from 'react-bootstrap';
 
 export default class About extends React.Component {
@@ -9,9 +8,7 @@ render() {
     return (
         <div>
             <Col md={2}><Aside groupName={'Home'} /></Col>
-            <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
-
-
+            <Col md={10}  id="contentArea">
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
             <p>Milton was incorporated in 1802 and is located in the Northeast section of
                 <a href='http://nhdeeds.com/strafford/StHome.html'> Strafford County.</a>

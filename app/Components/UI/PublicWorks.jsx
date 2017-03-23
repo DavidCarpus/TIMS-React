@@ -1,11 +1,10 @@
 import React from 'react';
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
 import TaxMapForm  from './TaxMapForm'
-import styles from './PublicWorks.css'
+import styles from './Styles/PublicWorks.css'
 import Aside from './Aside'
 import SmartLink from './SmartLink'
 
-import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import NoticesList from './NoticesList'
@@ -26,7 +25,7 @@ export default class PublicWorks extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'PublicWorks'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea" >
                     <h1 style={{textAlign:'center'}}>Public Works Department</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
                         <NoticesList notices={notices.filter((notice)=>

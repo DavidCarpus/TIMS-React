@@ -1,8 +1,6 @@
 import React from 'react';
 import Aside from './Aside'
 import DocumentList  from './DocumentList'
-import styles from './Assessing.css'
-import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import SmartLink from './SmartLink'
@@ -14,7 +12,7 @@ export default class CodeEnforcement extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'CodeEnforcement'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea" >
 
                     <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
                     <p>Most inspections are conducted Tuesday's and Wednesday's and occasionally other days to accommodate the property owner. Applications and complaint forms can be picked up at the Town Hall Monday through Friday from 8:00 AM to 4:00 PM.</p>

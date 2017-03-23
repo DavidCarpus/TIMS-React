@@ -3,16 +3,15 @@ import Aside from './Aside'
 import SmartLink from './SmartLink'
 import DocumentList  from './DocumentList'
 import FAQList  from './FAQList'
-
-
-import layoutStyles from './MainLayout.css'
+import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Welfare extends React.Component {
 
     render() {
         return (
-            <div id="Welfare">
-                <div id="contentArea"  className={layoutStyles.contentArea}>
+            <Row id="Welfare" className="show-grid">
+            <Col md={2}><Aside groupName={'Welfare'} /></Col>
+            <Col md={10}  id="contentArea" >
                     <h1 style={{textAlign:'center'}}>Milton Welfare & Community Services Information</h1>
                         <quote>The Town has a basic legal duty to administer welfare as described in New Hampshire RSA 165:1-I, which states “Whenever a person in any town is poor and unable to support himself, he shall be relieved and maintained by the overseers of public welfare of such town…”</quote>
                         <br/><br/>
@@ -27,12 +26,9 @@ export default class Welfare extends React.Component {
                         <DocumentList groupName='Welfare' />
 
                         <FAQList groupName='Welfare' />
-                        
-                    </div>
-                    <Aside
-                        groupName='Welfare'
-                        />
-            </div>
+                        </Col>
+                    </Row>
+
         );
     }
 

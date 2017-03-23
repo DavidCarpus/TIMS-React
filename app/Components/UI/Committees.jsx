@@ -2,7 +2,6 @@ import React from 'react';
 import DocumentList  from './DocumentList'
 import Aside from './Aside'
 import SmartLink from './SmartLink'
-import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import NoticesList from './NoticesList'
@@ -52,7 +51,7 @@ export default class Committees extends React.Component {
 
         return (
 <div>
-    <Col md={10}  mdPush={2} id="contentArea"  className={layoutStyles.contentArea}>
+    <Col md={10}  mdPush={2} id="contentArea"  >
 
         <h1 style={{textAlign:'center'}}>{groupLabel}</h1>
 

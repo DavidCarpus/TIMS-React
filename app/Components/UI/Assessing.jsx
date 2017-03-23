@@ -4,11 +4,22 @@ import DocumentList  from './DocumentList'
 import Aside from './Aside'
 
 import { Col } from 'react-bootstrap';
-import styles from './Assessing.css'
 
 export default class Assessing extends React.Component {
 
     render() {
+        const onlineAssessmentButton= {
+            backgroundColor: 'blue',
+            color: 'white',
+            width: '150px',
+            height: '45px',
+            fontSize: '2vmin',
+            display:'inline-block',
+            // float:'left',
+            textAlign: 'center',
+            borderRadius: '10px',
+            background: 'radial-gradient(blue, grey)'
+        }
         return (
             <div>
                 <Col md={2}><Aside groupName={'Assessing'} /></Col>
@@ -30,7 +41,7 @@ export default class Assessing extends React.Component {
                     <div >
                         <div  style={{width:'48%'}}>
                             <a href='http://data.avitarassociates.com/logondirect.aspx?usr=milton&pwd=milton'>
-                                <div className={styles.onlineAssessmentButton}>Assessment Data Review Online</div>
+                                <div  style={onlineAssessmentButton}>Assessment Data Review Online</div>
                             </a>
                         </div>
                         <TaxMapForm />

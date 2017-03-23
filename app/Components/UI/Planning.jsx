@@ -2,7 +2,6 @@ import React from 'react';
 import Aside from './Aside'
 import SmartLink from './SmartLink'
 
-import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Planning extends React.Component {
@@ -11,7 +10,7 @@ export default class Planning extends React.Component {
         return (
             <div>
                 <Col md={2}><Aside groupName={'Planning'} /></Col>
-                <Col md={10}  id="contentArea"  className={layoutStyles.contentArea}>
+                <Col md={10}  id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Planning and Land Use</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Notices.css'
+import styles from './Styles/Notices.css'
 import SmartLink from './SmartLink'
 import notices from '../Data/Notices.json'
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Dropdown from 'react-dropdown'
-import './TaxMapForm.css'
+import './Styles/TaxMapForm.css'
 
 export default class TaxMapForm extends React.Component {
     _onSelect(val){
