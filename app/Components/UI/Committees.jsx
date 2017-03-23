@@ -9,9 +9,9 @@ import NoticesList from './NoticesList'
 import GroupMembers from './GroupMembers'
 import AgendasAndMinutes from './AgendasAndMinutes'
 
-import notices from './Data/Notices.json'
-import organizations from './Data/OrganizationalUnits.json'
-import organizationPageText from './Data/OrganizationPageText.json'
+import notices from '../Data/Notices.json'
+import organizations from '../Data/OrganizationalUnits.json'
+import organizationPageText from '../Data/OrganizationPageText.json'
 
 class RawText extends React.Component {
     render() {

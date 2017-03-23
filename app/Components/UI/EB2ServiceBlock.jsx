@@ -1,6 +1,6 @@
 import React from 'react';
 import EB2ServiceLink from './EB2ServiceLink'
-import servicesData from './Data/EB2Services.json'
+import servicesData from '../Data/EB2Services.json'
 
 export default class EB2ServiceBlock extends React.Component {
     render() {

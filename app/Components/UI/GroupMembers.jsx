@@ -1,5 +1,5 @@
 import React from 'react';
- import data from './Data/GroupMembers.json'
+ import data from '../Data/GroupMembers.json'
  import SmartLink from './SmartLink'
 
  import styles from './GroupMembers.css'

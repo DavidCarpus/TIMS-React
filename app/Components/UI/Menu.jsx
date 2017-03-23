@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import styles from './Menu.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import organizations from './Data/OrganizationalUnits.json'
+import organizations from '../Data/OrganizationalUnits.json'
 var departments = organizations.filter( (organization)=>
             {return organization.mainMenu == 'Departments' } )
 var committees = organizations.filter( (organization)=>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Notices.css'
 import SmartLink from './SmartLink'
-import notices from './Data/Notices.json'
+import notices from '../Data/Notices.json'
 
 class NoticeListElement extends React.Component {
     render(){

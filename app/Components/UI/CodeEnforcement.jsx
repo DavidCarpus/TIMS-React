@@ -6,7 +6,7 @@ import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import SmartLink from './SmartLink'
-import data from './Data/CodeEnforcement.json'
+import data from '../Data/CodeEnforcement.json'
 var helpfulInformation = data.helpfulInformation
 
 export default class CodeEnforcement extends React.Component {

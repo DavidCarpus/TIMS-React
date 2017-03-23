@@ -1,5 +1,5 @@
 import React from 'react';
- import documentData from './Data/Documents.json'
+ import documentData from '../Data/Documents.json'
  import SmartLink from './SmartLink'
 // var documents = documentData.filter( (document)=>
 //             {return document.department == 'Assessing'} )

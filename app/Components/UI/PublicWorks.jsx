@@ -13,9 +13,9 @@ import EB2ServiceBlock from './EB2ServiceBlock'
 // import EB2ServiceLink from './EB2ServiceLink'
 import TransferStationRules from './TransferStationRules'
 
-import notices from './Data/Notices.json'
-import data from './Data/PublicWorks.json'
-import servicesData from './Data/EB2Services.json'
+import notices from '../Data/Notices.json'
+import data from '../Data/PublicWorks.json'
+import servicesData from '../Data/EB2Services.json'
 var services = servicesData.services
 var asideData =  data.asideData
 // var documents = data.documents
@@ -34,7 +34,7 @@ export default class PublicWorks extends React.Component {
 
                         <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
                             linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
-                
+
                         <hr/>
                         <h2>Transfer Station</h2>
                         <p>

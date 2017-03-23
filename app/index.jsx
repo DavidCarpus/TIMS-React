@@ -1,21 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HomePage from './Components/HomePage';
-import MainLayout from './Components/MainLayout';
-import About from './Components/About';
-import Calendar from './Components/Calendar'
-import Assessing from './Components/Assessing'
-import CodeEnforcement from './Components/CodeEnforcement'
-import ParksRecreation from './Components/ParksRecreation'
-import Planning from './Components/Planning'
-import PublicWorks from './Components/PublicWorks'
-import TransferStationRules from './Components/TransferStationRules'
-import Sewer from './Components/Sewer'
-import Welfare from './Components/Welfare'
-import TownClerk from './Components/TownClerk'
+import HomePage from './Components/UI/HomePage';
+import MainLayout from './Components/UI/MainLayout';
+import About from './Components/UI/About';
+import Calendar from './Components/UI/Calendar'
+import Assessing from './Components/UI/Assessing'
+import CodeEnforcement from './Components/UI/CodeEnforcement'
+import ParksRecreation from './Components/UI/ParksRecreation'
+import Planning from './Components/UI/Planning'
+import PublicWorks from './Components/UI/PublicWorks'
+import TransferStationRules from './Components/UI/TransferStationRules'
+import Sewer from './Components/UI/Sewer'
+import Welfare from './Components/UI/Welfare'
+import TownClerk from './Components/UI/TownClerk'
 
-import Committees from './Components/Committees'
-import PlanningBoard from './Components/PlanningBoard'
+import Committees from './Components/UI/Committees'
+import PlanningBoard from './Components/UI/PlanningBoard'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;

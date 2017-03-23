@@ -5,7 +5,7 @@ import NoticesList from './NoticesList'
 import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import notices from './Data/Notices.json'
+import notices from '../Data/Notices.json'
 
 export default class HomePage extends React.Component {
     render() {

@@ -1,5 +1,5 @@
 import React from 'react';
- import FAQData from './Data/FAQ.json'
+ import FAQData from '../Data/FAQ.json'
 // var documents = documentData.filter( (document)=>
 //             {return document.department == 'Assessing'} )
 //

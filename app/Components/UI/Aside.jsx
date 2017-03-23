@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Aside.css'
-import asideData from './Data/Asides.json'
+import asideData from '../Data/Asides.json'
 // import layoutStyles from './MainLayout.css'
 
 class AsideItem extends React.Component {

@@ -10,10 +10,10 @@ import styles from './Assessing.css'
 import layoutStyles from './MainLayout.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import data from './Data/ParksRecreation.json'
-import notices from './Data/Notices.json'
+import data from '../Data/ParksRecreation.json'
+import notices from '../Data/Notices.json'
 
-import servicesData from './Data/EB2Services.json'
+import servicesData from '../Data/EB2Services.json'
 var services = servicesData.services
 var gazette = data.gazette
 

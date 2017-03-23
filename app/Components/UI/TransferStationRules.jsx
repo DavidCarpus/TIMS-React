@@ -3,7 +3,7 @@ import layoutStyles from './MainLayout.css'
 
 import styles from './PublicWorks.css'
 
-import data from './Data/PublicWorks.json'
+import data from '../Data/PublicWorks.json'
 var wasteTypes = data.transferrules.wasteTypes
 
 class WasteType extends React.Component {

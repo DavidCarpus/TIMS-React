@@ -7,7 +7,7 @@ import NoticesList from './NoticesList'
 import DocumentList  from './DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
- import notices from './Data/Notices.json'
+ import notices from '../Data/Notices.json'
 
 export default class TownClerk extends React.Component {
     render() {

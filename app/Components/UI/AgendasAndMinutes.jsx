@@ -1,5 +1,5 @@
 import React from 'react';
- import data from './Data/AgendasAndMinutes.json'
+ import data from '../Data/AgendasAndMinutes.json'
  import SmartLink from './SmartLink'
 
  class MeetingBlock extends React.Component {
