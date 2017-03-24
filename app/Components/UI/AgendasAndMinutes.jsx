@@ -14,16 +14,20 @@ import React from 'react';
          return (
              <div id='MeetingBlock'>
                  {meeting.meetingDate}
-                 {meeting.agendaLink ? '-' : ''}
-                 {meeting.agendaLink ? <SmartLink link={meeting.agendaLink} linkText='Agenda' /> : ''}
-                 {meeting.minutesLink ? '-' : ''}
+                 ---
                  {minutesLink}
-                 {meeting.videoLink ? '-' : ''}
+                 {meeting.agendaLink ? <SmartLink link={meeting.agendaLink} linkText='Agenda' /> : ''}
                  {meeting.videoLink ? <SmartLink link={meeting.videoLink} linkText='Video' /> : ''}
              </div>
          )
      }
  }
+ /*
+ {meeting.minutesLink ? '-' : ''}
+ {meeting.agendaLink ? '-' : ''}
+ {meeting.videoLink ? '-' : ''}
+
+ */
 
 export default class AgendasAndMinutes extends React.Component {
     render() {

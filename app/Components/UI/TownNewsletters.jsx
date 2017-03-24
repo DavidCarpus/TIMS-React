@@ -1,4 +1,5 @@
 import React from 'react';
+import SmartLink from './SmartLink'
 
 export default class TownNewsletters extends React.Component {
     render() {
@@ -13,7 +14,8 @@ export default class TownNewsletters extends React.Component {
                         map((entry, index) =>
                         <div key={index}>
                             <li>
-                                <a href={entry.link}>{entry.desc} Gazette</a>
+                                <SmartLink link={entry.link}
+                                    linkText={entry.desc}/>
                             </li>
                         </div>
                     )}
@@ -23,3 +25,5 @@ export default class TownNewsletters extends React.Component {
         )
     }
 }
+
+// <a href={entry.link}>{entry.desc} Gazette</a>

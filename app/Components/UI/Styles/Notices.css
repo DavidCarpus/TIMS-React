@@ -13,3 +13,7 @@
     display: inline-block;
     width: 80%;
 }
+
+.hidebullets {
+    list-style: none;
+}
