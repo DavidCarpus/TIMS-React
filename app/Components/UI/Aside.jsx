@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Styles/Aside.css'
-import asideData from '../Data/Asides.json'
 
 class AsideItem extends React.Component {
     createMarkup(){
@@ -28,11 +27,9 @@ class AsideItem extends React.Component {
 
 export default class MainAside extends React.Component {
     render() {
-        var groupName= this.props.groupName || ''
-        var id = groupName + '_Asides'
-        var title = this.props.title || `Milton ${groupName} Documentation`
-        var asides = asideData.filter( (aside)=>
-                    {return aside.department == groupName } )
+        var id = this.props.groupName + '_Asides'
+        var title = this.props.title
+        var asides = this.props.asides
 
         var recentEvents = this.props.data || asides
         var list = ''

@@ -1,9 +1,5 @@
 import React from 'react';
-import EB2ServiceLink from './EB2ServiceLink'
-import EB2ServiceBlock from './EB2ServiceBlock'
-
-import servicesData from '../Data/EB2Services.json'
-var services = servicesData.services
+import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
 
 export default class OnlinePaymentsBlock extends React.Component {
     render() {

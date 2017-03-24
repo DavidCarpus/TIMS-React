@@ -10,7 +10,7 @@
     {"id": 9, "desc": "Supervisors of the Checklist" , "label": "Supervisors of the Checklist", "link":"ChecklistSupervisors", "mainMenu":"Committees"},
     {"id": 11, "desc": "Town House Committee", "label": "Town House Commitee", "link":"TownHouse" , "mainMenu":"Committees"},
     {"id": 12, "desc": "Trustees of Trust Funds" , "label": "Trustees of Trust  Funds", "link":"TrustFunds", "mainMenu":"Committees"},
-    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA" , "label": "Zoning Board of Adjustment (ZBA)", "link":"Zoning", "mainMenu":"Committees"}
+    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA)" , "label": "Zoning Board of Adjustment (ZBA)", "link":"Zoning", "mainMenu":"Committees"}
     ,
     {"id": 16, "desc": "Assessing", "link":"Assessing"    , "mainMenu":"Departments"},
     {"id": 17, "desc": "Code Enforcement",        "link":"CodeEnforcement"    , "mainMenu":"Departments"}    ,

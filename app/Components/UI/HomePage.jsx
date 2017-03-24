@@ -1,10 +1,8 @@
 import React from 'react';
 import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
-import Aside from './Aside'
-import NoticesList from './NoticesList'
+import Aside from '../Containers/Aside'
+import NoticesList from '../Containers/NoticesList'
 import { Grid, Row, Col } from 'react-bootstrap';
-
-import notices from '../Data/Notices.json'
 
 export default class HomePage extends React.Component {
     render() {
@@ -21,7 +19,7 @@ export default class HomePage extends React.Component {
                         603-652-4501
                     </div>
 
-                    <NoticesList notices={notices.filter((notice)=> {return notice.mainpage})}/>
+                    <NoticesList groupName='Home'/>
                     <OnlinePaymentsBlock/>
                 </Col>
                 <Col md={2} mdPull={10}><Aside groupName={'Home'} /></Col>

@@ -1,8 +1,9 @@
 import React from 'react';
-import Aside from './Aside'
+import Aside from '../Containers/Aside'
+
 import SmartLink from './SmartLink'
-import DocumentList  from './DocumentList'
-import FAQList  from './FAQList'
+import DocumentList  from '../Containers/DocumentList'
+import FAQList  from '../Containers/FAQList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Welfare extends React.Component {

@@ -1,11 +1,9 @@
 import React from 'react';
-import Aside from './Aside'
-import DocumentList  from './DocumentList'
+import Aside from '../Containers/Aside'
+import DocumentList  from '../Containers/DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import SmartLink from './SmartLink'
-import data from '../Data/CodeEnforcement.json'
-var helpfulInformation = data.helpfulInformation
 
 export default class CodeEnforcement extends React.Component {
     render() {
@@ -22,7 +20,7 @@ export default class CodeEnforcement extends React.Component {
                     <p>Please call the Land Use Clerk at Town Hall between the hours of 8:00 AM and 4:00 PM Monday through Friday with any immediate concerns or questions.</p>
 
                     <h2>Helpful Information</h2>
-                    {helpfulInformation.map((link, index) =>
+                    {this.props.helpfulInformation.map((link, index) =>
                         <div key={index}><SmartLink link={link.link} linkText={link.desc} /></div>
                     )}
 

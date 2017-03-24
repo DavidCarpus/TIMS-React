@@ -1,7 +1,8 @@
 import React from 'react';
 import SmartLink from './SmartLink'
-import Aside from './Aside'
-import DocumentList  from './DocumentList'
+import Aside from '../Containers/Aside'
+
+import DocumentList  from '../Containers/DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Sewer extends React.Component {

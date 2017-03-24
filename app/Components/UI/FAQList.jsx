@@ -1,11 +1,7 @@
 import React from 'react';
- import FAQData from '../Data/FAQ.json'
-// var documents = documentData.filter( (document)=>
-//             {return document.department == 'Assessing'} )
-//
+
 class FAQ extends React.Component {
     render() {
-        // <li ><p dangerouslySetInnerHTML={desc} ></p></li>
         var question = {__html: this.props.question.question}
         var answer = {__html: this.props.question.answer}
         return (
@@ -25,18 +21,13 @@ export default class FAQList extends React.Component {
     }
 
     render() {
-        // var groupName= 'Sewer'
-        var groupName= this.props.groupName
-        var id = groupName + '_FAQ'
-        var title = this.props.title || `Milton ${groupName} FAQ`
-        var questions = FAQData.filter( (doc)=>
-                    {return doc.department == groupName } )
+        var id = this.props.groupName + '_FAQ'
 
-        var out = JSON.stringify(questions)
+        var out = JSON.stringify(this.props.questions)
         return (
             <div id={id}>
-                {questions.length > 0 ? <h2>{title}</h2> : ''}
-                    {questions.map( (question, index) =>
+                {this.props.questions.length > 0 ? <h2>{this.props.title}</h2> : ''}
+                    {this.props.questions.map( (question, index) =>
                         <FAQ key={index} question={question} />
                         )}
             </div>

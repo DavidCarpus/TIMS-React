@@ -1,5 +1,4 @@
 import React from 'react';
- import data from '../Data/AgendasAndMinutes.json'
  import SmartLink from './SmartLink'
 
  class MeetingBlock extends React.Component {
@@ -28,11 +27,9 @@ import React from 'react';
 
 export default class AgendasAndMinutes extends React.Component {
     render() {
-        var groupName= this.props.groupName
-        var id = groupName + '_AgendasAndMinutes'
-        var title = this.props.title || 'Meeting Agendas and Minutes'
-        var meetings = data.filter( (meeting)=>
-                    {return meeting.groupName == groupName } )
+        var id = this.props.groupName + '_AgendasAndMinutes'
+        var title = this.props.title
+        var meetings = this.props.meetings
 
         var out = JSON.stringify(meetings)
         return (

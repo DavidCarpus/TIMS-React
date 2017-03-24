@@ -5,16 +5,17 @@ import MainLayout from './Components/UI/MainLayout';
 import About from './Components/UI/About';
 import Calendar from './Components/UI/Calendar'
 import Assessing from './Components/UI/Assessing'
-import CodeEnforcement from './Components/UI/CodeEnforcement'
 import ParksRecreation from './Components/UI/ParksRecreation'
 import Planning from './Components/UI/Planning'
 import PublicWorks from './Components/UI/PublicWorks'
-import TransferStationRules from './Components/UI/TransferStationRules'
 import Sewer from './Components/UI/Sewer'
 import Welfare from './Components/UI/Welfare'
 import TownClerk from './Components/UI/TownClerk'
 
-import Committees from './Components/UI/Committees'
+import CodeEnforcement from './Components/Containers/CodeEnforcement'
+import TransferStationRules from './Components/Containers/TransferStationRules'
+
+import Committees from './Components/Containers/Committees'
 import PlanningBoard from './Components/UI/PlanningBoard'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'

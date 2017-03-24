@@ -1,5 +1,5 @@
 import React from 'react';
-import Aside from './Aside'
+import Aside from '../Containers/Aside'
 import {  Col } from 'react-bootstrap';
 
 export default class About extends React.Component {
@@ -7,8 +7,7 @@ export default class About extends React.Component {
 render() {
     return (
         <div>
-            <Col md={2}><Aside groupName={'Home'} /></Col>
-            <Col md={10}  id="contentArea">
+            <Col md={10}  mdPush={2} id="contentArea"  >
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
             <p>Milton was incorporated in 1802 and is located in the Northeast section of
                 <a href='http://nhdeeds.com/strafford/StHome.html'> Strafford County.</a>
@@ -27,6 +26,7 @@ render() {
                 </p>
 
             </Col>
+            <Col md={2} mdPull={10}><Aside groupName='Home' /></Col>
         </div>
     );
 }

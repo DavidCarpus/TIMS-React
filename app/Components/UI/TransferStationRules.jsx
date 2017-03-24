@@ -1,16 +1,12 @@
 import React from 'react';
-
 import styles from './Styles/PublicWorks.css'
-
-import data from '../Data/PublicWorks.json'
-var wasteTypes = data.transferrules.wasteTypes
 
 class WasteType extends React.Component {
     render() {
         var wasteType = this.props.wasteType
         var note = wasteType.note
         if (note) { note =   '(' + note + ')'        }
-        // var dump = JSON.stringify(wasteType.rules);
+
         return (
             <div>
                 <h3>{wasteType.wasteType} {note}</h3>
@@ -24,12 +20,10 @@ class WasteType extends React.Component {
         )
     }
 }
-/*
-*/
-export default class TransferStationRules extends React.Component {
 
+export default class TransferStationRules extends React.Component {
     render() {
-        var dump = JSON.stringify(data.transferrules.feeSchedule);
+        var dump = JSON.stringify(this.props.feeSchedule);
         return (
             <div id='TransferStationRules'>
                 <div id="contentArea"
@@ -48,7 +42,7 @@ export default class TransferStationRules extends React.Component {
                 </ul>
 
                 <hr/>
-                {wasteTypes.
+                {this.props.wasteTypes.
                     map( (wasteType, index) =>
                         <WasteType key={index} wasteType={wasteType} />
                     )}
@@ -63,7 +57,7 @@ export default class TransferStationRules extends React.Component {
 
                     <h2>Fee Schedule</h2>
                     <div className={styles.feeNote}><p>NOTE: Fees are subject to change without notice.</p></div>
-                    {data.transferrules.feeSchedule.
+                    {this.props.feeSchedule.
                         map( (wasteType, index) =>
                             <div key={index} className={styles.feeItem}>
                                 <div className={styles.feeItemDesc}>{wasteType.desc}</div>
@@ -76,4 +70,3 @@ export default class TransferStationRules extends React.Component {
         )
     }
 }
-// <li>{wasteType.desc}- {wasteType.price}</li>

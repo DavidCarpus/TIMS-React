@@ -1,12 +1,13 @@
 import React from 'react';
-import DocumentList  from './DocumentList'
-import Aside from './Aside'
+import { Grid, Row, Col } from 'react-bootstrap';
+import Aside from '../Containers/Aside'
+
 import SmartLink from './SmartLink'
 import PlanningMapsForm from './PlanningMapsForm'
-import { Grid, Row, Col } from 'react-bootstrap';
 
-import GroupMembers from './GroupMembers'
-import AgendasAndMinutes from './AgendasAndMinutes'
+import DocumentList  from '../Containers/DocumentList'
+import GroupMembers from '../Containers/GroupMembers'
+import AgendasAndMinutes from '../Containers/AgendasAndMinutes'
 
 export default class PlanningBoard extends React.Component {
 

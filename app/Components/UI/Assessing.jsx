@@ -1,7 +1,7 @@
 import React from 'react';
 import TaxMapForm  from './TaxMapForm'
-import DocumentList  from './DocumentList'
-import Aside from './Aside'
+import Aside from '../Containers/Aside'
+import DocumentList  from '../Containers/DocumentList'
 
 import { Col } from 'react-bootstrap';
 
