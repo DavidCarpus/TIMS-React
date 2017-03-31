@@ -8,9 +8,7 @@ export default class OnlinePaymentsBlock extends React.Component {
             color: 'white',
             width: '150px',
             height: '40px',
-            fontSize: '2vmin',
             display:'inline-block',
-            // float:'left',
             textAlign: 'center',
             borderRadius: '10px',
             background: 'radial-gradient(blue, grey)'
@@ -21,7 +19,7 @@ export default class OnlinePaymentsBlock extends React.Component {
                 <EB2ServiceBlock />
                 <a href='https://nhtaxkiosk.com/?KIOSKID=MILTON' target='_blank'>
                     <div style={onlineAssessmentButton}>
-                        Property Taxes<br/>Review/Pay Online</div>
+                        <p>Property Taxes<br/>Review/Pay Online</p></div>
                 </a>
 
             </div>

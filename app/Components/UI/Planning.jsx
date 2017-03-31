@@ -11,7 +11,7 @@ export default class Planning extends React.Component {
         var groupName='Planning'
         return (
             <div>
-                <Col md={10}  id="contentArea"  >
+                <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Planning and Land Use</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>
