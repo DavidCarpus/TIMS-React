@@ -18,6 +18,9 @@ import TransferStationRules from './Components/Containers/TransferStationRules'
 import Committees from './Components/Containers/Committees'
 import PlanningBoard from './Components/UI/PlanningBoard'
 
+import ContactUs from './Components/UI/ContactUs'
+import Employment from './Components/UI/Employment'
+
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
 
@@ -33,6 +36,9 @@ ReactDOM.render(
                 <Route path="/" component={HomePage} />
                 <Route path="/about" component={About} />
                 <Route path="/calendar" component={Calendar} />
+                <Route path="/ContactUs" component={ContactUs} />
+                <Route path="/Employment" component={Employment} />
+
 
                 <Route path="Departments"  >
                     <Route path="Assessing" component={Assessing} />

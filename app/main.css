@@ -7,18 +7,6 @@ body {
   font-family: sans-serif;
 }
 
-@media bp-iphone5{
-    /*p, h3{
-      font-size: 3vmin;
-    }
-    h2{
-      font-size: 6vmin;
-    }*/
-    /*:global(#navbar) a{
-        font-size: 2vmin;
-    }*/
-}
-
 :global(#eb2govBlock) {
     /*background-color: blue;*/
     display: inline-block;

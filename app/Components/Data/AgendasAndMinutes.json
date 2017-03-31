@@ -148,4 +148,34 @@
         "minutesLabel":"",
         "videoLink":""
     }
+
+    ,
+    { "groupName":"Selectmen",
+        "meetingDate": "2017-03-20",
+        "agendaLink":"http://miltonnh-us.com/uploads/bos_agendas_678_3147606031.pdf",
+        "minutesLink":"",
+        "minutesLabel":"",
+        "videoLink":"https://www.youtube.com/watch?v=Uy4CYJJIB18&feature=em-upload_owner"
+    },
+    { "groupName":"Selectmen",
+        "meetingDate": "2017-03-06",
+        "agendaLink":"http://miltonnh-us.com/uploads/bos_agendas_675_2809907543.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/bos_agendas_680_2468411197.pdf",
+        "minutesLabel":"",
+        "videoLink":""
+    },
+    { "groupName":"Selectmen",
+        "meetingDate": "2017-02-27",
+        "agendaLink":"http://miltonnh-us.com/uploads/bos_agendas_673_382650096.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/bos_agendas_680_1418906417.pdf",
+        "minutesLabel":"",
+        "videoLink":"https://www.youtube.com/watch?v=eY15l-pmnn8"
+    },
+    { "groupName":"Selectmen",
+        "meetingDate": "2017-02-06",
+        "agendaLink":"http://miltonnh-us.com/uploads/bos_agendas_668_2840010793.pdf",
+        "minutesLink":"http://miltonnh-us.com/uploads/bos_agendas_680_237966923.pdf",
+        "minutesLabel":"",
+        "videoLink":"https://www.youtube.com/watch?v=dH8GsTWv408"
+    }
 ]

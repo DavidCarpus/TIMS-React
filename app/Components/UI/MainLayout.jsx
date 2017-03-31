@@ -1,6 +1,7 @@
 import React from 'react';
-import Menu from './Menu'
 import { Grid, Row, Col } from 'react-bootstrap';
+import Menu from './Menu'
+import Footer from './Footer'
 
 export default class MainLayout extends React.Component {
 
@@ -20,6 +21,9 @@ export default class MainLayout extends React.Component {
                 <main id="primaryArea" >
                     {this.props.children}
                 </main>
+            </Row>
+            <Row id='footer' className="show-grid">
+                <Footer/>
             </Row>
         </Grid>
     );

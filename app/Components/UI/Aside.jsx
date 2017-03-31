@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Styles/Aside.css'
+import SmartLink from './SmartLink'
 
 class AsideItem extends React.Component {
     createMarkup(){
@@ -9,14 +10,14 @@ class AsideItem extends React.Component {
 
     render() {
         // var desc = this.createMarkup()
-        // var desc = this.props.item.desc
+        var linkText = this.props.item.desc
         var desc = {__html: this.props.item.desc}
         var hasLink  = (this.props.item.link != null)
         return (
             <li >
             {hasLink
             ?
-            (<a href={this.props.item.link} dangerouslySetInnerHTML={desc} ></a>)
+             (<SmartLink link={this.props.item.link} linkText={linkText}/>)
             :
             (<p dangerouslySetInnerHTML={desc} ></p>)
             }
@@ -24,6 +25,11 @@ class AsideItem extends React.Component {
         );
     }
 }
+/*
+(<a href={this.props.item.link} dangerouslySetInnerHTML={desc} ></a>)
+(<SmartLink link='/ContactUs' linkText={desc}/>)
+var desc = {__html: this.props.item.desc}
+*/
 
 export default class MainAside extends React.Component {
     render() {

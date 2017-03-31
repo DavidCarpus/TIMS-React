@@ -11,7 +11,8 @@ export default class Assessing extends React.Component {
         const onlineAssessmentButton= {
             backgroundColor: 'blue',
             color: 'white',
-            width: '150px',
+            width: '160px',
+            paddingTop: '5px',
             height: '45px',
             fontSize: '2vmin',
             display:'inline-block',

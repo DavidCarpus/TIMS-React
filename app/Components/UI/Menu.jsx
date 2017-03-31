@@ -9,7 +9,14 @@ import organizations from '../Data/OrganizationalUnits.json'
 var departments = organizations.filter( (organization)=>
             {return organization.mainMenu == 'Departments' } )
 var committees = organizations.filter( (organization)=>
-            {return organization.mainMenu == 'Committees' } )
+            {return organization.mainMenu == 'BoardsAndCommittees' } ).
+            sort((a, b) => {
+                const labelA=a.label.toUpperCase()
+                const labelB=b.label.toUpperCase()
+                return (labelA < labelB) ? -1: (labelA > labelB)? 1:0
+            // return new Date(b.meetingDate) - new Date(a.meetingDate);
+            })
+
 
 // <DropdownButton title={buttonTitle} onSelect={() => null}>
 
@@ -28,7 +35,7 @@ export default class Menu extends React.Component {
             >
                 <Navbar.Header>
                     <Navbar.Brand>
-                      <a href="#" style={logo}>
+                      <a href="#" style={logo} alt='HomePage'>
                           <img
                               className={styles.logo}
                               src={this.logoLink()}
@@ -41,20 +48,23 @@ export default class Menu extends React.Component {
                 <Navbar.Collapse
                     className="bs-navbar-collapse">
                     <Nav>
+                        <LinkContainer to="/">
+                            <NavItem eventKey={1} >Home</NavItem>
+                        </LinkContainer>
                         <LinkContainer to="/about">
-                            <NavItem eventKey={1} >About</NavItem>
+                            <NavItem eventKey={2} >About</NavItem>
                         </LinkContainer>
                         <LinkContainer to="/calendar">
-                            <NavItem eventKey={2} >Town Calendar</NavItem>
+                            <NavItem eventKey={3} >Town Calendar</NavItem>
                         </LinkContainer>
-                        <NavDropdown eventKey={'3'} title="Departments" id={33}>
+                        <NavDropdown eventKey={'4'} title="Departments" id={44}>
                             {departments.map((department, index) =>
                                 ( !department.link.startsWith('http'))
                                 ?
                                 <LinkContainer to={'Departments/' + department.link}
                                     key={index}>
                                     <MenuItem
-                                        eventKey={'3.'+index}
+                                        eventKey={'4.'+index}
                                          className={styles.navItem}>{department.desc}</MenuItem>
                                 </LinkContainer>
                                 :
@@ -63,7 +73,7 @@ export default class Menu extends React.Component {
                                    </Navbar.Text>
                                 )}
                         </NavDropdown>
-                        <NavDropdown eventKey={'4'} title="Committees" id={44}>
+                        <NavDropdown eventKey={'5'} title="Boards And Committees" id={55}>
                             {committees.map((committee, index) =>
                               ( !committee.link.startsWith('http'))
                               ?
@@ -71,7 +81,7 @@ export default class Menu extends React.Component {
                                   key={index}
                                   >
                                   <MenuItem
-                                      eventKey={'4.'+index}
+                                      eventKey={'5.'+index}
                                       className={styles.navItem}>{committee.desc}</MenuItem>
                               </LinkContainer>
                               :
@@ -91,6 +101,9 @@ export default class Menu extends React.Component {
           )
       }
   }
+  /*
+
+  */
 
 class MenuLink extends React.Component {
     render() {
@@ -160,16 +173,6 @@ class CommitteeMenuLink extends React.Component {
         )
     }
 }
-// render() {
-// return (
-//         <MenuLink
-//             lnk={('link' in this.props.committee)
-//                 ? '/BoardsAndCommittees/' + this.props.committee.link
-//                 :'/BoardsAndCommittees/' + this.props.committee.desc}
-//             eventKey={this.props.eventKey}
-//             desc={this.props.committee.desc}/>
-// )
-// }
 
 /*
 Town meeting info (Calendar)

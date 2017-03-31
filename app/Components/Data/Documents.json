@@ -148,5 +148,70 @@
         "desc": "Variance",
         "link":"http://miltonnh-us.com/uploads/zba_77_4002501668.pdf"
     }
+    ,
+    {"department":"Selectmen", "date": "2222-12-03",
+        "desc": "Citizens Request Form for Selectmen Meeting",
+        "link":"http://miltonnh-us.com/uploads/bos_58_2804844146.pdf"
+    },
+    {"department":"Selectmen", "date": "2222-12-03",
+        "desc": "Request for Information under the Right to Know Law",
+        "link":"http://miltonnh-us.com/uploads/bos_52_1750322610.pdf"
+    },
+    {"department":"Selectmen", "date": "2222-12-03",
+        "desc": "Notification/Complaint Form",
+        "link":"http://miltonnh-us.com/uploads/bos_57_260010012.pdf"
+    }
+    ,
+    {"department":"Selectmen", "date": "2221-05-04",
+        "desc": "Pet Ordinance",
+        "link":"http://miltonnh-us.com/images/stories/downloads/selectmen/ordinances/petordinancefinaladopted50409.pdf"
+    },
+    {"department":"Selectmen", "date": "2221-04-04",
+        "desc": "Sign Ordinance",
+        "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2026151269.pdf"
+    },
+    {"department":"Selectmen", "date": "2221-04-04",
+        "desc": "Snow Removal Policy",
+        "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2307174134.pdf"
+    },
+    {"department":"Selectmen", "date": "2221-05-04",
+        "desc": "Milton Zoning Ordinance",
+        "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
+    }
+    ,
+    {"department":"Selectmen", "date": "2015-12-01",
+        "desc": "Budget - Operating Budget 2013-2015",
+        "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
+    },
+    {"department":"Selectmen", "date": "2016-11-01",
+        "desc": "Budget - November 2016 Expenditure Report",
+        "link":"http://miltonnh-us.com/uploads/bos_budget_28_635089335.pdf"
+    },
+    {"department":"Selectmen", "date": "2016-10-01",
+        "desc": "Budget - October 2016 Expenditure Report",
+        "link":"http://miltonnh-us.com/uploads/bos_budget_24_2198695748.pdf"
+    },
+    {"department":"Selectmen", "date": "2016-09-01",
+        "desc": "Budget - September 2016 Expenditure Report",
+        "link":"http://miltonnh-us.com/uploads/bos_budget_23_2498527688.pdf"
+    },
+    {"department":"Selectmen", "date": "2016-04-01",
+        "desc": "Budget - April 2016 Expenditure Report",
+        "link":"http://miltonnh-us.com/uploads/bos_budget_21_3787802024.pdf"
+    },
+    {"department":"Selectmen", "date": "2016-03-01",
+        "desc": "Budget - March 2016 Expenditure Report",
+        "link":"http://miltonnh-us.com/uploads/bos_budget_19_224619096.pdf"
+    }
+
+    ,
+    {"department":"PlanningBoard", "date": "2016-03-01",
+        "desc": "Milton Planning Board CIP Charge and Process Policy",
+        "link":"http://miltonnh-us.com/uploads/planning_board_190_23816019.pdf"
+    },
+    {"department":"PlanningBoard", "date": "2016-03-01",
+        "desc": "Milton CIP Establishing Fiscal Wellness",
+        "link":"http://miltonnh-us.com/uploads/planning_board_190_840943347.pdf"
+    }
 
 ]
