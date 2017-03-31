@@ -7,9 +7,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class Sewer extends React.Component {
     render() {
+        const groupName='Sewer'
         return (
             <div>
-                <Col md={2}><Aside groupName={'Sewer'} /></Col>
                 <Col md={10}  id="contentArea" >
                         <h1 style={{textAlign:'center'}}>Sewer Department</h1>
 
@@ -20,12 +20,14 @@ export default class Sewer extends React.Component {
                         <p><i>The Sewer Department is in the process of streamlining their billing process and updating records. In the coming months, those who utilize sewer services will be receiving information on these changes and asking for confirmation of their billing information. If you utilize sewer services and have not received information by mail, we ask that you please contact our secretary to update our records.</i></p>
 
                         <DocumentList
-                            groupName='Sewer'
+                            groupName={groupName}
                             title='Milton Sewage Department Documentation'
                             />
                         <SmartLink link='http://des.nh.gov/index.htm'
                             linkText='NH Department of Environmental Services (DES)'/>
                 </Col>
+                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+
             </div>
         )
     }

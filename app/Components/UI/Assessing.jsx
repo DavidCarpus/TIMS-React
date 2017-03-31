@@ -8,6 +8,7 @@ import { Col } from 'react-bootstrap';
 export default class Assessing extends React.Component {
 
     render() {
+        var groupName='Assessing'
         const onlineAssessmentButton= {
             backgroundColor: 'blue',
             color: 'white',
@@ -23,8 +24,7 @@ export default class Assessing extends React.Component {
         }
         return (
             <div>
-                <Col md={2}><Aside groupName={'Assessing'} /></Col>
-                <Col md={10}  id="contentArea"  >
+                <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Assessing Department</h1>
                     <p>The Assessing Department is charged by State law with discovering, describing, and valuing real property for taxation purposes. The Department's job is diverse and involves the following responsibilities:</p>
                     <ul>
@@ -49,10 +49,11 @@ export default class Assessing extends React.Component {
                     </div>
 
                     <DocumentList
-                        groupName='Assessing'
+                        groupName={groupName}
                         title='Milton Assessors Documentation'
                         />
                     </Col>
+                    <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
             </div>
 
         );

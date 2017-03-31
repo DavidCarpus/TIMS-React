@@ -8,9 +8,9 @@ import { Grid, Row, Col } from 'react-bootstrap';
 export default class Planning extends React.Component {
 
     render() {
+        var groupName='Planning'
         return (
             <div>
-                <Col md={2}><Aside groupName={'Planning'} /></Col>
                 <Col md={10}  id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Planning and Land Use</h1>
                     The Planning and Land Use Department consists of the following boards:
@@ -28,6 +28,8 @@ export default class Planning extends React.Component {
                     <p>If you should have any questions please do not hesitate to contact Dana Crossley, Land Use Clerk, at 603-652-4501 x5 or
                         landuse@miltonnh-us.com</p>
                 </Col>
+                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+
             </div>
         );
     }

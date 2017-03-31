@@ -7,11 +7,10 @@ import SmartLink from './SmartLink'
 
 export default class CodeEnforcement extends React.Component {
     render() {
+        var groupName='CodeEnforcement'
         return (
             <div>
-                <Col md={2}><Aside groupName={'CodeEnforcement'} /></Col>
                 <Col md={10}  id="contentArea" >
-
                     <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
                     <p>Most inspections are conducted Tuesday's and Wednesday's and occasionally other days to accommodate the property owner. Applications and complaint forms can be picked up at the Town Hall Monday through Friday from 8:00 AM to 4:00 PM.</p>
                     <p>The Building Inspector is responsible for issuing all permits, (Building, Electrical, Plumbing, Mechanical, Occupancy, and Signs etc.) Applications for permits are received, plans are reviewed and if all codes and requirements are satisfied a fee is calculated and the permit will be issued to the applicant. For major and minor building permits, the Building Inspector has 7-10 days to review the permit.</p>
@@ -29,6 +28,7 @@ export default class CodeEnforcement extends React.Component {
                         title='Milton Code Enforcement Documentation'
                         />
                 </Col>
+                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
             </div>
         );
     }
