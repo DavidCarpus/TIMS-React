@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Styles/PublicWorks.css'
+import styles from '../assets/Styles/PublicWorks.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'

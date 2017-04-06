@@ -1,5 +1,5 @@
 import React from 'react';
- import CommitteesUI from '../UI/Committees'
+ import CommitteesUI from '../Components/Committees'
 
  import organizations from '../Data/OrganizationalUnits.json'
  import organizationPageText from '../Data/OrganizationPageText.json'

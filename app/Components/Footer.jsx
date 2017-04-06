@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import SmartLink from './SmartLink'
-import styles from './Styles/Footer.css'
+import styles from '../assets/Styles/Footer.css'
 
 export default class Footer extends React.Component {
     render(){

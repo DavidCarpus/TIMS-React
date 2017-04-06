@@ -1,7 +1,7 @@
 import React from 'react';
- import SmartLink from './SmartLink'
+ import SmartLink from '../Components/SmartLink'
 
- import styles from './Styles/GroupMembers.css'
+ import styles from '../assets/Styles/GroupMembers.css'
 
 export default class GroupMembers extends React.Component {
     render() {

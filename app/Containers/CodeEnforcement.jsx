@@ -1,5 +1,5 @@
 import React from 'react';
- import CodeEnforcementUI from '../UI/CodeEnforcement'
+ import CodeEnforcementUI from '../Components/CodeEnforcement'
  import {helpfulInformation} from '../Data/CodeEnforcement.json'
 
 export default class CodeEnforcement extends React.Component {

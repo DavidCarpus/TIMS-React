@@ -1,7 +1,7 @@
 import React from 'react';
 import FAQData from '../Data/FAQ.json'
- import SmartLink from '../UI/SmartLink'
- import FAQListUI from '../UI/FAQList'
+ import SmartLink from '../Components/SmartLink'
+ import FAQListUI from '../Components/FAQList'
 
 
 export default class FAQList extends React.Component {

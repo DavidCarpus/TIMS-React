@@ -1,5 +1,5 @@
 import React from 'react';
- import SmartLink from './SmartLink'
+ import SmartLink from '../Components/SmartLink'
 
  class MeetingBlock extends React.Component {
      render() {

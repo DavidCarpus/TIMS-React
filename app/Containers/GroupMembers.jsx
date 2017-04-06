@@ -1,7 +1,7 @@
 import React from 'react';
  import data from '../Data/GroupMembers.json'
- import SmartLink from '../UI/SmartLink'
- import GroupMembersUI from '../UI/GroupMembers'
+ import SmartLink from '../Components/SmartLink'
+ import GroupMembersUI from '../Components/GroupMembers'
 
 export default class GroupMembers extends React.Component {
     render() {
@@ -12,7 +12,7 @@ export default class GroupMembers extends React.Component {
                     {return member.groupName == groupName } )
 
         return (
-            <div>                
+            <div>
                 <GroupMembersUI members={members} title={title} groupName={groupName} />
             </div>
         )

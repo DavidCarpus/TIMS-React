@@ -1,5 +1,5 @@
 import React from 'react';
- import TransferStationRulesUI from '../UI/TransferStationRules'
+ import TransferStationRulesUI from '../Components/TransferStationRules'
  import data from '../Data/PublicWorks.json'
  var wasteTypes = data.transferrules.wasteTypes
 var feeSchedule =data.transferrules.feeSchedule

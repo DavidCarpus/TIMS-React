@@ -1,5 +1,5 @@
 import React from 'react';
- import EB2ServiceBlockUI from '../UI/EB2ServiceBlock'
+ import EB2ServiceBlockUI from '../Components/EB2ServiceBlock'
  import {services} from '../Data/EB2Services.json'
 
 export default class EB2ServiceBlock extends React.Component {

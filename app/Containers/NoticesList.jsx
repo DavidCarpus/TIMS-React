@@ -1,7 +1,7 @@
 import React from 'react';
  import data from '../Data/Notices.json'
- import SmartLink from '../UI/SmartLink'
- import NoticesListUI from '../UI/NoticesList'
+ import SmartLink from '../Components/SmartLink'
+ import NoticesListUI from '../Components/NoticesList'
 
 export default class NoticesList extends React.Component {
     render() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Styles/PublicWorks.css'
+import styles from '../assets/Styles/PublicWorks.css'
 
 class WasteType extends React.Component {
     render() {

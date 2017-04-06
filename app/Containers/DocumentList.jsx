@@ -1,7 +1,7 @@
 import React from 'react';
 import documentData from '../Data/Documents.json'
- import SmartLink from '../UI/SmartLink'
- import DocumentListUI from '../UI/DocumentList'
+ import SmartLink from '../Components/SmartLink'
+ import DocumentListUI from '../Components/DocumentList'
 
 export default class DocumentList extends React.Component {
     render() {

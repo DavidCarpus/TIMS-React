@@ -1,6 +1,6 @@
 import React from 'react';
  import data from '../Data/AgendasAndMinutes.json'
- import AgendasAndMinutesUI from '../UI/AgendasAndMinutes'
+ import AgendasAndMinutesUI from '../Components/AgendasAndMinutes'
 
 export default class AgendasAndMinutes extends React.Component {
     render() {

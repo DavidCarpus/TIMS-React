@@ -1,7 +1,7 @@
 import React from 'react';
  import data from '../Data/Asides.json'
- import SmartLink from '../UI/SmartLink'
- import AsideUI from '../UI/Aside'
+ import SmartLink from '../Components/SmartLink'
+ import AsideUI from '../Components/Aside'
 
 export default class Aside extends React.Component {
     render() {
