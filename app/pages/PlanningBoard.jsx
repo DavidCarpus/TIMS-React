@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Aside from '../Containers/Aside'
 
-import SmartLink from './SmartLink'
-import PlanningMapsForm from './PlanningMapsForm'
+import SmartLink from '../Components/SmartLink'
+import PlanningMapsForm from '../Components/PlanningMapsForm'
 
 import DocumentList  from '../Containers/DocumentList'
 import GroupMembers from '../Containers/GroupMembers'

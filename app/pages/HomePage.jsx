@@ -1,5 +1,5 @@
 import React from 'react';
-import OnlinePaymentsBlock  from './OnlinePaymentsBlock'
+import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'
 import { Grid, Row, Col } from 'react-bootstrap';

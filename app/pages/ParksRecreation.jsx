@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Aside from '../Containers/Aside'
 
-import TaxMapForm  from './TaxMapForm'
+import TaxMapForm  from '../Components/TaxMapForm'
 import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
 
 import NoticesList from '../Containers/NoticesList'

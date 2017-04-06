@@ -1,5 +1,5 @@
 import React from 'react';
-import TaxMapForm  from './TaxMapForm'
+import TaxMapForm  from '../Components/TaxMapForm'
 import Aside from '../Containers/Aside'
 import DocumentList  from '../Containers/DocumentList'
 

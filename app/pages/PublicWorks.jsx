@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'
 
-import SmartLink from './SmartLink'
+import SmartLink from '../Components/SmartLink'
 
 import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
 

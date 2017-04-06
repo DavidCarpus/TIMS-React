@@ -1,24 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import HomePage from './Components/HomePage';
+import HomePage from './pages/HomePage';
 import MainLayout from './Components/MainLayout';
-import About from './Components/About';
-import Calendar from './Components/Calendar'
-import Assessing from './Components/Assessing'
-import ParksRecreation from './Components/ParksRecreation'
-import Planning from './Components/Planning'
-import PublicWorks from './Components/PublicWorks'
-import Sewer from './Components/Sewer'
-import Welfare from './Components/Welfare'
-import TownClerk from './Components/TownClerk'
-import ContactUs from './Components/ContactUs'
-import Employment from './Components/Employment'
+import About from './pages/About';
+import Calendar from './pages/Calendar'
+import Assessing from './pages/Assessing'
+import ParksRecreation from './pages/ParksRecreation'
+import Planning from './pages/Planning'
+import PublicWorks from './pages/PublicWorks'
+import Sewer from './pages/Sewer'
+import Welfare from './pages/Welfare'
+import TownClerk from './pages/TownClerk'
+import ContactUs from './pages/ContactUs'
+import Employment from './pages/Employment'
 
-import CodeEnforcement from './Containers/CodeEnforcement'
-import TransferStationRules from './Containers/TransferStationRules'
-import Committees from './Containers/Committees'
-import PlanningBoard from './Components/PlanningBoard'
+import CodeEnforcement from './pages/CodeEnforcement'
+import TransferStationRules from './pages/TransferStationRules'
+import Committees from './pages/Committees'
+import PlanningBoard from './pages/PlanningBoard'
 
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'

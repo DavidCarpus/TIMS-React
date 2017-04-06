@@ -1,5 +1,5 @@
 import React from 'react';
-import Aside from './Aside'
+import Aside from '../Components/Aside'
 
 export default class Calendar extends React.Component {
     render() {

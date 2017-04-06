@@ -1,7 +1,7 @@
 import React from 'react';
 // import Aside from './Aside'
 import Aside from '../Containers/Aside'
-import SmartLink from './SmartLink'
+import SmartLink from '../Components/SmartLink'
 
 import { Grid, Row, Col } from 'react-bootstrap';
 

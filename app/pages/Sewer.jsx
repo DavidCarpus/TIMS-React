@@ -1,5 +1,5 @@
 import React from 'react';
-import SmartLink from './SmartLink'
+import SmartLink from '../Components/SmartLink'
 import Aside from '../Containers/Aside'
 
 import DocumentList  from '../Containers/DocumentList'

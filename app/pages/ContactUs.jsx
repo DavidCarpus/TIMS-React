@@ -1,5 +1,5 @@
 import React from 'react';
-import Aside from './Aside'
+import Aside from '../Components/Aside'
 import { Grid, Row, Col } from 'react-bootstrap';
 
 export default class ContactUs extends React.Component {
