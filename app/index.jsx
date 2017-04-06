@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import HomePage from './Components/UI/HomePage';
 import MainLayout from './Components/UI/MainLayout';
 import About from './Components/UI/About';
@@ -11,15 +12,14 @@ import PublicWorks from './Components/UI/PublicWorks'
 import Sewer from './Components/UI/Sewer'
 import Welfare from './Components/UI/Welfare'
 import TownClerk from './Components/UI/TownClerk'
+import ContactUs from './Components/UI/ContactUs'
+import Employment from './Components/UI/Employment'
 
 import CodeEnforcement from './Components/Containers/CodeEnforcement'
 import TransferStationRules from './Components/Containers/TransferStationRules'
-
 import Committees from './Components/Containers/Committees'
 import PlanningBoard from './Components/UI/PlanningBoard'
 
-import ContactUs from './Components/UI/ContactUs'
-import Employment from './Components/UI/Employment'
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
