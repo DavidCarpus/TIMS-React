@@ -13,7 +13,7 @@ render(){
             <ul className={styles.hidebullets}>{this.props.notices.
                 map(notice =>
                     <li key={notice.id}>
-                        <SmartLink link={notice.link} linkText={notice.shortDesc} />
+                        <SmartLink link={notice.link} linkText={notice.desc} />
                     </li>
             )}</ul>
 

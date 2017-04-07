@@ -1,53 +1,37 @@
 import React from 'react';
  import SmartLink from '../Components/SmartLink'
 
- class MeetingBlock extends React.Component {
-     render() {
-         var meeting = this.props.meeting
-         // TODO: Have meeting.minutesLabel display even if link not there
-        //  var minutesLabel = meeting.minutesLabel
-         var minutesLink=meeting.minutesLabel
-         if (meeting.minutesLink) {
-             var minutesLabel = meeting.minutesLabel || 'Minutes'
-             minutesLink = <SmartLink link={meeting.minutesLink} linkText={minutesLabel} />
-         }
-         return (
-             <div id='MeetingBlock'>
-                 {meeting.meetingDate}
-                 ---
-                 {minutesLink}
-                 {meeting.agendaLink ? <SmartLink link={meeting.agendaLink} linkText='Agenda' /> : ''}
-                 {meeting.videoLink ? <SmartLink link={meeting.videoLink} linkText='Video' /> : ''}
-             </div>
-         )
-     }
- }
- /*
- {meeting.minutesLink ? '-' : ''}
- {meeting.agendaLink ? '-' : ''}
- {meeting.videoLink ? '-' : ''}
-
- */
-
 export default class AgendasAndMinutes extends React.Component {
+    renderMeeting(meetingElements) {
+        return meetingElements.map( (element, index) => {
+            const text = element.desc || element.type;
+         return (
+             <span> <SmartLink link={element.link} linkText={text} />  </span>
+         )
+     });
+    }
+
+    renderMeetings(meetings) {
+        var component=this
+           return meetings.map( (meeting, index) => {
+            return (
+                <li className="list-group-item" >
+                    {meeting.date} -
+                    {component.renderMeeting(meeting.values)}
+                </li>
+            )
+        });
+    }
+
     render() {
         var id = this.props.groupName + '_AgendasAndMinutes'
-        var title = this.props.title
+        var title = this.props.title || 'Agendas And Minutes'
         var meetings = this.props.meetings
 
-        var out = JSON.stringify(meetings)
         return (
             <div id={id}>
-                {meetings.length > 0 ? <h2>{title}</h2> : ''}
-                    {meetings.
-                        sort((a, b) => {
-                        return new Date(b.meetingDate) - new Date(a.meetingDate);
-                        }).
-                        map( (meeting, index) =>
-                            <div key={index} >
-                                <MeetingBlock meeting={meeting}/>
-                            </div>
-                        )}
+                {meetings.length > 0 ? <h2>{title }</h2> : ''}
+                {this.renderMeetings(meetings) }
             </div>
         )
     }

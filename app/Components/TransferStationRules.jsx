@@ -21,7 +21,7 @@ class WasteType extends React.Component {
     }
 }
 
-export default class TransferStationRules extends React.Component {
+export default class TransferStationRulesContainer extends React.Component {
     render() {
         var dump = JSON.stringify(this.props.feeSchedule);
         return (

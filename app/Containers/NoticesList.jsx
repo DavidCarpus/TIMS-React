@@ -1,21 +1,31 @@
 import React from 'react';
- import data from '../Data/Notices.json'
  import SmartLink from '../Components/SmartLink'
  import NoticesListUI from '../Components/NoticesList'
+ import data from '../Data/PublicRecords.json'
 
 export default class NoticesList extends React.Component {
     render() {
         var groupName= this.props.groupName || ''
         var id = groupName + '_Noticess'
         var title = this.props.title || `Milton ${groupName} Documentation`
-        var notices=[]
+        // var notices=[]
+
+        var notices = data.filter( (record)=> {
+            return  record.type == 'Notice'
+        } ).sort((a, b) => {
+            const ad = new Date(a.date);
+            const bd = new Date(b.date);
+            return ad<bd ? -1: ad>bd ? 1: a.order - b.order
+            // return ad<bd ? -1: ad>bd ? 1:  b.order - a.order
+        })
+
         if(groupName == 'Home')
         {
-            notices = data.filter( (notice) =>
+            notices = notices.filter( (notice) =>
             {return notice.mainpage } )
         } else {
-            notices = data.filter( (notice) =>
-            {return notice.dept == groupName } )
+            notices = notices.filter( (notice) =>
+            {return notice.groupName == groupName } )
         }
 
         return (
@@ -27,6 +37,7 @@ export default class NoticesList extends React.Component {
 }
 
 /*
+{JSON.stringify(notices)}
 Notices:
 {JSON.stringify(groupName)}
 {JSON.stringify(notices)}

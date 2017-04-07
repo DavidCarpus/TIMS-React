@@ -1,0 +1,498 @@
+[
+    {"groupName":"Assessing", "date": "2009-01-01",        "desc": "2009 Assessment Listed By Location", "type": "Document"},
+    {"groupName":"Assessing", "date": "2009-01-02",        "desc": "2009 Assessment Listed By Owner", "type": "Document"},
+    {"groupName":"Assessing", "date": "2009-01-03",        "desc": "2009 Valid Sales", "type": "Document"},
+    {"groupName":"Sewer", "date": "2009-01-01",  "desc": "Sewer Ordinance", "type": "Document"},
+    {"groupName":"Sewer", "date": "2009-01-03",  "desc": "Sewer Connection Permit",  "type": "Document" },
+    {"groupName":"TownClerk", "date": "2009-01-01",  "desc": "Doc 1", "type": "Document"},
+    {"groupName":"TownClerk", "date": "2009-01-03",  "desc": "Doc 2", "type": "Document"},
+
+        {"groupName":"Assessing",  "type": "Document",
+            "date": "2009-01-01",
+            "desc": "2009 Assessment Listed By Location"
+        },
+        {   "groupName":"CodeEnforcement",   "type": "Document",
+            "desc": "Major Building Permit (new homes, commercial) ",
+            "date": "2009-01-01",
+            "link":"http://miltonnh-us.com/uploads/code_32_889062993.pdf"
+        },
+        {"desc": "Minor Building Permit (Sheds, decks, alterations, demolitions) ",
+            "link":"http://miltonnh-us.com/uploads/code_32_3435455709.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        },
+        {"desc": "Driveway Permit ",
+            "link":"http://miltonnh-us.com/uploads/code_32_1856587109.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        },
+        {"desc": "Mechanical/Gas Permit ",
+            "link":"http://miltonnh-us.com/uploads/code_33_1305911895.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        },
+        {"desc": "Electrical Permit ",
+            "link":"http://miltonnh-us.com/uploads/code_32_2382427981.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        },
+        {"desc": "Plumbing Permit ",
+            "link":"http://miltonnh-us.com/uploads/code_36_1330455078.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        },
+        {"desc": "Permit Notice: Fees & Fines",
+            "link":"http://miltonnh-us.com/uploads/code_29_2890266634.pdf",
+            "groupName":"CodeEnforcement",   "type": "Document"
+        }
+        ,
+
+        {"groupName":"CemeteryTrustees", "date": "2009-01-03",   "type": "Document",
+            "desc": "By-Laws",
+            "link":"http://miltonnh-us.com/uploads/cemetery_69_1639359744.pdf"
+        },
+        {"groupName":"CemeteryTrustees", "date": "2009-01-03", "type": "Document",
+            "desc": "Application for Right to Inter",
+            "link":"http://miltonnh-us.com/uploads/cemetery_71_1981914058.pdf"
+        },
+        {"groupName":"CemeteryTrustees", "date": "2009-01-03", "type": "Document",
+            "desc": "Adopt a Cemetery Care Guidelines",
+            "link":"http://miltonnh-us.com/uploads/cemetery_70_257066258.pdf"
+        },
+        {"groupName":"CemeteryTrustees", "date": "2009-01-03", "type": "Document",
+            "desc": "Certificate of Right to Inter",
+            "link":"http://miltonnh-us.com/uploads/cemetery_71_3058841609.pdf"
+        },
+        {"groupName":"CemeteryTrustees", "date": "2009-01-03", "type": "Document",
+            "desc": "Rules and Regulations",
+            "link":"http://miltonnh-us.com/uploads/cemetery_67_2997314167.pdf"
+        },
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Economic Basement Assessment, 2012",
+            "link":"http://miltonnh-us.com/uploads/economic_59_4066609108.pdf"
+        }  ,
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Strategic Economic Development Plan, 2012",
+            "link":"http://miltonnh-us.com/uploads/economic_57_1979046104.pdf"
+        }  ,
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Exit 17 East Concept",
+            "link":"http://miltonnh-us.com/uploads/economic_58_4269855736.pdf"
+        },
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Exit 17 West Concept",
+            "link":"http://miltonnh-us.com/uploads/economic_58_877773245.pdf"
+        },
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Exit 18 East Concept",
+            "link":"http://miltonnh-us.com/uploads/economic_58_260802677.pdf"
+        },
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "Exit 18 West Concept",
+            "link":"http://miltonnh-us.com/uploads/economic_58_3311049264.pdf"
+        },
+        {"groupName":"EconomicDevelopment", "date": "2009-01-03", "type": "Document",
+            "desc": "",
+            "link":"http://www.visitnh.gov/"
+        }  ,
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Town of Milton Welfare Guideline", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_5_364208847.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Application Checklist", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_21_636897142.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Welfare Application", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_35_2300776825.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Doctor Verification Form (Must be completed and returned by Doctor's office)", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_16_3311173523.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Burial Assistance Form ", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_36_3094117116.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Landlord Verification Form", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_35_747242113.pdf"
+        },
+        {"groupName":"Welfare", "date": "2009-01-03",  "desc": "Additional Public Assistance Links and Numbers", "type": "Document",
+            "link":"http://miltonnh-us.com/uploads/welfare_38_847250403.pdf"
+        }
+        ,
+        {"groupName":"LibraryTrustees", "date": "2009-01-03","type": "Document",
+            "desc": "Milton Free Public Library Engineering Report",
+            "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_30_590377818.pdf"
+        }  ,
+        {"groupName":"TrustFunds", "date": "2013-12-03","type": "Document",
+            "desc": "2013 Year End Report",
+            "link":"http://miltonnh-us.com/uploads/trust_funds_109_1781681865.pdf"
+        },
+        {"groupName":"TrustFunds", "date": "2012-12-03","type": "Document",
+            "desc": "2012 Year End Report",
+            "link":"http://miltonnh-us.com/uploads/trust_funds_88_1324231147.pdf"
+        }
+        ,
+        {"groupName":"Zoning", "date": "2012-12-03","type": "Document",
+            "desc": "Special Exception Application",
+            "link":"http://miltonnh-us.com/uploads/zba_77_4192905869.pdf"
+        },
+        {"groupName":"Zoning", "date": "2012-12-03","type": "Document",
+            "desc": "Equitable Waiver",
+            "link":"http://miltonnh-us.com/uploads/zba_77_3422119116.pdf"
+        },
+        {"groupName":"Zoning", "date": "2012-12-03","type": "Document",
+            "desc": "Appeal from an Administrative Decision",
+            "link":"http://miltonnh-us.com/uploads/zba_77_2338509314.pdf"
+        },
+        {"groupName":"Zoning", "date": "2012-12-03","type": "Document",
+            "desc": "Variance",
+            "link":"http://miltonnh-us.com/uploads/zba_77_4002501668.pdf"
+        }
+
+            ,
+            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+                "desc": "Citizens Request Form for Selectmen Meeting",
+                "link":"http://miltonnh-us.com/uploads/bos_58_2804844146.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+                "desc": "Request for Information under the Right to Know Law",
+                "link":"http://miltonnh-us.com/uploads/bos_52_1750322610.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+                "desc": "Notification/Complaint Form",
+                "link":"http://miltonnh-us.com/uploads/bos_57_260010012.pdf"
+            }
+            ,
+            {"groupName":"Selectmen", "date": "2221-05-04","type": "Document",
+                "desc": "Pet Ordinance",
+                "link":"http://miltonnh-us.com/images/stories/downloads/selectmen/ordinances/petordinancefinaladopted50409.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2221-04-04","type": "Document",
+                "desc": "Sign Ordinance",
+                "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2026151269.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2221-04-04","type": "Document",
+                "desc": "Snow Removal Policy",
+                "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2307174134.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2221-05-04","type": "Document",
+                "desc": "Milton Zoning Ordinance",
+                "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
+            }
+            ,
+            {"groupName":"Selectmen", "date": "2015-12-01","type": "Document",
+                "desc": "Budget - Operating Budget 2013-2015",
+                "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2016-11-01","type": "Document",
+                "desc": "Budget - November 2016 Expenditure Report",
+                "link":"http://miltonnh-us.com/uploads/bos_budget_28_635089335.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2016-10-01","type": "Document",
+                "desc": "Budget - October 2016 Expenditure Report",
+                "link":"http://miltonnh-us.com/uploads/bos_budget_24_2198695748.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2016-09-01","type": "Document",
+                "desc": "Budget - September 2016 Expenditure Report",
+                "link":"http://miltonnh-us.com/uploads/bos_budget_23_2498527688.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2016-04-01","type": "Document",
+                "desc": "Budget - April 2016 Expenditure Report",
+                "link":"http://miltonnh-us.com/uploads/bos_budget_21_3787802024.pdf"
+            },
+            {"groupName":"Selectmen", "date": "2016-03-01","type": "Document",
+                "desc": "Budget - March 2016 Expenditure Report",
+                "link":"http://miltonnh-us.com/uploads/bos_budget_19_224619096.pdf"
+            }
+
+            ,
+            {"groupName":"PlanningBoard", "date": "2016-03-01","type": "Document",
+                "desc": "Milton Planning Board CIP Charge and Process Policy",
+                "link":"http://miltonnh-us.com/uploads/planning_board_190_23816019.pdf"
+            },
+            {"groupName":"PlanningBoard", "date": "2016-03-01","type": "Document",
+                "desc": "Milton CIP Establishing Fiscal Wellness",
+                "link":"http://miltonnh-us.com/uploads/planning_board_190_840943347.pdf"
+            }
+                    ,
+
+        { "groupName":"BudgetCommittee", "type": "Agenda",
+            "date": "2017-02-21",
+            "link":"http://miltonnh-us.com/uploads/budget_306_3492870537.pdf"
+        },
+        { "groupName":"BudgetCommittee", "type": "Agenda",
+            "date": "2017-02-11",
+            "link":"http://miltonnh-us.com/uploads/budget_304_3018228619.pdf"
+        },
+        { "groupName":"BudgetCommittee", "type": "Minutes",
+            "date": "2017-02-11",
+            "link":"http://miltonnh-us.com/uploads/budget_307_605978038.pdf"
+        },
+        { "groupName":"BudgetCommittee", "type": "Agenda",
+            "date": "2016-12-15",
+            "link":"http://miltonnh-us.com/uploads/budget_285_1305097653.pdf"
+        },
+        { "groupName":"BudgetCommittee","type": "Minutes",
+            "date": "2016-12-15",
+            "link":"http://miltonnh-us.com/uploads/budget_287_3492623261.pdf"
+        },
+        { "groupName":"BudgetCommittee", "type": "Video",
+            "date": "2016-12-15",
+            "link":"https://www.youtube.com/watch?v=jQSEu-xtBLs"
+        },
+        { "groupName":"CemeteryTrustees","type": "Agenda",
+            "date": "2017-02-22",
+            "link":"http://miltonnh-us.com/uploads/cemetery_76_3184030255.pdf"
+        },
+        { "groupName":"CemeteryTrustees","type": "Agenda",
+            "date": "2017-01-25",
+            "link":"http://miltonnh-us.com/uploads/cemetery_74_4122925728.pdf"
+        },
+        { "groupName":"CemeteryTrustees","type": "Minutes",
+            "date": "2017-01-25",
+            "link":"http://miltonnh-us.com/uploads/cemetery_79_1894760548.pdf"
+        },
+        { "groupName":"CemeteryTrustees", "type": "Agenda",
+            "date": "2016-12-28",
+            "link":"http://miltonnh-us.com/uploads/cemetery_73_3676418840.pdf"
+        },
+        { "groupName":"CemeteryTrustees","type": "Minutes",
+            "date": "2016-12-28",
+            "link":"http://miltonnh-us.com/uploads/cemetery_78_1199697270.pdf"
+        }
+        ,
+        { "groupName":"LibraryTrustees","type": "Agenda",
+            "date": "2016-01-11",
+            "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_160_3278473966.pdf"
+        },
+        { "groupName":"LibraryTrustees","type": "Minutes",
+            "date": "2016-01-11",
+            "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_165_3816409968.pdf",
+            "desc":"Canceled"
+        },
+        { "groupName":"LibraryTrustees","type": "Agenda",
+            "date": "2017-02-08",
+            "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_162_1672603499.pdf"
+        },
+        { "groupName":"LibraryTrustees","type": "Minutes",
+            "date": "2017-02-08",
+            "link":"",
+            "desc":"Canceled"
+        },
+        { "groupName":"LibraryTrustees","type": "Agenda",
+            "date": "2017-02-24",
+            "link":"http://miltonnh-us.com/uploads/milton-free-public-library-board-of-trustees_164_1789014553.pdf"
+        },
+        { "groupName":"Recreation","type": "Agenda",
+            "date": "2016-06-15",
+            "link":"http://miltonnh-us.com/uploads/recreation_126_4290273043.pdf"
+        },
+        { "groupName":"Recreation","type": "Agenda",
+            "date": "2016-05-18",
+            "link":"",
+            "desc":"No agenda or minutes"
+        },
+        { "groupName":"Recreation","type": "Minutes",
+            "date": "2016-05-04",
+            "link":"http://miltonnh-us.com/uploads/recreation_127_56013468.pdf"
+        },
+        { "groupName":"Recreation","type": "Agenda",
+            "date": "2016-05-04",
+            "link":"http://miltonnh-us.com/uploads/recreation_121_3562022071.pdf"
+        }
+        ,
+        { "groupName":"EconomicDevelopment","type": "Agenda",
+            "date": "2016-11-09",
+            "link":"http://miltonnh-us.com/uploads/economic_79_2381887235.pdf"
+        },
+        { "groupName":"EconomicDevelopment","type": "Minutes",
+            "date": "2016-11-09",
+            "desc":"No Quorum/Rescheduled"
+        }
+
+        ,
+        { "groupName":"Selectmen","type": "Agenda",
+            "date": "2017-03-06",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_675_2809907543.pdf"
+        },
+        { "groupName":"Selectmen","type": "Agenda",
+            "date": "2017-03-20",
+            "link":"http://miltonnh-us.com/uploads/economic_79_2381887235.pdf"
+        },
+        { "groupName":"Selectmen","type": "Video",
+            "date": "2017-03-20",
+            "link":"https://www.youtube.com/watch?v=Uy4CYJJIB18&feature=em-upload_owner"
+        },
+        { "groupName":"Selectmen","type": "Minutes",
+            "date": "2017-03-06",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_680_2468411197.pdf"
+        },
+        { "groupName":"Selectmen","type": "Document",
+            "date": "2017-03-06",
+            "desc":"Test Dummy Document on Same Date as a meeting",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_680_2468411197.pdf"
+        },
+        { "groupName":"SewerCommission","type": "Agenda",
+            "date": "2012-05-06",
+            "link":"http://miltonnh-us.com/uploads/sewer_comm_5_4094455831.pdf"
+        },
+        { "groupName":"SewerCommission","type": "Agenda",
+            "date": "2011-10-04",
+            "link":"http://miltonnh-us.com/uploads/sewer_comm_3_1306836267.pdf"
+        },
+        { "groupName":"SewerCommission","type": "Agenda",
+            "date": "2011-11-01",
+            "desc":"No Agenda or Minutes availible"
+        },
+        { "groupName":"TrustFunds","type": "Agenda",
+            "date": "2017-02-15",
+            "link":"http://miltonnh-us.com/uploads/trust_funds_146_1296104008.pdf"
+        },
+        { "groupName":"TrustFunds","type": "Minutes",
+            "date": "2017-02-15",
+            "link":"http://miltonnh-us.com/uploads/trust_funds_147_3711713556.pdf",
+            "desc":"Draft Minutes"
+        },
+        { "groupName":"Zoning",
+            "type": "Agenda",
+            "date": "2017-02-23",
+            "link":"http://miltonnh-us.com/uploads/zba_104_2759952083.pdf"
+        },
+        { "groupName":"Zoning",
+            "type": "Agenda",
+            "date": "2017-01-26",
+            "link":"http://miltonnh-us.com/uploads/zba_101_1941484346.pdf"
+        },
+        { "groupName":"Zoning",
+            "type": "Minutes",
+            "date": "2017-01-26",
+            "link":"http://miltonnh-us.com/uploads/zba_106_1612429798.pdf"
+        },
+        { "groupName":"Selectmen",
+            "type": "Agenda",
+            "date": "2017-02-27",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_673_382650096.pdf"
+        },
+        { "groupName":"Selectmen",
+            "type": "Minutes",
+            "date": "2017-02-27",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_680_1418906417.pdf"
+        },
+        { "groupName":"Selectmen",
+            "type": "Video",
+            "date": "2017-02-27",
+            "link":"https://www.youtube.com/watch?v=eY15l-pmnn8"
+        },
+        { "groupName":"Selectmen",
+            "type": "Agenda",
+            "date": "2017-02-06",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_668_2840010793.pdf"
+        },
+        { "groupName":"Selectmen",
+            "type": "Minutes",
+            "date": "2017-02-06",
+            "link":"http://miltonnh-us.com/uploads/bos_agendas_680_237966923.pdf"
+        },
+        { "groupName":"Selectmen",
+            "type": "Video",
+            "date": "2017-02-06",
+            "link":"https://www.youtube.com/watch?v=dH8GsTWv408"
+        },
+
+        {"mainpage": true,  "date": "2017-04-22", "groupName":"PublicWorks","type": "Notice",
+            "desc": "Earth Day, Clean Up Day",
+            "link":"http://miltonnh-us.com/uploads/public_works_29_656022802.pdf","dateposted":""
+        },
+        {"mainpage": true,  "date": "2017-06-10", "groupName":"police","type": "Notice",
+            "desc":"Rabies Clinic 3/18",
+              "link":"http://miltonnh-us.com/uploads/index_602_28535122.pdf"
+          },
+        {"mainpage": true, "date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"Bid Notice: Project Paint Phase 2 Milton Free Public Library",
+           "link":"http://miltonnh-us.com/uploads/index_603_3386137334.pdf","dateposted":""
+       },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+            "desc":"Class V Roads posted 8 Ton weight limit as of 2/22",
+             "link":"http://miltonnh-us.com/uploads/index_599_4040727334.pdf","dateposted":""
+         },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"Milton Three Ponds Herbicide Treatment Meeting Information",
+            "link":"http://miltonnh-us.com/uploads/index_596_3412365711.pdf","dateposted":""
+        },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"Warrant Articles",
+           "link":"http://miltonnh-us.com/uploads/index_592_3732066310.pdf","dateposted":""
+       },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"Tax Comparison Chart for 2016",
+             "link":"http://miltonnh-us.com/uploads/index_566_2103534360.pdf","dateposted":""
+         },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"CIP Documents can be found on the Planning Board's Page",
+            "link":"/BoardsAndCommittees/PlanningBoard","dateposted":""
+        },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"UNK","type": "Notice",
+            "desc":"Earth Day, PWD Clean Up Day",
+            "link":"http://miltonnh-us.com/uploads/index_601_656022802.pdf","dateposted":""
+        },
+        {"mainpage": true,"date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+            "desc":"Snow Removal Policy",
+           "link":"http://miltonnh-us.com/uploads/index_493_3851436379.pdf","dateposted":""
+       },
+       {"mainpage": true,  "date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+           "desc": "2017 Transfer Station Stickers Information",
+           "link":"http://miltonnh-us.com/uploads/transfer_68_250581410.pdf","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+           "desc": "Solid Waste Ordinance",
+           "link":"http://miltonnh-us.com/uploads/transfer_59_2892924232.pdf","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+           "desc": "The Town of Milton Offers Compost Bins for Sale",
+           "link":"http://miltonnh-us.com/uploads/transfer_59_3926278684.pdf","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-06-10", "groupName":"PublicWorks","type": "Notice",
+           "desc": "The Town of Milton is a member of the Northeast Resource Recovery (NRRA)",
+           "link":"http://www.nrra.net/","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-03-24", "groupName":"TownClerk","type": "Notice",
+           "desc": "Town Clerk/Tax Collector's Office Closed 3.24.17 ",
+           "link":"http://miltonnh-us.com/uploads/taxes_245_523043089.pdf","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-03-18", "groupName":"TownClerk","type": "Notice",
+           "desc": "Rabies Clinic 3/18",
+           "link":"http://miltonnh-us.com/uploads/taxes_241_28535122.pdf","dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-03-18", "groupName":"TownClerk","type": "Notice",
+           "desc": "The Town Clerk is now Registering Dogs for 2017",
+           "dateposted":""
+       },
+       {"mainpage": false,  "date": "2017-03-18", "groupName":"TownClerk","type": "Notice",
+           "desc": "2017 Saturday Office Hours",
+           "link":"http://miltonnh-us.com/uploads/taxes_228_2408480422.pdf","dateposted":""
+       },
+       {"mainpage": false, "date": "2017-04-22","type": "Notice",
+           "desc": "Camp Three Ponds Registration", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2017-06-10","type": "Notice",
+           "desc": "Milton Summer Kick-Off", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2017-04-08","type": "Notice",
+           "desc": "Easter Egg Hunt", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2017-03-16","type": "Notice",
+           "desc": "Spaghetti Dinner", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-21","type": "Notice",
+           "desc": " Softball Field Renovation Committee Draft", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-06","type": "Notice",
+           "desc": " Softball Field Renovation Committee Agenda", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-27","type": "Notice",
+           "desc": " Softball Field Renovation Committee Agenda", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-27","type": "Notice",
+           "desc": " Softball Field Renovation Committee Draft", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-21","type": "Notice",
+           "desc": " Softball Field Renovation Committee Agenda", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-10-06","type": "Notice",
+           "desc": " Softball Field Renovation Committee Minutes", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-09-28","type": "Notice",
+           "desc": " Softball Field Renovation Committee Agenda", "groupName":"ParksRecreation"},
+       {"mainpage": false, "date": "2016-09-28","type": "Notice",
+           "desc": " Softball Field Renovation Committee Minutes", "groupName":"ParksRecreation"}
+
+       ,
+       {"mainpage": false, "date": "2017-03-04",  "desc": "Session scheduled for Saturday, March 4, 2017 ", "groupName":"ChecklistSupervisors","type": "Notice",
+           "link":"http://miltonnh-us.com/uploads/checklist_22_2475623.pdf","dateposted":""
+       }
+
+
+]

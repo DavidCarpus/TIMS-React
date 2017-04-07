@@ -13,9 +13,9 @@ import NoticesList from '../Containers/NoticesList'
 class RawText extends React.Component {
     render() {
         var text1 = ''
-        if (this.props.groupPageText && this.props.groupPageText.pagetext) {
-            if (this.props.block in this.props.groupPageText.pagetext[0]) {
-                    text1 =this.props.groupPageText.pagetext[0][this.props.block];
+        if (this.props.groupPageText ) {
+            if (this.props.block in this.props.groupPageText) {
+                    text1 =this.props.groupPageText[this.props.block];
                     text1 =  {__html: text1}
             }
         }
