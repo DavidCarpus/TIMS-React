@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router';
 import styles from '../assets/Styles/Menu.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -68,9 +69,9 @@ export default class Menu extends React.Component {
                                          className={styles.navItem}>{department.desc}</MenuItem>
                                 </LinkContainer>
                                 :
-                                <Navbar.Text key={index}>
-                                       <Navbar.Link href={department.link}  target="_blank"> {department.desc}</Navbar.Link>
-                                   </Navbar.Text>
+                                    <div className={styles.externalMenu} key={index}>
+                                        <a  href={department.link} target='_blank'>{department.desc}</a>
+                                    </div>
                                 )}
                         </NavDropdown>
                         <NavDropdown eventKey={'5'} title="Boards And Committees" id={55}>
@@ -85,12 +86,9 @@ export default class Menu extends React.Component {
                                       className={styles.navItem}>{committee.desc}</MenuItem>
                               </LinkContainer>
                               :
-                              <Navbar.Text
-                                  key={index}
-                                  >
-                                  <Navbar.Link href={committee.link}
-                                      target="_blank">{committee.desc}</Navbar.Link>
-                              </Navbar.Text>
+                              <div className={styles.externalMenu} key={index}>
+                                  <a  href={committee.link} target='_blank'>{committee.desc}</a>
+                              </div>
                                 )
                             }
                         </NavDropdown>
@@ -103,6 +101,31 @@ export default class Menu extends React.Component {
   }
   /*
 
+  ( !department.link.startsWith('http'))
+  ?
+  <LinkContainer to={'Departments/' + department.link}
+      key={index}>
+      <MenuItem
+          eventKey={'4.'+index}
+           className={styles.navItem}>{department.desc}</MenuItem>
+  </LinkContainer>
+  :
+      <div className={styles.externalMenu} key={index}>
+          <a  href={department.link} target='_blank'>{department.desc}</a>
+      </div>
+  )}
+
+
+  <Navbar.Text key={index}>
+         <Navbar.Link href={department.link}  target="_blank"> {department.desc}</Navbar.Link>
+     </Navbar.Text>
+
+     <LinkContainer to={department.link} target="_blank"
+     key={index}>
+     <MenuItem
+     eventKey={'4.'+index}
+     className={styles.navItem}>{department.desc}</MenuItem>
+     </LinkContainer>
   */
 
 class MenuLink extends React.Component {

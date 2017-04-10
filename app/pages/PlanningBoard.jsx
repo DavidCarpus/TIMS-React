@@ -8,14 +8,17 @@ import PlanningMapsForm from '../Components/PlanningMapsForm'
 import DocumentList  from '../Containers/DocumentList'
 import GroupMembers from '../Containers/GroupMembers'
 import AgendasAndMinutes from '../Containers/AgendasAndMinutes'
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class PlanningBoard extends React.Component {
 
     render() {
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'PlanningBoard' } )[0]
+
         return (
             <Row id="PlanningBoard" className="show-grid">
-                <Col md={2}><Aside groupName={'PlanningBoard'} /></Col>
-                <Col md={10}  id="contentArea" >
+                <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Planning Board</h1>
 
 <p>The Milton Planning Board meets on the first and third Tuesdays of the month (as needed, please check schedule to confirm meeting times) to process applications, discuss potential changes to ordinances and regulations, and to also keep up to date on the happenings in the town to confirm that they conform to town regulations. Approval from the Planning Board is required for all subdivisions, lot line adjustments, new non-residential development and expansions or changes of use to non-residential buildings or sites. Abutters play a crucial role by providing information and in helping the Planning Board evaluate plans. Abutters and other citizens interested in a project are encouraged to call the Planning Office with concerns or comments, view the plans at the Town Hall, Land Use Office, submit written comments, or attend the Planning Board meeting.    </p>
@@ -24,22 +27,28 @@ export default class PlanningBoard extends React.Component {
 
                     <PlanningMapsForm/>
 
-                    <GroupMembers
-                        groupName='PlanningBoard'
-                        title='Planning Board Members'
-                        />
+                    <GroupMembers group={group} groupName={group.link} title={group.label + ' Members'} />
                     <AgendasAndMinutes
+                        group={group}
                         groupName='PlanningBoard'
                         />
 
 
                     <DocumentList
+                        group={group}
                         groupName='PlanningBoard'
                         title='Planning Board Documentation'
                         />
             </Col>
+            <Col md={2} mdPull={10}><Aside group={group} Name={group.link} /></Col>
         </Row>
         );
     }
 
 }
+/*
+<GroupMembers
+    groupName='PlanningBoard'
+    title='Planning Board Members'
+    />
+*/

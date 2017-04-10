@@ -4,11 +4,15 @@ import Aside from '../Containers/Aside'
 import DocumentList  from '../Containers/DocumentList'
 
 import { Col } from 'react-bootstrap';
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Assessing extends React.Component {
 
     render() {
-        var groupName='Assessing'
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'ParksRecreation' } )[0]
+
+        // var groupName='Assessing'
         const onlineAssessmentButton= {
             backgroundColor: 'blue',
             color: 'white',
@@ -49,11 +53,12 @@ export default class Assessing extends React.Component {
                     </div>
 
                     <DocumentList
-                        groupName={groupName}
+                        group={group} 
+                        groupName={group.link}
                         title='Milton Assessors Documentation'
                         />
                     </Col>
-                    <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+                    <Col md={2} mdPull={10}><Aside group={group} groupName={group.link} /></Col>
             </div>
 
         );

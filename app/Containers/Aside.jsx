@@ -1,4 +1,27 @@
 import React from 'react';
+import AsideUI from '../Components/Aside'
+ import { connect } from 'react-redux'
+
+const mapStateToProps = (state, ownProps) => {
+
+    // var asides = []
+    var asides = ownProps.group.asides || []
+    // console.log(ownProps);
+    return {
+        asides: asides
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+     fetchDocs: () => { console.log('Test') }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AsideUI);
+
+/*
+import React from 'react';
  // import data from '../Data/Asides.json'
  import SmartLink from '../Components/SmartLink'
  import AsideUI from '../Components/Aside'
@@ -21,3 +44,4 @@ export default class Aside extends React.Component {
         )
     }
 }
+*/

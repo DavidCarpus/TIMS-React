@@ -10,7 +10,7 @@ export default function configureStore(initialState) {
   )(createStore);
 
   const store = finalCreateStore(reducer, initialState);
-
+  
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('./reducers', () => {

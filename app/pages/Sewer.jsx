@@ -4,10 +4,14 @@ import Aside from '../Containers/Aside'
 
 import DocumentList  from '../Containers/DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Sewer extends React.Component {
     render() {
-        const groupName='Sewer'
+        // const groupName='Sewer'
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'Sewer' } )[0]
+
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
@@ -20,13 +24,13 @@ export default class Sewer extends React.Component {
                         <p><i>The Sewer Department is in the process of streamlining their billing process and updating records. In the coming months, those who utilize sewer services will be receiving information on these changes and asking for confirmation of their billing information. If you utilize sewer services and have not received information by mail, we ask that you please contact our secretary to update our records.</i></p>
 
                         <DocumentList
-                            groupName={groupName}
+                            group={group}
                             title='Milton Sewage Department Documentation'
                             />
                         <SmartLink link='http://des.nh.gov/index.htm'
                             linkText='NH Department of Environmental Services (DES)'/>
                 </Col>
-                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+                <Col md={2} mdPull={10}><Aside group={group} groupName={group.link} /></Col>
 
             </div>
         )

@@ -5,14 +5,18 @@ import SmartLink from '../Components/SmartLink'
 import DocumentList  from '../Containers/DocumentList'
 import FAQList  from '../Containers/FAQList'
 import { Grid, Row, Col } from 'react-bootstrap';
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Welfare extends React.Component {
 
     render() {
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'Welfare' } )[0]
+
         return (
-            <Row id="Welfare" className="show-grid">
-            <Col md={2}><Aside groupName={'Welfare'} /></Col>
-            <Col md={10}  id="contentArea" >
+            <Row id={group.link} className="show-grid">
+            <Col md={10}  mdPush={2} id="contentArea"  >
+
                     <h1 style={{textAlign:'center'}}>Milton Welfare & Community Services Information</h1>
                         <quote>The Town has a basic legal duty to administer welfare as described in New Hampshire RSA 165:1-I, which states “Whenever a person in any town is poor and unable to support himself, he shall be relieved and maintained by the overseers of public welfare of such town…”</quote>
                         <br/><br/>
@@ -24,10 +28,11 @@ export default class Welfare extends React.Component {
                         <p>Do not email or fax completed applications.</p>
                         <p><b>Rental Assistance will not be provided without a Notice to Quit or a Demand for Rent.  Electric Assistance will not be provided without a disconnect notice.</b> </p>
 
-                        <DocumentList groupName='Welfare' />
+                        <DocumentList group={group}  groupName={group.link} />
 
-                        <FAQList groupName='Welfare' />
+                        <FAQList group={group} groupName={group.link}/>
                         </Col>
+                        <Col md={2} mdPull={10}><Aside group={group}  /></Col>
                     </Row>
 
         );

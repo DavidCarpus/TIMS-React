@@ -4,9 +4,11 @@ import { combineReducers } from 'redux';
 // import ValidateUserFieldsReducer from './reducer_validateUserFields';
 // import ResendEmailReducer from './reducer_resendEmail';
 // import UpdateEmailReducer from './reducer_updateEmail';
+// import AgendasAndMinutesReducer from './AgendasAndMinutes';
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
+    // agendasAndMinutes: AgendasAndMinutesReducer
   // user: UserReducer,
   // validateFields: ValidateUserFieldsReducer,
   // posts: PostsReducer, //<-- Posts

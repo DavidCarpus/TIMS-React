@@ -7,7 +7,7 @@ import SmartLink from './SmartLink'
 
 export default class CodeEnforcement extends React.Component {
     render() {
-        var groupName='CodeEnforcement'
+        // var groupName='CodeEnforcement'
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
@@ -24,11 +24,11 @@ export default class CodeEnforcement extends React.Component {
                     )}
 
                     <DocumentList
-                        groupName='CodeEnforcement'
+                        group={this.props.group}
                         title='Milton Code Enforcement Documentation'
                         />
                 </Col>
-                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+                <Col md={2} mdPull={10}><Aside group={this.props.group}  /></Col>
             </div>
         );
     }

@@ -4,13 +4,16 @@ import React from 'react';
 
 export default class CodeEnforcement extends React.Component {
     render() {
-        var codeEnforcementData = organizations.filter( (organization)=>
+        var group = organizations.filter( (organization)=>
             {return organization.link == 'CodeEnforcement' } )[0]
-        var helpfulInformation = codeEnforcementData.helpfulInformation
+
+        // var codeEnforcementData = organizations.filter( (organization)=>
+        //     {return organization.link == 'CodeEnforcement' } )[0]
+        var helpfulInformation = group.helpfulInformation
 
         return (
             <div>
-                <CodeEnforcementUI helpfulInformation={helpfulInformation} />
+                <CodeEnforcementUI group={group} helpfulInformation={helpfulInformation} />
             </div>
         )
     }

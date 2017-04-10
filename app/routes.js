@@ -19,12 +19,13 @@ import CodeEnforcement from './pages/CodeEnforcement'
 import TransferStationRules from './pages/TransferStationRules'
 import Committees from './pages/Committees'
 import PlanningBoard from './pages/PlanningBoard'
-import Test from './pages/Test'
+// import Test from './pages/Test'
 
 
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
 
+// <Route path="/Test" component={Test} />
 
 export default (
     <Route component={MainLayout}>
@@ -33,7 +34,6 @@ export default (
             <Route path="/calendar" component={Calendar} />
             <Route path="/ContactUs" component={ContactUs} />
             <Route path="/Employment" component={Employment} />
-            <Route path="/Test" component={Test} />
 
 
             <Route path="Departments"  >

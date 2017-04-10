@@ -9,17 +9,20 @@ import SmartLink from '../Components/SmartLink'
 import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
 
 import TransferStationRules from '../Containers/TransferStationRules'
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class PublicWorks extends React.Component {
 
     render() {
-        const groupName='PublicWorks'
+        // const groupName='PublicWorks'
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'PublicWorks' } )[0]
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Public Works Department</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
-                        <NoticesList groupName={groupName}/>
+                        <NoticesList group={group} groupName={group.link}/>
 
                         <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
                             linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
@@ -43,10 +46,10 @@ export default class PublicWorks extends React.Component {
                             linkText='Printable Transfer Station Rules'/>
                             <hr/>
 
-                        <EB2ServiceBlock groupName={groupName}/>
+                        <EB2ServiceBlock groupName={group.link}/>
                         Buy Transfer Station Stickers Online
                 </Col>
-                <Col md={2} mdPull={10}><Aside groupName={groupName} /></Col>
+                <Col md={2} mdPull={10}><Aside group={group}  groupName={group.link} /></Col>
             </div>
         );
     }

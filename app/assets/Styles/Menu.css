@@ -4,6 +4,26 @@
     max-height: 110%;
     /*background: rgba(255,255,255,0.9);*/
 }
+
+/*#custom-bootstrap-menu p.navbar-text:after {*/
+/*padding-right:  20px;
+margin-right:  20px;*/
+.externalMenu{
+    min-width: 210px;
+    margin-left: 20px;
+}
+.externalMenu a:after{
+        content: "";
+        display: block;
+        background: url('./images/external-128.png') no-repeat;
+        background-size: 100% 100%;
+        /*background-color: red;*/
+        color: white;
+        width: 10px;
+        height: 10px;
+        float: right;
+        margin: 0 0 0 5px;
+}
 /*@media bp-iphone5 {
      :global(#navbar) a{
             font-size: 2vmin;

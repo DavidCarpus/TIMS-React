@@ -1,10 +1,13 @@
 import React from 'react';
 import Aside from '../Containers/Aside'
 import {  Col } from 'react-bootstrap';
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class About extends React.Component {
 
 render() {
+    var group = organizations.filter( (organization)=>
+        {return organization.link == 'About' } )[0]
     return (
         <div>
             <Col md={10}  mdPush={2} id="contentArea"  >
@@ -26,7 +29,7 @@ render() {
                 </p>
 
             </Col>
-            <Col md={2} mdPull={10}><Aside groupName='Home' /></Col>
+            <Col md={2} mdPull={10}><Aside group={group}  /></Col>
         </div>
     );
 }

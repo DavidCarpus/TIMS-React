@@ -6,7 +6,7 @@ export default class AgendasAndMinutes extends React.Component {
         return meetingElements.map( (element, index) => {
             const text = element.desc || element.type;
          return (
-             <span> <SmartLink link={element.link} linkText={text} />  </span>
+             <span  key={index}> <SmartLink link={element.link} linkText={text} />  </span>
          )
      });
     }
@@ -15,7 +15,7 @@ export default class AgendasAndMinutes extends React.Component {
         var component=this
            return meetings.map( (meeting, index) => {
             return (
-                <li className="list-group-item" >
+                <li className="list-group-item"  key={index}>
                     {meeting.date} -
                     {component.renderMeeting(meeting.values)}
                 </li>
@@ -24,8 +24,8 @@ export default class AgendasAndMinutes extends React.Component {
     }
 
     render() {
-        var id = this.props.groupName + '_AgendasAndMinutes'
-        var title = this.props.title || 'Agendas And Minutes'
+        var id = this.props.group.link + '_AgendasAndMinutes'
+        var title = this.props.title ||  'Agendas And Minutes'
         var meetings = this.props.meetings
 
         return (

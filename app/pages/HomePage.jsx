@@ -3,9 +3,13 @@ import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'
 import { Grid, Row, Col } from 'react-bootstrap';
+import organizations from '../Data/OrganizationalUnits.json'
 
 export default class HomePage extends React.Component {
     render() {
+        var group = organizations.filter( (organization)=>
+            {return organization.link == 'Home' } )[0]
+
         return (
             <div>
                 <Col md={10} mdPush={2} id="contentArea">
@@ -22,7 +26,7 @@ export default class HomePage extends React.Component {
                     <NoticesList groupName='Home'/>
                     <OnlinePaymentsBlock/>
                 </Col>
-                <Col md={2} mdPull={10}><Aside groupName={'Home'} /></Col>
+                <Col md={2} mdPull={10}><Aside  group={group} groupName={'Home'} /></Col>
             </div>
         );
     }
