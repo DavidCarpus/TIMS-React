@@ -11,8 +11,8 @@ render(){
         <section id='notices'>
             <h2>Notices</h2>
             <ul className={styles.hidebullets}>{this.props.notices.
-                map(notice =>
-                    <li key={notice.id}>
+                map( (notice,index) =>
+                    <li key={notice.id || index}>
                         <SmartLink link={notice.link} linkText={notice.desc} />
                     </li>
             )}</ul>

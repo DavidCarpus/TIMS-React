@@ -20,7 +20,7 @@ export default class PublicWorks extends React.Component {
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
-                    <h1 style={{textAlign:'center'}}>Public Works Department</h1>
+                    <h1 style={{textAlign:'center'}}>{group.desc}</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
                         <NoticesList group={group} groupName={group.link}/>
 
@@ -40,7 +40,7 @@ export default class PublicWorks extends React.Component {
                         <p>At the Milton Transfer Station our goal is to create a polite and friendly atmosphere while committing to a superior level of service to assist the residents in their recycling and disposal needs.</p>
                     </div>
 
-                    <TransferStationRules/>
+                    <TransferStationRules group={group}/>
                     <hr/>
                         <SmartLink link='/Departments/TransferRules'
                             linkText='Printable Transfer Station Rules'/>
@@ -49,7 +49,7 @@ export default class PublicWorks extends React.Component {
                         <EB2ServiceBlock groupName={group.link}/>
                         Buy Transfer Station Stickers Online
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group}  groupName={group.link} /></Col>
+                <Col md={2} mdPull={10}><Aside group={group} /></Col>
             </div>
         );
     }

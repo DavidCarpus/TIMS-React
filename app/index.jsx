@@ -5,13 +5,15 @@ import { Router, browserHistory, hashHistory } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore.js';
 
-import publicRecords from './Data/PublicRecords.json'
+// import publicRecords from './Data/PublicRecords.json'
 // import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 // var routerHistory = browserHistory;
 var routerHistory = hashHistory;
-var initialState = { PublicRecords: publicRecords}
+// var initialState = { PublicRecords: publicRecords, agendasAndMinutes: {documents:[], loading: false} }
+// var initialState = { }
 
-const store = configureStore(initialState);
+// const store = configureStore(initialState);
+const store = configureStore();
 
 
 ReactDOM.render(

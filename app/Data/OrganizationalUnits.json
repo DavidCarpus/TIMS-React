@@ -77,7 +77,10 @@
         ],
         "asides": [
             {"desc": "Land Use Clerk<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
-        ]
+        ],
+        "pagetext":{
+            "desc":"<p>The Milton Planning Board meets on the first and third Tuesdays of the month (as needed, please check schedule to confirm meeting times) to process applications, discuss potential changes to ordinances and regulations, and to also keep up to date on the happenings in the town to confirm that they conform to town regulations. Approval from the Planning Board is required for all subdivisions, lot line adjustments, new non-residential development and expansions or changes of use to non-residential buildings or sites. Abutters play a crucial role by providing information and in helping the Planning Board evaluate plans. Abutters and other citizens interested in a project are encouraged to call the Planning Office with concerns or comments, view the plans at the Town Hall, Land Use Office, submit written comments, or attend the Planning Board meeting.    </p><p>The Planning Board is pleased to have the part time assistance of Bruce W. Woodruff, Planning,land use & Development Consultant, in capital improvement program, site plan and subdivision application review and other Land Use issues that may come before the Board.</p><p>For additional information, please contact Dana Crossley, Land Use Clerk at 603-652-4501 ext 5</p>"
+        }
     },
     {"id": 7, "desc": "Recreation Commission" , "link":"Recreation",
         "label": "Recreation Committee",  "mainMenu":"BoardsAndCommittees",
@@ -150,7 +153,10 @@
             {"desc": "Phone: <br/>(603) 652-4501 x6"},
             {"desc": "Fax: <br/>(603) 652-4120"},
             {"desc": "E-Mail: <br/>assessing@miltonnh-us.com"}
-        ]
+        ],
+        "pagetext": {
+            "desc": "<p>The Assessing Department is charged by State law with discovering, describing, and valuing real property for taxation purposes. The Department's job is diverse and involves the following responsibilities:</p><ul><li>Appraise and assess all real estate    </li><li>Monitor all sales and analyze the local real estate market </li><li>Maintain Property Record Card data </li><li>Administer Current Use Program </li><li>Oversee all Tax Exemption and Tax Credit Programs </li><li>Manage Timber Tax and Gravel Tax Programs </li><li>Assist taxpayers and the general public </li><li>Maintain Town's assessment roll by valuation of additions and new construction </li><li>Administer Tax Abatements </li><li>Provide assistance to other departments as needed </li></ul>"
+        }
     },
     {"id": 17, "desc": "Code Enforcement",        "link":"CodeEnforcement"    , "mainMenu":"Departments",
         "helpfulInformation":
@@ -175,7 +181,7 @@
     {"id": 18, "desc": "Fire / Emergency Management", "link":"http://www.miltonfirerescue.com/"  , "mainMenu":"Departments"}    ,
     {"id": 19, "desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"    , "mainMenu":"Departments"},
     {"id": 20, "desc": "Parks & Recreation",        "link":"ParksRecreation"    , "mainMenu":"Departments",
-        "gazette":
+        "newsletter":
         [
             {"date": "2016-03-01","desc": "February/March 2016", "link":"parks_297_738096610.pdf"},
             {"date": "2015-11-01","desc": "November 2015", "link":"parks_292_2482151554.pdf"},
@@ -193,7 +199,10 @@
             {"desc": "Phone: <br/>(603) 652-4501 x8"},
             {"desc": "Cell: <br/>(603) 834-0279"},
             {"desc": "Email: <br/>recreation@miltonnh-us.com"}
-        ]
+        ],
+        "pagetext":{
+            "desc":"<p>Town Beach is open Saturday's & Sunday's weather permitting 10-5pm. Please call ahead to verify that the gatehouse is open. 603-652-7308"
+        }
     },
     {"id": 21, "desc": "Planning and Land Use",        "link":"Planning"    , "mainMenu":"Departments"},
     {"id": 22, "desc": "Police" ,        "link":"http://miltonnhpd.com/", "mainMenu":"Departments"},

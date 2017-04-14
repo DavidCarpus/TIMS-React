@@ -23,7 +23,9 @@ export default class HomePage extends React.Component {
                         603-652-4501
                     </div>
 
-                    <NoticesList groupName='Home'/>
+                    <NoticesList
+                        group={group}
+                        groupName='Home'/>
                     <OnlinePaymentsBlock/>
                 </Col>
                 <Col md={2} mdPull={10}><Aside  group={group} groupName={'Home'} /></Col>

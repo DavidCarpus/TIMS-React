@@ -1,21 +1,20 @@
 import React from 'react';
- import SmartLink from '../Components/SmartLink'
- import TownNewslettersUI from '../Components/TownNewsletters'
- import organizations from '../Data/OrganizationalUnits.json'
+import TownNewslettersUI from '../Components/TownNewsletters'
+ import { connect } from 'react-redux'
 
-export default class TownNewsletters extends React.Component {
-    render() {
-        var id = 'TownNewsletters'
-        var title = this.props.title || 'Milton Town Gazette'
-        var parksRecreationData = organizations.filter( (organization)=>
-            {return organization.link == 'ParksRecreation' } )[0]
-       var gazette =parksRecreationData.gazette
-
-
-        return (
-            <div>
-                <TownNewslettersUI newsletters={gazette} title={title} id={id} />
-            </div>
-        )
-    }
+const mapStateToProps = (state, ownProps) => {
+    var newsletters = ownProps.group.newsletter || []
+    return {
+        newsletters: newsletters,
+        title: ownProps.title || 'Town Newsletter',
+        id: ''
+    };
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+     fetchDocs: () => { console.log('Test') }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TownNewslettersUI);

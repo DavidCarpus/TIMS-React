@@ -7,13 +7,9 @@ export default class CodeEnforcement extends React.Component {
         var group = organizations.filter( (organization)=>
             {return organization.link == 'CodeEnforcement' } )[0]
 
-        // var codeEnforcementData = organizations.filter( (organization)=>
-        //     {return organization.link == 'CodeEnforcement' } )[0]
-        var helpfulInformation = group.helpfulInformation
-
         return (
             <div>
-                <CodeEnforcementUI group={group} helpfulInformation={helpfulInformation} />
+                <CodeEnforcementUI group={group} helpfulInformation={group.helpfulInformation} />
             </div>
         )
     }

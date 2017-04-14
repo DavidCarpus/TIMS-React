@@ -1,5 +1,4 @@
 import React from 'react';
-// import Aside from './Aside'
 import Aside from '../Containers/Aside'
 import SmartLink from '../Components/SmartLink'
 
@@ -14,7 +13,7 @@ export default class Planning extends React.Component {
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
-                    <h1 style={{textAlign:'center'}}>Planning and Land Use</h1>
+                    <h1 style={{textAlign:'center'}}>{group.desc}</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>
                         <li><SmartLink link='BoardsAndCommittees/PlanningBoard' linkText='Planning Board' /></li>
@@ -30,7 +29,7 @@ export default class Planning extends React.Component {
                     <p>If you should have any questions please do not hesitate to contact Dana Crossley, Land Use Clerk, at 603-652-4501 x5 or
                         landuse@miltonnh-us.com</p>
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group} groupName={group.link} /></Col>
+                <Col md={2} mdPull={10}><Aside group={group} /></Col>
 
             </div>
         );

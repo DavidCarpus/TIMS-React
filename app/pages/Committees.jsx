@@ -11,8 +11,6 @@ export default class Committees extends React.Component {
 
         var groupPageText = group.pagetext;
 
-        // var groupPageText = organizationPageText.filter( (organization)=>
-        //             {return organization.name == groupName } )
         if (groupPageText != null) {
             groupPageText = groupPageText[0]
         }

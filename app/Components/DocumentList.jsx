@@ -2,9 +2,16 @@ import React from 'react';
  import SmartLink from './SmartLink'
 
 export default class DocumentList extends React.Component {
+    componentWillMount() {
+        this.props.fetchDocs(this.props.group.link);
+    }
+
     render() {
         var groupName= this.props.group.link
         var id = groupName + '_Documents'
+        if ( this.props.documentsGroupName &&  this.props.documentsGroupName !=  this.props.group.link ) {
+            this.props.fetchDocs(this.props.group.link);
+        }
 
         return (
             <div id={id}>

@@ -1,26 +1,22 @@
 import React from 'react';
-import FAQData from '../Data/FAQ.json'
- import SmartLink from '../Components/SmartLink'
- import FAQListUI from '../Components/FAQList'
+import { connect } from 'react-redux'
+import FAQListUI from '../Components/FAQList'
+ import FAQData from '../Data/FAQ.json'
 
-
-export default class FAQList extends React.Component {
-    render() {
-        var groupName= this.props.groupName
-        var id = groupName + '_FAQ'
-        var title = this.props.title || `Milton ${groupName} FAQ`
-        var questions = FAQData.filter( (doc)=>
-                    {return doc.department == groupName } )
-
-        return (
-            <div>
-                <FAQListUI questions={questions} title={title} groupName={groupName} />
-            </div>
-        )
-    }
+const mapStateToProps = (state, ownProps) => {
+    var questions = FAQData.filter( (doc)=>
+                {return doc.department == ownProps.groupName } )
+  return {
+      questions: questions,
+      title: ownProps.title || 'FAQ',
+      groupName: ownProps.groupName
+  };
 }
 
-/*
+const mapDispatchToProps = (dispatch) => {
+  return {
+     fetchDocs: () => { console.log('Test') }
+  }
+}
 
-
-*/
+export default connect(mapStateToProps, mapDispatchToProps)(FAQListUI);
