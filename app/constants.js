@@ -15,30 +15,3 @@ const PublicDocumentsConstants = {
 module.exports = {
     PublicDocumentsConstants
 }
-
-/*
-errors[
-
-]
-
-document {
-    id
-    desc
-    keywords
-    date submitted
-    date expires
-    url
-}
-keywordSearch{
-    fetching
-    suggestions
-}
-
-organization{
-    id
-    name
-    parent
-    type (department, comittee, subcomittee)
-    url
-}
-*/

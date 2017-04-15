@@ -66,7 +66,7 @@ $app->get('/Records/Notices/{groupName}', function (Silex\Application $app, $gro
     foreach ($jsonArray as $key => $item) {
         // echo "<pre>" . print_r($item, TRUE)  .  '</pre>';
         if ($item['type'] == 'Notice') {
-            if ($item['groupName'] == $groupName || ($groupName == 'Main' && $item['mainpage'])) {
+            if ($item['groupName'] == $groupName || ($groupName == 'Home' && $item['mainpage'])) {
             //     echo "$key";
             //     // $item['id'] = $key;
             unset($item['date']);
