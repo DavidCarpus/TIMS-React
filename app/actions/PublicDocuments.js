@@ -1,7 +1,8 @@
 import {PublicDocumentsConstants} from '../constants'
 import axios from 'axios';
 
- const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
+// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
+const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
 
  //========================================
 // http://stackoverflow.com/questions/4994201/is-object-empty
@@ -25,7 +26,7 @@ export function fetchMeetingDocs(groupName) {
       // headers: []
     });
     return dispatch => {
-        // console.log('fetchMeetings'+JSON.stringify(groupName));
+        console.log('fetchMeetings'+JSON.stringify(groupName));
         request.then( response => {
                dispatch(fetchMeetingsSuccess(groupName, response.data));
             //    console.log('fetchMeetingDocs... success: ');
