@@ -10,6 +10,7 @@
     "build": "webpack",
     "babel": "babel-node app/index.js",
     "push": "ssh A2 rm -R ./www/milton/*.* && scp build/* A2:./www/milton/ && rsync -auv images/ A2:./www/milton/images/ && rsync -auv api/ A2:./www/milton/api/",
+    "pushDev": "ssh A2 rm -R ./www/miltonDev/*.* && scp build/* A2:./www/miltonDev/ && rsync -auv images/ A2:./www/miltonDev/images/ && rsync -auv api/ A2:./www/milton/api/",
     "test": "karma start",
     "test:tdd": "npm run test -- --auto-watch --no-single-run",
     "test:lint": "eslint ./app ./tests --ext .js --ext .jsx --ignore-path .gitignore --ignore-pattern dist --cache"

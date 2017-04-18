@@ -3,8 +3,8 @@ import reducers from './reducers';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 
-// export default function configureStore(initialState) {
-function configureStore(initialState) {
+export default function configureStore(initialState) {
+// function configureStore(initialState) {
   const finalCreateStore = compose(
       applyMiddleware(promise()),
       applyMiddleware(thunk),

@@ -4,5 +4,4 @@ import configureStore from './configureStore.js';
 
 // const store = configureStore(initialState);
 // const store = configureStore();
-
-export let myStore = configureStore();
+export const myStore = configureStore();

@@ -1,8 +1,8 @@
 import {PublicDocumentsConstants} from '../constants'
 import axios from 'axios';
 
- // const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
+ const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
+// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
 // const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
 const actionsName='PublicDocuments';
 
@@ -93,7 +93,7 @@ export function fetchGroupDocsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupNotices(groupName) {
-    console.log(actionsName +'  fetchGroupNotices'+JSON.stringify(groupName));
+    // console.log(actionsName +'  fetchGroupNotices'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Notices/`+ groupName,
@@ -116,7 +116,7 @@ export function fetchGroupNoticesSuccess(groupName, docs) {
     payload: docs,
     groupName: groupName
   };
-  console.log(actionsName +'  fetchGroupNoticesSuccess:'+JSON.stringify(action));
+  // console.log(actionsName +'  fetchGroupNoticesSuccess:'+JSON.stringify(docs.length));
   return action;
 }
 //========================================
