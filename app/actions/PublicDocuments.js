@@ -1,10 +1,11 @@
 import {PublicDocumentsConstants} from '../constants'
 import axios from 'axios';
 
- const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
+ // const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
 // const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
 const actionsName='PublicDocuments';
+console.log('href' + location.href);
 
 
 //========================================
