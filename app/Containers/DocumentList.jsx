@@ -6,11 +6,12 @@ import DocumentListUI from '../Components/DocumentList'
 const mapStateToProps = (state, ownProps) => {
     return {
         documents: state.PublicRecords.documents,
+        group: ownProps.group,
         documentsGroupName: state.PublicRecords.groupName,
-        title: ownProps.title || 'Documentation'
+        loading: state.OrganizationalUnits.loading,
+        title: ownProps.title || 'Documentation',
     };
 }
-
 const mapDispatchToProps = (dispatch) => {
   return {
       fetchDocs: (groupName) => {

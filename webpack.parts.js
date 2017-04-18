@@ -31,7 +31,7 @@ exports.notifications = function(options) {
   return {
     plugins: [
         new WebpackBuildNotifierPlugin({
-            title: "Worldef Webpack Build",
+            title: "Milton Webpack Build",
             failureIcon: options.iconPath,
             successIcon: './',
             suppressSuccess: true,

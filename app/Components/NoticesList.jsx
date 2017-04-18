@@ -3,6 +3,10 @@ import styles from '../assets/Styles/Notices.css'
 import SmartLink from './SmartLink'
 
 export default class NoticesList extends React.Component {
+    componentWillMount() {
+        this.props.fetchNotices(this.props.group.link);
+    }
+
 render(){
     return (
         this.props.notices.length == 0

@@ -6,7 +6,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import SmartLink from './SmartLink'
 
 export default class CodeEnforcement extends React.Component {
+    renderHelpfulInfo(){
+        return (this.props.helpfulInformation.map((link, index) =>
+            <div key={index}><SmartLink link={link.link} linkText={link.desc} /></div>
+        )
+        )
+    }
     render() {
+        var helpfulInformation = this.props.helpfulInformation ? this.renderHelpfulInfo(): '';
         // var groupName='CodeEnforcement'
         return (
             <div>
@@ -19,9 +26,7 @@ export default class CodeEnforcement extends React.Component {
                     <p>Please call the Land Use Clerk at Town Hall between the hours of 8:00 AM and 4:00 PM Monday through Friday with any immediate concerns or questions.</p>
 
                     <h2>Helpful Information</h2>
-                    {this.props.helpfulInformation.map((link, index) =>
-                        <div key={index}><SmartLink link={link.link} linkText={link.desc} /></div>
-                    )}
+                    {helpfulInformation}
 
                     <DocumentList
                         group={this.props.group}

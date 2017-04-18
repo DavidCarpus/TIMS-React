@@ -12,8 +12,15 @@ const PublicDocumentsConstants = {
     FETCH_GROUP_NOTICES_FAILURE: 'FETCH_GROUP_NOTICES_FAILURE'
 }
 
+const OrganizationalUnitConstants = {
+    FETCH_OU_DATA: 'FETCH_OU_DATA',
+    FETCH_OU_DATA_SUCCESS: 'FETCH_OU_DATA_SUCCESS',
+    FETCH_OU_DATA_FAILURE: 'FETCH_OU_DATA_FAILURE',
+}
+
 module.exports = {
-    PublicDocumentsConstants
+    PublicDocumentsConstants,
+    OrganizationalUnitConstants
 }
 
 /*

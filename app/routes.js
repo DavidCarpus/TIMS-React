@@ -1,31 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import HomePage from './pages/HomePage';
-import MainLayout from './Components/MainLayout';
-import About from './pages/About';
-import Calendar from './pages/Calendar'
-import Assessing from './pages/Assessing'
-import ParksRecreation from './pages/ParksRecreation'
-import Planning from './pages/Planning'
-import PublicWorks from './pages/PublicWorks'
-import Sewer from './pages/Sewer'
-import Welfare from './pages/Welfare'
-import TownClerk from './pages/TownClerk'
-import ContactUs from './pages/ContactUs'
-import Employment from './pages/Employment'
-
-import CodeEnforcement from './pages/CodeEnforcement'
-import TransferStationRules from './pages/TransferStationRules'
-import Committees from './pages/Committees'
-import PlanningBoard from './pages/PlanningBoard'
-// import Test from './pages/Test'
-
-
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
 
+import MainLayout from './Components/MainLayout';
+
+import HomePage from './pages/HomePage';
+import About from './pages/About';
+import Calendar from './pages/Calendar'
+
+import ContactUs from './pages/ContactUs'
+import Employment from './pages/Employment'
+import PlanningBoard from './pages/PlanningBoard'
+
+import Committees from './pages/Committees'
+import Departments from './Containers/Departments'
+import {myStore} from './store/myStore.js';
+
+import { fetchOrganizationalUnitData } from './actions/OrganizationalUnitData'
+
+// import Test from './pages/Test'
 // <Route path="/Test" component={Test} />
+// console.log('myStore:' + JSON.stringify(myStore));
+
+    function onEnterHandler(store) {
+      return (nextState, replace) => {
+        store.dispatch({
+          type: 'CHANGE_DEPARTMENT',
+          payload: nextState.params.department
+        })
+        store.dispatch(fetchOrganizationalUnitData(nextState.params.department))
+      };
+    }
 
 export default (
     <Route component={MainLayout}>
@@ -36,17 +42,7 @@ export default (
             <Route path="/Employment" component={Employment} />
 
 
-            <Route path="Departments"  >
-                <Route path="Assessing" component={Assessing} />
-                <Route path="CodeEnforcement" component={CodeEnforcement} />
-                <Route path="ParksRecreation" component={ParksRecreation} />
-                <Route path="Planning" component={Planning} />
-                <Route path="PublicWorks" component={PublicWorks} />
-                <Route path="TownClerk" component={TownClerk} />
-                <Route path="Welfare" component={Welfare} />
-                <Route path="TransferRules" component={TransferStationRules} />
-                <Route path="Sewer" component={Sewer} />
-
+            <Route path="Departments/:department" component={Departments} onEnter={onEnterHandler(myStore)}>
             </Route>
 
             <Route path="BoardsAndCommittees"  >

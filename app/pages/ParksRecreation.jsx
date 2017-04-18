@@ -12,8 +12,8 @@ import organizations from '../Data/OrganizationalUnits.json'
 
 export default class ParksRecreation extends React.Component {
     render() {
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'ParksRecreation' } )[0]
+        var group = this.props.group;
+
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
@@ -22,12 +22,12 @@ export default class ParksRecreation extends React.Component {
 
                     <EB2ServiceBlock groupName={group.link}/>
                     <NoticesList
-                        group={group}
+                        group={this.props.group}
                         groupName={group.link}/>
 
-                    <TownNewsletters title={'Milton Town Gazette'} group={group} />
+                    <TownNewsletters title={'Milton Town Gazette'} group={this.props.group} />
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group}  /></Col>
+                <Col md={2} mdPull={10}><Aside group={this.props.group}  /></Col>
 
             </div>
         );
