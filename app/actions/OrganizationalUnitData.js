@@ -1,9 +1,12 @@
 import {OrganizationalUnitConstants} from '../constants'
 import axios from 'axios';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
+// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
 // const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
 const actionsName='OrganizationalUnitData';
+console.log('OrganizationalUnit ROOT_URL:' + ROOT_URL);
+
 //========================================
 export function fetchOrganizationalUnitData(groupName) {
     console.log(actionsName + ' fetchOrganizationalUnitData:'+JSON.stringify(groupName));
@@ -11,6 +14,8 @@ export function fetchOrganizationalUnitData(groupName) {
       method: 'get',
       url: `${ROOT_URL}GroupData/`+ groupName,
     });
+    // console.log(actionsName +' fetchMeetings'+JSON.stringify(`${ROOT_URL}GroupData/`+ groupName));
+
     return dispatch => {
         dispatch({type: OrganizationalUnitConstants.FETCH_OU_DATA, groupName: groupName});
         request.then( response => {
