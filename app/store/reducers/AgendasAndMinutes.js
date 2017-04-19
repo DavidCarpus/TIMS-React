@@ -7,10 +7,10 @@ export default function(state = INITIAL_STATE, action) {
     let error;
     switch(action.type) {
         case PublicDocumentsConstants.FETCH_MEETING_DOCS:// start fetching docs and set loading = true
-        console.log('agendasAndMinutes Reducer processing FETCH_MEETING_DOCS:' + JSON.stringify(action.groupName));
+        // console.log('agendasAndMinutes Reducer processing FETCH_MEETING_DOCS:' + JSON.stringify(action.groupName));
             return { ...state,  groupName:action.groupName, documents:[], error: null, loading: true };
         case PublicDocumentsConstants.FETCH_MEETING_DOCS_SUCCESS:// return list of posts and make loading = false
-            console.log('agendasAndMinutes Reducer processing SUCCESS:' + JSON.stringify(action.groupName));
+            // console.log('agendasAndMinutes Reducer processing SUCCESS:' + JSON.stringify(action.groupName));
             return { ...state, groupName:action.groupName, documents: action.payload, error:null, loading: false };
         case PublicDocumentsConstants.FETCH_MEETING_DOCS_FAILURE:// return error and make loading = false
         console.log('agendasAndMinutes Reducer processing FAILURE:' + JSON.stringify(action));

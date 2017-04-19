@@ -12,6 +12,40 @@ const PublicDocumentsConstants = {
     FETCH_GROUP_NOTICES_FAILURE: 'FETCH_GROUP_NOTICES_FAILURE'
 }
 
-module.exports = {
-    PublicDocumentsConstants
+const OrganizationalUnitConstants = {
+    FETCH_OU_DATA: 'FETCH_OU_DATA',
+    FETCH_OU_DATA_SUCCESS: 'FETCH_OU_DATA_SUCCESS',
+    FETCH_OU_DATA_FAILURE: 'FETCH_OU_DATA_FAILURE',
 }
+
+module.exports = {
+    PublicDocumentsConstants,
+    OrganizationalUnitConstants
+}
+
+/*
+errors[
+
+]
+
+document {
+    id
+    desc
+    keywords
+    date submitted
+    date expires
+    url
+}
+keywordSearch{
+    fetching
+    suggestions
+}
+
+organization{
+    id
+    name
+    parent
+    type (department, comittee, subcomittee)
+    url
+}
+*/

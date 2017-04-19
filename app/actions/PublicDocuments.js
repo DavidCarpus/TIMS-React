@@ -1,39 +1,31 @@
 import {PublicDocumentsConstants} from '../constants'
 import axios from 'axios';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://carpusconsulting.com/milton/api/';
+ // const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
+// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
 // const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
+const actionsName='PublicDocuments';
+console.log('PublicDocuments ROOT_URL:' + ROOT_URL);
 
- //========================================
-// http://stackoverflow.com/questions/4994201/is-object-empty
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-function isEmpty(obj) {
-    if (obj == null) return true;
-    if (obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
-    if (typeof obj !== 'object') return true;
-    for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
-    }
-    return true;
-}
+
 //========================================
 export function fetchMeetingDocs(groupName) {
-    // console.log('fetchMeetings'+JSON.stringify(groupName));
+    // console.log(actionsName +' fetchMeetings'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Meetings/`+ groupName,
       // headers: []
     });
     return dispatch => {
-        console.log('fetchMeetings'+JSON.stringify(groupName));
+        // console.log('fetchMeetings'+JSON.stringify(groupName));
         request.then( response => {
                dispatch(fetchMeetingsSuccess(groupName, response.data));
-            //    console.log('fetchMeetingDocs... success: ');
+            //    console.log(actionsName +'  fetchMeetingDocs... success: ');
           })
           .catch( reason => {
             //   if (isEmpty(reason))  return;
-            //   console.log('fetchMeetingDocs? : ' + JSON.stringify(reason));
+              console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
               dispatch(fetchMeetingsFailure(reason));
           })
 
@@ -46,12 +38,12 @@ export function fetchMeetingsSuccess(groupName, meetingDocs) {
     payload: meetingDocs,
     groupName: groupName
   };
-  // console.log('fetchMeetingsSuccess:'+JSON.stringify(action));
+  console.log(actionsName +'  fetchMeetingsSuccess:'+JSON.stringify(action.groupName));
   return action;
 }
 //========================================
 export function fetchMeetingsFailure(error) {
-    console.log('fetchMeetingsFailure:'+JSON.stringify(error));
+    console.log(actionsName +'  fetchMeetingsFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_MEETING_DOCS_FAILURE,
     payload: error
@@ -61,7 +53,7 @@ export function fetchMeetingsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupDoc(groupName) {
-    // console.log('fetchGroupDocs'+JSON.stringify(groupName));
+    console.log(actionsName +'  fetchGroupDocs'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Documents/`+ groupName,
@@ -69,7 +61,9 @@ export function fetchGroupDoc(groupName) {
     });
     return dispatch => {
         request.then( response => {
-            // console.log('fetchGroupDocs response'+JSON.stringify(response.data.length));
+            // dispatch({type: PublicDocumentsConstants.FETCH_GROUP_DOCS, groupName: groupName});
+
+            // console.log(actionsName +'  fetchGroupDocs response '+groupName + ' ' +JSON.stringify(groupName));
                dispatch(fetchGroupDocsSuccess(groupName, response.data));
           })
           .catch( reason => {
@@ -85,13 +79,13 @@ export function fetchGroupDocsSuccess(groupName, docs) {
     payload: docs,
     groupName: groupName
   };
-  console.log('fetchGroupDocsSuccess:'+docs.length);
+  // console.log(actionsName +'  fetchGroupDocsSuccess:'+docs.length);
   // console.log(JSON.stringify(action));
   return action;
 }
 //========================================
 export function fetchGroupDocsFailure(error) {
-    console.log('fetchMeetingsFailure:'+JSON.stringify(error));
+    console.log(actionsName +'  fetchMeetingsFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_DOCS_FAILURE || 'Fail',
     payload: error
@@ -101,7 +95,7 @@ export function fetchGroupDocsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupNotices(groupName) {
-    console.log('fetchGroupNotices'+JSON.stringify(groupName));
+    // console.log(actionsName +'  fetchGroupNotices'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Notices/`+ groupName,
@@ -124,12 +118,12 @@ export function fetchGroupNoticesSuccess(groupName, docs) {
     payload: docs,
     groupName: groupName
   };
-  console.log('fetchGroupNoticesSuccess:'+JSON.stringify(action));
+  // console.log(actionsName +'  fetchGroupNoticesSuccess:'+JSON.stringify(docs.length));
   return action;
 }
 //========================================
 export function fetchGroupNoticesFailure(error) {
-    console.log('fetchGroupNoticesFailure:'+JSON.stringify(error));
+    console.log(actionsName +'  fetchGroupNoticesFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_FAILURE || 'Fail',
     payload: error

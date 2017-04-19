@@ -1,26 +1,23 @@
 import React from 'react';
-import TaxMapForm  from '../Components/TaxMapForm'
+import { Col } from 'react-bootstrap';
+
+import styles from '../assets/Styles/Assessing.css'
 import Aside from '../Containers/Aside'
 import DocumentList  from '../Containers/DocumentList'
-
-import { Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
-import styles from '../assets/Styles/Assessing.css'
 import RawText from '../Components/RawText'
+import TaxMapForm  from '../Components/TaxMapForm'
 
 export default class Assessing extends React.Component {
 
     render() {
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'Assessing' } )[0]
+        var group = this.props.group;
         var groupPageText = group.pagetext;
 
-            // <RawText groupPageText={groupPageText} block='desc' />
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Assessing Department</h1>
-                    <RawText groupPageText={group.pagetext} block='desc' />
+                    <RawText groupPageText={groupPageText} block='desc' />
 
                     <div >
                         <div  style={{width:'48%'}}>

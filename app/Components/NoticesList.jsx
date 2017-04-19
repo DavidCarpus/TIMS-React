@@ -7,7 +7,7 @@ export default class NoticesList extends React.Component {
         this.props.fetchNotices(this.props.group.link);
     }
 
-    render(){
+render(){
     return (
         this.props.notices.length == 0
         ? <section id='notices'></section>

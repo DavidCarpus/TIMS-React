@@ -5,18 +5,15 @@ import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'
 
 import SmartLink from '../Components/SmartLink'
-
 import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
-
 import TransferStationRules from '../Containers/TransferStationRules'
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class PublicWorks extends React.Component {
 
     render() {
-        // const groupName='PublicWorks'
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'PublicWorks' } )[0]
+        var group = this.props.group;
+        var groupPageText = group.pagetext;
+
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >

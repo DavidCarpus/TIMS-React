@@ -1,0 +1,364 @@
+[
+    {"id": 1, "desc":"Budget Committee", "link": "BudgetCommittee",
+        "label": "Budget Committee", "mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"name":"Caitlin Magargee - Elected"	 ,"term":"2019"},
+            {"name":"Thomas McDougall - Elected"	 ,"term":"2019"},
+            {"name":"Larry Brown Chairman- Elected"	 ,"term":"2018"} ,
+             {"name":"Bob Carrier - Appointed till 2017"	 ,"term":"2018"},
+            {"name":"Maureen Steer - Elected"	 ,"term":"2017"},
+            {"name":"Dennis Wing - Elected"	,"term":"2017"},
+            {"name":"Lue Synder - School  Board Representative"	,"term":"2016"},
+            {"name":"Mike Beaulieu - Selectmen's Representative"	 ,"term":"2016"},
+            {"name":"Stan Nadeau- Water District Representative",	"term":"2016"}
+        ]
+    },
+    {"id": 2, "desc": "Cemetery Trustees", "link":"CemeteryTrustees",
+        "label": "Cemetery Trustees", "mainMenu":"BoardsAndCommittees",
+        "asides":[
+            {"desc": "John Katwick - Chairman 2018<br/>603-652-9872"},
+            {"desc": "Bruce Woodruff 2019"},
+            {"desc": "Gordy Maness - 2017<br/>603-652-7251"}
+        ]
+    },
+    {"id": 3, "desc": "Conservation Committee", "link":"ConservationCommittee",
+        "label": "Conservation Committee", "mainMenu":"BoardsAndCommittees" ,
+        "members":[
+            {"office":"Chairman",	"name":"Cynthia Wyatt",	"term":"2017"},
+            {"office":"Vice Chairman",	"name":"Eric Knapp",	"term":"2019"},
+            {"office":"Treasurer",	"name":"Steve Panish",	"term":"2018"},
+            {"office":"Commissioner",	"name":"Paul Blanc",	"term":"2017"},
+            {"office":"Commissioner",	"name":"Karen Golab",	"term":"2018"},
+            {"office":"Alternate",	"name":"Wayne Slyvester",	"term":"2020"},
+            {"office":"Alternate",	"name":"Virginia Long",	"term":"2020"},
+            {"office":"Alternate",	"name":"Barry Carr",	"term":"2018"}
+        ],
+        "asides":[
+            {"desc": "Conservation Commission Secretary: <br/>Dana Crossley<br/>603-652-4501 ext 5"    }
+        ],
+        "pagetext": [
+            {"desc":"<p>Are you interested in serving on the Branch River Scenic Byway Corridor Advisory Committee?  For more information click here</p><br/>    <p>The Conservation Commission’s goal is to fulfill the mandates of RSA 36-A, and the conservation planning goals in the Milton Master Plan. Notable activity in 2010 was:</p><br/>    <p>Passage of Shoreland Overlay Protection District ordinance: In 2008, Milton received an $8500 Community Technical Assistance grant to improve water quality. Jack Mettee, a planning consultant, was hired in fall 2008. Throughout 2009, he and the CC worked to consolidate and streamline the existing water protection ordinances, and to ensure consistency between Milton’s ordinances and the new State Comprehensive Shoreland Protection Act. Public forums featured local water resource professionals who addressed the importance of natural buffers along streams, rivers and ponds. UNH freshwater biologist Dr. Jim Haney discussed the continuing decline of water quality in the Milton 3 Ponds. Input from the Planning Board was incorporated into the ordinance, and the Planning Board voted to include and support the proposed overlay district on the 2010 town warrant. The ordinance was passed by town vote.</p><br/>    <p>Natural Resource Planning Maps completed. Two new maps are now available in the land use planning room at the Emma Ramsey Center showing: 1) comprehensive water resources, and 2) multiple conservation features including prime farmland soils, NHFG Wildlife Action Plan data, NH Coastal Plan Core Focus Areas, snowmobile trails, conservation lands, and tax parcels. These maps were donated by Moose Mountains Regional Greenways.</p><br/>    <p>Monitoring town held conservation easements. The town is required to annually monitor Milton conservation lands and the conservation easements it holds. The Milton Conservation Commission contracted UNH graduate forestry students to produce baseline monitoring documentation and to mark the boundaries of all conservation properties. The town owned Ball property and the Frizzell conservation easement baselines and boundary markings are complete. Additionally:</p><br/>    <li>Erin Quigley completed the baseline and boundary markings for map 14, lot 2 consisting of 20.42 town owned acres known as the Jones Brook Park. The town voted in 2002 to place the Jones Brook Park under conservation easement as per Warrant Article 16.</li><br/>    <li>Ms. Quigley also completed the baseline documentation and boundary marking of the town owned 4.2 acre Payne property, which is contiguous with the Jones Brook property. This property is referenced as map 14, lot 6. This property was voted to be placed under conservation easement as per Article 23 of 2003 Milton Town Warrant.</li><br/>    <li>Ms. Quigley completed the baseline documentation and boundary marking of town owned 24.8 acre land locked property within the wellhead protective radius of Milton’s public drinking water supply. This property is referenced as Map 37 lot 110, and is known historically as the Old Ski Area.</li><br/>    <li>Ms. Quigley completed the baseline documentation of the Milton conservation easement properties known as Wallace Way consisting of 5 acres and Dames Brook consisting of 10.5 acres.</li><br/>    <li>Milton properties that are in the process of baseline documentation are map 27, lot 1, 92 landlocked acres with high conservation value, and Lyman Brook conservation easement consisting of 19.5 acres.</li><br/>    <p>Land Protection Projects:</p><br/>    <p>The Milton Conservation Commission was instrumental in assisting Philip and Sylvia Thayer Zaeder with their donation of a 37 acre conservation easement on their historic homestead on Hare Rd. The Zaeders paid most of the costs, while the town paid for the required survey from the Conservation Fund. Strafford Rivers Conservancy is the primary easement holder, the town hold the executor interest. These actions were supported by the Selectmen.</p><br/>    <p>Milton’s Conservation Fund: This fund receives 50% of the land use change tax, and is primarily used to assist landowners defray the cost of conservation easements. These conservation projects fulfill the conservation objectives of the Master Plan by protecting Milton’s water resources, forestlands, wildlife habitat, and farmland. Side benefits are the preservation of Milton’s scenic beauty and rural character.</p><br/>    <p>Additional Links:</p><br/>    <p>Strafford Regional Planning Commission</p><br/>"}
+        ]
+    },
+    {"id": 4, "desc": "Economic Development" , "link":"EconomicDevelopment",
+        "label": "Economic Development ","mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"name":"Bob Bordeau",	"term":"2015"},
+            {"name":"Cubbi Lirette",	"term":"2016"},
+            {"name":"Eric Knapp",	"term":"2017"},
+            {"name":"Nick Marique",	"term":"2018"},
+            {"name":"Mike Beaulieu",	"term":"2019"}
+        ],
+        "pagetext": [
+            {"text1":"Milton ...  We are open for business<br/><br/>Welcome to the Economic Development section of the Milton NH website, developed by the Milton Economic Development Committee (MEDC) with the support of the Milton Board of Selectmen and the Town Administrator. We define economic development in a broad sense … “a series of planned activities designed to increase the number of jobs and investment in the community.” The Town of Milton is beginning the process of economic development. The Town’s basic goal is to provide tools and assistance that encourage existing businesses to expand and to attract new commercial and industrial projects that are compatible with Milton and its beautiful natural environment. <br/><br/>Our primary focus is to:<br/>Assist existing businesses with potential expansion plans; <br/>Assist existing businesses in working with the Town;<br/>Provide insight and assistance to businesses in working with local boards and departments during the development review, approval and permitting processes;<br/>Provide relocation and site selection information and assistance;<br/>Encourage a positive regulatory environment towards business; and<br/>Encourage the creation and maintenance of a strong economic development infrastructure.<br/> <br/><u>Milton Gears up for its Strategic Economic Development Plan</u><br/>Through a small grant from the Public Service Company of New Hampshire (PSNH), the Town of Milton will start work on its Strategic Economic Development Plan with consultant assistance. Strategic Planning is a management tool that helps an organization or community focus its energy to undertake specific actions that guide the organization in achieving specific short and long-term goals. The Strategic Economic Development Plan determines where the Town fits with the current “environment”, establishes goals and a vision and proposes actions to achieve the vision. The effort involves three components:<br/><br/>Situational Analysis, Milton’s Strengths and Limitations Today: This activity includes a review of the existing environment for increased economic activity. As part of the Situation Analysis, the community carefully considers various driving forces such as income growth, changing demographics, education, type of existing industries, natural resource limitations and opportunities, etc. A summary review of the past economic development work completed in 2007 by the Cost of Community Service Study Committee (CCSSC).<br/><br/>This process explores the various strengths, weaknesses, opportunities and threats (an acronym for this activity is SWOT) regarding the community.<br/><br/>• Strengths: characteristics of Milton that give it an advantage over others in the region. For example, good transportation access, skilled labor, attractive natural resources and open space areas, e.g., Milton’s Three Ponds.<br/>• Weaknesses: (or Limitations): characteristics that place the community at a disadvantage relative to others. For example, limited utility capacity or limited sites with sewer and water;<br/>• Opportunities: external activities that may make Milton more attractive. For example, improvements to and widening of the Spaulding Turnpike, development potential around Exists 17 and 18 off the Turnpike.<br/>• Threats: external elements in the environment that could raise issues for the community. For example, other nearby communities developing a business park, changes to state regulations.<br/><br/>Goal Setting --- Milton’s Economic Future: The goal setting and visioning process is critical to any strategic plan.  Whether the plan is for an organization, the community or a smaller group, it is critical to determine the direction in which the community wishes to proceed. Goals should be designed and worded as much as possible to be specific, measurable and realistic. Part of the goal setting process usually involves the preparation of a Vision Statement— a description of what the community desires and what Strategic Plan hopes to accomplish—“A community with a thriving economy.”  It may also include a set of guiding principles or primary goals and priorities to implement the Vision.<br/><br/>Action Plan --- Getting the Job Completed: Action planning involves establishing a set of actions or tactics to implement the plan and achieve the Plan goals. Each goal or objective is associated with an action or set of actions, which is one of the methods needed to reach a goal. Action planning also includes specifying responsibilities and timelines with each objective, or who needs to do what and by when<br/><br/>What is the benefit? In the end, the Strategic Economic Development Plan provides the community with a realistic guide or “road map” of how it can advance its economic development program.<br/><br/>In the late winter or early spring, the Town will conduct an open visioning session designed to involve the community in this process. We will keep the community informed via the Town website.<br/><br/>Finally, the Town wishes to thank Eversource for its grant assistance.<br/>"}
+        ]
+
+    },
+    {"id": 5, "desc": "Milton Free Public Library Board of Trustees" ,  "link":"LibraryTrustees",
+        "label": "Library Trustees ","mainMenu":"BoardsAndCommittees",
+        "asides": [
+            {"desc": "Milton Free Public Library<br/>13 Main Street, <br/>Milton Mills, NH<br/>603-473-8535<br/>Email: MFPL@metrocast.net"    }
+        ],
+        "pagetext": [
+            {"desc":"<h2>Milton Free Public Library Mission Statement</h2>The mission of the Milton Free Public Library is to promote the use of the library and to provide the community access to the books, ideas, resources, and information for the education, employment, and self-government in a society that values and protects freedom of speech, which celebrates and respects our similarities and our differences, and holds all people to be equal and free."}
+        ]
+    },
+    {"id": 6, "desc": "Planning Board" , "link":"PlanningBoard",
+        "label": "Planning Board",  "mainMenu":"BoardsAndCommittees",
+        "members":[
+            {"office":"Chairman","name":"Brian Boyers",	"term":"2017"},
+            {"office":"Vice Chairman","name":"Peter Hayward",	"term":"2017"},
+            {"office":"Member","name":"Robert Bourdeau",	"term":"2018"},
+            {"office":"Member","name":"Tim Long",	"term":"2018"},
+            {"office":"Member","name":"Joseph Michaud",	"term":"2019"},
+            {"office":"Member","name":"Larry Brown",	"term":"2019"},
+            {"office":"Alternate (Appointed)","name":"Robert Graham"},
+            {"office":"Ex-Officio","name":"Tom Gray",	"term":"2017"}
+        ],
+        "asides": [
+            {"desc": "Land Use Clerk<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+        ],
+        "pagetext":{
+            "desc":"<p>The Milton Planning Board meets on the first and third Tuesdays of the month (as needed, please check schedule to confirm meeting times) to process applications, discuss potential changes to ordinances and regulations, and to also keep up to date on the happenings in the town to confirm that they conform to town regulations. Approval from the Planning Board is required for all subdivisions, lot line adjustments, new non-residential development and expansions or changes of use to non-residential buildings or sites. Abutters play a crucial role by providing information and in helping the Planning Board evaluate plans. Abutters and other citizens interested in a project are encouraged to call the Planning Office with concerns or comments, view the plans at the Town Hall, Land Use Office, submit written comments, or attend the Planning Board meeting.    </p><p>The Planning Board is pleased to have the part time assistance of Bruce W. Woodruff, Planning,land use & Development Consultant, in capital improvement program, site plan and subdivision application review and other Land Use issues that may come before the Board.</p><p>For additional information, please contact Dana Crossley, Land Use Clerk at 603-652-4501 ext 5</p>"
+        }
+    },
+    {"id": 7, "desc": "Recreation Commission" , "link":"Recreation",
+        "label": "Recreation Committee",  "mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"office":"Selectman Liaison","name":"Andrew Rawson",	"term":""},
+            {"office":"School Board Liaison","name":"Douglas Shute",	"term":"2015"},
+            {"office":"Chairman","name":"Christopher Jacobs",	"term":"2015"},
+            {"office":"Commissioner","name":"Stefanie Berry",	"term":"2017"},
+            {"office":"Commissioner","name":"Sarah Rogers",	"term":"2016"}
+        ],
+        "asides": [
+            {"department":"Recreation", "desc": "Director<br/>Karen Brown" }
+        ],
+        "pagetext": [
+            {"desc":"The Recreation Commission meets the 3rd Wednesday of the month at the Emma Ramsey Community Center"}
+        ]
+    },
+    {"id": 8, "desc": "Sewer Commission", "link":"SewerCommission" ,
+        "label": "Sewer Commission",  "mainMenu":"BoardsAndCommittees"
+    },
+    {"id": 9, "desc": "Supervisors of the Checklist" , "link":"ChecklistSupervisors",
+        "label": "Supervisors of the Checklist", "mainMenu":"BoardsAndCommittees"
+    },
+    {"id": 11, "desc": "Town House Committee",  "link":"TownHouse" ,
+        "label": "Town House Commitee", "mainMenu":"BoardsAndCommittees",
+        "pagetext": [
+            {"desc":"<p>The Milton Town House Stewardship Committee wishes to thank the Milton community, neighboring towns, and summer visitors for their continued support of our Town House Restoration efforts.  During the past year, many people have helped with cash contributions, several large gifts of money and materials, baked goods, and donated items for our Food/Yard Sale on June 6th.  Your support along with grants awarded by Land and Community Heritage Investment Program (LCHIP), we continue to make great strides in our mission to bringing the Town House up to a standard that will make it a very useful and desirable Town resource.</p><br/>"}
+        ]
+    },
+    {"id": 12, "desc": "Trustees of Trust Funds" , "link":"TrustFunds",
+        "label": "Trustees of Trust  Funds", "mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"office":"Trustee Treasurer","name":"Marion Trafton - 603-652-9768",	"term":""},
+            {"office":"Trustee","name":"Karen Brown - 603-652-4501 x8",	"term":""}
+        ]
+    },
+    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA)" , "link":"Zoning",
+        "label": "Zoning Board of Adjustment (ZBA)", "mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"office":"Chairman","name":"Michael Tabory",	"term":"2017"},
+            {"office":"Member","name":"Luella Snyder",	"term":"2017"},
+            {"office":"Appointed until 2017","name":"Larry Brown",	"term":"2019"},
+            {"office":"Member","name":"Bruce Woodruff",	"term":"2018"},
+            {"office":"Member","name":"Stan Nadeau",	"term":"2018"},
+            {"office":"Alternate","name":"Sean Skillings",	"term":""}
+        ],
+        "asides": [
+            {"department":"Zoning", "desc": "Zoning Board of Adjustment Secretary<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+        ],
+        "pagetext": [
+            {"desc":"<p>The Zoning Board of Adjustment is a quasi-jusdicial board that hears appeals for Variances or Special Exceptions, from residents of the Town of Milton, whose projects deviate from the Milton Zoning Ordinance. The ZBA also hears appeals from Administrative Decisions regarding Code Enforcement. </p><br/>"}
+        ]
+    },
+    {"id": 14, "desc": "Board of Selectmen" , "link":"Selectmen",
+        "label": "Board of Selectmen", "mainMenu":"BoardsAndCommittees",
+        "members": [
+            {"office":"Selectman","name":"Ryan Thibeault - 603-534-7032",	"term":""},
+            {"office":"Selectman","name":"Mike Bealieu - 603-944-5574 ",	"term":""},
+            {"office":"Selectman","name":"Andrew Rawson - 603-534-1330 ",	"term":""}
+        ]
+    }
+
+    ,
+    {"id": 16, "desc": "Assessing", "link":"Assessing"    , "mainMenu":"Departments",
+        "asides": [
+            {"desc": "Kathy Wallingford<br/> Assessing Director"},
+            {"desc": "Marybeth Walker<br/>Contracted Assessor"},
+            {"desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+            {"desc": "Business Hours: <br/>Monday through Friday 8:00 a.m. - 4:00 p.m."},
+            {"desc": "Phone: <br/>(603) 652-4501 x6"},
+            {"desc": "Fax: <br/>(603) 652-4120"},
+            {"desc": "E-Mail: <br/>assessing@miltonnh-us.com"}
+        ],
+        "pagetext": {
+            "desc": "<p>The Assessing Department is charged by State law with discovering, describing, and valuing real property for taxation purposes. The Department's job is diverse and involves the following responsibilities:</p><ul><li>Appraise and assess all real estate    </li><li>Monitor all sales and analyze the local real estate market </li><li>Maintain Property Record Card data </li><li>Administer Current Use Program </li><li>Oversee all Tax Exemption and Tax Credit Programs </li><li>Manage Timber Tax and Gravel Tax Programs </li><li>Assist taxpayers and the general public </li><li>Maintain Town's assessment roll by valuation of additions and new construction </li><li>Administer Tax Abatements </li><li>Provide assistance to other departments as needed </li></ul>"
+        }
+    },
+    {"id": 17, "desc": "Code Enforcement",        "link":"CodeEnforcement"    , "mainMenu":"Departments",
+        "helpfulInformation":
+            [
+                {"desc": "Requirements for Obtaining a Building Permit",
+                "link":"http://miltonnh-us.com/uploads/code_31_3511899406.pdf"},
+                {"desc": "Zoning Ordinance ",
+                "link": "http://miltonnh-us.com/uploads/code_37_1489959989.pdf"},
+                {"desc": "Sign Ordinance ",
+                "link":"http://miltonnh-us.com/uploads/code_31_260423228.pdf"}
+            ],
+        "asides": [
+            { "desc": "Code Enforcement/Health Officer/Building Inspector<br/>Brian Boyers"},
+            { "desc": "Business Hours: <br/>Tuesday & Wednesday <br/>8:00 am - 4:00pm"},
+            { "desc": "Phone: <br/>(603) 652-4501 x7"},
+            { "desc": " "},
+            { "desc": "Land Use Clerk: Dana Crossley"},
+            { "desc": "Phone: <br/>(603) 652-4501 x5"},
+            { "desc": "Fax: <br/>(603) 652-4120"    }
+        ]
+    } ,
+    {"id": 18, "desc": "Fire / Emergency Management", "link":"http://www.miltonfirerescue.com/"  , "mainMenu":"Departments"}    ,
+    {"id": 19, "desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"    , "mainMenu":"Departments"},
+    {"id": 20, "desc": "Parks & Recreation",        "link":"ParksRecreation"    , "mainMenu":"Departments",
+        "newsletter":
+        [
+            {"date": "2016-03-01","desc": "February/March 2016", "link":"parks_297_738096610.pdf"},
+            {"date": "2015-11-01","desc": "November 2015", "link":"parks_292_2482151554.pdf"},
+            {"date": "2015-10-01","desc": "October 2015", "link":"parks_286_2389011159.pdf"},
+            {"date": "2015-04-01","desc": "April 2015", "link":"parks_278_3667448753.pdf"},
+            {"date": "2015-02-01","desc": "February 2015", "link":"parks_264_1711322083.pdf"},
+            {"date": "2014-12-01","desc": "November/December 2014", "link":"parks_261_915835459.pdf"},
+            {"date": "2014-10-01","desc": "October 2014", "link":"parks_254_1502079631.pdf"},
+
+            {"date": "2001-11-01","desc": "Older?", "link":"Older"}
+        ],
+        "asides": [
+            {"desc": "Karen J. Brown, Recreation Director"},
+            {"desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+            {"desc": "Phone: <br/>(603) 652-4501 x8"},
+            {"desc": "Cell: <br/>(603) 834-0279"},
+            {"desc": "Email: <br/>recreation@miltonnh-us.com"}
+        ],
+        "pagetext":{
+            "desc":"<p>Town Beach is open Saturday's & Sunday's weather permitting 10-5pm. Please call ahead to verify that the gatehouse is open. 603-652-7308"
+        }
+    },
+    {"id": 21, "desc": "Planning and Land Use",        "link":"Planning"    , "mainMenu":"Departments"},
+    {"id": 22, "desc": "Police" ,        "link":"http://miltonnhpd.com/", "mainMenu":"Departments"},
+    {"id": 23, "desc": "Public Works",        "link":"PublicWorks"    , "mainMenu":"Departments",
+        "asides": [
+            {"desc": "Public Works Dept. Phone: 603-652-9891"},
+            {"desc": "Transfer Station Phone: 603-652-4125"},
+            {"desc": "Highway Department Phone: 603-652-9891"},
+            {"desc": "Government Buildings<br/>Willis 'Bill' Whitten<br/>Secretary: Shawn Donell<br/>Phone: 603-652-9891"}
+        ],
+        "transferrules": {
+            "wasteTypes":
+            [
+                {"wasteType":"Recyclables",
+                    "note":"please rinse containers",
+                    "rules":
+                    [
+                        "Paper: All paper products. Newspaper, Junk mail, card board (soda boxes, cearal boxes, etc) shreded paper, etc. \"anything that tears\"",
+                        "Tin Cans",
+                        "Aluminum foils and pet food cans",
+                        "Aluminum beverage cans are seperated into their own individual container.",
+                        "Comigles",
+                        "#1 -#7 plastics (see recycling triangle on bottom or container)",
+                        "Glass"
+                    ]
+                },
+                {"wasteType":"Bulky Waste",
+                    "note":"see fee schedule",
+                    "rules":
+                    [
+                        "Large non-recyclable plastics, mattresses, rugs, non-wood furniture, sheet rock, pressure treated lumber, insulation."
+                    ]
+                },
+                {"wasteType":"Metals",
+                    "note":"please remove as much cloth and plastic as possible",
+                    "rules":
+                    [
+                        "Scrap iron: car parts, lawnmowers, bikes, strollers, etc.",
+                        "Scrap Aluminum: siding, gutters, lawn furniture, grills, etc.",
+                        "Copper Wire",
+                        "Scrap copper"
+                    ]
+                },
+                {"wasteType":"Electronics",
+                    "note":"see fee schedule",
+                    "rules":
+                    [
+                        "TV's, microwaves, CPU's, monitors, DVD players, steros, printers, etc. (Anything with a circuit board)"
+                    ]
+                },
+                {"wasteType":"Mercury Containing Items",
+                    "rules":
+                    [
+                        "Florescent bulbs, compact florescent bulbs, thermometers, mercury cell batteries"
+                    ]
+                },
+                {"wasteType":"Construction Debris",
+                    "note":"see fee schedule",
+                    "rules":
+                    [
+                        "Painted/stained wood, shingles, plywood, particle board, wood furniture, plaster, ceramics, pane glass."
+                    ]
+                },
+                {"wasteType":"Waste Oil",
+                    "rules":
+                    [
+                        "Used motor oil, transmission fluid, gear oil, cooking oil. NO FLAMABLE LIQUIDS"
+                    ]
+                },
+                {"wasteType":"Household Hazardous Waste",
+                    "rules":
+                    [
+                        "All hazardous wastes are to be stored for disposal at your home until the Household Hazardous Waste Day events are held. ",
+                        "HHWD events will be scheduled periodically throughout the year by the town. ",
+                        "The date, time and location of these events will be posted ASAP."
+                    ]
+                },
+                {"wasteType":"Burn Pit",
+                    "note":"see fee schedule",
+                    "rules":
+                    [
+                        "Wood stove ash may be placed in burn pit only if ash is totally burned out. Brush and Limbs not over 5 inches in diameter."
+                    ]
+                }
+            ]
+            ,
+            "feeSchedule":
+            [
+                {"desc":"Permit Sticker", "price":"$5.00"},
+                {"desc":"Scale Fees", "price":"A load in its entirety $.08per lb"},
+                {"desc":"TV under 27\"", "price":"$5.00"},
+                {"desc":"TV 28-45", "price":"$10.00"},
+                {"desc":"TV 46\" & up", "price":"$20.00"},
+                {"desc":"Monitor, CPU", "price":"$5.00"},
+                {"desc":"Small Electronics (VCR, DVD, Stereo, etc)", "price":"$2.00"},
+                {"desc":"Refrigerator, Freezer, Air conditioner, Dehumidifier", "price":"$10.00"},
+                {"desc":"Tires under 13\"", "price":"$1.00"},
+                {"desc":"Tires 14-17\"", "price":"$2.00"},
+                {"desc":"Tractor Tires", "price":"$10.00"},
+                {"desc":"Propane Tanks 1-20lb", "price":"$2.00"},
+                {"desc":"Propane Tanks 30-100lb", "price":"$20.00"}
+            ]
+        }
+    },
+    {"id": 24, "desc": "Sewer Department",        "link":"Sewer"    , "mainMenu":"Departments",
+        "asides": [
+            {"desc": "Operator<br/>Dale Sprague"},
+            {"desc": "Secretary<br/>Dana Crossley<br/>603-652-4501 ext 5" }
+        ]
+    },
+    {"id": 25, "desc": "Tax Collector/Town Clerk",        "link":"TownClerk"    , "mainMenu":"Departments",
+        "asides": [
+                {"desc": "P.O Box 180<br/> 424 White Mountain HWY<br/>Milton, NH 03851"},
+                {"desc": "Hours<br/>Mon, Tues, Wed, Fri<br/>8:30am-4:00pm<br/>Thurs - 8:30am-6:30pm <br/>Last Sat of the Month<br/>8am-12pm<br/>Except Holiday weekends"},
+                {"desc": "Town Clerk / Tax Collector<br/>Michelle Beauchamp<br/>townclerktaxcollector@miltonnh-us.com<br/>603-652-4501 x4"},
+                {"desc": "Deputy Town Clerks / <br/>Assistant Tax Collectors<br/>603-652-4501 x3<br/><br/> Diane DuBois<br/>deputytc@miltonnh-us.com<br/><br/>Norma Corrow<br/>miltonatc@metrocast.net"},
+                {"desc": "Assistant Town Clerk / <br/>Tax Collector<br/>Jinette Sturman"},
+                {"desc": "Fax<br/>603-652-4120"}
+            ]
+    },
+    {"id": 26, "desc": "Welfare" , "link":"Welfare" ,"mainMenu":"Departments",
+        "asides": [
+            {"desc": "424 White Mountain Highway<br/>Milton, NH 03851"},
+            {"desc": "Hours: <br/>By appointment only. "},
+            {"desc": "Phone: <br/>(603) 652-4501 x6"},
+            {"desc": "Fax: <br/>(603) 652-4120"    }
+        ]
+    }
+
+    ,
+    {"id": 27, "desc": "Home" , "link":"Home" ,"mainMenu":"Home",
+        "asides": [
+            {"desc": "2017 Town Observed Holidays",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_469_380390481.pdf"
+            },
+            {"desc": "NH Solar Garden Proposal for Lockhart Field",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_465_702591217.pdf"
+            },
+            {"desc": "Starting Thursday, July 28, 2016 there will be a Selectman at the Town Hall Thursday mornings from 8am to 8:30am available to address questions and concerns.",
+                "department":"Home"
+            },
+            {"desc": "Notice Letter From Metrocast ",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_470_3411020464.pdf"
+            },
+            {"desc": "Employment Opportunities & Committee Vacancies",
+                "department":"Home",
+                "link": "/Employment"
+            }
+        ]
+    }
+    ,
+    {"id": 28, "desc": "About" , "link":"About" ,"mainMenu":"About",
+        "asides": []
+    }
+
+]

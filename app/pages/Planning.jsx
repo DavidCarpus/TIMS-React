@@ -8,8 +8,9 @@ import organizations from '../Data/OrganizationalUnits.json'
 export default class Planning extends React.Component {
 
     render() {
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'Planning' } )[0]
+        var group = this.props.group;
+        var groupPageText = group.pagetext;
+
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >

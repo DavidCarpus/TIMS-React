@@ -29,6 +29,30 @@ $app->register(new JDesrosiers\Silex\Provider\CorsServiceProvider(), array(
 ));
 // ==========================================================
 // ==========================================================
+$app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName)  {
+    // echo JWT::encode($token, 'secret_server_key');
+    // echo $groupName ;
+    // echo '<hr />';
+    $string = file_get_contents(Config::PATH_TO_ORGANIZATIONAL_JSON_FILE);
+    $jsonArray = json_decode($string, true);
+
+    $filteredArray=array_filter($jsonArray, function($elem) use($groupName){
+        return $elem['link'] == $groupName;
+    });
+    $group=[];
+    if (count($filteredArray)  > 0) {
+        $group = array_values($filteredArray)[0];
+        // $group = array_shift(array_values($filteredArray));
+    }
+    return json_encode($group);
+    // if ( array_key_exists('asides', $group)) {
+    //     return json_encode($group['asides']);
+    // } else {
+    //     return '[]';
+    // }
+    // echo "<pre>" . print_r($group, TRUE)  .  '</pre>';
+});
+// ==========================================================
 $app->get('/Records/Documents/{groupName}', function (Silex\Application $app, $groupName)  {
     // echo JWT::encode($token, 'secret_server_key');
     // echo $groupName ;
@@ -62,17 +86,12 @@ $app->get('/Records/Notices/{groupName}', function (Silex\Application $app, $gro
     $jsonArray = json_decode($string, true);
 
     $filteredArray=array();
-    // print_r("<pre>" );
     foreach ($jsonArray as $key => $item) {
-        // echo "<pre>" . print_r($item, TRUE)  .  '</pre>';
         if ($item['type'] == 'Notice') {
             if ($item['groupName'] == $groupName || ($groupName == 'Home' && $item['mainpage'])) {
-            //     echo "$key";
-            //     // $item['id'] = $key;
             unset($item['date']);
             unset($item['type']);
             unset($item['groupName']);
-            //     // array_push($filteredArray, $item);
                 $filteredArray[]= $item;
             }
         }
@@ -100,15 +119,6 @@ $app->get('/Records/Meetings/{groupName}', function (Silex\Application $app, $gr
             $filteredArray[$keyDate] []= $item;
         }
     }
-    // print_r("</pre>" );
-    // $filteredArray = array_filter($jsonArray, function($obj) use($groupName)
-    // {
-    //     // return $obj['groupName'] == $groupName && ($obj->type == 'Minutes' || $obj->type == 'Agendas' ||$obj->type == 'Video');
-    //     return $obj['groupName'] == $groupName && ($obj['type'] == 'Minutes' || $obj['type'] == 'Agendas' ||$obj['type'] == 'Video');
-    // });
-    // echo "<pre>" . print_r($filteredArray, TRUE)  .  '</pre>';
-
-    // return "<pre>" . print_r($filteredArray, TRUE)  .  '</pre>';
     return json_encode($filteredArray);
 });
 
