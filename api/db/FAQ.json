@@ -1,0 +1,79 @@
+[
+    {
+        "groupName": "Welfare",
+        "question":"Where can I apply for State Welfare?",
+        "answer":"NH Health and Human Services (sometimes called 'State Welfare') is a program that includes Food Stamps, TANF (Temporary Assistance for Needy Families), Medicaid, APTD (Aid for the Permanent and Totally Disabled), Title XX (Childcare), OAA (Old Age Assistance) and more.  It is located at the Community Center in Rochester. <br/>Rochester residents call 332-9120. <br/>http://www.dhhs.nh.gov/"
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"What is Fuel Assistance (FAP) and how do I apply for it?",
+        "answer":"The Community Action Program coordinates the winter Fuel Assistance Program.  This program helps families and individuals with low income to pay for their heat during the winter months. Potential recipients must be found eligible within the poverty guidelines set by HUD.  Residents can begin calling for an appointment to apply beginning early October.  Residents are encouraged to apply early, as appointments can be 1 month out from the initial call. <br/>Milton residents call:  460-4313"
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Other Fuel Assistance Programs?",
+        "answer":"Citizens Energy Program<br/>In partnership with CITGO, Citizens Energy works to provide deliveries of home heating oil to those in need during the winter months.<br/>(617) 338-6300<br/>http://www.citizensenergy.com/main/Home.html"
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Are there food pantries for Milton residents?",
+        "answer":"Farmington Food Pantry:<br/>Located at 527 Main Street, Farmington.  Hours of operation are Monday, Wednesday & Friday from 8:30am - Noon.<br/>Milton residents are welcome at the Farmington Food Pantry.<br/> <br/>To get more information on other possible food options, call the Local Welfare Office in your town/city. <br/>How can I apply for Public Housing and Section 8?<br/>If you have low income, and you are either elderly (over 62 years), or disabled or you have minor children in your household, you may be eligible for the subsidized housing program.<br/>Rochester Housing Authority: 332-4126.<br/>New Hampshire Housing and Finance Authority: 1- 800-439-7247"  }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Who do I call if I have a concern about a child's well being?",
+        "answer":"NH Bureau of Child Protection<br/>Phone number:  1-800-894-5533.<br/>http://www.dhhs.nh.gov/DHHS/BCP/default.htm"
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"How can I contact the Homeless Shelters in the Rochester area?",
+        "answer":"My Friend's Place in Dover:<br/>Phone number:  749-3017.<br/>http://www.volunteersolutions.org/uwgs/org/217629.html<br/> <br/>The Homeless Center for Strafford County in Gonic:<br/>The Homeless Center is an overnight shelter, which provides shelter and support during the winter months (mid- October to approximately mid-April) for women and families.<br/>Phone number:  332-3065<br/> <br/>Cross Roads House in Portsmouth:<br/>Phone number:  436-2218<br/>http://www.crossroadshouse.org/<br/> <br/>New Generation, Inc in Greenland:<br/>Provides shelter & support to homeless women, in crisis during pregnancy, and to mothers and children.<br/>Phone number:  436-4989<br/>http://www.newgennh.com/<br/> <br/>*Homeless shelters may seek a referral from your city/town origin."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Are their medical programs for residents with minimal financial means?",
+        "answer":"Avis Goodwin Health & Dental:<br/>Provides affordable integrated, comprehensive, quality community healthcare on a sliding fee basis.<br/>Phone number:  332-4249<br/>http://www.avisgoodwinchc.org/<br/> <br/>Mobile Health Van<br/>Health Care program targeting the homeless and uninsured.  It is equipped with staff personnel who can help with primary healthcare, basic health screenings, foot care, access to prenatal care, medical information and referrals.  This van stops at several towns in the Seacoast area of the state. Please call 1-888-922-0055 for more info & a schedule."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Who do I contact to get help with a security deposit?",
+        "answer":"Security Deposit information can be obtained in the same office. Ask the intake worker for information. This is a CAPSC program, not a Town welfare function."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Do you have ADA access?",
+        "answer":"Yes, the welfare office is handicap accessible."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"I do not live in Milton, can I apply for assistance with your office?",
+        "answer":"You must contact the city or town Welfare Official of the community where you do currently reside, if you are seeking town welfare. By State law, every city and town in New Hampshire must have a Welfare Official. For the Welfare Official's name and number for your community, contact your city or town offices. However, you may apply for fuel assistance or electric assistance through CAPSC at any of the Community Action outreach offices in Strafford County (Rochester, Dover, Farmington & Milton)."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"I am thinking of moving to Milton, can I apply with your office?",
+        "answer":"You must first contact the Welfare Official in the city or town where you are currently living. By State law every city and town in New Hampshire must have a Welfare Official. For the Welfare Official's name and number for your community, contact your city or town offices."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"Can you tell me over the phone or through email if I am eligible for help?",
+        "answer":"No, all eligibility is determined by appointment only."
+    }
+    ,
+    {
+        "groupName": "Welfare",
+        "question":"I was last seen by a caseworker in your office three months ago, do I have to reapply?",
+        "answer":"No, cases are now considered active for a period of six (6) months from the date of last contact. Call the office for an appointment."
+    }
+
+]
