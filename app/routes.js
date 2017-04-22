@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
 
-import MainLayout from './Components/MainLayout';
+// import MainLayout from './Components/MainLayout';
+import MainLayout from './Containers/MainLayout';
 
 import HomePage from './pages/HomePage';
 import About from './pages/About';
@@ -35,7 +36,7 @@ import { fetchOrganizationalUnitData } from './actions/OrganizationalUnitData'
 
 export default (
     <Route component={MainLayout}>
-            <Route path="/" component={HomePage} />
+            <Route path="/" component={HomePage} groupName='Home' />
             <Route path="/about" component={About} />
             <Route path="/calendar" component={Calendar} />
             <Route path="/ContactUs" component={ContactUs} />

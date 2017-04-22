@@ -29,6 +29,33 @@ $app->register(new JDesrosiers\Silex\Provider\CorsServiceProvider(), array(
 ));
 // ==========================================================
 // ==========================================================
+$app->get('/Menus/', function (Silex\Application $app)  {
+    $string = file_get_contents(Config::PATH_TO_MENUS_JSON_FILE);
+    $jsonArray = json_decode($string, true);
+    // echo "<pre>" . print_r($jsonArray, TRUE)  .  '</pre>';
+    return json_encode($jsonArray);
+});
+// ==========================================================
+$app->get('/Asides/{groupName}', function (Silex\Application $app, $groupName)  {
+    $string = file_get_contents(Config::PATH_TO_ORGANIZATIONAL_JSON_FILE);
+    $jsonArray = json_decode($string, true);
+    $filteredArray=array_filter($jsonArray, function($elem) use($groupName){
+        return $elem['link'] == $groupName;
+    });
+    $group=[];
+    if (count($filteredArray)  > 0) {
+        $group = array_values($filteredArray)[0];
+        // $group = array_shift(array_values($filteredArray));
+    }
+    // echo "<pre>" . print_r($jsonArray, TRUE)  .  '</pre>';
+    if ( array_key_exists('asides', $group)) {
+        return json_encode($group['asides']);
+    } else {
+        return '[]';
+    }
+    // return json_encode($jsonArray);
+});
+// ==========================================================
 $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName)  {
     // echo JWT::encode($token, 'secret_server_key');
     // echo $groupName ;
@@ -71,6 +98,29 @@ $app->get('/Records/Documents/{groupName}', function (Silex\Application $app, $g
         unset($item['type']);
         unset($item['groupName']);
         //     // array_push($filteredArray, $item);
+            $filteredArray[]= $item;
+        }
+    }
+    // echo "<pre>" . print_r($filteredArray, TRUE)  .  '</pre>';
+    return json_encode($filteredArray);
+});
+// ==========================================================
+$app->get('/FAQ/{groupName}', function (Silex\Application $app, $groupName)  {
+    // echo JWT::encode($token, 'secret_server_key');
+    // echo $groupName ;
+    // echo '<hr />';
+    $string = file_get_contents(Config::PATH_TO_FAQ_JSON_FILE);
+    $jsonArray = json_decode($string, true);
+
+    $filteredArray=array();
+    // print_r("<pre>" );
+    foreach ($jsonArray as $key => $item) {
+        // echo "<pre>" . print_r($item, TRUE)  .  '</pre>';
+        if ($item['groupName'] == $groupName ) {
+        //     echo "$key";
+        //     // $item['id'] = $key;
+        //     // array_push($filteredArray, $item);
+        unset($item['groupName']);
             $filteredArray[]= $item;
         }
     }

@@ -3,7 +3,6 @@ import Aside from '../Containers/Aside'
 import SmartLink from '../Components/SmartLink'
 
 import { Grid, Row, Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Planning extends React.Component {
 

@@ -3,12 +3,10 @@ import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import Aside from '../Containers/Aside'
 import NoticesList from '../Containers/NoticesList'
 import { Grid, Row, Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class HomePage extends React.Component {
     render() {
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'Home' } )[0]
+        var group ={'link' : 'Home'}
 
         return (
             <div>

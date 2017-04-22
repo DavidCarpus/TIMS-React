@@ -1,13 +1,12 @@
 import React from 'react';
 import Aside from '../Containers/Aside'
 import {  Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class About extends React.Component {
 
 render() {
-    var group = organizations.filter( (organization)=>
-        {return organization.link == 'About' } )[0]
+    var group ={'link' : 'About'}
+
     return (
         <div>
             <Col md={10}  mdPush={2} id="contentArea"  >

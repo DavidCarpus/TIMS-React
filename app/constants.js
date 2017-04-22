@@ -18,34 +18,29 @@ const OrganizationalUnitConstants = {
     FETCH_OU_DATA_FAILURE: 'FETCH_OU_DATA_FAILURE',
 }
 
+const FAQConstants = {
+    FETCH_FAQ_DATA: 'FETCH_FAQ_DATA',
+    FETCH_FAQ_DATA_SUCCESS: 'FETCH_FAQ_DATA_SUCCESS',
+    FETCH_FAQ_DATA_FAILURE: 'FETCH_FAQ_DATA_FAILURE',
+}
+
+const MainMenuConstants = {
+    FETCH_MAIN_MENU_DATA: 'FETCH_MAIN_MENU_DATA',
+    FETCH_MAIN_MENU_DATA_SUCCESS: 'FETCH_MAIN_MENU_DATA_SUCCESS',
+    FETCH_MAIN_MENU_DATA_FAILURE: 'FETCH_MAIN_MENU_DATA_FAILURE',
+}
+
+const PageAsidesConstants = {
+    FETCH_PAGE_ASIDES_DATA: 'FETCH_PAGE_ASIDES_DATA',
+    FETCH_PAGE_ASIDES_DATA_SUCCESS: 'FETCH_PAGE_ASIDES_DATA_SUCCESS',
+    FETCH_PAGE_ASIDES_DATA_FAILURE: 'FETCH_PAGE_ASIDES_DATA_FAILURE',
+}
+
+
 module.exports = {
     PublicDocumentsConstants,
-    OrganizationalUnitConstants
+    OrganizationalUnitConstants,
+    FAQConstants,
+    MainMenuConstants,
+    PageAsidesConstants,
 }
-
-/*
-errors[
-
-]
-
-document {
-    id
-    desc
-    keywords
-    date submitted
-    date expires
-    url
-}
-keywordSearch{
-    fetching
-    suggestions
-}
-
-organization{
-    id
-    name
-    parent
-    type (department, comittee, subcomittee)
-    url
-}
-*/

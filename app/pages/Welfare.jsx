@@ -5,13 +5,12 @@ import SmartLink from '../Components/SmartLink'
 import DocumentList  from '../Containers/DocumentList'
 import FAQList  from '../Containers/FAQList'
 import { Grid, Row, Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Welfare extends React.Component {
 
     render() {
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'Welfare' } )[0]
+        var group = this.props.group;
+        var groupPageText = group.pagetext;
 
         return (
             <Row id={group.link} className="show-grid">

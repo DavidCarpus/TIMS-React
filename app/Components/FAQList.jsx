@@ -1,6 +1,7 @@
 import React from 'react';
 
 class FAQ extends React.Component {
+
     render() {
         var question = {__html: this.props.question.question}
         var answer = {__html: this.props.question.answer}
@@ -15,6 +16,10 @@ class FAQ extends React.Component {
 }
 
 export default class FAQList extends React.Component {
+    componentWillMount() {
+        this.props.fetchFAQ(this.props.group.link);
+    }
+
     createMarkup(desc){
         // var desc = this.props.item.desc
         return {__html: desc};
@@ -27,15 +32,16 @@ export default class FAQList extends React.Component {
         return (
             <div id={id}>
                 {this.props.questions.length > 0 ? <h2>{this.props.title}</h2> : ''}
-                    {this.props.questions.map( (question, index) =>
-                        <FAQ key={index} question={question} />
-                        )}
+                {this.props.questions.map( (question, index) =>
+                    <FAQ key={index} question={question} />
+                )}
             </div>
         )
     }
 }
-
 /*
+{out}
+
 <div>{out}</div>
 
 

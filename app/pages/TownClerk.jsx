@@ -5,13 +5,11 @@ import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import NoticesList from '../Containers/NoticesList'
 import DocumentList  from '../Containers/DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class TownClerk extends React.Component {
     render() {
-        // const groupName='TownClerk'
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'TownClerk' } )[0]
+        var group = this.props.group;
+        var groupPageText = group.pagetext;
 
         return (
             <div>

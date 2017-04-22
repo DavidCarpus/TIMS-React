@@ -9,14 +9,6 @@ export default class DocumentList extends React.Component {
     render() {
         var groupName= this.props.group.link
         var id = groupName + '_Documents'
-        //   console.log('*******DocumentList************');
-        //   console.log(JSON.stringify(this.props.currentGroupName));
-        //   console.log(JSON.stringify(this.props));
-        //   console.log('*******************');
-
-        // if ( this.props.documentsGroupName &&  this.props.documentsGroupName !=  this.props.group.link ) {
-        //     this.props.fetchDocs(this.props.group.link);
-        // }
       if ( this.props.loading) {
           console.log('***DepartmentsUI loading. ');
           return (<div>Loading</div>)

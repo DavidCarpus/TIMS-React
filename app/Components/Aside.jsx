@@ -25,29 +25,22 @@ class AsideItem extends React.Component {
         );
     }
 }
-/*
-(<a href={this.props.item.link} dangerouslySetInnerHTML={desc} ></a>)
-(<SmartLink link='/ContactUs' linkText={desc}/>)
-var desc = {__html: this.props.item.desc}
-*/
 
 export default class MainAside extends React.Component {
+    componentWillMount() {
+        this.props.fetchData(this.props.group.link);
+    }
+
     render() {
         var id = this.props.groupName + '_Asides'
-        var title = this.props.title
-        var asides = this.props.asides
 
-        var recentEvents = this.props.data || asides
-        var list = ''
-        // if ('data' in this.props && recentEvents.length > 0) {
-            list = recentEvents.map((element, index) =>
-                <AsideItem key={index} item={element} />
-                )
-        // }
+        var recentEvents = this.props.asides.PageAsides || this.props.asides
         return (
             <aside id={id} className={styles.primaryAside}>
             <ul>
-                {list}
+                {recentEvents.map((element, index) =>
+                    <AsideItem key={index} item={element} />
+                )}
             </ul>
 
         </aside>

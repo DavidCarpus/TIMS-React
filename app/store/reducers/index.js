@@ -3,6 +3,10 @@ import AgendasAndMinutesReducer from './AgendasAndMinutes';
 import PublicRecordsReducer from './PublicRecords';
 import PublicRecordsNoticesReducer from './PublicRecords_Notices';
 import OrganizationalUnitsReducer from './OrganizationalUnitData';
+import MainMenusReducer from './MainMenuData';
+import FAQReducer from './FAQData';
+import PageAsidesReducer from './PageAsides';
+
 
 import { reducer as formReducer } from 'redux-form';
 
@@ -11,6 +15,9 @@ const rootReducer = combineReducers({
     PublicRecords: PublicRecordsReducer,
     PublicNotices: PublicRecordsNoticesReducer,
     OrganizationalUnits: OrganizationalUnitsReducer,
+    FAQ: FAQReducer,
+    MainMenus : MainMenusReducer,
+    PageAsides : PageAsidesReducer,
 });
 
 export default rootReducer;

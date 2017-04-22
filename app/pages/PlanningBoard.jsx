@@ -16,6 +16,8 @@ export default class PlanningBoard extends React.Component {
     render() {
         var group = organizations.filter( (organization)=>
             {return organization.link == 'PlanningBoard' } )[0]
+        // var group = this.props.group;
+        // var groupPageText = group.pagetext;
 
         return (
             <Row id="PlanningBoard" className="show-grid">

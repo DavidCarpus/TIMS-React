@@ -4,13 +4,11 @@ import Aside from '../Containers/Aside'
 
 import DocumentList  from '../Containers/DocumentList'
 import { Grid, Row, Col } from 'react-bootstrap';
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class Sewer extends React.Component {
     render() {
-        // const groupName='Sewer'
-        var group = organizations.filter( (organization)=>
-            {return organization.link == 'Sewer' } )[0]
+        var group = this.props.group;
+        var groupPageText = group.pagetext;
 
         return (
             <div>

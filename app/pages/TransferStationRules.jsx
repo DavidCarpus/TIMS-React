@@ -6,6 +6,8 @@ export default class TransferStationRules extends React.Component {
     render() {
         var group = organizations.filter( (organization)=>
             {return organization.link == 'PublicWorks' } )[0]
+        // var group = this.props.group;
+        // var groupPageText = group.pagetext;
 
         return (
             <div>

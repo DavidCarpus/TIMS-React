@@ -6,7 +6,7 @@ import axios from 'axios';
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
 // const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
 const actionsName='PublicDocuments';
-console.log('PublicDocuments ROOT_URL:' + ROOT_URL);
+// console.log('PublicDocuments ROOT_URL:' + ROOT_URL);
 
 
 //========================================
@@ -53,7 +53,7 @@ export function fetchMeetingsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupDoc(groupName) {
-    console.log(actionsName +'  fetchGroupDocs'+JSON.stringify(groupName));
+    // console.log(actionsName +'  fetchGroupDocs'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Documents/`+ groupName,

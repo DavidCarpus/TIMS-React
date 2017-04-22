@@ -1,21 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import FAQListUI from '../Components/FAQList'
- import FAQData from '../Data/FAQ.json'
+import {fetchFAQData} from '../actions/FAQData'
 
 const mapStateToProps = (state, ownProps) => {
-    var questions = FAQData.filter( (doc)=>
-                {return doc.department == ownProps.groupName } )
-  return {
-      questions: questions,
-      title: ownProps.title || 'FAQ',
-      groupName: ownProps.groupName
-  };
+    return {
+        questions: state.FAQ.faqData,
+        title: ownProps.title || 'FAQ',
+        groupName: ownProps.groupName,
+    };
 }
-
 const mapDispatchToProps = (dispatch) => {
   return {
-     fetchDocs: () => { console.log('Test') }
+      fetchFAQ: (groupName) => {
+          dispatch(fetchFAQData(groupName))
+     },
   }
 }
 

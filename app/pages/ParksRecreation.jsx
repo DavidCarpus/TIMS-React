@@ -8,7 +8,6 @@ import RawText from '../Components/RawText'
 
 import NoticesList from '../Containers/NoticesList'
 import TownNewsletters from '../Containers/TownNewsletters'
-import organizations from '../Data/OrganizationalUnits.json'
 
 export default class ParksRecreation extends React.Component {
     render() {
