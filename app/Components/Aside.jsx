@@ -28,11 +28,13 @@ class AsideItem extends React.Component {
 
 export default class MainAside extends React.Component {
     componentWillMount() {
-        this.props.fetchData(this.props.group.link);
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        this.props.fetchData(groupName);
     }
 
     render() {
-        var id = this.props.groupName + '_Asides'
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        var id = groupName + '_Asides'
 
         var recentEvents = this.props.asides.PageAsides || this.props.asides
         return (

@@ -7,10 +7,14 @@ export default function(state = INITIAL_STATE, action) {
     let error;
     switch(action.type) {
         case PublicDocumentsConstants.FETCH_GROUP_NOTICES:// start fetching docs and set loading = true
-        console.log('PublicRecords Reducer processing FETCH_GROUP_NOTICES:' + JSON.stringify(action));
+        // console.log('PublicRecords Reducer processing FETCH_GROUP_NOTICES:' + JSON.stringify(action));
             return { ...state,  groupName:action.groupName, documents:[], error: null, loading: true };
         case PublicDocumentsConstants.FETCH_GROUP_NOTICES_SUCCESS:// return list of posts and make loading = false
-            console.log('PublicRecords Reducer processing SUCCESS:' + JSON.stringify(action.groupName));
+            if (! action.groupName) {
+                // eslint-disable-next-line no-debugger
+                debugger;
+            }
+            // console.log('PublicRecords Reducer processing SUCCESS:' + JSON.stringify(action.groupName));
             return { ...state, groupName:action.groupName, documents: action.payload, error:null, loading: false };
         case PublicDocumentsConstants.RESET_GROUP_NOTICES:// start fetching docs and set loading = true
         // console.log('PublicRecords Reducer processing RESET_GROUP_NOTICES:' + JSON.stringify(action));

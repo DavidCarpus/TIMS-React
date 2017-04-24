@@ -13,26 +13,30 @@ import Calendar from './pages/Calendar'
 import ContactUs from './pages/ContactUs'
 import Employment from './pages/Employment'
 import PlanningBoard from './pages/PlanningBoard'
+import TransferRules from './Containers/TransferStationRules'
 
-import Committees from './pages/Committees'
+// import Committees from './pages/Committees'
+import Committees from './Containers/Committees'
 import Departments from './Containers/Departments'
 import {myStore} from './store/myStore.js';
 
 import { fetchOrganizationalUnitData } from './actions/OrganizationalUnitData'
+import { fetchPageAsides } from './actions/PageAsides'
+import { fetchMeetingDocs, fetchGroupDoc } from './actions/PublicDocuments'
 
 // import Test from './pages/Test'
 // <Route path="/Test" component={Test} />
 // console.log('myStore:' + JSON.stringify(myStore));
 
-    function onEnterHandler(store) {
-      return (nextState, replace) => {
-        store.dispatch({
-          type: 'CHANGE_DEPARTMENT',
-          payload: nextState.params.department
-        })
-        store.dispatch(fetchOrganizationalUnitData(nextState.params.department))
-      };
-    }
+function OrgUnitChange(groupType, store) {
+  return (nextState, replace) => {
+      var groupName = nextState.params[groupType];
+      store.dispatch(fetchOrganizationalUnitData(groupName));
+      store.dispatch(fetchPageAsides(groupName));
+      store.dispatch(fetchMeetingDocs(groupName));
+      store.dispatch(fetchGroupDoc(groupName));
+  };
+}
 
 export default (
     <Route component={MainLayout}>
@@ -43,13 +47,19 @@ export default (
             <Route path="/Employment" component={Employment} />
 
 
-            <Route path="Departments/:department" component={Departments} onEnter={onEnterHandler(myStore)}>
-            </Route>
+                <Route path="Departments"  >
+                    <Route path="TransferRules" component={TransferRules} groupName='TransferRules' />
+                </Route>
+                <Route path="/Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} />
+
 
             <Route path="BoardsAndCommittees"  >
                 <Route path="PlanningBoard" component={PlanningBoard} />
             </Route>
-            <Route path="/BoardsAndCommittees/:commitee" component={Committees}/>
+            <Route path="/BoardsAndCommittees/:committee" component={Committees} onEnter={OrgUnitChange('committee',myStore)} />
 
     </Route>
 );
+
+// <Route path="Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} >
+// </Route>

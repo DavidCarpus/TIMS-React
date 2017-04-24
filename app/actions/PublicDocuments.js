@@ -11,7 +11,11 @@ const actionsName='PublicDocuments';
 
 //========================================
 export function fetchMeetingDocs(groupName) {
-    // console.log(actionsName +' fetchMeetings'+JSON.stringify(groupName));
+    if (! groupName && location.href.indexOf('localhost') > 0 ) {
+        debugger; // eslint-disable-line no-debugger
+    }
+
+    console.log(actionsName +' fetchMeetings:'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Meetings/`+ groupName,
@@ -19,6 +23,8 @@ export function fetchMeetingDocs(groupName) {
     });
     return dispatch => {
         // console.log('fetchMeetings'+JSON.stringify(groupName));
+        dispatch({type: PublicDocumentsConstants.FETCH_MEETING_DOCS});
+
         request.then( response => {
                dispatch(fetchMeetingsSuccess(groupName, response.data));
             //    console.log(actionsName +'  fetchMeetingDocs... success: ');
@@ -38,7 +44,7 @@ export function fetchMeetingsSuccess(groupName, meetingDocs) {
     payload: meetingDocs,
     groupName: groupName
   };
-  console.log(actionsName +'  fetchMeetingsSuccess:'+JSON.stringify(action.groupName));
+  // console.log(actionsName +'  fetchMeetingsSuccess:'+JSON.stringify(action.groupName));
   return action;
 }
 //========================================
@@ -53,13 +59,19 @@ export function fetchMeetingsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupDoc(groupName) {
-    // console.log(actionsName +'  fetchGroupDocs'+JSON.stringify(groupName));
+    if (! groupName && location.href.indexOf('localhost') > 0 ) {
+        debugger; // eslint-disable-line no-debugger
+    }
+    console.log(actionsName +'  fetchGroupDoc:'+JSON.stringify(groupName));
+
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Documents/`+ groupName,
       // headers: []
     });
+
     return dispatch => {
+        dispatch( {type:PublicDocumentsConstants.FETCH_GROUP_DOCS});
         request.then( response => {
             // dispatch({type: PublicDocumentsConstants.FETCH_GROUP_DOCS, groupName: groupName});
 
@@ -96,12 +108,16 @@ export function fetchGroupDocsFailure(error) {
 //========================================
 export function fetchGroupNotices(groupName) {
     // console.log(actionsName +'  fetchGroupNotices'+JSON.stringify(groupName));
+    if (! groupName && location.href.indexOf('localhost') > 0 ) {
+        debugger; // eslint-disable-line no-debugger
+    }
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Notices/`+ groupName,
       // headers: []
     });
     return dispatch => {
+        dispatch( {type:PublicDocumentsConstants.FETCH_GROUP_NOTICES});
         request.then( response => {
                dispatch(fetchGroupNoticesSuccess(groupName, response.data));
           })

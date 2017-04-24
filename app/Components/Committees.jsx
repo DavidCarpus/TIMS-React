@@ -11,11 +11,17 @@ import SmartLink from './SmartLink'
 import RawText  from './RawText'
 
 export default class Committees extends React.Component {
+    componentWillMount() {
+        if (!this.props.loading) {
+            this.props.fetchOUData(this.props.groupName);
+        }
+
+    }
 
     render() {
         var groupPageText = this.props.groupPageText
-        var groupName = this.props.group.link || this.props.group.desc || 'missing desc'
-        var groupLabel = this.props.group.desc || 'missing desc'
+        var groupName = this.props.groupName
+        var groupLabel = this.props.group.desc || 'Loading Committe Data:' + this.props.groupName
 
         return (
             <div>
@@ -32,7 +38,7 @@ export default class Committees extends React.Component {
 
                     <AgendasAndMinutes groupName={groupName} group={this.props.group} />
 
-                    <DocumentList group={this.props.group} />
+                    <DocumentList groupName={groupName} group={this.props.group} />
                 </Col>
                 <Col md={2} mdPull={10}><Aside group={this.props.group} Name={groupName} /></Col>
             </div>

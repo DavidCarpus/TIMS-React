@@ -12,6 +12,12 @@ export default function(state = INITIAL_STATE, action) {
         case OrganizationalUnitConstants.FETCH_OU_DATA_SUCCESS:// return list of posts and make loading = false
             // console.log('OrganizationalUnitData Reducer - processing SUCCESS:' + JSON.stringify(action.groupName));
             return { ...state, groupName:action.groupName, groupData: action.payload, error:null, loading: false };
+        case OrganizationalUnitConstants.FETCH_OU_DATA_FAILURE:// return list of posts and make loading = false
+            // console.log('OrganizationalUnitData Reducer - processing FETCH_OU_DATA_FAILURE:' + JSON.stringify(action.groupName));
+            // // eslint-disable-next-line no-debugger
+            // debugger;
+            return { ...state, groupName:action.groupName, groupData: action.payload, error:null, loading: false };
+
         default:
         // console.log('OrganizationalUnitData Reducer default:' + JSON.stringify(action.type));
         // console.log('PublicRecords Reducer default state:' + JSON.stringify(state));

@@ -9,7 +9,8 @@ const actionsName='OrganizationalUnitData';
 
 //========================================
 export function fetchOrganizationalUnitData(groupName) {
-    // console.log(actionsName + ' fetchOrganizationalUnitData:'+JSON.stringify(groupName));
+    console.log(actionsName + ' fetchOrganizationalUnitData:'+JSON.stringify(groupName));
+    // groupName = (groupName == 'TransferRules')? 'PublicWorks' : groupName;
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}GroupData/`+ groupName,
@@ -23,6 +24,9 @@ export function fetchOrganizationalUnitData(groupName) {
             //    console.log(actionsName + ' fetchOrganizationalUnitData... success: ');
           })
           .catch( reason => {
+              if (location.href.indexOf('localhost') > 0 ) {
+                  debugger; // eslint-disable-line no-debugger
+              }
             //   console.log(actionsName + ' fetchOrganizationalUnitData? : ' + JSON.stringify(reason));
               dispatch(fetchOrganizationalUnitDataFailure(reason));
           })

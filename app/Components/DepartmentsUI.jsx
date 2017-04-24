@@ -9,20 +9,15 @@ import Planning from '../pages/Planning'
 import PublicWorks from '../pages/PublicWorks'
 import TownClerk from '../pages/TownClerk'
 import Welfare from '../pages/Welfare'
-import TransferStationRules from '../pages/TransferStationRules'
+import TransferStationRules from '../Containers/TransferStationRules'
 import Sewer from '../pages/Sewer'
 
 export default class DepartmentsUI extends React.Component {
-    componentWillMount() {
-        this.props.fetchOUData(this.props.currentGroupName || this.props.params.department,);
-    }
-
   render() {
-      if ( this.props.loading) {
-          return (<div>Loading</div>)
+      if ( this.props.loading || ! this.props.groupData) {
+          return (<div>DepartmentsUI Loading {this.props.groupName}</div>)
       }
-
-    switch (this.props.groupData.link) {
+    switch (this.props.groupName) {
         case 'Assessing':
             return (
                 <Assessing group={this.props.groupData}></Assessing>
@@ -61,7 +56,7 @@ export default class DepartmentsUI extends React.Component {
             );
     }
     return (
-        <div>Unknown department: {this.props.currentGroupName}</div>
+        <div>Unknown department UI: {this.props.groupName}</div>
     )
 
   }

@@ -21,7 +21,16 @@ class WasteType extends React.Component {
     }
 }
 
-export default class TransferStationRulesContainer extends React.Component {
+export default class TransferStationRules extends React.Component {
+    componentWillMount() {
+        // Note: Needed to allow a direct route to this container as other routes have param.group set
+        if (! this.props.loading && this.props.route && this.props.route.groupName) {
+            // console.log('TransferStationRules : componentWillMount : ' + this.props.route.groupName);
+            this.props.fetchOUData('PublicWorks');
+        }
+    //
+    }
+
     render() {
         var dump = JSON.stringify(this.props.feeSchedule);
         return (

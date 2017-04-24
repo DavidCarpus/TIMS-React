@@ -6,7 +6,8 @@ import React from 'react';
 const mapStateToProps = (state, ownProps) => {
   return {
       meetings: state.agendasAndMinutes.documents,
-      meetingGroupName: state.agendasAndMinutes.groupName
+      meetingGroupName: state.agendasAndMinutes.groupName,
+      loading: state.agendasAndMinutes.loading
   };
 }
 

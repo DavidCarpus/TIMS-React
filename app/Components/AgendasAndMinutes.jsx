@@ -3,7 +3,10 @@ import React from 'react';
 
 export default class AgendasAndMinutes extends React.Component {
     componentWillMount() {
-        this.props.fetchMeetings(this.props.groupName);
+        // console.log('AgendasAndMinutes:componentWillMount: ' + this.props.groupName);
+        if (! this.props.loading && this.props.meetingGroupName != this.props.groupName) {
+            this.props.fetchMeetings(this.props.groupName);
+        }
     }
 
     renderMeeting(meetingElements) {
@@ -35,9 +38,6 @@ export default class AgendasAndMinutes extends React.Component {
         var id = this.props.group.link + '_AgendasAndMinutes'
         var title = this.props.title ||  'Agendas And Minutes'
         var meetings = this.props.meetings || []
-        if ( this.props.meetingGroupName && this.props.meetingGroupName != this.props.groupName ) {
-            this.props.fetchMeetings(this.props.groupName);
-        }
 
         return (
             <div id={id}>

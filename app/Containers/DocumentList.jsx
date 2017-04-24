@@ -5,10 +5,10 @@ import DocumentListUI from '../Components/DocumentList'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        documents: state.PublicRecords.documents,
         group: ownProps.group,
+        documents: state.PublicRecords.documents,
         documentsGroupName: state.PublicRecords.groupName,
-        loading: state.OrganizationalUnits.loading,
+        loading: state.PublicRecords.loading,
         title: ownProps.title || 'Documentation',
     };
 }

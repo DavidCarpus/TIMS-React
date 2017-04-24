@@ -28,11 +28,15 @@ export default class FAQList extends React.Component {
     render() {
         var id = this.props.groupName + '_FAQ'
 
-        var out = JSON.stringify(this.props.questions)
+        if ( this.props.loading) {
+            // console.log('***FAQList loading. ');
+            return (<div>Loading</div>)
+        }
+
         return (
             <div id={id}>
                 {this.props.questions.length > 0 ? <h2>{this.props.title}</h2> : ''}
-                {this.props.questions.map( (question, index) =>
+                { this.props.questions.map( (question, index) =>
                     <FAQ key={index} question={question} />
                 )}
             </div>

@@ -4,7 +4,10 @@ import SmartLink from './SmartLink'
 
 export default class NoticesList extends React.Component {
     componentWillMount() {
-        this.props.fetchNotices(this.props.group.link);
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        if (this.props.noticesGroupName != groupName) {
+            this.props.fetchNotices(groupName);
+        }
     }
 
 render(){

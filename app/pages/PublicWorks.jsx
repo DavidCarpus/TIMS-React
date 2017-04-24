@@ -9,7 +9,6 @@ import EB2ServiceBlock from '../Containers/EB2ServiceBlock'
 import TransferStationRules from '../Containers/TransferStationRules'
 
 export default class PublicWorks extends React.Component {
-
     render() {
         var group = this.props.group;
         var groupPageText = group.pagetext;
@@ -37,17 +36,20 @@ export default class PublicWorks extends React.Component {
                         <p>At the Milton Transfer Station our goal is to create a polite and friendly atmosphere while committing to a superior level of service to assist the residents in their recycling and disposal needs.</p>
                     </div>
 
-                    <TransferStationRules group={group}/>
+                    <TransferStationRules group={group} />
                     <hr/>
-                        <SmartLink link='/Departments/TransferRules'
-                            linkText='Printable Transfer Station Rules'/>
-                            <hr/>
+                    <SmartLink link='/Departments/TransferRules'
+                        linkText='Printable Transfer Station Rules'/>
+                    <hr/>
 
-                        <EB2ServiceBlock groupName={group.link}/>
-                        Buy Transfer Station Stickers Online
+                    <EB2ServiceBlock groupName={group.link}/>
+                    Buy Transfer Station Stickers Online
                 </Col>
                 <Col md={2} mdPull={10}><Aside group={group} /></Col>
             </div>
         );
     }
 }
+
+/*
+*/

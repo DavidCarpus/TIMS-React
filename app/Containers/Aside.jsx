@@ -4,10 +4,8 @@ import AsideUI from '../Components/Aside'
 import { fetchPageAsides } from '../actions/PageAsides'
 
 const mapStateToProps = (state, ownProps) => {
-    var asides = ownProps.group.asides || []
-    // console.log('GroupAsides:' + JSON.stringify(ownProps.group));
     return {
-        asides: state.PageAsides,
+        asides: state.PageAsides || [],
         group: ownProps.group,
     };
 }
@@ -15,7 +13,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
      fetchData: (groupName) => {
-        //  console.log('fetchPageAsides:');
          dispatch(fetchPageAsides(groupName))
      }
   }

@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         questions: state.FAQ.faqData,
         title: ownProps.title || 'FAQ',
+        loading: state.FAQ.loading,
         groupName: ownProps.groupName,
     };
 }
