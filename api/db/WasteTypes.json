@@ -1,0 +1,73 @@
+[
+    {"wasteType":"Recyclables",
+        "note":"please rinse containers",
+        "rules":
+        [
+            "Paper: All paper products. Newspaper, Junk mail, card board (soda boxes, cearal boxes, etc) shreded paper, etc. \"anything that tears\"",
+            "Tin Cans",
+            "Aluminum foils and pet food cans",
+            "Aluminum beverage cans are seperated into their own individual container.",
+            "Comigles",
+            "#1 -#7 plastics (see recycling triangle on bottom or container)",
+            "Glass"
+        ]
+    },
+    {"wasteType":"Bulky Waste",
+        "note":"see fee schedule",
+        "rules":
+        [
+            "Large non-recyclable plastics, mattresses, rugs, non-wood furniture, sheet rock, pressure treated lumber, insulation."
+        ]
+    },
+    {"wasteType":"Metals",
+        "note":"please remove as much cloth and plastic as possible",
+        "rules":
+        [
+            "Scrap iron: car parts, lawnmowers, bikes, strollers, etc.",
+            "Scrap Aluminum: siding, gutters, lawn furniture, grills, etc.",
+            "Copper Wire",
+            "Scrap copper"
+        ]
+    },
+    {"wasteType":"Electronics",
+        "note":"see fee schedule",
+        "rules":
+        [
+            "TV's, microwaves, CPU's, monitors, DVD players, steros, printers, etc. (Anything with a circuit board)"
+        ]
+    },
+    {"wasteType":"Mercury Containing Items",
+        "rules":
+        [
+            "Florescent bulbs, compact florescent bulbs, thermometers, mercury cell batteries"
+        ]
+    },
+    {"wasteType":"Construction Debris",
+        "note":"see fee schedule",
+        "rules":
+        [
+            "Painted/stained wood, shingles, plywood, particle board, wood furniture, plaster, ceramics, pane glass."
+        ]
+    },
+    {"wasteType":"Waste Oil",
+        "rules":
+        [
+            "Used motor oil, transmission fluid, gear oil, cooking oil. NO FLAMABLE LIQUIDS"
+        ]
+    },
+    {"wasteType":"Household Hazardous Waste",
+        "rules":
+        [
+            "All hazardous wastes are to be stored for disposal at your home until the Household Hazardous Waste Day events are held. ",
+            "HHWD events will be scheduled periodically throughout the year by the town. ",
+            "The date, time and location of these events will be posted ASAP."
+        ]
+    },
+    {"wasteType":"Burn Pit",
+        "note":"see fee schedule",
+        "rules":
+        [
+            "Wood stove ash may be placed in burn pit only if ash is totally burned out. Brush and Limbs not over 5 inches in diameter."
+        ]
+    }
+]

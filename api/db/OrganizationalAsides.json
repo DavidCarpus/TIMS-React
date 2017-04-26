@@ -1,0 +1,121 @@
+[
+    {"id": 2 , "link":"CemeteryTrustees",
+        "asides":[
+            {"desc": "John Katwick - Chairman 2018<br/>603-652-9872"},
+            {"desc": "Bruce Woodruff 2019"},
+            {"desc": "Gordy Maness - 2017<br/>603-652-7251"}
+        ]
+    },
+    {"id": 3, "link":"ConservationCommittee",
+        "asides":[
+            {"desc": "Conservation Commission Secretary: <br/>Dana Crossley<br/>603-652-4501 ext 5"    }
+        ]
+    },
+    {"id": 5,  "link":"LibraryTrustees",
+        "asides": [
+            {"desc": "Milton Free Public Library<br/>13 Main Street, <br/>Milton Mills, NH<br/>603-473-8535<br/>Email: MFPL@metrocast.net"    }
+        ]
+    },
+    {"id": 6,  "link":"PlanningBoard",
+        "asides": [
+            {"desc": "Land Use Clerk<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+        ]
+    },
+    {"id": 7,  "link":"Recreation",
+        "asides": [
+            {"department":"Recreation", "desc": "Director<br/>Karen Brown" }
+        ]
+    },
+    {"id": 13,  "link":"Zoning",
+        "asides": [
+            {"department":"Zoning", "desc": "Zoning Board of Adjustment Secretary<br/>Dana Crossley<br/>Phone: <br/>(603) 652-4501 x5<br/>Fax: <br/>(603) 652-4120" }
+        ]
+    },
+    {"id": 16, "link":"Assessing"    ,
+        "asides": [
+            {"desc": "Kathy Wallingford<br/> Assessing Director"},
+            {"desc": "Marybeth Walker<br/>Contracted Assessor"},
+            {"desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+            {"desc": "Business Hours: <br/>Monday through Friday 8:00 a.m. - 4:00 p.m."},
+            {"desc": "Phone: <br/>(603) 652-4501 x6"},
+            {"desc": "Fax: <br/>(603) 652-4120"},
+            {"desc": "E-Mail: <br/>assessing@miltonnh-us.com"}
+        ]
+    },
+    {"id": 17,  "link":"CodeEnforcement"    ,
+        "asides": [
+            { "desc": "Code Enforcement/Health Officer/Building Inspector<br/>Brian Boyers"},
+            { "desc": "Business Hours: <br/>Tuesday & Wednesday <br/>8:00 am - 4:00pm"},
+            { "desc": "Phone: <br/>(603) 652-4501 x7"},
+            { "desc": " "},
+            { "desc": "Land Use Clerk: Dana Crossley"},
+            { "desc": "Phone: <br/>(603) 652-4501 x5"},
+            { "desc": "Fax: <br/>(603) 652-4120"    }
+        ]
+    } ,
+    {"id": 20,  "link":"ParksRecreation"    ,
+        "asides": [
+            {"desc": "Karen J. Brown, Recreation Director"},
+            {"desc": "Mailing Address:<br/>PO Box 310 Milton, NH 03851"},
+            {"desc": "Phone: <br/>(603) 652-4501 x8"},
+            {"desc": "Cell: <br/>(603) 834-0279"},
+            {"desc": "Email: <br/>recreation@miltonnh-us.com"}
+        ]
+    },
+    {"id": 23, "link":"PublicWorks"    ,
+        "asides": [
+            {"desc": "Public Works Dept. Phone: 603-652-9891"},
+            {"desc": "Transfer Station Phone: 603-652-4125"},
+            {"desc": "Highway Department Phone: 603-652-9891"},
+            {"desc": "Government Buildings<br/>Willis 'Bill' Whitten<br/>Secretary: Shawn Donell<br/>Phone: 603-652-9891"}
+        ]
+    },
+    {"id": 24,  "link":"Sewer"    ,
+        "asides": [
+            {"desc": "Operator<br/>Dale Sprague"},
+            {"desc": "Secretary<br/>Dana Crossley<br/>603-652-4501 ext 5" }
+        ]
+    },
+    {"id": 25,   "link":"TownClerk"    ,
+        "asides": [
+                {"desc": "P.O Box 180<br/> 424 White Mountain HWY<br/>Milton, NH 03851"},
+                {"desc": "Hours<br/>Mon, Tues, Wed, Fri<br/>8:30am-4:00pm<br/>Thurs - 8:30am-6:30pm <br/>Last Sat of the Month<br/>8am-12pm<br/>Except Holiday weekends"},
+                {"desc": "Town Clerk / Tax Collector<br/>Michelle Beauchamp<br/>townclerktaxcollector@miltonnh-us.com<br/>603-652-4501 x4"},
+                {"desc": "Deputy Town Clerks / <br/>Assistant Tax Collectors<br/>603-652-4501 x3<br/><br/> Diane DuBois<br/>deputytc@miltonnh-us.com<br/><br/>Norma Corrow<br/>miltonatc@metrocast.net"},
+                {"desc": "Assistant Town Clerk / <br/>Tax Collector<br/>Jinette Sturman"},
+                {"desc": "Fax<br/>603-652-4120"}
+            ]
+    },
+    {"id": 26,  "link":"Welfare" ,
+        "asides": [
+            {"desc": "424 White Mountain Highway<br/>Milton, NH 03851"},
+            {"desc": "Hours: <br/>By appointment only. "},
+            {"desc": "Phone: <br/>(603) 652-4501 x6"},
+            {"desc": "Fax: <br/>(603) 652-4120"    }
+        ]
+    }
+    ,
+    {"id": 27,  "link":"Home" ,
+        "asides": [
+            {"desc": "2017 Town Observed Holidays",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_469_380390481.pdf"
+            },
+            {"desc": "NH Solar Garden Proposal for Lockhart Field",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_465_702591217.pdf"
+            },
+            {"desc": "Starting Thursday, July 28, 2016 there will be a Selectman at the Town Hall Thursday mornings from 8am to 8:30am available to address questions and concerns.",
+                "department":"Home"
+            },
+            {"desc": "Notice Letter From Metrocast ",
+                "department":"Home",
+                "link": "http://miltonnh-us.com/uploads/page_right_470_3411020464.pdf"
+            },
+            {"desc": "Employment Opportunities & Committee Vacancies",
+                "department":"Home",
+                "link": "/Employment"
+            }
+        ]
+    }
+]

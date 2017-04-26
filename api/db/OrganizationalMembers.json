@@ -1,0 +1,80 @@
+[
+    {"id": 1, "desc":"Budget Committee", "link": "BudgetCommittee",
+        "members": [
+            {"name":"Caitlin Magargee - Elected"	 ,"term":"2019"},
+            {"name":"Thomas McDougall - Elected"	 ,"term":"2019"},
+            {"name":"Larry Brown Chairman- Elected"	 ,"term":"2018"} ,
+             {"name":"Bob Carrier - Appointed till 2017"	 ,"term":"2018"},
+            {"name":"Maureen Steer - Elected"	 ,"term":"2017"},
+            {"name":"Dennis Wing - Elected"	,"term":"2017"},
+            {"name":"Lue Synder - School  Board Representative"	,"term":"2016"},
+            {"name":"Mike Beaulieu - Selectmen's Representative"	 ,"term":"2016"},
+            {"name":"Stan Nadeau- Water District Representative",	"term":"2016"}
+        ]
+    },
+    {"id": 3, "desc": "Conservation Committee", "link":"ConservationCommittee",
+        "members":[
+            {"office":"Chairman",	"name":"Cynthia Wyatt",	"term":"2017"},
+            {"office":"Vice Chairman",	"name":"Eric Knapp",	"term":"2019"},
+            {"office":"Treasurer",	"name":"Steve Panish",	"term":"2018"},
+            {"office":"Commissioner",	"name":"Paul Blanc",	"term":"2017"},
+            {"office":"Commissioner",	"name":"Karen Golab",	"term":"2018"},
+            {"office":"Alternate",	"name":"Wayne Slyvester",	"term":"2020"},
+            {"office":"Alternate",	"name":"Virginia Long",	"term":"2020"},
+            {"office":"Alternate",	"name":"Barry Carr",	"term":"2018"}
+        ]
+    },
+    {"id": 4, "desc": "Economic Development" , "link":"EconomicDevelopment",
+        "members": [
+            {"name":"Bob Bordeau",	"term":"2015"},
+            {"name":"Cubbi Lirette",	"term":"2016"},
+            {"name":"Eric Knapp",	"term":"2017"},
+            {"name":"Nick Marique",	"term":"2018"},
+            {"name":"Mike Beaulieu",	"term":"2019"}
+        ]
+    },
+    {"id": 6, "desc": "Planning Board" , "link":"PlanningBoard",
+        "members":[
+            {"office":"Chairman","name":"Brian Boyers",	"term":"2017"},
+            {"office":"Vice Chairman","name":"Peter Hayward",	"term":"2017"},
+            {"office":"Member","name":"Robert Bourdeau",	"term":"2018"},
+            {"office":"Member","name":"Tim Long",	"term":"2018"},
+            {"office":"Member","name":"Joseph Michaud",	"term":"2019"},
+            {"office":"Member","name":"Larry Brown",	"term":"2019"},
+            {"office":"Alternate (Appointed)","name":"Robert Graham"},
+            {"office":"Ex-Officio","name":"Tom Gray",	"term":"2017"}
+        ]
+    },
+    {"id": 7, "desc": "Recreation Commission" , "link":"Recreation",
+        "members": [
+            {"office":"Selectman Liaison","name":"Andrew Rawson",	"term":""},
+            {"office":"School Board Liaison","name":"Douglas Shute",	"term":"2015"},
+            {"office":"Chairman","name":"Christopher Jacobs",	"term":"2015"},
+            {"office":"Commissioner","name":"Stefanie Berry",	"term":"2017"},
+            {"office":"Commissioner","name":"Sarah Rogers",	"term":"2016"}
+        ]
+    },
+    {"id": 12, "desc": "Trustees of Trust Funds" , "link":"TrustFunds",
+        "members": [
+            {"office":"Trustee Treasurer","name":"Marion Trafton - 603-652-9768",	"term":""},
+            {"office":"Trustee","name":"Karen Brown - 603-652-4501 x8",	"term":""}
+        ]
+    },
+    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA)" , "link":"Zoning",
+        "members": [
+            {"office":"Chairman","name":"Michael Tabory",	"term":"2017"},
+            {"office":"Member","name":"Luella Snyder",	"term":"2017"},
+            {"office":"Appointed until 2017","name":"Larry Brown",	"term":"2019"},
+            {"office":"Member","name":"Bruce Woodruff",	"term":"2018"},
+            {"office":"Member","name":"Stan Nadeau",	"term":"2018"},
+            {"office":"Alternate","name":"Sean Skillings",	"term":""}
+        ]
+    },
+    {"id": 14, "desc": "Board of Selectmen" , "link":"Selectmen",
+        "members": [
+            {"office":"Selectman","name":"Ryan Thibeault - 603-534-7032",	"term":""},
+            {"office":"Selectman","name":"Mike Bealieu - 603-944-5574 ",	"term":""},
+            {"office":"Selectman","name":"Andrew Rawson - 603-534-1330 ",	"term":""}
+        ]
+    }
+]
