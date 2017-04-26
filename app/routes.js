@@ -12,7 +12,7 @@ import Calendar from './pages/Calendar'
 
 import ContactUs from './pages/ContactUs'
 import Employment from './pages/Employment'
-import PlanningBoard from './pages/PlanningBoard'
+// import PlanningBoard from './pages/PlanningBoard'
 import TransferRules from './Containers/TransferStationRules'
 
 // import Committees from './pages/Committees'
@@ -53,13 +53,18 @@ export default (
                 <Route path="/Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} />
 
 
-            <Route path="BoardsAndCommittees"  >
-                <Route path="PlanningBoard" component={PlanningBoard} />
-            </Route>
             <Route path="/BoardsAndCommittees/:committee" component={Committees} onEnter={OrgUnitChange('committee',myStore)} />
 
     </Route>
 );
 
-// <Route path="Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} >
-// </Route>
+/*
+<Route path="BoardsAndCommittees"  >
+    <Route path="PlanningBoard" component={PlanningBoard} />
+</Route>
+
+
+<Route path="Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} >
+</Route>
+
+*/

@@ -37,7 +37,7 @@ $app->get('/Menus/', function (Silex\Application $app)  {
 });
 // ==========================================================
 $app->get('/Asides/{groupName}', function (Silex\Application $app, $groupName)  {
-    $string = file_get_contents(Config::PATH_TO_ORGANIZATIONAL_JSON_FILE);
+    $string = file_get_contents('db/OrganizationalAsides.json');
     $jsonArray = json_decode($string, true);
     $filteredArray=array_filter($jsonArray, function($elem) use($groupName){
         return $elem['link'] == $groupName;
@@ -45,7 +45,6 @@ $app->get('/Asides/{groupName}', function (Silex\Application $app, $groupName)  
     $group=[];
     if (count($filteredArray)  > 0) {
         $group = array_values($filteredArray)[0];
-        // $group = array_shift(array_values($filteredArray));
     }
     // echo "<pre>" . print_r($jsonArray, TRUE)  .  '</pre>';
     if ( array_key_exists('asides', $group)) {
@@ -60,7 +59,7 @@ $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName
     // echo JWT::encode($token, 'secret_server_key');
     // echo $groupName ;
     // echo '<hr />';
-    $string = file_get_contents(Config::PATH_TO_ORGANIZATIONAL_JSON_FILE);
+    $string = file_get_contents('db/OrganizationalUnits.json');
     $jsonArray = json_decode($string, true);
 
     $filteredArray=array_filter($jsonArray, function($elem) use($groupName){
@@ -71,6 +70,37 @@ $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName
         $group = array_values($filteredArray)[0];
         // $group = array_shift(array_values($filteredArray));
     }
+    // echo "<pre>" . print_r($group, TRUE)  .  '</pre>';
+    $asides=array_filter(json_decode(file_get_contents('db/OrganizationalAsides.json'), true), function($elem) use($groupName){
+        return $elem['link'] == $groupName;
+    });
+    // echo "<pre>" . print_r($asides, TRUE)  .  '</pre>';
+    $asides= is_null($asides) ? []: current($asides);
+     $group['asides'] = is_null($asides) ? []:$group['asides'] = $asides;
+
+     $members=array_filter(json_decode(file_get_contents('db/OrganizationalMembers.json'), true), function($elem) use($groupName){
+         return $elem['link'] == $groupName;
+     });
+    $members = current($members);
+    $group['members'] = is_null($members['members']) ? []: $group['members'] = $members['members'];
+
+    $pagetext=array_filter(json_decode(file_get_contents('db/OrganizationalPageText.json'), true), function($elem) use($groupName){
+        return $elem['link'] == $groupName;
+    });
+   $pagetext = current($pagetext);
+   $group['pagetext'] = is_null($pagetext['pagetext']) ? []: $group['pagetext'] = $pagetext['pagetext'];
+
+   if ($groupName == 'PublicWorks') {
+       $group['transferrules'] =  array(
+           'wasteTypes' => json_decode(file_get_contents('db/WasteTypes.json'), true),
+           'feeSchedule' => json_decode(file_get_contents('db/FeeSchedule.json'), true),
+           );
+   }
+
+   if ($groupName == 'CodeEnforcement') {
+       $group['helpfulInformation'] =  json_decode(file_get_contents('db/HelpfulInformation.json'), true);
+   }
+
     return json_encode($group);
     // if ( array_key_exists('asides', $group)) {
     //     return json_encode($group['asides']);

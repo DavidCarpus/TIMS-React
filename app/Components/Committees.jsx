@@ -15,7 +15,6 @@ export default class Committees extends React.Component {
         if (!this.props.loading) {
             this.props.fetchOUData(this.props.groupName);
         }
-
     }
 
     render() {
