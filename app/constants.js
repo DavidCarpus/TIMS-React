@@ -35,6 +35,11 @@ const PageAsidesConstants = {
     FETCH_PAGE_ASIDES_DATA_SUCCESS: 'FETCH_PAGE_ASIDES_DATA_SUCCESS',
     FETCH_PAGE_ASIDES_DATA_FAILURE: 'FETCH_PAGE_ASIDES_DATA_FAILURE',
 }
+const EB2ServicesConstants = {
+    FETCH_DATA: 'FETCH_EB2SERVICES_DATA',
+    FETCH_DATA_SUCCESS: 'FETCH_EB2SERVICES_DATA_SUCCESS',
+    FETCH_DATA_FAILURE: 'FETCH_EB2SERVICES_DATA_FAILURE',
+}
 
 
 module.exports = {
@@ -43,4 +48,5 @@ module.exports = {
     FAQConstants,
     MainMenuConstants,
     PageAsidesConstants,
+    EB2ServicesConstants,
 }

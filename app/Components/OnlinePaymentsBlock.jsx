@@ -16,7 +16,7 @@ export default class OnlinePaymentsBlock extends React.Component {
         return (
             <div id='eb2govBlock'>
                 <h2>Follow the links for Dog Licensing, Online Registration, Vital Records or Property Taxes.</h2>
-                <EB2ServiceBlock />
+                <EB2ServiceBlock groupName={'Home'}/>
                 <a href='https://nhtaxkiosk.com/?KIOSKID=MILTON' target='_blank'>
                     <div style={onlineAssessmentButton}>
                         <p>Property Taxes<br/>Review/Pay Online</p></div>

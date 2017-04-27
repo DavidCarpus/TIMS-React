@@ -8,7 +8,7 @@ export default class CodeEnforcement extends React.Component {
 
         return (
             <div>
-                <CodeEnforcementUI group={group} helpfulInformation={group.helpfulInformation} />
+                <CodeEnforcementUI group={group} helpfulInformation={group.helpfulinformation} />
             </div>
         )
     }

@@ -55,6 +55,29 @@ $app->get('/Asides/{groupName}', function (Silex\Application $app, $groupName)  
     // return json_encode($jsonArray);
 });
 // ==========================================================
+$app->get('/EB2Services/{groupName}', function (Silex\Application $app, $groupName)  {
+    $string = file_get_contents('db/EB2Services.json');
+    $jsonArray = json_decode($string, true);
+    $filteredArray=$jsonArray;
+    if (! ($groupName == 'Home' || $groupName == 'TownClerk')) {
+        // echo "<pre>" . print_r($jsonArray, TRUE)  .  '</pre>';
+        $filteredArray=array_filter($jsonArray, function($elem) use($groupName){
+            return $elem['link'] == $groupName;
+        });
+    };
+    $services=[];
+    if (count($filteredArray)  > 0) {
+        $services = array_values($filteredArray);
+    }
+    // echo "<pre>" . print_r($services, TRUE)  .  '</pre>';
+    // if ( array_key_exists('asides', $group)) {
+    //     return json_encode($group['asides']);
+    // } else {
+    //     return '[]';
+    // }
+    return json_encode($services);
+});
+// ==========================================================
 $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName)  {
     // echo JWT::encode($token, 'secret_server_key');
     // echo $groupName ;
@@ -67,46 +90,29 @@ $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName
     });
     $group=[];
     if (count($filteredArray)  > 0) {
-        $group = array_values($filteredArray)[0];
-        // $group = array_shift(array_values($filteredArray));
+        $group = current($filteredArray);
     }
-    // echo "<pre>" . print_r($group, TRUE)  .  '</pre>';
-    $asides=array_filter(json_decode(file_get_contents('db/OrganizationalAsides.json'), true), function($elem) use($groupName){
-        return $elem['link'] == $groupName;
-    });
-    // echo "<pre>" . print_r($asides, TRUE)  .  '</pre>';
-    $asides= is_null($asides) ? []: current($asides);
-     $group['asides'] = is_null($asides) ? []:$group['asides'] = $asides;
 
-     $members=array_filter(json_decode(file_get_contents('db/OrganizationalMembers.json'), true), function($elem) use($groupName){
-         return $elem['link'] == $groupName;
-     });
-    $members = current($members);
-    $group['members'] = is_null($members['members']) ? []: $group['members'] = $members['members'];
+    // foreach (["Members", "Asides", "PageText"] as  $value) {
+    foreach (["Members",  "PageText"] as  $value) {
+        $tableData=array_filter(json_decode(file_get_contents('db/Organizational' . $value . '.json'), true), function($elem) use($groupName){
+            return $elem['link'] == $groupName;
+        });
+        $tableData= is_null($tableData) ? []: current($tableData);
+        $tableData = ($value == 'Members' || $value == 'PageText' ) ?  $tableData[strtolower($value)] : $tableData;
+        // echo "<pre>" . print_r($tableData, TRUE)  .  '</pre>';
+        $group[strtolower($value)] = $tableData;
+    }
 
-    $pagetext=array_filter(json_decode(file_get_contents('db/OrganizationalPageText.json'), true), function($elem) use($groupName){
-        return $elem['link'] == $groupName;
-    });
-   $pagetext = current($pagetext);
-   $group['pagetext'] = is_null($pagetext['pagetext']) ? []: $group['pagetext'] = $pagetext['pagetext'];
-
-   if ($groupName == 'PublicWorks') {
-       $group['transferrules'] =  array(
-           'wasteTypes' => json_decode(file_get_contents('db/WasteTypes.json'), true),
-           'feeSchedule' => json_decode(file_get_contents('db/FeeSchedule.json'), true),
-           );
-   }
-
-   if ($groupName == 'CodeEnforcement') {
-       $group['helpfulInformation'] =  json_decode(file_get_contents('db/HelpfulInformation.json'), true);
-   }
+    if ( array_key_exists('customData', $group)) {
+        foreach ($group['customData'] as  $value) {
+            $tableData=json_decode(file_get_contents('db/' . $value . '.json'), true);
+            $group[strtolower($value)] = $tableData;
+        }
+        unset($group['customData']);
+    }
 
     return json_encode($group);
-    // if ( array_key_exists('asides', $group)) {
-    //     return json_encode($group['asides']);
-    // } else {
-    //     return '[]';
-    // }
     // echo "<pre>" . print_r($group, TRUE)  .  '</pre>';
 });
 // ==========================================================
@@ -146,11 +152,11 @@ $app->get('/FAQ/{groupName}', function (Silex\Application $app, $groupName)  {
     // print_r("<pre>" );
     foreach ($jsonArray as $key => $item) {
         // echo "<pre>" . print_r($item, TRUE)  .  '</pre>';
-        if ($item['groupName'] == $groupName ) {
+        if ($item['link'] == $groupName ) {
         //     echo "$key";
         //     // $item['id'] = $key;
         //     // array_push($filteredArray, $item);
-        unset($item['groupName']);
+        unset($item['link']);
             $filteredArray[]= $item;
         }
     }

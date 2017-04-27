@@ -1,5 +1,5 @@
 [
-    {"id": 1, "desc":"Budget Committee", "link": "BudgetCommittee",
+    {"id": 1, "link": "BudgetCommittee",
         "members": [
             {"name":"Caitlin Magargee - Elected"	 ,"term":"2019"},
             {"name":"Thomas McDougall - Elected"	 ,"term":"2019"},
@@ -12,7 +12,7 @@
             {"name":"Stan Nadeau- Water District Representative",	"term":"2016"}
         ]
     },
-    {"id": 3, "desc": "Conservation Committee", "link":"ConservationCommittee",
+    {"id": 3, "link":"ConservationCommittee",
         "members":[
             {"office":"Chairman",	"name":"Cynthia Wyatt",	"term":"2017"},
             {"office":"Vice Chairman",	"name":"Eric Knapp",	"term":"2019"},
@@ -24,7 +24,7 @@
             {"office":"Alternate",	"name":"Barry Carr",	"term":"2018"}
         ]
     },
-    {"id": 4, "desc": "Economic Development" , "link":"EconomicDevelopment",
+    {"id": 4, "link":"EconomicDevelopment",
         "members": [
             {"name":"Bob Bordeau",	"term":"2015"},
             {"name":"Cubbi Lirette",	"term":"2016"},
@@ -33,7 +33,7 @@
             {"name":"Mike Beaulieu",	"term":"2019"}
         ]
     },
-    {"id": 6, "desc": "Planning Board" , "link":"PlanningBoard",
+    {"id": 6, "link":"PlanningBoard",
         "members":[
             {"office":"Chairman","name":"Brian Boyers",	"term":"2017"},
             {"office":"Vice Chairman","name":"Peter Hayward",	"term":"2017"},
@@ -45,7 +45,7 @@
             {"office":"Ex-Officio","name":"Tom Gray",	"term":"2017"}
         ]
     },
-    {"id": 7, "desc": "Recreation Commission" , "link":"Recreation",
+    {"id": 7, "link":"Recreation",
         "members": [
             {"office":"Selectman Liaison","name":"Andrew Rawson",	"term":""},
             {"office":"School Board Liaison","name":"Douglas Shute",	"term":"2015"},
@@ -54,13 +54,13 @@
             {"office":"Commissioner","name":"Sarah Rogers",	"term":"2016"}
         ]
     },
-    {"id": 12, "desc": "Trustees of Trust Funds" , "link":"TrustFunds",
+    {"id": 12, "link":"TrustFunds",
         "members": [
             {"office":"Trustee Treasurer","name":"Marion Trafton - 603-652-9768",	"term":""},
             {"office":"Trustee","name":"Karen Brown - 603-652-4501 x8",	"term":""}
         ]
     },
-    {"id": 13, "desc": "Zoning Board of Adjustment (ZBA)" , "link":"Zoning",
+    {"id": 13, "link":"Zoning",
         "members": [
             {"office":"Chairman","name":"Michael Tabory",	"term":"2017"},
             {"office":"Member","name":"Luella Snyder",	"term":"2017"},
@@ -70,7 +70,7 @@
             {"office":"Alternate","name":"Sean Skillings",	"term":""}
         ]
     },
-    {"id": 14, "desc": "Board of Selectmen" , "link":"Selectmen",
+    {"id": 14, "link":"Selectmen",
         "members": [
             {"office":"Selectman","name":"Ryan Thibeault - 603-534-7032",	"term":""},
             {"office":"Selectman","name":"Mike Bealieu - 603-944-5574 ",	"term":""},
