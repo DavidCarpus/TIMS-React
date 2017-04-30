@@ -3,21 +3,18 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 var routerHistory = hashHistory;
 
-// import MainLayout from './Components/MainLayout';
-import MainLayout from './Containers/MainLayout';
-
 import HomePage from './pages/HomePage';
 import About from './pages/About';
 import Calendar from './pages/Calendar'
-
 import ContactUs from './pages/ContactUs'
 import Employment from './pages/Employment'
-// import PlanningBoard from './pages/PlanningBoard'
-import TransferRules from './Containers/TransferStationRules'
+import Login from './pages/Login'
 
-// import Committees from './pages/Committees'
+import MainLayout from './Containers/MainLayout';
+import TransferRules from './Containers/TransferStationRules'
 import Committees from './Containers/Committees'
 import Departments from './Containers/Departments'
+
 import {myStore} from './store/myStore.js';
 
 import { fetchOrganizationalUnitData } from './actions/OrganizationalUnitData'
@@ -45,6 +42,7 @@ export default (
             <Route path="/calendar" component={Calendar} />
             <Route path="/ContactUs" component={ContactUs} />
             <Route path="/Employment" component={Employment} />
+            <Route path="/Login" component={Login} />
 
 
                 <Route path="Departments"  >
@@ -59,12 +57,5 @@ export default (
 );
 
 /*
-<Route path="BoardsAndCommittees"  >
-    <Route path="PlanningBoard" component={PlanningBoard} />
-</Route>
-
-
-<Route path="Departments/:department" component={Departments} onEnter={OrgUnitChange('department',myStore)} >
-</Route>
 
 */

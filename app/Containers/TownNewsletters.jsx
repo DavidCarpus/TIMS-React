@@ -3,7 +3,7 @@ import TownNewslettersUI from '../Components/TownNewsletters'
  import { connect } from 'react-redux'
 
 const mapStateToProps = (state, ownProps) => {
-    var newsletters = ownProps.group.newsletter || []
+    var newsletters = ownProps.group.newsletters || []
     return {
         newsletters: newsletters,
         title: ownProps.title || 'Town Newsletter',

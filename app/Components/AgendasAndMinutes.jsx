@@ -47,3 +47,8 @@ export default class AgendasAndMinutes extends React.Component {
         )
     }
 }
+
+AgendasAndMinutes.propTypes = {
+    loading: React.PropTypes.bool.isRequired,
+    meetings: React.PropTypes.object.isRequired,
+}

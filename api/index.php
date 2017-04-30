@@ -22,11 +22,22 @@ $pdo = (new SQLiteConnection())->connect();
 
 $token = array();
 $id = 'carpus';
+// $userkey='change';
 $token['id'] = $id;
+$app['userkey'] = 'change';
+//
+// $app->register(new JDesrosiers\Silex\Provider\CorsServiceProvider(), array(
+//     "cors.allowOrigin" => "*",
+// ));
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//https://silex.sensiolabs.org/doc/2.0/middlewares.html
+$addAuthToken = function (Request $request, Response $response, Silex\Application $app) {
+    $response->headers->set('authorization', $app['userkey']);
+};
 
-$app->register(new JDesrosiers\Silex\Provider\CorsServiceProvider(), array(
-    "cors.allowOrigin" => "*",
-));
+$app->after(function (Request $request, Response $response) {
+    $response->headers->set('Access-Control-Allow-Origin', '*');
+});
 // ==========================================================
 // ==========================================================
 $app->get('/Menus/', function (Silex\Application $app)  {
@@ -77,6 +88,44 @@ $app->get('/EB2Services/{groupName}', function (Silex\Application $app, $groupNa
     // }
     return json_encode($services);
 });
+// ==========================================================
+$app->get('/LoginRequest/{encodedemailAddress}', function (Silex\Application $app, $encodedemailAddress)  {
+    global $userkey;
+    $emailAddress = base64_decode ( $encodedemailAddress);
+    $token = array(
+        "name" => "David Carpus",
+        "emailAddress" => $emailAddress,
+        "iss" => "townURL",
+        "aud" => "townURL",
+        "iat" => time(),
+    );
+// echo '<hr />';
+// echo $emailAddress;
+// echo '<hr />';
+    $key =  base64_encode( JWT::encode($token, Config::JWT_KEY) );
+    if ($_SERVER["SERVER_NAME"] != 'localhost') {
+        $url = 'http://' . $_SERVER["SERVER_NAME"] . '/' . $key;
+        mail ( $emailAddress , 'JWT Link' , $url  );
+        return 'email sent.';
+    } else {
+        $url = 'http://' . $_SERVER["SERVER_NAME"] . '/path/' . $key;
+        $app['userkey'] = $key;
+        return '<a href="'.$app['url_generator']->generate('Login', [ "jwt64" => $key, "email" => $encodedemailAddress ]).'">Login</a>';
+    }
+    // return json_encode($key);
+})->after($addAuthToken);
+// ==========================================================
+$app->get('/Login/{jwt64}', function (Silex\Application $app, $jwt64)  {
+    $jwt = base64_decode ( $jwt64);
+    $decoded = JWT::decode($jwt, Config::JWT_KEY, array('HS256'));
+    // $params = $request->query->all();
+    echo '<hr />';
+    echo "<pre>" . print_r($decoded, TRUE)  .  '</pre>';
+    echo '<hr />';
+    // mail ( $emailAddress , 'JWT Link' , $key  );
+return $_SERVER["SERVER_NAME"];
+    // return json_encode($key);
+})->bind('Login');;
 // ==========================================================
 $app->get('/GroupData/{groupName}', function (Silex\Application $app, $groupName)  {
     // echo JWT::encode($token, 'secret_server_key');
@@ -205,9 +254,12 @@ $app->get('/Records/Meetings/{groupName}', function (Silex\Application $app, $gr
             $filteredArray[$keyDate] []= $item;
         }
     }
+    // echo "<pre>" . print_r($filteredArray, TRUE)  .  '</pre>';
     return json_encode($filteredArray);
 });
-
+// ==========================================================
+// ==========================================================
+// ==========================================================
 $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
 });
