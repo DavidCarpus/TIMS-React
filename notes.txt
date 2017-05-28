@@ -1,19 +1,11 @@
-SQLITE and Node
-https://codeforgeek.com/2014/07/node-sqlite-tutorial/
-
-***
-JWT - Tokens
-https://knpuniversity.com/screencast/rest-ep2/authentication-via-token
-https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0
-
-https://gonzalo123.com/
-https://gonzalo123.com/2014/05/05/token-based-authentication-with-silex-applications/
-
-https://redis.io/  // Storage of tokens on server?
-
-***
-PHP Silex
-https://silex.sensiolabs.org/doc/2.0/usage.html
-
-
+************************************************
 ~/bin/startWedDev.sh ALL
+
+
+************************************************
+News, Calendar, City Services, Notices, Employment, Contact us, Agenda/Minutes/Video, Road Construction, NIXLE
+************************************************
+
+npm run migrate:rollback
+npm run migrate:latest
+npm run knex:seed:run json
