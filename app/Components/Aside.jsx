@@ -3,14 +3,9 @@ import styles from '../assets/Styles/Aside.css'
 import SmartLink from './SmartLink'
 
 class AsideItem extends React.Component {
-    createMarkup(){
-        var desc = this.props.item.desc
-        return {__html: desc};
-    }
-
     render() {
         // var desc = this.createMarkup()
-        var linkText = this.props.item.desc
+        var linkText = this.props.item.description
         var desc = {__html: this.props.item.description}
         var hasLink  = (this.props.item.link != null)
         return (
