@@ -1,5 +1,7 @@
 var express = require('express');
 var logger = require('morgan');
+var Config = require('./config'),
+configuration = new Config();
 
 var routes = require('./routes/index').router;
 var handleDisconnect = require('./routes/index').handleDisconnect;
@@ -39,7 +41,7 @@ function timestamp (req, res, next) {
     next()
 }
 
-app.set('port', 45000);
+app.set('port', configuration.expressPort);
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 // app.use(express.static(path.join(__dirname, 'public')));

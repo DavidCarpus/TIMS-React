@@ -1,12 +1,10 @@
 import {EB2ServicesConstants} from '../constants'
 import axios from 'axios';
+var Config = require('../config'),
+configuration = new Config();
 
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
-// const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
+const ROOT_URL = configuration.ui.ROOT_URL
 const actionsName='EB2ServicesData';
-// console.log('EB2Services ROOT_URL:' + ROOT_URL);
-
 //========================================
 export function fetchEB2ServicesData(groupName) {
     // console.log(actionsName + ' fetchEB2ServicesData:'+JSON.stringify(groupName));

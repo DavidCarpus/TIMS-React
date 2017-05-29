@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
 var mysql = require('mysql');
+var fs = require('fs');
 
 var Config = require('../config');
 configuration = new Config();
@@ -102,7 +103,7 @@ var allowCrossDomain = function(req, res, next) {
 router.get('/Menus', function(req, res) {
         // console.log(fs.readFileSync('Menus.json', 'utf8'));
         // TODO: Add error checking if file not there ar move data to db
-        res.json(JSON.parse(fs.readFileSync('Menus.json', 'utf8')));
+        res.json(JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8')));
 });
 // ==========================================================
 router.get('/Asides/:groupName', function(req, res) {

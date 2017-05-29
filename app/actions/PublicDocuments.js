@@ -1,21 +1,17 @@
 import {PublicDocumentsConstants} from '../constants'
 import axios from 'axios';
+var Config = require('../config'),
+configuration = new Config();
 
- // const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
-// const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
+const ROOT_URL = configuration.ui.ROOT_URL
 const actionsName='PublicDocuments';
-// console.log('PublicDocuments ROOT_URL:' + ROOT_URL);
-
-
 //========================================
 export function fetchMeetingDocs(groupName) {
     if (! groupName && location.href.indexOf('localhost') > 0 ) {
         debugger; // eslint-disable-line no-debugger
     }
 
-    console.log(actionsName +' fetchMeetings:'+JSON.stringify(groupName));
+    // console.log(actionsName +' fetchMeetings:'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Meetings/`+ groupName,
@@ -62,7 +58,7 @@ export function fetchGroupDoc(groupName) {
     if (! groupName && location.href.indexOf('localhost') > 0 ) {
         debugger; // eslint-disable-line no-debugger
     }
-    console.log(actionsName +'  fetchGroupDoc:'+JSON.stringify(groupName));
+    // console.log(actionsName +'  fetchGroupDoc:'+JSON.stringify(groupName));
 
     const request = axios({
       method: 'get',
