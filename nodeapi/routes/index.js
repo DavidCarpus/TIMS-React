@@ -168,7 +168,7 @@ router.get('/Records/Notices/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
-        query = "Select id, recordtype as type, fileLink as link,date from PublicRecords where pageLink='" + req.params.groupName +"'";
+        query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
         query += " and ( recordtype='Minutes'  or recordtype='Agendas'  or recordtype='Video' )";
         query += "  ORDER BY date ";
         simpleDBQuery(query)
