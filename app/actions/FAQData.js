@@ -1,12 +1,10 @@
 import {FAQConstants} from '../constants'
 import axios from 'axios';
+var Config = require('../config'),
+configuration = new Config();
 
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : './api/';
-// const ROOT_URL = 'http://carpusconsulting.com/milton/api/';
+const ROOT_URL = configuration.ui.ROOT_URL
 const actionsName='FAQData';
-// console.log('FAQ ROOT_URL:' + ROOT_URL);
-
 //========================================
 export function fetchFAQData(groupName) {
     console.log(actionsName + ' fetchFAQData:'+JSON.stringify(groupName));

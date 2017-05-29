@@ -5,7 +5,6 @@ configuration = new Config();
 
 const ROOT_URL = configuration.ui.ROOT_URL
 const actionsName='OrganizationalUnitData';
-
 //========================================
 export function fetchOrganizationalUnitData(groupName) {
     // console.log(actionsName + ' fetchOrganizationalUnitData:'+JSON.stringify(groupName));
