@@ -4,7 +4,7 @@ import SmartLink from './SmartLink'
 
 export default class NoticesList extends React.Component {
     componentWillMount() {
-        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.description || 'missing groupName'
         if (this.props.noticesGroupName != groupName) {
             this.props.fetchNotices(groupName);
         }
@@ -20,7 +20,7 @@ render(){
             <ul className={styles.hidebullets}>{this.props.notices.
                 map( (notice,index) =>
                     <li key={notice.id || index}>
-                        <SmartLink link={notice.link} linkText={notice.desc} />
+                        <SmartLink link={notice.link} linkText={notice.description} />
                     </li>
             )}</ul>
 

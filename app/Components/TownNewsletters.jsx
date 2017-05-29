@@ -15,7 +15,7 @@ export default class TownNewsletters extends React.Component {
                         <div key={index}>
                             <li>
                                 <SmartLink link={entry.link}
-                                    linkText={entry.desc}/>
+                                    linkText={entry.description}/>
                             </li>
                         </div>
                     )}

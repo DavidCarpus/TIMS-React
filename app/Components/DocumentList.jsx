@@ -26,7 +26,7 @@ export default class DocumentList extends React.Component {
                 {this.props.documents.
                     map( (document, index) =>
                         <div key={index} >
-                            <SmartLink link={document.link} linkText={document.desc || document.link} />
+                            <SmartLink link={document.link} linkText={document.description || document.link} />
                         </div>
                     )}
 
