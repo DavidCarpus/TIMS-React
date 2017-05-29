@@ -11,7 +11,7 @@ class AsideItem extends React.Component {
     render() {
         // var desc = this.createMarkup()
         var linkText = this.props.item.desc
-        var desc = {__html: this.props.item.desc}
+        var desc = {__html: this.props.item.description}
         var hasLink  = (this.props.item.link != null)
         return (
             <li >
@@ -28,12 +28,12 @@ class AsideItem extends React.Component {
 
 export default class MainAside extends React.Component {
     componentWillMount() {
-        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.description || 'missing groupName'
         this.props.fetchData(groupName);
     }
 
     render() {
-        var groupName = this.props.groupName || this.props.group.link || this.props.group.desc || 'missing groupName'
+        var groupName = this.props.groupName || this.props.group.link || this.props.group.description || 'missing groupName'
         var id = groupName + '_Asides'
 
         var recentEvents = this.props.asides.PageAsides || this.props.asides
