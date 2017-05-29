@@ -69,7 +69,7 @@ export default class TransferStationRules extends React.Component {
                     {this.props.feeSchedule.
                         map( (wasteType, index) =>
                             <div key={index} className={styles.feeItem}>
-                                <div className={styles.feeItemDesc}>{wasteType.desc}</div>
+                                <div className={styles.feeItemDesc}>{wasteType.description}</div>
                                 <div className={styles.feeItemPrice}>{wasteType.price}</div>
                             </div>
                         )}
