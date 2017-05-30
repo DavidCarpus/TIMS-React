@@ -7,6 +7,7 @@ var routes = require('./routes/index').router;
 var handleDisconnect = require('./routes/index').handleDisconnect;
 
 var app = express();
+// console.log(configuration);
 
 handleDisconnect();
 
@@ -18,8 +19,9 @@ app.use(timestamp)
 if (process.env.NODE_ENV !== 'test') {
     app.use(logger(':ts :method :url :response-time'))
   // app.use(logger('dev'));
+// } else {
+//     app.use(logger('combined'))
 }
-// app.use(logger('combined'))
 
 Date.prototype.datetimestr = function() {
   var mm = this.getMonth() + 1; // getMonth() is zero-based

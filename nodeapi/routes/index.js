@@ -225,6 +225,11 @@ router.get('/GroupData/:groupName', function(req, res) {
                     })
                 }) // map wasteTypes
             ) //  Promise All
+            .catch(err => {
+                // res.json('Error', JSON.stringify(err))
+                console.log('Fetch WasteTypesRules error', JSON.stringify(err));
+                res.status(404).json(err);
+            })
         })
         .then(wasteTypesWithRules =>{
             if (wasteTypesWithRules.length > 0) {
@@ -241,6 +246,11 @@ router.get('/GroupData/:groupName', function(req, res) {
                 groupDataWithWasteTypes.newsletters = newsletters;
             }
             return groupDataWithWasteTypes;
+        })
+        .catch(err => {
+            // res.json('Error', JSON.stringify(err))
+            console.log('Fetch newsletters error', JSON.stringify(err));
+            res.status(404).json(err);
         })
     })
     .then(groupDataWithNewsletters =>{
@@ -273,7 +283,7 @@ router.get('/GroupData/:groupName', function(req, res) {
     } )
     .catch(err => {
         // res.json('Error', JSON.stringify(err))
-        console.log('Fetch data error', JSON.stringify(err));
+        console.log('Fetch group data error', JSON.stringify(err));
         res.status(404).json(err);
     })
 });

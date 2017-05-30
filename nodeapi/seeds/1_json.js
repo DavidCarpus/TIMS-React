@@ -1,6 +1,4 @@
 var fs = require('fs');
-// var knexConfig = require('./knexfile.js')
-// var knex = require('knex')(knexConfig['development']);
 
 const DEFAULT_JSON_DIR='/home/dcarpus/code/milton_nh/react_miltonNH/nodeapi/db/json/';
 const DEFAULT_DB_PATH='/home/dcarpus/code/milton_nh/react_miltonNH/nodeapi/db/phpsqlite.db';
@@ -44,18 +42,21 @@ function objectInsert(filename, obj) {
 
     switch (basename) {
         case 'WasteTypes':
-        return [ {listName: basename, pageLink: 'PublicWorks', datatext:obj.wasteType + ' (' + obj.note + ')', listParentID:0} ]
+        return [ {listName: basename, pageLink: 'PublicWorks', datatext:obj.wasteType + ' (' + obj.note + ')', pkey:obj.key, listParentID:0} ]
             break;
         case 'WasteTypesRules':
-            return [{listName: basename, pageLink: 'PublicWorks', datatext:obj.desc, listParentID:0}]
+            return [{listName: basename, pageLink: 'PublicWorks', datatext:obj.desc, pkey:obj.key, listParentID:0}]
             break;
         case 'OrganizationalPageText':
-            var pageText = obj.pagetext[0];
-            if (pageText.desc) {
-                return [{listName: basename, pageLink:obj.link, datatext:pageText.desc, listParentID:0}]
+            var pagetext = obj.pagetext[0];
+            if (typeof pagetext == 'undefined') {
+                console.log("pagetext undefined??" , obj);
             }
-            if (pageText.text1) {
-                return [{listName: basename, pageLink:obj.link, datatext:pageText.text1, listParentID:0}]
+            if ( pagetext.desc) {
+                return [{listName: basename, pageLink:obj.link, datatext:pagetext.desc, listParentID:0}]
+            }
+            if ( pagetext.text1) {
+                return [{listName: basename, pageLink:obj.link, datatext:pagetext.text1, listParentID:0}]
             }
             break;
         case 'PublicRecords':
@@ -114,19 +115,20 @@ function readJSONContent(jsonFile) {
 //======================================
 exports.seed = function(knex, Promise) {
     var list = fs.readdirSync(JSON_DIR)
+    console.log("Processing " + JSON_DIR);
 
     return new Promise(function(resolve, reject) {
         resolve(Promise.all(list.map( (file) => {
+            console.log(file);
             return readJSONContent(JSON_DIR + file)
             .then(result => {
                 let tableName = tableNameFromJSON(file);
-                // console.log(file);
                 return Promise.all(result.map(record => {
                     let out = objectInsert(file, record)
                     if (Array.isArray(out) ) {
                         return knex(tableName).insert(out)
                     } else {
-                        console.log("out:" + out);
+                        console.log(file  + " out:" + out);
                         return Promise.reject(out);
                     }
                 }))

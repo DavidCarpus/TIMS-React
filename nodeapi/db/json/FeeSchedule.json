@@ -1,6 +1,6 @@
 [
     {"desc":"Permit Sticker", "price":"$5.00"},
-    {"desc":"Scale Fees", "price":"A load in its entirety $.08per lb"},
+    {"desc":"Scale Fees (A load in its entirety ..per lb)", "price":"$.08"},
     {"desc":"TV under 27\"", "price":"$5.00"},
     {"desc":"TV 28-45", "price":"$10.00"},
     {"desc":"TV 46\" & up", "price":"$20.00"},

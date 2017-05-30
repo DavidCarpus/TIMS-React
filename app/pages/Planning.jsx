@@ -13,7 +13,7 @@ export default class Planning extends React.Component {
         return (
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
-                    <h1 style={{textAlign:'center'}}>{group.desc}</h1>
+                    <h1 style={{textAlign:'center'}}>{group.description}</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>
                         <li><SmartLink link='BoardsAndCommittees/PlanningBoard' linkText='Planning Board' /></li>

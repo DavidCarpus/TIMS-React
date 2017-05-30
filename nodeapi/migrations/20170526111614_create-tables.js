@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
     table.string('listName');
     table.text('pageLink');
     table.text('datatext');
+    table.bigInteger('pkey');
     table.text('fileLink');
     table.text('datadesc');
     table.bigInteger('listParentID');

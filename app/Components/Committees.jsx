@@ -20,7 +20,7 @@ export default class Committees extends React.Component {
     render() {
         var groupPageText = this.props.groupPageText
         var groupName = this.props.groupName
-        var groupLabel = this.props.group.description || 'Loading Committe Data:' + this.props.groupName
+        var groupLabel = this.props.group.description ||  this.props.group.desc ||  this.props.groupName
 
         return (
             <div>

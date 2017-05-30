@@ -11,12 +11,13 @@ export default class Welfare extends React.Component {
     render() {
         var group = this.props.group;
         var groupPageText = group.pagetext;
+        // <h1 style={{textAlign:'center'}}>Milton Welfare & Community Services Information</h1>
 
         return (
             <Row id={group.link} className="show-grid">
             <Col md={10}  mdPush={2} id="contentArea"  >
+                <h1 style={{textAlign:'center'}}>{group.description}</h1>
 
-                    <h1 style={{textAlign:'center'}}>Milton Welfare & Community Services Information</h1>
                         <quote>The Town has a basic legal duty to administer welfare as described in New Hampshire RSA 165:1-I, which states “Whenever a person in any town is poor and unable to support himself, he shall be relieved and maintained by the overseers of public welfare of such town…”</quote>
                         <br/><br/>
                         <p>*New applicants, or applicants who are reapplying for assistance must first call to schedule an appointment.</p>

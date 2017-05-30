@@ -25,7 +25,6 @@ export default class TransferStationRules extends React.Component {
     componentWillMount() {
         // Note: Needed to allow a direct route to this container as other routes have param.group set
         if (! this.props.loading && this.props.route && this.props.route.groupName) {
-            console.log('TransferStationRules : componentWillMount : ' + this.props.route.groupName);
             this.props.fetchOUData('PublicWorks');
         }
     //
@@ -50,11 +49,12 @@ export default class TransferStationRules extends React.Component {
                     <li>RECYCLING IS MANDATORY. Bags may be opened or rejected for content.</li>
                 </ul>
 
-                <hr/>
+
                 {this.props.wasteTypes.
                     map( (wasteType, index) =>
-                        <WasteType key={index} wasteType={wasteType} />
-                    )}
+                    <WasteType key={index} wasteType={wasteType} />
+                )}
+                <hr/>
 
                     <div className={styles.leaves}>
                     Leaves/Pine Needles/Grass Clippings can be dumped at Barron Brothers Located at 372 RT 11 Farmington.<br/>
@@ -66,8 +66,8 @@ export default class TransferStationRules extends React.Component {
 
                     <h2>Fee Schedule</h2>
                     <div className={styles.feeNote}><p>NOTE: Fees are subject to change without notice.</p></div>
-                    {this.props.feeSchedule.
-                        map( (wasteType, index) =>
+                        {this.props.feeSchedule.
+                            map( (wasteType, index) =>
                             <div key={index} className={styles.feeItem}>
                                 <div className={styles.feeItemDesc}>{wasteType.description}</div>
                                 <div className={styles.feeItemPrice}>{wasteType.price}</div>
@@ -79,3 +79,7 @@ export default class TransferStationRules extends React.Component {
         )
     }
 }
+/*
+
+
+*/

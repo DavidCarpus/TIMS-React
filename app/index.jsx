@@ -10,7 +10,7 @@ import {myStore} from './store/myStore.js';
 // var routerHistory = browserHistory;
 var routerHistory = hashHistory;
 
-ReactDOM.render(
+window.searchRoot = ReactDOM.render(
   <Provider store={myStore}>
     <Router history={routerHistory} routes={routes} />
   </Provider>

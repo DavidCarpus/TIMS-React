@@ -44,10 +44,10 @@ function objectInsert(filename, obj) {
 
     switch (basename) {
         case 'WasteTypes':
-        return [ {listName: basename, pageLink: 'PublicWorks', datatext:obj.wasteType + ' (' + obj.note + ')', listParentID:0} ]
+        return [ {listName: basename, pageLink: 'PublicWorks', datatext:obj.wasteType + ' (' + obj.note + ')', key:obj.key, listParentID:0} ]
             break;
         case 'WasteTypesRules':
-            return [{listName: basename, pageLink: 'PublicWorks', datatext:obj.desc, listParentID:0}]
+            return [{listName: basename, pageLink: 'PublicWorks', datatext:obj.desc, key:obj.key, listParentID:0}]
             break;
         case 'OrganizationalPageText':
             var pageText = obj.pagetext[0];
@@ -115,10 +115,13 @@ function readJSONContent(jsonFile) {
 //======================================
 var list = fs.readdirSync(JSON_DIR)
 
-Promise.all(list.map( (file) => {
+//     "initDB": "npm run migrate:rollback && npm run migrate:latest && npm run knex:seed:run json"
+
+Promise.all(list.filter(file => {return file == 'WasteTypes.json'}).map( (file) => {
         return readJSONContent(JSON_DIR + file)
         .then(result => {
                 let tableName = tableNameFromJSON(file);
+                // console.log(tableName);
                 return Promise.all(result.map(record => {
                     let out = objectInsert(file, record)
                     if (Array.isArray(out) ) {
@@ -139,3 +142,24 @@ Promise.all(list.map( (file) => {
     process.exit()
 }
 )
+/*
+
+SELECT
+WTR.id, WTR.datatext, WTR.pkey, WTR.listName, WTR.listParentID,
+WT.id, WT.datatext, WT.pkey, WT.listName
+FROM `ListData` as WT
+LEFT JOIN `ListData` as WTR on WTR.pkey = WT.pkey
+WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
+
+
+UPDATE `ListData` as WT
+LEFT JOIN `ListData` as WTR on WTR.pkey = WT.pkey
+SET WTR.listParentID = WT.id
+WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
+
+
+UPDATE ListData AS WTR
+LEFT JOIN `ListData` as WT on WTR.pkey = WT.pkey
+SET WTR.listParentID = WT.id
+WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
+*/

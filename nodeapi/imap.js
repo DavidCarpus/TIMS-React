@@ -4,11 +4,33 @@ var base64  = require('base64-stream');
 var fs      = require('fs');
 var mysql = require('mysql');
 
-var Config = require('./config'),
-configuration = new Config();
+// var Config = require('./config'),
+// configuration = new Config();
+//
 
-var connection;
-var imapTest = new IPromise(configuration.imapcredentials);
+var downloadPath='';  //configuration.paths.notices
+
+class IMapProcessor {
+    constructor(imapConf, dwnPath){
+        this.config = imapConf;
+        downloadPath = dwnPath;
+        this.connection = null;
+        this.imap = new IPromise(this.config);
+    }
+    process(connection=null) {
+        var imapConn = this.imap
+        // console.log('Processing email' , connection);
+        return processEmail(imapConn, connection)
+        // return new Promise(function(resolve, reject) {
+        //     .then(process.exit())
+        // });
+    }
+}
+
+module.exports.IMapProcessor = IMapProcessor;
+
+// var connection;
+// var imapTest = new IPromise(configuration.imapcredentials);
 
 // =================================================
 function getEmailParts(msg) {
@@ -41,7 +63,7 @@ function hasAllRequiredData(dbData) {
 // =================================================
 function fetchPDFAttachment(attachment, msg, imap) {
     return new Promise(function(resolve, reject) {
-        let filename = configuration.paths.notices + msg.uid + '_' + attachment.disposition.params.filename;
+        let filename = downloadPath + msg.uid + '_' + attachment.disposition.params.filename;
         let encoding = attachment.encoding;
         let attachmentData = msg.pdfs[attachment.partID];
         if (typeof attachmentData == 'undefined' || attachmentData.length == 0) {
@@ -230,9 +252,9 @@ function processEmail(imap, connection=null) {
                         reject({error: results[0].error})
                     });
                 } else {
-                    if (connection != null) {
-                            insertEmailIntoDB(results[0].DBData, connection);
-                        }
+                    // if (connection != null) {
+                    //         insertEmailIntoDB(results[0].DBData, connection);
+                    //     }
                         return Promise.resolve(results[0]);
                 }
             })
@@ -258,70 +280,4 @@ function downloadEmailPDFAttachments(msg, imap) {
             return fetchPDFAttachment(attachment, msg, imap)
         }));
 }
-//====================================
-function handleDisconnect() {
-  connection = mysql.createConnection(configuration.db_config); // Recreate the connection, since
-                                                  // the old one cannot be reused.
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-    // else {
-    //     connection.query('USE carpusco_test');
-    // }
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    console.log('db error', JSON.stringify(err));
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-//====================================
-function simpleDBQuery(query){
-    return new Promise(function(resolve, reject) {
-        if(query.length <= 0) reject('Missing Query')
-        // connection.query('USE carpusco_test');
-        connection.query(query, function(err, rows){
-            console.log('err:' , err);
-            // console.log('simpleDBQuery \n ' + query + '\n - rows: ' + JSON.stringify(rows));
-            // console.log('simpleDBQuery \n ' + query );
-            resolve( rows);
-        });
-    })
-}
-//====================================
-//====================================
-
-handleDisconnect();
-
-var p = processEmail(imapTest, connection)
-p.then((messages)=>{
-    // messages.map(msg => {
-    //     console.log('-----------------------');
-    //     if (typeof msg.error != 'undefined' ) { // Error
-    //         console.log('*** Error: ' + msg.error);
-    //     } else {
-    //         console.log(require('util').inspect(msg, {colors:true, depth: null }));
-    //     }
-    // })
-    process.exit()
-}).catch(function(error){
-    console.error("Oops:", error.message);
-    process.exit()
-})
-
-/*
-
-var query = "Select id, datadesc as description, fileLink as link from ListData where listName='PageAsides' and  pageLink= 'Home'";
-simpleDBQuery(query)
-.then(rows => {
-console.log(require('util').inspect(rows, { depth: null }));
-process.exit()
-});
-
-*/
+ //====================================
