@@ -14,6 +14,7 @@ exports.up = function(knex, Promise) {
     table.increments('id');
     table.text('pageLink');
     table.date('date');
+    table.date('expiredate');
     table.string('recordtype');
     table.string('recorddesc');
     table.text('fileLink');
