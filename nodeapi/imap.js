@@ -18,10 +18,26 @@ class IMapProcessor {
     process() {
         return processSimpleEmail(imaps, {imap: this.config}, this.downloadPath)
     }
-    archiveMessages(uids){
-        console.log('archiveMessages:' + require('util').inspect(uids, { depth: null }));
-        return Promise.resolve('Done archiveMessages.');
-    }
+    archiveMessage(uid, destFolder='Processed'){
+        // 'Processed'
+        // 'Errors'
+        return imaps.connect({imap: this.config})
+        .then( sconnection => {
+            return sconnection.openBox('INBOX').then( box => {
+                return sconnection.moveMessage(uid, 'INBOX.'+destFolder)
+                .then(movedMsg => {
+                   return Promise.resolve(uid);
+               })
+               .catch(mvErr => {
+                   return Promise.reject('mvErr:' + uid +':'+ mvErr);
+               })
+           })
+           .then(movedMsg => {
+            //   console.log('moveMessage:' , uid);
+              return Promise.resolve(uid);
+          })
+       })
+   }
 }
 
 module.exports.IMapProcessor = IMapProcessor;
