@@ -4,12 +4,14 @@ var fs      = require('fs');
 var mysql = require('mysql');
 
 var imaps = require('imap-simple');
+var imapValidator = require('./libs/imapValidator');
 
 var Config = require('./config'),
 configuration = new Config();
 
-var downloadPath='';  //configuration.paths.notices
-
+// var downloadPath='';  //configuration.paths.notices
+//===============================================
+//===============================================
 class IMapProcessor {
     constructor(imapConf, dwnPath){
         this.config = imapConf;
@@ -41,13 +43,15 @@ class IMapProcessor {
 }
 
 module.exports.IMapProcessor = IMapProcessor;
-
+//===============================================
+//===============================================
 function processSimpleEmail(imapLib, credentials, paths) {
     return imapLib.connect(credentials)
     .then( sconnection => {
+
         return sconnection.openBox('INBOX').then( box => {
             var searchCriteria = ['ALL'];
-            var fetchOptions = { bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'], struct: true };
+            var fetchOptions = { bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'], struct: true, envelope:true };
             return sconnection.search(searchCriteria, fetchOptions);
         })
 
@@ -88,8 +92,12 @@ function processSimpleEmail(imapLib, credentials, paths) {
             })); // End Promise.all messages
         })
 
-        .then(withAttachPromises => { // Fetch email text body form server
-            return Promise.all(withAttachPromises.map(attach => {
+        .then(withAttachPromises => { // quick validate email envelope
+            return imapValidator.validateHostOrigins(withAttachPromises);
+        })
+
+        .then(validSender => { // Fetch email text body form server
+            return Promise.all(validSender.map(attach => {
                 delete attach.header.attributes.struct // We do not need this as we now have promises to request needed data
                 return Promise.all(attach.bodyPromises)
                 .then(bodyData => {
@@ -112,13 +120,14 @@ function processSimpleEmail(imapLib, credentials, paths) {
 
         .then(withExtractedBodies=>{ // Validate database field data and write out attachments
             return Promise.all(withExtractedBodies.map(msgWithBody => {
-                // TODO: Verify required DB field values are present and resolve attachmentPromises
-                if (! hasAllRequiredData(msgWithBody.DBData) ){
-                    msgWithBody.err = 'Missing required information.(date, type, group, etc..)';
-                    return Promise.resolve(msgWithBody);
+                if (! imapValidator.hasAllRequiredData(msgWithBody) ){
+                    msgWithBody.err = (msgWithBody.err  || '') + 'Missing required information.(date, type, group, etc..).\n';
                 }
-                if (! msgWithBody.attachmentPromises || msgWithBody.attachmentPromises.length == 0 ){
-                    msgWithBody.err = 'Missing required attachments.';
+                if (! imapValidator.requiredAttachmentsPresent(msgWithBody, configuration) ){
+                    msgWithBody.err = (msgWithBody.err  || '') +'Missing required attachments.\n';
+                }
+
+                if (typeof msgWithBody.err != 'undefined') {
                     delete msgWithBody.attachmentPromises;
                     return Promise.resolve(msgWithBody);
                 }
@@ -127,11 +136,20 @@ function processSimpleEmail(imapLib, credentials, paths) {
                 return retrieveAttachmentData(msgWithBody, paths);
             }))
         })
+
+        .then(done => {
+            if (done.length == 0) {
+                sconnection.end();
+            }
+            return Promise.resolve(done);
+            // console.log('Done:', done);
+        })
         .catch(Err => {
             console.log('messages Err:', Err);
         })
     }) // Connection was successful
     .then(res =>{
+        // console.log('Done res:', res);
         return Promise.resolve(res);
     })
     .catch(connErr => {
@@ -205,18 +223,6 @@ function extractDBData( header, bodyData) {
     return results;
 }
 // =================================================
-function hasAllRequiredData(dbData) {
-    let requiredFields = ['groupName', 'date', 'requestType', 'recordtype'];
-    return requiredFields.reduce((acc, field) => {
-        if(dbData[field] == null)  {
-            dbData.error = ( typeof dbData.error != 'undefined'  ) ? dbData.error : ''; // Init string as blank if needed
-            dbData.error += field
-            return false;
-        };
-        return acc;
-    }, true)
-}
-// =================================================
 function writeAttachment(attachment, path) {
     if (typeof attachment.filename != 'undefined') {
         let filename = ""+path + attachment.uid + '_' + attachment.filename
@@ -240,14 +246,20 @@ function writeAttachment(attachment, path) {
     }
 }
 // =================================================
-// processSimpleEmail(imaps, {imap: configuration.imapcredentials}, configuration.paths )
-// .then(emails => {
-//     emails.map(email => {
-//         console.log('Processed simple email:', email);
-//     })
-//     // console.log('*** Done.', done);
-//     process.exit();
-// })
-// .catch(err => {
-//     console.log('err:', err);
-// })
+// https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
+if (require.main === module) {
+    console.log('called directly');
+    processSimpleEmail(imaps, {imap: configuration.imapcredentials}, configuration.paths.notices )
+    .then(emails => {
+        emails.map(email => {
+            console.log('Processed simple email:' + require('util').inspect(email, { depth: null }));
+        })
+        // console.log('*** Done.', done);
+        process.exit();
+    })
+    .catch(err => {
+        console.log('err:', err);
+    })
+// } else {
+//     console.log('required as a module');
+}

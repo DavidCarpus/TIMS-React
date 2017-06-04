@@ -32,10 +32,10 @@ function translateToDBScheme(noticeData, attachment) {
 }
 
 class NoticeProcessor {
-    process(connection, noticeData) {
+    process( noticeData) {
         let action = noticeData.DBData.requestType;
         // console.log('--------------');
-        let noticePromises = Promise.all(noticeData.attachmentLocations.map(attachment => {
+        return Promise.all(noticeData.attachmentLocations.map(attachment => {
             let entry= translateToDBScheme(noticeData.DBData, attachment)
             switch (action) {
                 case 'ADD':
@@ -43,26 +43,20 @@ class NoticeProcessor {
                     .then(results => {
                         entry.id = results[0];
                         entry.uid = noticeData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                        // console.log('NoticeProcessor:noticeData:', noticeData);
-                        // console.log('Insert results:', results);
                         return Promise.resolve(entry);
                     })
                     .catch(err => {
                         entry.uid = noticeData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                        // console.log('Insert err:', err);
                         return Promise.reject(err);
                     }))
                     // console.log('knex:' , knex('PublicRecords').insert(entry).toString());
                     break;
                 default:
-                    // console.log(' *** Unknown action:' + action + ' for DBData:' , noticeData.DBData);
                     return Promise.reject(' *** Unknown action:' + action + ' for DBData:' , noticeData.DBData);
 
             }
         })
         )
-        // console.log('noticePromises:', noticePromises);
-        return noticePromises;
     }
 }
 

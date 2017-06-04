@@ -15,3 +15,5 @@ env NODE_ENV=test node_modules/.bin/knex seed:run json
 
 
 env NODE_ENV=test npm run start
+
+https://stackoverflow.com/questions/4672903/sending-mails-with-attachment-via-nodejs
