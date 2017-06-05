@@ -20,7 +20,7 @@ render(){
             <ul className={styles.hidebullets}>{this.props.notices.
                 map( (notice,index) =>
                     <li key={notice.id || index}>
-                        <SmartLink link={notice.link} linkText={notice.description} />
+                        <SmartLink link={notice.link} id={notice.id} linkText={notice.description} />
                     </li>
             )}</ul>
 

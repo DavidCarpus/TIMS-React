@@ -17,3 +17,5 @@ env NODE_ENV=test node_modules/.bin/knex seed:run json
 env NODE_ENV=test npm run start
 
 https://stackoverflow.com/questions/4672903/sending-mails-with-attachment-via-nodejs
+
+https://stackoverflow.com/questions/35206589/how-to-download-fetch-response-in-react-as-file

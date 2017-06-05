@@ -3,6 +3,7 @@ var router = express.Router();              // get an instance of the express Ro
 var cors = require('cors');
 var mysql = require('mysql');
 var fs = require('fs');
+var mime = require('mime');
 
 var Config = require('../config');
 configuration = new Config();
@@ -115,6 +116,26 @@ router.get('/Asides/:groupName', function(req, res) {
              res.json(rows);
          });
         //  res.json([]);
+});
+// ==========================================================
+router.get('/fetchFile/:fileID', function(req, res) {
+        var query = "Select id, fileLink as link from PublicRecords where id = '" + req.params.fileID +"' ";
+         simpleDBQuery(query)
+         .then(rows => {
+             let fullPath = rows[0].link;
+             if (fullPath.startsWith('./')) {
+                 fullPath = __dirname + fullPath
+                 fullPath = fullPath.replace('routes','') ;
+             }
+             let filename =  fullPath.replace(/^.*[\\\/]/, '')
+            //  console.log('fetchFile:' + fullPath);
+             var mimetype = mime.lookup(fullPath);
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+            res.setHeader('Content-type', mimetype);
+            res.sendFile(fullPath)
+            //  res.json(rows);
+         });
 });
 // ==========================================================
 router.get('/EB2Services/:groupName', function(req, res) {

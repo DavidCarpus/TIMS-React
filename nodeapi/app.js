@@ -13,7 +13,7 @@ var app = express();
 handleDisconnect(); // open (and keep open) a database connection used by routes
 //===============================================
 var IMapProcessor = require('./libs/imap').IMapProcessor;
-let imap = new IMapProcessor(configuration.imapcredentials, configuration.paths.notices);
+let imap = new IMapProcessor(configuration.imapProcess);
 
 var NoticeProcessor = require('./libs/noticeProcessor').NoticeProcessor;
 var noticeProcessor = new NoticeProcessor()
