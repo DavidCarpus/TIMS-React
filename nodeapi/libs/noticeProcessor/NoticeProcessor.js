@@ -1,10 +1,10 @@
 var mysql = require('mysql');
 var fs = require('fs');
 
-var Config = require('../config'),
+var Config = require('../../config'),
 configuration = new Config();
 
-var knexConfig = require('../knexfile.js')
+var knexConfig = require('../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 // var knex = require('knex')({client:'mysql'});
 

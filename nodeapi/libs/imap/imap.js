@@ -4,9 +4,9 @@ var fs      = require('fs');
 var mysql = require('mysql');
 
 var imaps = require('imap-simple');
-var imapValidator = require('./libs/imapValidator');
+var imapValidator = require('../imapValidator');
 
-var Config = require('./config'),
+var Config = require('../../config'),
 configuration = new Config();
 
 // var downloadPath='';  //configuration.paths.notices
@@ -111,9 +111,8 @@ function processSimpleEmail(imapLib, credentials, paths) {
 
         .then(withBodies => { // Extract out data from message body for database
             return Promise.resolve(withBodies.map(msgWithBody => {
-                let header = msgWithBody.header.parts[0].body;
-                msgWithBody.DBData = extractDBData(header, msgWithBody.bodyData);
-                msgWithBody.header = {from:header.from,subject:header.subject,to:header.to, date:msgWithBody.header.attributes.date}
+                msgWithBody.DBData = imapValidator.extractDBData(msgWithBody);
+                msgWithBody.header = imapValidator.extractHeaderData(msgWithBody);
                 return msgWithBody;
             }))
         })
@@ -177,50 +176,6 @@ function retrieveAttachmentData(msgWithBody, paths) {
         })
         return Promise.resolve(msgWithBody);
     });
-}
-//=======================================
-function extractDBData( header, bodyData) {
-    const groupNames = ["PublicWorks", "Selectmen", "Recreation"];
-
-    let bodyLines = bodyData.trim().split("\n");
-    let results = { mainpage: true, date: new Date(), groupName: 'Main', requestType: 'ADD'};
-
-    bodyLines.map( line=>{
-        line = line.toUpperCase().trim();
-        var groupName = groupNames.indexOf(line.split(' ').join('')); // Remove spaces from the line
-        if (groupName >= 0) { results.groupName = groupNames[groupName]; }
-
-        dte = Date.parse(line);
-        if (dte >= 0 ) {
-            if(line.indexOf('EXPIRE') >= 0 ) {
-                results.expire = dte;
-            } else {
-                results.date = dte;
-            }
-        }
-        if(line.indexOf('MAINPAGE') >= 0 ) {
-            if (line == 'MAINPAGE') {
-                results.mainpage = true;
-            } else if(line.indexOf('NO') >= 0 ) {
-                results.mainpage = false;
-            }
-        }
-        if (line.startsWith('DESC:') || line.startsWith('DESCRIPTION')) {
-            results.desc = line;
-        }
-
-        if(line.indexOf('AGENDA') >= 0 ) {            results.recordtype = 'Agendas';        }
-        if(line == 'NOTICE' ) {            results.recordtype = 'Notice';        }
-        if(line == 'UPDATE' ) {            results.requestType = 'UPDATE';        }
-    }) // bodyTextPart.map
-
-    // TODO: Determine if header subject contains missing field data
-    // console.log('header:' , header);
-    let line = header.subject[0].toUpperCase().trim().split(' ').join('');
-    var groupName = groupNames.map(name=>{return name.toUpperCase()}).indexOf(line.split(' ').join('')); // Remove spaces from the line
-    if (groupName >= 0) { results.groupName = groupNames[groupName]; }
-
-    return results;
 }
 // =================================================
 function writeAttachment(attachment, path) {

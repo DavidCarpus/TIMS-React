@@ -9,15 +9,13 @@ var routes = require('./routes/index').router;
 var handleDisconnect = require('./routes/index').handleDisconnect;
 
 var app = express();
-// console.log(configuration);
 
-handleDisconnect();
-
+handleDisconnect(); // open (and keep open) a database connection used by routes
 //===============================================
-var IMapProcessor = require('./imap').IMapProcessor;
+var IMapProcessor = require('./libs/imap').IMapProcessor;
 let imap = new IMapProcessor(configuration.imapcredentials, configuration.paths.notices);
 
-var NoticeProcessor = require('./db/NoticeProcessor').NoticeProcessor;
+var NoticeProcessor = require('./libs/noticeProcessor').NoticeProcessor;
 var noticeProcessor = new NoticeProcessor()
 
 //===============================================
