@@ -1,28 +1,21 @@
-var stream = require('stream');
-var base64  = require('base64-stream');
 var fs      = require('fs');
-var mysql = require('mysql');
-
 var imaps = require('imap-simple');
+
 var imapValidator = require('../imapValidator');
 
 var Config = require('../../config'),
 configuration = new Config();
 
-// var downloadPath='';  //configuration.paths.notices
-//===============================================
 //===============================================
 class IMapProcessor {
-    constructor(imapConf, dwnPath){
-        this.config = imapConf;
-        this.downloadPath = dwnPath;
+    constructor(imapConf){
+        this.config = imapConf.imapcredentials;
+        this.downloadPaths = imapConf.downloadPath;
     }
     process() {
-        return processSimpleEmail(imaps, {imap: this.config}, this.downloadPath)
+        return processSimpleEmail(imaps, {imap: this.config}, this.downloadPaths)
     }
-    archiveMessage(uid, destFolder='Processed'){
-        // 'Processed'
-        // 'Errors'
+    archiveMessage(uid, destFolder='Processed'){ //destFolder element of {Processed','Errors'}
         return imaps.connect({imap: this.config})
         .then( sconnection => {
             return sconnection.openBox('INBOX').then( box => {
@@ -35,7 +28,6 @@ class IMapProcessor {
                })
            })
            .then(movedMsg => {
-            //   console.log('moveMessage:' , uid);
               return Promise.resolve(uid);
           })
        })
@@ -46,6 +38,7 @@ module.exports.IMapProcessor = IMapProcessor;
 //===============================================
 //===============================================
 function processSimpleEmail(imapLib, credentials, paths) {
+    // console.log('paths:',paths);
     return imapLib.connect(credentials)
     .then( sconnection => {
 
@@ -132,7 +125,7 @@ function processSimpleEmail(imapLib, credentials, paths) {
                 }
 
                 msgWithBody.attachmentCnt = msgWithBody.attachmentPromises.length;
-                return retrieveAttachmentData(msgWithBody, paths);
+                return retrieveAttachmentData(msgWithBody, paths.notices);
             }))
         })
 
@@ -204,7 +197,8 @@ function writeAttachment(attachment, path) {
 // https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
 if (require.main === module) {
     console.log('called directly');
-    processSimpleEmail(imaps, {imap: configuration.imapcredentials}, configuration.paths.notices )
+    let imapConf = configuration.imapProcess;
+    processSimpleEmail(imaps, {imap: imapConf.imapcredentials}, imapConf.downloadPath )
     .then(emails => {
         emails.map(email => {
             console.log('Processed simple email:' + require('util').inspect(email, { depth: null }));

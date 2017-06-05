@@ -1,3 +1,4 @@
+const groupNames = require('./GroupNames.json');
 
 var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com']
 var validEmailAddresses= ['miltonnh@carpusconsulting.com']
@@ -42,11 +43,19 @@ function extractHeaderData(email) {
 
 //=======================================
 function getGroupNameFromTextLine(textLine) {
-    const groupNames = ["PUBLICWORKS", "SELECTMEN", "RECREATION"];
-    var groupName = groupNames.indexOf(textLine.toUpperCase().split(' ').join('')); // Remove spaces from the line
-    console.log("Matched:",groupName);
-    if (groupName >= 0) { return groupNames[groupName]; }
-    return null;
+    let testLine = textLine.toUpperCase().split(' ').join(''); // Remove spaces from the line
+    let foundGroup = groupNames.filter(group => {
+        // console.log('group:', group, testLine);
+        if (testLine == group.primary.toUpperCase()) {return true;}
+        let alternatives = group.alternatives.filter(alternative => {
+            if (testLine == alternative.toUpperCase()) {return true;}
+        })
+        if (alternatives.length > 0) {return true; }
+        // console.log('alternatives:', alternatives);
+        return false;
+    })
+    // console.log('foundGroup:', foundGroup);
+    return foundGroup.length > 0 ? foundGroup[0].primary: null;
 }
 //=======================================
 function extractDBData(email) {
@@ -96,4 +105,12 @@ module.exports = {
     requiredAttachmentsPresent,
     extractHeaderData,
     extractDBData
+}
+//=======================================
+//=======================================
+//=======================================
+if (require.main === module) {
+    console.log('called directly');
+    console.log('getGroupNameFromTextLine1:', getGroupNameFromTextLine('bos'));
+    process.exit();
 }
