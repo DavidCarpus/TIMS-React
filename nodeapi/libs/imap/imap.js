@@ -1,5 +1,7 @@
 var fs      = require('fs');
 var imaps = require('imap-simple');
+var extractHeaderData = require('./helperMethods').extractHeaderData;
+var extractDBData = require('./helperMethods').extractDBData;
 
 var imapValidator = require('../imapValidator');
 
@@ -104,8 +106,8 @@ function processSimpleEmail(imapLib, credentials, paths) {
 
         .then(withBodies => { // Extract out data from message body for database
             return Promise.resolve(withBodies.map(msgWithBody => {
-                msgWithBody.DBData = imapValidator.extractDBData(msgWithBody);
-                msgWithBody.header = imapValidator.extractHeaderData(msgWithBody);
+                msgWithBody.DBData = extractDBData(msgWithBody);
+                msgWithBody.header = extractHeaderData(msgWithBody);
                 return msgWithBody;
             }))
         })
@@ -115,9 +117,9 @@ function processSimpleEmail(imapLib, credentials, paths) {
                 if (! imapValidator.hasAllRequiredData(msgWithBody) ){
                     msgWithBody.err = (msgWithBody.err  || '') + 'Missing required information.(date, type, group, etc..).\n';
                 }
-                if (! imapValidator.requiredAttachmentsPresent(msgWithBody, configuration) ){
-                    msgWithBody.err = (msgWithBody.err  || '') +'Missing required attachments.\n';
-                }
+                // if (! imapValidator.requiredAttachmentsPresent(msgWithBody, configuration) ){
+                //     msgWithBody.err = (msgWithBody.err  || '') +'Missing required attachments.\n';
+                // }
 
                 if (typeof msgWithBody.err != 'undefined') {
                     delete msgWithBody.attachmentPromises;
@@ -150,25 +152,30 @@ function processSimpleEmail(imapLib, credentials, paths) {
 }
 //=======================================
 function retrieveAttachmentData(msgWithBody, paths) {
-    return Promise.all(msgWithBody.attachmentPromises)
-    .then(retrievedAttachmentData => {
-        delete msgWithBody.bodyData;  //No need to keep as we have required field data
-        msgWithBody.attachmentLocations = [];
-        return Promise.all(retrievedAttachmentData.map(attach => {
-            return writeAttachment(attach, paths)
-            .then(writtenAttachment => {
-                msgWithBody.attachmentLocations = msgWithBody.attachmentLocations.concat(writtenAttachment.filename);
-                return Promise.resolve(msgWithBody);
-            })
-        }))
-    })
-    .then(retrieved => {
-        let promisesRemoved = retrieved.map( singleRetrieval => {
-            delete singleRetrieval.attachmentPromises;
-            return singleRetrieval;
+    if (msgWithBody.attachmentPromises && msgWithBody.attachmentPromises.length > 0) {
+        return Promise.all(msgWithBody.attachmentPromises)
+        .then(retrievedAttachmentData => {
+            delete msgWithBody.bodyData;  //No need to keep as we have required field data
+            msgWithBody.attachmentLocations = [];
+            return Promise.all(retrievedAttachmentData.map(attach => {
+                return writeAttachment(attach, paths)
+                .then(writtenAttachment => {
+                    msgWithBody.attachmentLocations = msgWithBody.attachmentLocations.concat(writtenAttachment.filename);
+                    return Promise.resolve(msgWithBody);
+                })
+            }))
         })
+        .then(retrieved => {
+            let promisesRemoved = retrieved.map( singleRetrieval => {
+                delete singleRetrieval.attachmentPromises;
+                return singleRetrieval;
+            })
+            return Promise.resolve(msgWithBody);
+        });
+    } else {
+        delete msgWithBody.attachmentPromises;
         return Promise.resolve(msgWithBody);
-    });
+    }
 }
 // =================================================
 function writeAttachment(attachment, path) {
@@ -201,6 +208,7 @@ if (require.main === module) {
     processSimpleEmail(imaps, {imap: imapConf.imapcredentials}, imapConf.downloadPath )
     .then(emails => {
         emails.map(email => {
+            console.log('======================');
             console.log('Processed simple email:' + require('util').inspect(email, { depth: null }));
         })
         // console.log('*** Done.', done);

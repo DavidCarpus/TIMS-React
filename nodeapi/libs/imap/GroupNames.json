@@ -1,0 +1,17 @@
+[
+    {"primary":"Main", "alternatives":["Main", "HomePage"]},
+    {"primary":"Assessing", "alternatives":["Assessing"]},
+    {"primary":"CodeEnforcement", "alternatives":["Code"]},
+    {"primary":"ParksRecreation", "alternatives":["PnR"]},
+    {"primary":"Planning", "alternatives":["Planning"]},
+    {"primary":"PublicWorks", "alternatives":["PublicWorks", "PW"]},
+    {"primary":"Sewer", "alternatives":["Sewer"]},
+    {"primary":"TownClerk", "alternatives":["Town Clerk", "Tax Collector"]},
+    {"primary":"Welfare", "alternatives":["Welfare"]},
+    {"primary":"Selectmen", "alternatives":["Selectmen", "BOS"]},
+    {"primary":"Recreation", "alternatives":["Recreation", "Rec"]},
+    {"primary":"BudgetCommittee", "alternatives":["Budget"]},
+    {"primary":"CemeteryTrustees", "alternatives":["Cemetery"]},
+    {"primary":"ConservationCommittee", "alternatives":["Conservation"]},
+    {"primary":"EconomicDevelopment", "alternatives":["Economic Development"]}
+]

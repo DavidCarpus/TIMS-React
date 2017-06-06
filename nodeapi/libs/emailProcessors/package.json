@@ -1,0 +1,6 @@
+{
+  "name": "EmailSubmitter",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./EmailSubmitter.js"
+}

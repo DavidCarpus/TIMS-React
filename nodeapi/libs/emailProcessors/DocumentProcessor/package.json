@@ -1,0 +1,6 @@
+{
+  "name": "DocumentProcessor",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./DocumentProcessor.js"
+}

@@ -15,71 +15,46 @@ handleDisconnect(); // open (and keep open) a database connection used by routes
 var IMapProcessor = require('./libs/imap').IMapProcessor;
 let imap = new IMapProcessor(configuration.imapProcess);
 
-var NoticeProcessor = require('./libs/noticeProcessor').NoticeProcessor;
-var noticeProcessor = new NoticeProcessor()
-
+var emailSubmit = require('./libs/emailProcessors').submit;
 //===============================================
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 //===============================================
 function imapProcess(delay, count=2) {
-    // console.log("Starting imap.process,");
-imap.process()
-.then(results => {
-    // console.log('results:',results);
-    // return Promise.resolve(results);
-    return Promise.all(results.map(entry => {
-        if (typeof entry.err != 'undefined') { // Bad emails. Move to 'Errors'
-        return imap.archiveMessage(entry.uid, 'Errors')
-        .then(archiveResults => {
-            console.log('Moved email to Errors:', archiveResults);
-            return Promise.resolve(archiveResults);
-        })
-        .catch(moveErr => {
-            console.log('moveErr:', moveErr);
-            return Promise.reject('moveErr:'+ moveErr);
-        })
-
-    } else {
-        return noticeProcessor.process( entry)
-        .then(resultLogged => {
-            return imap.archiveMessage(entry.uid, 'Processed')
-            .then(archiveResults => {
-                console.log('Moved email to Processed:', archiveResults);
-                return Promise.resolve(archiveResults);
-            })
-            .catch(moveErr => {
-                console.log('moveErr:', moveErr);
-                return Promise.reject('moveErr:'+ moveErr);
-            })
-        })
-    } // 'Valid entries'
-}))
-
-})
-.then(entryResults => {
-    // console.log("Completed imap.process." + count);
-    // process.exit();
-    return sleep(delay).then(out =>{
-        if (count > 0) {
-            --count;
-            if (configuration.imapProcess.infinite) {
-                ++count;
-            }
-            return imapProcess(delay, count)
-        } else {
-            process.exit();
-        }
-
+    imap.process()
+    .then(results => { // Submit email data into database
+        return Promise.all(results.map(entry => {
+            return emailSubmit(entry, imap);
+        }))
     })
-    // return Promise.resolve(entryResults);
+    .then(processedEmails => { // Archive emails on imap server
+        return Promise.all(processedEmails.map(insertedEmail => {
+            let destFolder = 'Processed';
+            if (typeof insertedEmail[0].err != 'undefined') { destFolder = 'Errors';}
+            return Promise.resolve(imap.archiveMessage(insertedEmail[0].uid, destFolder));
+        }))
+    })
+    .then(entryResults => { // Loop imapProcess
+        if (entryResults.length > 0) {
+            console.log("Processed emails:" , entryResults);
+        }
+        return sleep(delay).then(out =>{
+            if (count > 0) {
+                --count;
+                if (configuration.imapProcess.infinite) {
+                    ++count;
+                }
+                return imapProcess(delay, count)
+            } else {
+                process.exit();
+            }
 
-})
-.catch(err => {
-    console.log('IMAP processing error:' + err);
-    process.exit();
-})
+        })
+    })
+    .catch(err => {
+        console.log('IMAP processing error:' + err);
+    })
 }
 //===============================================
 
@@ -148,7 +123,9 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(app.get('port'));
-console.log('Express server listening on port ' + app.get('port'));
+let d = new Date();
+let ts = d.toString().replace('GMT-0400 (EDT)', '');
+console.log(ts+ ' Express server listening on port ' + app.get('port'));
 
 if (configuration.mode == 'development') {
     console.log('configuration:' , configuration);
@@ -156,8 +133,8 @@ if (configuration.mode == 'development') {
     console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
     console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
 }
-
-
 imapProcess(configuration.imapProcess.delay, 50);
+
+
 
 // http://handyjs.org/article/the-kick-ass-guide-to-creating-nodejs-cron-tasks
