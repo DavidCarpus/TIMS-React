@@ -128,12 +128,13 @@ router.get('/fetchFile/:fileID', function(req, res) {
                  fullPath = fullPath.replace('routes','') ;
              }
              let filename =  fullPath.replace(/^.*[\\\/]/, '')
-            //  console.log('fetchFile:' + fullPath);
+            //  console.log('fetchFile:' + filename);
              var mimetype = mime.lookup(fullPath);
 
             res.setHeader('Content-disposition', 'attachment; filename=' + filename);
             res.setHeader('Content-type', mimetype);
             res.sendFile(fullPath)
+            // res.download(fullPath, filename)
             //  res.json(rows);
          });
 });
