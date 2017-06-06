@@ -13,7 +13,7 @@ export default class AgendasAndMinutes extends React.Component {
         return meetingElements.map( (element, index) => {
             const text = element.desc || element.type;
          return (
-             <span  key={index}> <SmartLink link={element.link} linkText={text} />  </span>
+             <span  key={index}> <SmartLink link={element.link} id={element.id} linkText={text} />  </span>
          )
      });
     }
