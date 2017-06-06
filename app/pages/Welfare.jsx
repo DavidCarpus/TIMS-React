@@ -3,6 +3,8 @@ import Aside from '../Containers/Aside'
 
 import SmartLink from '../Components/SmartLink'
 import DocumentList  from '../Containers/DocumentList'
+import NoticesList from '../Containers/NoticesList'
+
 import FAQList  from '../Containers/FAQList'
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -21,6 +23,9 @@ export default class Welfare extends React.Component {
                         <quote>The Town has a basic legal duty to administer welfare as described in New Hampshire RSA 165:1-I, which states “Whenever a person in any town is poor and unable to support himself, he shall be relieved and maintained by the overseers of public welfare of such town…”</quote>
                         <br/><br/>
                         <p>*New applicants, or applicants who are reapplying for assistance must first call to schedule an appointment.</p>
+                        <NoticesList
+                            group={this.props.group}
+                            groupName={group.Name}/>
 
                         <h2>How to Apply</h2>
                         <p>Please read the following before applying for assistance. The Milton Welfare Office is now located at Milton Town Hall. The Welfare Office provides temporary emergency assistance to Town residents for the basic necessities of life, when no other resources are available. Assistance is rendered in voucher form only.</p>

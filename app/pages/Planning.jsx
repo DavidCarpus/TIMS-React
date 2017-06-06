@@ -1,6 +1,7 @@
 import React from 'react';
 import Aside from '../Containers/Aside'
 import SmartLink from '../Components/SmartLink'
+import NoticesList from '../Containers/NoticesList'
 
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -22,6 +23,10 @@ export default class Planning extends React.Component {
                         <li><SmartLink link='BoardsAndCommittees/ConservationCommission' linkText='Conservation Commission' /></li>
                     </ul>
                     <p>For more information on these Boards and Committees, please click on the desired link above or under "Committees".</p>
+
+                    <NoticesList
+                        group={this.props.group}
+                        groupName={group.Name}/>
 
                     Zoning Ordinance, Site Plan and Subdivision Regulations can be found on the
                     <SmartLink link='BoardsAndCommittees/PlanningBoard' linkText=' Planning Board page' />.
