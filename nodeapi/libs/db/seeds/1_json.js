@@ -68,7 +68,7 @@ function objectInsert(filename, obj) {
             break;
         case 'OrganizationalMembers':
             var result = obj.members.map(member => {
-                return {pageLink:obj.link,name:member.name, term:member.term, office:member.office}
+                return {pageLink:obj.link,name:member.name, term:member.term, phone:member.phone, office:member.office}
             })
             return result;
             break;

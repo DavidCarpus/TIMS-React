@@ -1,5 +1,9 @@
+.feeschedule{
+    width: 100%;
+}
 .feeItem {
-width: 500px;
+max-width: 500px;
+width: 100%;
 clear: both;
 border: 1px solid black;
 margin: 0 auto;

@@ -36,7 +36,7 @@ function hasAllRequiredData(email) {
     return requiredFields.reduce((acc, field) => {
         if(emailData[field] == null)  {
             emailData.error = ( typeof emailData.error != 'undefined'  ) ? emailData.error : ''; // Init string as blank if needed
-            emailData.error += field
+            emailData.error += field + ','
             return false;
         };
         return acc;

@@ -1,5 +1,6 @@
 import React from 'react';
  import SmartLink from '../Components/SmartLink'
+ import s from '../Styles/AgendasAndMinutes.css'
 
 export default class AgendasAndMinutes extends React.Component {
     componentWillMount() {
@@ -25,8 +26,9 @@ export default class AgendasAndMinutes extends React.Component {
                 return {date:_date, values:  meetings[_date]}
             })
            return currentMeetings.map( (meeting, index) => {
+            //    <li className="list-group-item " + s.li  key={index}>
             return (
-                <li className="list-group-item"  key={index}>
+                <li className={s.li}  key={index}>
                     {meeting.date} -
                     {component.renderMeeting(meeting.values)}
                 </li>
@@ -38,10 +40,11 @@ export default class AgendasAndMinutes extends React.Component {
         var id = this.props.group.link + '_AgendasAndMinutes'
         var title = this.props.title ||  'Agendas And Minutes'
         var meetings = this.props.meetings || []
+        // title = '<h2>'+title + '</h2>'
 
         return (
-            <div id={id}>
-                {meetings && meetings.length > 0 ? <h2>{title }</h2> : ''}
+            <div id={id} className={s.li}>
+                {Object.keys(meetings).length> 0 ? <h2>{title}</h2> : ''}
                 {meetings && this.renderMeetings(meetings) }
             </div>
         )

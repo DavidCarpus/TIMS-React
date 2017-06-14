@@ -1,7 +1,7 @@
 import React from 'react';
 import DepartmentsUI from '../Components/DepartmentsUI'
 import { connect } from 'react-redux'
-import { fetchOrganizationalUnitData } from '../actions/OrganizationalUnitData'
+import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
 
 const mapStateToProps = (state, ownProps) => {
     var groupName=  ownProps.params.department;

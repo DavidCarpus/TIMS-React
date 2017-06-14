@@ -7,7 +7,6 @@ import GroupMembers from '../Containers/GroupMembers'
 import AgendasAndMinutes from '../Containers/AgendasAndMinutes'
 import NoticesList from '../Containers/NoticesList'
 
-import SmartLink from './SmartLink'
 import RawText  from './RawText'
 
 export default class Committees extends React.Component {
@@ -33,9 +32,9 @@ export default class Committees extends React.Component {
                     <NoticesList
                         group={this.props.group}
                         groupName={groupName}/>
-                    <GroupMembers group={this.props.group} groupName={groupName} title={groupLabel + ' Members'} />
+                    <GroupMembers group={this.props.group} groupName={groupName} title={' Members'} />
 
-                    <AgendasAndMinutes groupName={groupName} group={this.props.group} />
+                    <AgendasAndMinutes groupName={groupName} group={this.props.group} title={' Agendas and Minutes'} />
 
                     <DocumentList groupName={groupName} group={this.props.group} />
                 </Col>

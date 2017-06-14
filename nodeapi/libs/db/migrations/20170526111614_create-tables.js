@@ -32,6 +32,8 @@ exports.up = function(knex, Promise) {
     table.text('name');
     table.string('term');
     table.string('office');
+    table.string('phone');
+    table.string('email');
 }).createTableIfNotExists('Prices', function (table) {
     table.increments('id');
     table.string('listName');

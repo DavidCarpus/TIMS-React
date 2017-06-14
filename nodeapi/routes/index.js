@@ -222,7 +222,7 @@ router.get('/GroupData/:groupName', function(req, res) {
             })
         })
         .then(groupDataWithPageText =>{
-            query = "Select id,name,term,office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
+            query = "Select id,name,term,phone, email, office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
             return simpleDBQuery(query).
             then(members => {
                 if (members.length > 0) {

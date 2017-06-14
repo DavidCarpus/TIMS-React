@@ -10,6 +10,9 @@ var documentProcessor = new DocumentProcessor()
 var VideoProcessor = require('./VideoProcessor').VideoProcessor;
 var videoProcessor = new VideoProcessor()
 
+var UserProcessor = require('./UserProcessor').UserProcessor;
+var userProcessor = new UserProcessor()
+
 function submit(email, imap) {
     if (typeof email.err != 'undefined') {
         // 'Processors return a Promise.all / array so return array for errors as well'
@@ -29,6 +32,10 @@ function submit(email, imap) {
         case 'Video':
             return videoProcessor.process(email);
             break;
+        case 'User':
+            return userProcessor.process(email);
+            break;
+
         default:
             console.log('===================');
             console.log('email:',email);

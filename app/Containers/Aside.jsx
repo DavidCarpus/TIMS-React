@@ -1,9 +1,10 @@
 import React from 'react';
 import AsideUI from '../Components/Aside'
  import { connect } from 'react-redux'
-import { fetchPageAsides } from '../actions/PageAsides'
+import { fetchPageAsides } from '../../actions/PageAsides'
 
 const mapStateToProps = (state, ownProps) => {
+    console.log('Aside:', ownProps);
     return {
         asides: state.PageAsides || [],
         group: ownProps.group,

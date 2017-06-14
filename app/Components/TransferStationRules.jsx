@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../assets/Styles/PublicWorks.css'
+import styles from '../Styles/PublicWorks.css'
 
 class WasteType extends React.Component {
     render() {
@@ -64,8 +64,10 @@ export default class TransferStationRules extends React.Component {
                     Milton Residents MUST have a valid Milton Transfer Station sticker and Stop at the office before dumping.<br/>
                     </div>
 
-                    <h2>Fee Schedule</h2>
-                    <div className={styles.feeNote}><p>NOTE: Fees are subject to change without notice.</p></div>
+
+                    <div className={styles.feeschedule}>
+                        <h2>Fee Schedule</h2>
+                        <div className={styles.feeNote}><p>NOTE: Fees are subject to change without notice.</p></div>
                         {this.props.feeSchedule.
                             map( (wasteType, index) =>
                             <div key={index} className={styles.feeItem}>
@@ -73,9 +75,9 @@ export default class TransferStationRules extends React.Component {
                                 <div className={styles.feeItemPrice}>{wasteType.price}</div>
                             </div>
                         )}
-
                     </div>
                 </div>
+            </div>
         )
     }
 }

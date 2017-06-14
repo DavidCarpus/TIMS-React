@@ -1,15 +1,15 @@
 [
     {"id": 1, "link": "BudgetCommittee",
         "members": [
-            {"name":"Caitlin Magargee - Elected"	 ,"term":"2019"},
-            {"name":"Thomas McDougall - Elected"	 ,"term":"2019"},
-            {"name":"Larry Brown Chairman- Elected"	 ,"term":"2018"} ,
-             {"name":"Bob Carrier - Appointed till 2017"	 ,"term":"2018"},
-            {"name":"Maureen Steer - Elected"	 ,"term":"2017"},
-            {"name":"Dennis Wing - Elected"	,"term":"2017"},
-            {"name":"Lue Synder - School  Board Representative"	,"term":"2016"},
-            {"name":"Mike Beaulieu - Selectmen's Representative"	 ,"term":"2016"},
-            {"name":"Stan Nadeau- Water District Representative",	"term":"2016"}
+            {"office":"Elected",	"name":"Caitlin Magargee"	 ,"term":"2019"},
+            {"office":"Elected", "name":"Thomas McDougall"	 ,"term":"2019"},
+            {"office":"Elected", "name":"Larry Brown Chairman"	 ,"term":"2018"} ,
+             {"office":"Appointed till 2017", "name":"Bob Carrier"	 ,"term":"2018"},
+            {"office":"-","name":"Maureen Steer"	 ,"term":"2017"},
+            {"office":"-","name":"Dennis Wing"	,"term":"2017"},
+            {"office":"School  Board Representative","name":"Lue Synder"	,"term":"2016"},
+            {"office":"Selectmen's Representative","name":"Mike Beaulieu"	 ,"term":"2016"},
+            {"office":"Water District Representative","name":"Stan Nadeau",	"term":"2016"}
         ]
     },
     {"id": 3, "link":"ConservationCommittee",
@@ -56,8 +56,8 @@
     },
     {"id": 12, "link":"TrustFunds",
         "members": [
-            {"office":"Trustee Treasurer","name":"Marion Trafton - 603-652-9768",	"term":""},
-            {"office":"Trustee","name":"Karen Brown - 603-652-4501 x8",	"term":""}
+            {"office":"Trustee Treasurer","name":"Marion Trafton",	"phone":"603-652-9768",	"term":""},
+            {"office":"Trustee","name":"Karen Brown",	"phone":"603-652-4501 x8",	"term":""}
         ]
     },
     {"id": 13, "link":"Zoning",
@@ -72,9 +72,9 @@
     },
     {"id": 14, "link":"Selectmen",
         "members": [
-            {"office":"Selectman","name":"Ryan Thibeault - 603-534-7032",	"term":""},
-            {"office":"Selectman","name":"Mike Bealieu - 603-944-5574 ",	"term":""},
-            {"office":"Selectman","name":"Andrew Rawson - 603-534-1330 ",	"term":""}
+            {"office":"Selectman","name":"Ryan Thibeault",	"phone":"603-534-7032",	"term":""},
+            {"office":"Selectman","name":"Mike Bealieu",	"phone":"603-944-5574",	"term":""},
+            {"office":"Selectman","name":"Andrew Rawson",	"phone":"603-534-1330",	"term":""}
         ]
     }
 ]

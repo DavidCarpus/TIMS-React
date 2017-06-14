@@ -1,7 +1,7 @@
 import React from 'react';
  import SmartLink from '../Components/SmartLink'
 
- import styles from '../assets/Styles/GroupMembers.css'
+ import styles from '../Styles/GroupMembers.css'
 
 export default class GroupMembers extends React.Component {
     render() {
@@ -17,6 +17,7 @@ export default class GroupMembers extends React.Component {
                             <div key={index} className={styles.memberBlock}>
                                 <div className={styles.office}>{member.office}</div>
                                 <div className={styles.name}>{member.name}</div>
+                                <div className={styles.name}>{member.phone}</div>
                                 <div className={styles.term}>{member.term}</div>
                             </div>
                         )}

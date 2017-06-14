@@ -132,8 +132,8 @@ if (configuration.mode == 'development') {
 } else {
     console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
     console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
+    imapProcess(configuration.imapProcess.delay, 50);
 }
-imapProcess(configuration.imapProcess.delay, 50);
 
 
 

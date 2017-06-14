@@ -1,7 +1,7 @@
 import React from 'react';
 import TransferStationRulesUI from '../Components/TransferStationRules'
  import { connect } from 'react-redux'
- import { fetchOrganizationalUnitData } from '../actions/OrganizationalUnitData'
+ import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
 
 const mapStateToProps = (state, ownProps) => {
     var wasteTypes=[];

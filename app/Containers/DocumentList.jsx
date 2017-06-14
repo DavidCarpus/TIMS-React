@@ -1,7 +1,7 @@
 import React from 'react';
 import DocumentListUI from '../Components/DocumentList'
  import { connect } from 'react-redux'
- import {fetchGroupDoc, resetGroupDoc} from '../actions/PublicDocuments'
+ import {fetchGroupDoc, resetGroupDoc} from '../../actions/PublicDocuments'
 
 const mapStateToProps = (state, ownProps) => {
     return {

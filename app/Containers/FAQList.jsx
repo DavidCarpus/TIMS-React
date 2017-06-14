@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import FAQListUI from '../Components/FAQList'
-import {fetchFAQData} from '../actions/FAQData'
+import {fetchFAQData} from '../../actions/FAQData'
 
 const mapStateToProps = (state, ownProps) => {
     return {

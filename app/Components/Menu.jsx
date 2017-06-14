@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router';
-import styles from '../assets/Styles/Menu.css'
+import styles from '../Styles/Menu.css'
 import { Grid, Row, Col } from 'react-bootstrap';
 /*
 key={this.props.menu.id + '.'+ submenu.id}

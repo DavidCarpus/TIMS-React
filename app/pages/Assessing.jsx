@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 
-import styles from '../assets/Styles/Assessing.css'
+import styles from '../Styles/Assessing.css'
 import Aside from '../Containers/Aside'
 import DocumentList  from '../Containers/DocumentList'
 import RawText from '../Components/RawText'

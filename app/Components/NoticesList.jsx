@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../assets/Styles/Notices.css'
+import styles from '../Styles/Notices.css'
 import SmartLink from './SmartLink'
 
 export default class NoticesList extends React.Component {

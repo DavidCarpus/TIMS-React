@@ -1,7 +1,7 @@
 import React from 'react';
  import AgendasAndMinutesUI from '../Components/AgendasAndMinutes'
  import { connect } from 'react-redux'
- import {fetchMeetingDocs} from '../actions/PublicDocuments'
+ import {fetchMeetingDocs} from '../../actions/PublicDocuments'
 
 const mapStateToProps = (state, ownProps) => {
   return {

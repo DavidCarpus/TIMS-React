@@ -38,6 +38,7 @@ const common = merge(
   parts.indexTemplate({
     title: 'Milton New Hampshire - Town ' ,
     appMountId: 'app',
+    styles: 'main.css'
     // styles: ['https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css', 'https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css']
   }),
   parts.loadJSX(PATHS.app),

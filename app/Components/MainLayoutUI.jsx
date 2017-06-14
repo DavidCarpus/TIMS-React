@@ -2,15 +2,17 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Menu from './Menu'
 import Footer from './Footer'
+import s from '../Styles/MainLayoutUI.css'
 
 export default class MainLayoutUI extends React.Component {
     componentWillMount() {
         this.props.fetchData();
     }
 
+    // <Grid id="mainLayout" className='container'>
   render() {
       return (
-          <Grid id="mainLayout" className='container'>
+          <Grid id="MainLayoutUI" className={s.body}>
               <Row className="show-grid">
                   <header id="primary-header"
                        className='content row'>

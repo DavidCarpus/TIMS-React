@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../assets/Styles/Aside.css'
+import styles from '../Styles/Aside.css'
 import SmartLink from './SmartLink'
 
 class AsideItem extends React.Component {

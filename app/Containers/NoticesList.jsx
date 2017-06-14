@@ -1,7 +1,7 @@
 import React from 'react';
 import NoticesListUI from '../Components/NoticesList'
  import { connect } from 'react-redux'
- import {fetchGroupNotices} from '../actions/PublicDocuments'
+ import {fetchGroupNotices} from '../../actions/PublicDocuments'
 
  const mapStateToProps = (state, ownProps) => {
      return {

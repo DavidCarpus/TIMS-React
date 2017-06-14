@@ -320,11 +320,6 @@
             "date": "2017-03-06",
             "link":"http://miltonnh-us.com/uploads/bos_agendas_680_2468411197.pdf"
         },
-        { "groupName":"Selectmen","type": "Document",
-            "date": "2017-03-06",
-            "desc":"Test Dummy Document on Same Date as a meeting",
-            "link":"http://miltonnh-us.com/uploads/bos_agendas_680_2468411197.pdf"
-        },
         { "groupName":"SewerCommission","type": "Agenda",
             "date": "2012-05-06",
             "link":"http://miltonnh-us.com/uploads/sewer_comm_5_4094455831.pdf"

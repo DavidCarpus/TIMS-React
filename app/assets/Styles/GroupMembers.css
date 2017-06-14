@@ -1,14 +1,14 @@
 .office {
     float: left;
-    width:150px;
+    width:200px;
 }
 .name {
     float: left ;
-     width:300px;
+     width:175px;
  }
 .term {
     float: left ;
- width:150px;
+ width:50px;
  }
 
 .memberBlock {

@@ -1,7 +1,7 @@
 import React from 'react';
  import EB2ServiceBlockUI from '../Components/EB2ServiceBlock'
  import { connect } from 'react-redux'
-import {fetchEB2ServicesData} from '../actions/EB2Services'
+import {fetchEB2ServicesData} from '../../actions/EB2Services'
 
  const mapStateToProps = (state, ownProps) => {
      return {

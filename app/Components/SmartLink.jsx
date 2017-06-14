@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router'
-import styles from '../assets/Styles/SmartLink.css'
+import styles from '../Styles/SmartLink.css'
 var Config = require('../config'),
 configuration = new Config();
 
