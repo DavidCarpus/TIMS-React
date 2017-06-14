@@ -1,0 +1,31 @@
+{
+"imapProcess":{
+    "imapcredentials":{
+        "user": "miltonnh@jovaraanddavid.us",
+        "password": "M$g;~5_2e.T#",
+        "host": "bankson.tchmachines.com",
+        "port": 993,
+        "tls": true
+    },
+    "downloadPath": {
+            "notices": "./private/Attachments/"
+    },
+    "delay": 5000,
+    "infinite":true,
+    "emailAttachments":{
+        "required": true,
+        "validExtensions":["pdf"]
+    }
+},
+"db_config":{
+  "host"     : "66.198.240.7",
+  "user"     : "carpusco_dcarpus",
+  "password" : "IT8DEa}fJA+y",
+  "database" : "carpusco_miltonDev"
+},
+"expressPort":45001,
+"ui":{
+    "ROOT_URL":"http://localhost:45001/api/"
+}
+
+}

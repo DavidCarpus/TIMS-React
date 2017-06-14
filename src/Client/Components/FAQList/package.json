@@ -1,0 +1,6 @@
+{
+  "name": "FAQList",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FAQListC.js"
+}

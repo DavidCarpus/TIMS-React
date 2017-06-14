@@ -1,0 +1,30 @@
+{
+"imapProcess":{
+    "imapcredentials":{
+        "user": "miltonnh@carpusconsulting.com",
+        "password": "MN){FMGxFJoZ",
+        "host": "mail.carpusconsulting.com",
+        "port": 143
+    },
+    "downloadPath": {
+            "notices": "./private/Attachments/"
+    },
+    "delay": 10000,
+    "infinite":true,
+    "emailAttachments":{
+        "required": true,
+        "validExtensions":["pdf"]
+    }
+},
+"db_config":{
+  "host"     : "66.198.240.7",
+  "user"     : "carpusco_dcarpus",
+  "password" : "IT8DEa}fJA+y",
+  "database" : "carpusco_milton"
+},
+"expressPort":45000,
+"ui":{
+    "ROOT_URL":"http://www.carpusconsulting.com:45000/api/"
+}
+
+}

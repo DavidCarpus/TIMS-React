@@ -1,0 +1,38 @@
+[
+    {"id": 1, "desc":"Home", "link": "/"
+    },
+    {"id": 2, "desc":"About", "link": "/about"},
+    {"id": 3, "desc":"Town Calendar", "link": "/calendar"},
+    {"id": 4, "desc":"Departments", "link": "/Departments",
+        "menus": [
+            {"id": 1, "desc": "Assessing", "link":"/Assessing"},
+            {"id": 2, "desc": "Code Enforcement",        "link":"/CodeEnforcement"},
+            {"id": 3, "desc": "Fire / Emergency Management", "link":"http://www.miltonfirerescue.com/"}    ,
+            {"id": 4, "desc": "Free Library",        "link":"http://www.miltonfreepubliclibrary.org/"  },
+            {"id": 5, "desc": "Parks & Recreation",        "link":"/ParksRecreation"},
+            {"id": 6, "desc": "Planning and Land Use",        "link":"/Planning"  },
+            {"id": 7, "desc": "Police" ,        "link":"http://miltonnhpd.com/"},
+            {"id": 8, "desc": "Public Works",        "link":"/PublicWorks"},
+            {"id": 9, "desc": "Sewer Department",        "link":"/Sewer"},
+            {"id": 10, "desc": "Tax Collector/Town Clerk",        "link":"/TownClerk"},
+            {"id": 11, "desc": "Welfare" , "link":"/Welfare"}
+        ]
+    },
+    {"id": 5, "desc":"Boards And Committees", "link": "/BoardsAndCommittees",
+        "menus": [
+            {"id": 1, "desc":"Budget Committee", "link": "/BudgetCommittee"},
+            {"id": 2, "desc":"Cemetery Trustees", "link": "/CemeteryTrustees"},
+            {"id": 3, "desc":"Conservation Committee", "link": "/ConservationCommittee"},
+            {"id": 4, "desc":"Economic Development", "link": "/EconomicDevelopment"},
+            {"id": 5, "desc":"Library Trustees", "link": "/LibraryTrustees"},
+            {"id": 6, "desc":"Planning Board", "link": "/PlanningBoard"},
+            {"id": 7, "desc":"Recreation Committee", "link": "/Recreation"},
+            {"id": 8, "desc":"Sewer Commission", "link": "/SewerCommission"},
+            {"id": 9, "desc":"Supervisors of the Checklist", "link": "/ChecklistSupervisors"},
+            {"id": 10, "desc":"Town House Commitee", "link": "/TownHouse"},
+            {"id": 11, "desc":"Trustees of Trust  Funds", "link": "/TrustFunds"},
+            {"id": 12, "desc":"Zoning Board of Adjustment (ZBA)", "link": "/Zoning"},
+            {"id": 13, "desc":"Board of Selectmen", "link": "/Selectmen"}
+        ]
+    }
+]
