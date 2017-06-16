@@ -7,12 +7,15 @@ const mapStateToProps = (state, ownProps) => {
     let groupName = ownProps.group.link;
     let recordState = state.PageAsides;
 
+
     if (groupName && groupName.length > 0 && ownProps.store && !recordState.loading && recordState.groupName !==   groupName) {
         ownProps.store.dispatch(fetchPageAsides(groupName));
     }
+    let asides = recordState.PageAsides || [];
+    if (recordState.groupName !==   groupName) {        asides = [];    }
 
     return {
-        asides: recordState.PageAsides || [],
+        asides: asides,
         group: ownProps.group,
     };
 }
