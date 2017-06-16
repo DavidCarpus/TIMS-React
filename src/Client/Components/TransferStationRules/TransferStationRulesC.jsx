@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
     var feeSchedule=[];
 
     // console.log('TransferStationRulesUI:mapStateToProps', state.OrganizationalUnits);
-    if (!state.OrganizationalUnits.loading && state.OrganizationalUnits.groupName !== 'PublicWorks') {
+    if (ownProps.store && !state.OrganizationalUnits.loading && state.OrganizationalUnits.groupName !== 'PublicWorks') {
         // console.log('TransferStationRules fetchOUData:',state.OrganizationalUnits );
         ownProps.store.dispatch(fetchOrganizationalUnitData('PublicWorks'));
         // ownProps.fetchOUData(groupName);

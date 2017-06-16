@@ -2,5 +2,5 @@
   "name": "AgendasAndMinutes",
   "version": "0.0.0",
   "private": true,
-  "main": "./AgendasAndMinutesC.js"
+  "main": "./AgendasAndMinutesC.jsx"
 }

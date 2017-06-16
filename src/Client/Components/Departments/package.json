@@ -2,5 +2,5 @@
   "name": "Departments",
   "version": "0.0.0",
   "private": true,
-  "main": "./DepartmentsC.js"
+  "main": "./Departments.jsx"
 }

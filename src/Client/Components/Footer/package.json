@@ -1,6 +1,6 @@
 {
-  "name": "Aside",
+  "name": "Footer",
   "version": "0.0.0",
   "private": true,
-  "main": "./AsideC.jsx"
+  "main": "./Footer.jsx"
 }

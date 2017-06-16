@@ -14,8 +14,8 @@ export function fetchPageAsides(groupName) {
     });
     // console.log(actionsName +' fetchPageAsides'+JSON.stringify(`${ROOT_URL}Asides/`+ groupName));
 
-    // dispatch({type: MainMenuConstants.FETCH_PAGE_ASIDES_DATA});
     return dispatch => {
+        dispatch({type: PageAsidesConstants.FETCH_PAGE_ASIDES_DATA});
         request.then( response => {
             // console.log(actionsName + ' fetchPageAsides... success: '+JSON.stringify(response.data));
                dispatch(fetchPageAsidesSuccess(groupName,response.data));

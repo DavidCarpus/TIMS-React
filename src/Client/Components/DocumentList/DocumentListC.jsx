@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
     let recordState = state.PublicRecords;
 
     if (groupName && ownProps.store && !recordState.loading && recordState.groupName !==   groupName) {
-        // console.log('fetchGroupDoc:' +recordState.groupName + '-' +  groupName );
+        console.log('fetchGroupDoc:' +recordState.groupName + '-' +  groupName );
         ownProps.store.dispatch(fetchGroupDoc(groupName))
     }
     let documents = [];

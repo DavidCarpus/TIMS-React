@@ -15,7 +15,11 @@ import MainLayoutUI from './MainLayoutUI'
  // }
 
 const mapStateToProps = (state, ownProps) => {
-    // console.log('MainLayout:' + state.OrganizationalUnits.groupName );
+    // let groupName =  ''; //ownProps.group.link;
+    // let recordState = state.OrganizationalUnits
+    // console.log('MainLayout:ownProps:' , ownProps );
+    // console.log('MainLayoutUI:' +  ownProps.group + '-' + recordState.groupName + '-' + recordState.loading + '-' + ownProps.store);
+
     // console.log(require('util').inspect(state, { depth: null }));
     // store.dispatch(fetchOrganizationalUnitData(groupName));
 

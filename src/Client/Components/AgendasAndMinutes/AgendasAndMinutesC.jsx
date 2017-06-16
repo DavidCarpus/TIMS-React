@@ -13,9 +13,10 @@ const mapStateToProps = (state, ownProps) => {
     }
 
   return {
-      meetings: agendaState.documents,
+      meetings: agendaState.documents || [],
       meetingGroupName: agendaState.groupName,
-      loading: agendaState.loading
+      loading: agendaState.loading,
+      title: ownProps.title ||  'Agendas And Minutes'
   };
 }
 

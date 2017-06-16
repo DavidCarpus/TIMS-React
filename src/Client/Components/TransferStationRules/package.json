@@ -2,5 +2,5 @@
   "name": "TransferStationRules",
   "version": "0.0.0",
   "private": true,
-  "main": "./TransferStationRulesC.js"
+  "main": "./TransferStationRulesC.jsx"
 }

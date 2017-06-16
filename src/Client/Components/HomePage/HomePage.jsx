@@ -1,10 +1,14 @@
 import React from 'react';
-import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
-import Aside from '../Components/Aside/AsideC'
-import NoticesList from '../Components/NoticesList/NoticesListC'
+import OnlinePaymentsBlock  from '../OnlinePaymentsBlock'
+import Aside from '../Aside'
+import NoticesList from '../NoticesList'
 import {  Col } from 'react-bootstrap';
 
 export default class HomePage extends React.Component {
+    componentWillMount() {
+        this.props.fetchData(this.props);
+    }
+
     render() {
         var group ={'link' : 'Home'}
         // console.log( this.props );

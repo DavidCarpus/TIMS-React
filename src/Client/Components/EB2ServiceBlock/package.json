@@ -2,5 +2,5 @@
   "name": "EB2ServiceBlock",
   "version": "0.0.0",
   "private": true,
-  "main": "./EB2ServiceBlockC.js"
+  "main": "./EB2ServiceBlockC.jsx"
 }

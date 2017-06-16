@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './PublicWorks.css'
 import { Col } from 'react-bootstrap';
-import Aside from '../Components/Aside/AsideC'
-import NoticesList from '../Components/NoticesList/NoticesListC'
+import Aside from '../Components/Aside'
+import NoticesList from '../Components/NoticesList'
 
-import SmartLink from '../Components/SmartLink/SmartLink'
-import EB2ServiceBlock from '../Components/EB2ServiceBlock/EB2ServiceBlockC'
-import TransferStationRules from '../Components/TransferStationRules/TransferStationRulesC'
+import SmartLink from '../Components/SmartLink'
+import EB2ServiceBlock from '../Components/EB2ServiceBlock'
+import TransferStationRules from '../Components/TransferStationRules'
 
 export default class PublicWorks extends React.Component {
     render() {

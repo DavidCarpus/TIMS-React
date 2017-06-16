@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
-import SmartLink from '../SmartLink/SmartLink'
+import SmartLink from '../SmartLink'
 import  './Footer.css'
 
 export default class Footer extends React.Component {

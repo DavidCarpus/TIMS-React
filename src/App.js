@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import {myStore} from './Client/store/myStore.js';
-import MainLayout from './Client/Components/MainLayout/MainLayout';
+import MainLayout from './Client/Components/MainLayout';
 
 //https://stackoverflow.com/questions/35849970/accessing-redux-store-from-routes-set-up-via-react-router
 

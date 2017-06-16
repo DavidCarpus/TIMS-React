@@ -4,8 +4,10 @@ import GroupMembersUI from './GroupMembers'
 
 const mapStateToProps = (state, ownProps) => {
     var members = ownProps.group.members || []
+    // console.log('GroupMembersUI:state:', state);
   return {
-      members: members
+      members: members,
+      loading: state.OrganizationalUnits.loading
   };
 }
 

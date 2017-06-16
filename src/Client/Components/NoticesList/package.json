@@ -2,5 +2,5 @@
   "name": "NoticesList",
   "version": "0.0.0",
   "private": true,
-  "main": "./NoticesListC.js"
+  "main": "./NoticesListC.jsx"
 }

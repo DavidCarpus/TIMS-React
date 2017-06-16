@@ -27,6 +27,7 @@
     "mysql": "^2.13.0"
   },
   "devDependencies": {
-    "knex": "^0.13.0"
+    "knex": "^0.13.0",
+    "nodemon": "^1.11.0"
   }
 }

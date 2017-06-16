@@ -1,11 +1,11 @@
 import React from 'react';
 import {  Col } from 'react-bootstrap';
 
-import Aside from '../Aside/AsideC'
-import DocumentList  from '../DocumentList/DocumentListC'
-import GroupMembers from '../GroupMembers/GroupMembersC'
-import AgendasAndMinutes from '../AgendasAndMinutes/AgendasAndMinutesC'
-import NoticesList from '../NoticesList/NoticesListC'
+import Aside from '../Aside'
+import DocumentList  from '../DocumentList'
+import GroupMembers from '../GroupMembers'
+import AgendasAndMinutes from '../AgendasAndMinutes'
+import NoticesList from '../NoticesList'
 
 import RawText  from '../RawText'
 
@@ -14,7 +14,6 @@ export default class Committees extends React.Component {
         var groupPageText = this.props.groupPageText
         var groupName = this.props.groupName
         var groupLabel = this.props.group.description ||  this.props.group.desc ||  this.props.groupName
-        // this.requestGroupLoad(groupName);
 
         return (
             <div>
@@ -30,7 +29,7 @@ export default class Committees extends React.Component {
                         groupName={groupName}/>
                     <GroupMembers group={this.props.group} groupName={groupName} title={' Members'} />
 
-                    <AgendasAndMinutes groupName={groupName} group={this.props.group} title={' Agendas and Minutes'} store={this.props.store}/>
+                    <AgendasAndMinutes groupName={groupName} group={this.props.group} store={this.props.store}/>
 
                     <DocumentList groupName={groupName} group={this.props.group} store={this.props.store} />
                 </Col>

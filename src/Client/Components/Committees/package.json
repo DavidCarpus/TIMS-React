@@ -2,5 +2,5 @@
   "name": "Committees",
   "version": "0.0.0",
   "private": true,
-  "main": "./CommitteesC.js"
+  "main": "./CommitteesC.jsx"
 }

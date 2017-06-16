@@ -11,23 +11,19 @@ export function fetchMeetingDocs(groupName) {
         debugger; // eslint-disable-line no-debugger
     }
 
-    // console.log(actionsName +' fetchMeetings:'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}Records/Meetings/`+ groupName,
       // headers: []
     });
     return dispatch => {
-        // console.log('fetchMeetings'+JSON.stringify(groupName));
         dispatch({type: PublicDocumentsConstants.FETCH_MEETING_DOCS});
-
         request.then( response => {
                dispatch(fetchMeetingsSuccess(groupName, response.data));
-            //    console.log(actionsName +'  fetchMeetingDocs... success: ');
           })
           .catch( reason => {
             //   if (isEmpty(reason))  return;
-              console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
+            //   console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
               dispatch(fetchMeetingsFailure(reason));
           })
 
@@ -58,7 +54,6 @@ export function fetchGroupDoc(groupName) {
     if (! groupName && process.env.NODE_ENV === 'development' ) {
         debugger; // eslint-disable-line no-debugger
     }
-    // console.log(actionsName +'  fetchGroupDoc:'+JSON.stringify(groupName));
 
     const request = axios({
       method: 'get',
@@ -67,15 +62,15 @@ export function fetchGroupDoc(groupName) {
     });
 
     return dispatch => {
-        dispatch( {type:PublicDocumentsConstants.FETCH_GROUP_DOCS});
-        request.then( response => {
-            // dispatch({type: PublicDocumentsConstants.FETCH_GROUP_DOCS, groupName: groupName});
+        dispatch({type: PublicDocumentsConstants.FETCH_GROUP_DOCS});
 
+        request.then( response => {
             // console.log(actionsName +'  fetchGroupDocs response '+groupName + ' ' +JSON.stringify(groupName));
                dispatch(fetchGroupDocsSuccess(groupName, response.data));
           })
           .catch( reason => {
-              dispatch(fetchGroupDocsFailure(reason));
+            //   console.log("fetchGroupDocsFailure?? : ", request);
+              dispatch(fetchGroupDocsFailure(groupName, reason));
           })
 
     }
@@ -92,8 +87,8 @@ export function fetchGroupDocsSuccess(groupName, docs) {
   return action;
 }
 //========================================
-export function fetchGroupDocsFailure(error) {
-    console.log(actionsName +'  fetchMeetingsFailure:'+JSON.stringify(error));
+export function fetchGroupDocsFailure(groupName, error) {
+    // console.log(actionsName + '-' +groupName + '  fetchGroupDocsFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_DOCS_FAILURE || 'Fail',
     payload: error

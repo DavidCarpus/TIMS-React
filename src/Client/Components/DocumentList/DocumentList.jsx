@@ -1,36 +1,18 @@
 import React from 'react';
- import SmartLink from '../SmartLink/SmartLink'
+ import SmartLink from '../SmartLink'
 
-export default class DocumentList extends React.Component {
-    // componentWillMount() {
-    //     var groupName = this.props.groupName;
-    //     if (! this.props.loading && this.props.documentsGroupName != groupName) {
-    //         console.log('this.props.fetchDocs(' + groupName + ');');
-    //         // this.props.fetchDocs(groupName);
-    //     }
-    //     // this.props.fetchDocs(this.props.group.link);
-    // }
+ export default function DocumentList({groupName, loading, id, title, documents}){
+     if ( loading) {         return (<div>Loading</div>)     }
+     if (documents.length === 0) {        return(null);    }
 
-    render() {
-        var groupName = this.props.groupName;
-        //  || this.props.group.link || this.props.group.desc || 'missing groupName'
-        var id = groupName + '_Documents'
-
-      if ( this.props.loading) {
-        //   console.log('***DocumentList loading. ');
-          return (<div>Loading</div>)
-      }
-        return (
-            <div id={id}>
-                {this.props.documents.length > 0 ? <h2>{this.props.title} </h2> : ''}
-                {this.props.documents
-                    .map( (document, index) =>
-                        <div key={index} >
-                            <SmartLink link={document.link} linkText={document.description || document.link} />
-                        </div>
-                    )}
-
-            </div>
-        )
-    }
-}
+     return (
+         <div id={id}>
+             <h2>{title} </h2>
+             {documents.map( (document, index) =>
+                     <div key={index} >
+                         <SmartLink link={document.link} linkText={document.description || document.link} />
+                     </div>
+                 )}
+         </div>
+     )
+ }

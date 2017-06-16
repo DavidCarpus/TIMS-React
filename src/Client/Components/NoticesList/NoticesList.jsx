@@ -1,23 +1,20 @@
 import React from 'react';
-import styles from './Notices.css'
-import SmartLink from '../SmartLink/SmartLink'
+import  './Notices.css'
+import SmartLink from '../SmartLink'
 
-export default class NoticesList extends React.Component {
-render(){
+export default function  NoticesList({notices}){
+    if (notices.length === 0) {        return(null);    }
+
     return (
-        this.props.notices.length === 0
-        ? <section id='notices'></section>
-        :
         <section id='notices'>
             <h2>Notices</h2>
-            <ul className={styles.hidebullets}>{this.props.notices
-                .map( (notice,index) =>
+            <ul className="hidebullets">
+                {notices.map( (notice,index) =>
                     <li key={notice.id || index}>
-                        <SmartLink link={notice.link} id={notice.id} linkText={notice.description} />
+                        <SmartLink link={notice.link || ""} id={notice.id} linkText={notice.description} />
                     </li>
-            )}</ul>
-
+                )}
+            </ul>
         </section>
     )
-    }
 }

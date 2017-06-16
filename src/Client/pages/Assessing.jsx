@@ -2,8 +2,8 @@ import React from 'react';
 import { Col } from 'react-bootstrap';
 
 import  './Assessing.css'
-import Aside from '../Components/Aside/AsideC'
-import DocumentList  from '../Components/DocumentList/DocumentListC'
+import Aside from '../Components/Aside'
+import DocumentList  from '../Components/DocumentList'
 import RawText from '../Components/RawText'
 import TaxMapForm  from '../Components/TaxMapForm'
 

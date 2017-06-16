@@ -2,5 +2,5 @@
   "name": "DocumentList",
   "version": "0.0.0",
   "private": true,
-  "main": "./DocumentListC.js"
+  "main": "./DocumentListC.jsx"
 }

@@ -8,7 +8,6 @@ const mapStateToProps = (state, ownProps) => {
     let recordState = state.OrganizationalUnits;
 
     if (groupName && ownProps.store && !recordState.loading && recordState.groupName !==   groupName) {
-        console.log('fetchOUData:' +  groupName);
         ownProps.store.dispatch(fetchOrganizationalUnitData(groupName));
     }
 
@@ -24,9 +23,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      fetchOUData: (groupName) => {
-          dispatch(fetchOrganizationalUnitData(groupName))
-     }
+    //   fetchOUData: (groupName) => {
+    //       dispatch(fetchOrganizationalUnitData(groupName))
+    //  }
   }
 }
 

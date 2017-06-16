@@ -2,5 +2,5 @@
   "name": "GroupMembers",
   "version": "0.0.0",
   "private": true,
-  "main": "./GroupMembersC.js"
+  "main": "./GroupMembersC.jsx"
 }

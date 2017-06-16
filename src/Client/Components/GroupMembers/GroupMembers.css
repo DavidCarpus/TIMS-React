@@ -1,15 +1,20 @@
 .office {
     float: left;
-    width:200px;
+    min-width:200px;
 }
 .name {
     float: left ;
-     width:175px;
+     min-width:175px;
  }
-.term {
-    float: left ;
- width:50px;
- }
+ .term {
+     float: left ;
+  min-width:50px;
+  }
+
+  .phone {
+      float: left ;
+   min-width:150px;
+   }
 
 .memberBlock {
     clear: left;

@@ -1,9 +1,10 @@
 import React from 'react';
-import Aside from '../Components/Aside/AsideC'
-import DocumentList  from '../Components/DocumentList/DocumentListC'
 import {  Col } from 'react-bootstrap';
 
-import SmartLink from './SmartLink/SmartLink'
+import Aside from '../Components/Aside'
+import DocumentList  from '../Components/DocumentList'
+import SmartLink from './SmartLink'
+
 
 export default class CodeEnforcement extends React.Component {
     render() {

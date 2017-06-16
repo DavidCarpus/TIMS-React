@@ -7,26 +7,15 @@ import {
     Route,
 } from 'react-router'
 
-import HomePage from '../../pages/HomePage';
+import HomePage from '..//HomePage';
 import About from '../../pages/About';
 import Calendar from '../../pages/Calendar'
 import ContactUs from '../../pages/ContactUs'
 import Employment from '../../pages/Employment'
 import Login from '../../pages/Login'
-import Departments from '../Departments/Departments'
-import Committees from '../Committees/CommitteesC'
-import TransferStationRules from '../TransferStationRules/TransferStationRulesC'
-
-// function OrgUnitChange(groupType, store) {
-//   return (nextState, replace) => {
-//       var groupName = nextState.params[groupType];
-//       store.dispatch(fetchOrganizationalUnitData(groupName));
-//       store.dispatch(fetchPageAsides(groupName));
-//       store.dispatch(fetchMeetingDocs(groupName));
-//       store.dispatch(fetchGroupDoc(groupName));
-//   };
-// }
-
+import Departments from '../Departments'
+import Committees from '../Committees'
+import TransferStationRules from '../TransferStationRules'
 
 export default class MainLayoutUI extends React.Component {
     CommitteesPage = (newProps) => {
@@ -43,9 +32,12 @@ export default class MainLayoutUI extends React.Component {
         // if (newProps.match.params.department === 'TransferRules') {
         //     newProps.match.params.department = 'PublicWorks'
         // }
+        // console.log('newProps.match.params.department:',newProps.match.params.department);
+        // this.props.fetchOUData(newProps.match.params.department)
         return (
             <Departments
                 fetchOUData={this.props.fetchOUData}
+                groupName={newProps.match.params.department}
                 store={this.props.store}
                 {...newProps}
                 />

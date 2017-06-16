@@ -1,11 +1,11 @@
 import React from 'react';
-import Aside from '../Components/Aside/Aside'
+import Aside from '../Components/Aside'
 
 // import SmartLink from '../Components/SmartLink'
-import DocumentList  from '../Components/DocumentList/DocumentListC'
-import NoticesList from '../Components/NoticesList/NoticesListC'
+import DocumentList  from '../Components/DocumentList'
+import NoticesList from '../Components/NoticesList'
 
-import FAQList  from '../Components/FAQList/FAQListC'
+import FAQList  from '../Components/FAQList'
 import {  Col } from 'react-bootstrap';
 import {  Row } from 'react-bootstrap';
 

@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "devDependencies": {
-        "node-sass-chokidar": "^0.0.2",
+        "node-sass-chokidar": "^0.0.3",
+        "nodemon": "^1.11.0",
         "react-scripts": "1.0.7"
     },
     "dependencies": {

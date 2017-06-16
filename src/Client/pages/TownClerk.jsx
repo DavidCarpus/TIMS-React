@@ -1,16 +1,14 @@
 import React from 'react';
-import Aside from '../Components/Aside/AsideC'
+import Aside from '../Components/Aside'
 
 import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
-import NoticesList from '../Components/NoticesList/NoticesListC'
-import DocumentList  from '../Components/DocumentList/DocumentListC'
+import NoticesList from '../Components/NoticesList'
+import DocumentList  from '../Components/DocumentList'
 import {  Col } from 'react-bootstrap';
 
 export default class TownClerk extends React.Component {
     render() {
         var group = this.props.group;
-        // console.log('TownClerk group:' , group);
-        // var groupPageText = group.pagetext;
 
         return (
             <div>
@@ -30,8 +28,3 @@ export default class TownClerk extends React.Component {
         )
     }
 }
-/*
-
- data={asideData}
-
-*/

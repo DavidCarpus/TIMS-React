@@ -6,14 +6,24 @@ import Planning from '../../pages/Planning'
 import PublicWorks from '../../pages/PublicWorks'
 import TownClerk from '../../pages/TownClerk'
 import Welfare from '../../pages/Welfare'
-import TransferStationRules from '../TransferStationRules/TransferStationRulesC'
+import TransferStationRules from '../TransferStationRules'
 import Sewer from '../../pages/Sewer'
 
 export default class DepartmentsUI extends React.Component {
+    componentWillMount() {
+        // console.log('DepartmentsUI:componentWillMount: ' ,this.props);
+        this.props.fetchData(this.props.groupName);
+    }
+
   render() {
       if ( this.props.loading || ! this.props.groupData) {
           return (<div>DepartmentsUI Loading {this.props.groupName}</div>)
       }
+    //   if (this.props.groupData.link !== this.props.groupName) {
+    //       this.props.fetchData(this.props.groupName);
+    //       return (<div>DepartmentsUI Loading {this.props.groupName}</div>)
+    //   }
+    //   console.log(this.props);
     switch (this.props.groupName) {
         case 'Assessing':
             return (
@@ -56,20 +66,5 @@ export default class DepartmentsUI extends React.Component {
                 <div>Unknown department UI: {this.props.groupName}</div>
             );
     }
-    // return (
-    //     <div>Unknown department UI: {this.props.groupName}</div>
-    // )
-
   }
 }
-
-
-//   if ( !this.props.loading && this.props.groupData &&  this.props.currentGroupName !=  this.props.groupData.link ) {
-//       console.log('*******************');
-//       console.log(JSON.stringify(this.props.currentGroupName));
-//       console.log(JSON.stringify(this.props));
-//       console.log('*******************');
-//     //   console.log('***DepartmentsUI fetchOUData: ' + this.props.groupData.link + ':' + this.props.currentGroupName);
-//         // this.props.fetchOUData(this.props.currentGroupName);
-//   }
-//   console.log('DepartmentsUI loading?' + this.props.groupData +':' +this.props.groupData.length +':' + this.props.loading);

@@ -1,5 +1,5 @@
 import React from 'react';
-import Aside from '../Components/Aside/AsideC'
+import Aside from '../Components/Aside'
 import {  Col } from 'react-bootstrap';
 
 export default class About extends React.Component {

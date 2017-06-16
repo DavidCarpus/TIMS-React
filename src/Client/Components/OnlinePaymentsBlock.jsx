@@ -1,5 +1,5 @@
 import React from 'react';
-import EB2ServiceBlock from './EB2ServiceBlock/EB2ServiceBlockC'
+import EB2ServiceBlock from './EB2ServiceBlock'
 
 export default class OnlinePaymentsBlock extends React.Component {
     render() {
