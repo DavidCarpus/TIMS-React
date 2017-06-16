@@ -28,7 +28,7 @@ render() {
                 </p>
 
             </Col>
-            <Col md={2} mdPull={10}><Aside group={group}  store={this.props.store} /></Col>
+            <Col md={2} mdPull={10}><Aside group={group}   /></Col>
         </div>
     );
 }
