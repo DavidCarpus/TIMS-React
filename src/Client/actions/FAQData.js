@@ -4,15 +4,15 @@ var Config = require('../config'),
 configuration = new Config();
 
 const ROOT_URL = configuration.ui.ROOT_URL
-const actionsName='FAQData';
+// const actionsName='FAQData';
 //========================================
 export function fetchFAQData(groupName) {
-    console.log(actionsName + ' fetchFAQData:'+JSON.stringify(groupName));
+    // console.log(actionsName + ' fetchFAQData:'+JSON.stringify(groupName));
     const request = axios({
       method: 'get',
       url: `${ROOT_URL}FAQ/`+ groupName,
     });
-    console.log(actionsName +' fetchMeetings'+JSON.stringify(`${ROOT_URL}FAQ/`+ groupName));
+    // console.log(actionsName +' fetchFAQData'+JSON.stringify(`${ROOT_URL}FAQ/`+ groupName));
 
     return dispatch => {
         dispatch({type: FAQConstants.FETCH_FAQ_DATA, groupName: groupName});

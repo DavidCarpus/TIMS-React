@@ -28,12 +28,6 @@ export default class MainLayoutUI extends React.Component {
         );
     }
     DepartmentsPage = (newProps) => {
-        // console.log('newProps:', newProps);
-        // if (newProps.match.params.department === 'TransferRules') {
-        //     newProps.match.params.department = 'PublicWorks'
-        // }
-        // console.log('newProps.match.params.department:',newProps.match.params.department);
-        // this.props.fetchOUData(newProps.match.params.department)
         return (
             <Departments
                 fetchOUData={this.props.fetchOUData}
