@@ -14,14 +14,18 @@ const mapStateToProps = (state, ownProps) => {
     if (groupName === 'TransferRules') {
         groupName = 'PublicWorks'
     }
-    // console.log('DepartmentsUI:' +  ownProps.groupName + '-' + recordState.groupName + '-' + recordState.loading );
+
     if (ownProps.store &&  recordState.groupName !== ownProps.groupName && !recordState.loading) {
-        // console.log('mapStateToProps:fetchData:', ownProps.groupName);
-        ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
-        // ownProps.store.dispatch(fetchPageAsides(groupName))
-        // ownProps.store.dispatch(fetchGroupNotices(groupName))
-        // ownProps.store.dispatch(fetchGroupDoc(groupName))
-        loading=true;
+        // Check if last group loaded was not in 'Department' mainMenu, do NOT load here. Will do it in componentWillMount
+        if (state.MainMenus && state.MainMenus.menus.length > 0) {
+            let chk = state.MainMenus.menus
+            .filter(menu => menu.desc === 'Departments')[0].menus
+            .filter(menu => menu.link === '/'+recordState.groupName)[0]
+            if (typeof chk !== 'undefined') {
+                ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
+                loading=true;
+            }
+        }
     }
 
     return {
