@@ -79,27 +79,49 @@ function simpleDBQuery(query){
         });
     })
 }
-// // ==========================================================
-// function sendJSON(res, data) {
-//     res.json(data);
-// }
 // ==========================================================
-//CORS middleware
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'example.com');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-
-    next();
+function flattenMenus(parent, menus, results) {
+    let links = menus.map(level1 => {
+        if (level1.menus) {
+            return flattenMenus(level1.link, level1.menus, results)
+        }
+        if (level1.link.startsWith('http')) {
+            return results.push({desc:level1.desc, link:level1.link})
+        } else {
+            return results.push({desc:level1.desc, link:parent+level1.link})
+        }
+    })
+        return results;
 }
 // ==========================================================
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-// router.get('/', function(req, res) {
-//     connection.query('SELECT * FROM ListData', function(err, rows){
-//         res.json(rows);
-//     });
-// });
+router.get('/Links', function(req, res) {
+    let menus = JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8'));
+    let links =flattenMenus('',menus, [])
+    links.push({desc:'Contact Us', link:'/ContactUs'})
+    links.push({desc:'Employment', link:'/Employment'})
 
+    var query = "Select datadesc as description, fileLink as link from ListData where listName='HelpfulLinks'";
+    simpleDBQuery(query)
+    .then(rows => {
+        rows.map(row => {
+            links.push({desc: row.description, link:row.link});
+        })
+    })
+    .then(rows => {
+        // console.log(require('util').inspect(links, {colors:true, depth: null }));
+        // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
+        // res.json(JSON.stringify(links, null, 2) );
+        links.sort((a,b) => {
+            return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
+        })
+        // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
+        res.json(links);
+    })
+    .catch(err => {
+        console.log('HelpfulLinks Err:', err);
+    })
+    // res.json(links);
+});
 // ==========================================================
 router.get('/Menus', function(req, res) {
         // console.log(fs.readFileSync('Menus.json', 'utf8'));
