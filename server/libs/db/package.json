@@ -1,6 +1,6 @@
 {
-  "name": "db",
+  "name": "knex",
   "version": "0.0.0",
   "private": true,
-  "main": "./db.js"
+  "main": "./knex.js"
 }
