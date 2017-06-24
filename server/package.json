@@ -15,6 +15,7 @@
     "MD5": "^1.3.0",
     "base64-stream": "^0.1.3",
     "body-parser": "^1.17.1",
+    "cheerio": "^1.0.0-rc.1",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
     "cross-env": "^5.0.0",
@@ -24,7 +25,8 @@
     "imap-promise": "^1.0.2",
     "imap-simple": "^3.1.0",
     "morgan": "^1.8.2",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "knex": "^0.13.0",

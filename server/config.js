@@ -8,13 +8,13 @@ module.exports = function(){
     switch(mode){
         case 'development':
             // return dev_configuration;
-            return Object.assign({}, dev_configuration, {mode: mode});
+            return Object.assign({}, dev_configuration, {mode: mode, ATTACHMENT_DIR:__dirname + '/private/Attachments/'});
         case 'production':
         // return prod_configuration;
-            return Object.assign({}, prod_configuration, {mode: mode});
+            return Object.assign({}, prod_configuration, {mode: mode, ATTACHMENT_DIR:__dirname + '/private/Attachments/'});
         case 'test':
         // return test_configuration;
-            return Object.assign({}, test_configuration, {mode: mode});
+            return Object.assign({}, test_configuration, {mode: mode, ATTACHMENT_DIR:__dirname + '/private/Attachments/'});
         // default:
         //     return dev_configuration;
     }

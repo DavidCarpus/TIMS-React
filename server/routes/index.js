@@ -123,12 +123,14 @@ router.get('/fetchFile/:fileID', function(req, res) {
          simpleDBQuery(query)
          .then(rows => {
              let fullPath = rows[0].link;
-             if (fullPath.startsWith('./')) {
-                 fullPath = __dirname + fullPath
+             if (!fullPath.startsWith('http')) {
+                 console.log('fetchFile- append ATTACHMENT_DIR?:' + fullPath);
+                 fullPath = configuration.ATTACHMENT_DIR + fullPath
+                 console.log('fetchFile- appended ATTACHMENT_DIR?:' + fullPath);
                  fullPath = fullPath.replace('routes','') ;
              }
              let filename =  fullPath.replace(/^.*[\\\/]/, '')
-            //  console.log('fetchFile:' + filename);
+             console.log('fetchFile:' + filename);
              var mimetype = mime.lookup(fullPath);
 
             res.setHeader('Content-disposition', 'attachment; filename=' + filename);
