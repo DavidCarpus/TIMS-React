@@ -33,36 +33,6 @@ function handleDisconnect() {
 }
 
 router.use(cors());
-
-/*
-// https://enable-cors.org/server_expressjs.html
-// Add headers
-router.use(function (req, res, next) {
-    // console.log('req:' + JSON.stringify(Object.keys(req)));
-    // console.log('headers:' + JSON.stringify(req.headers));
-    // req.headers.host.indexOf('localhost') > 0
-    // console.log(req.headers.host);
-    // if (req.headers.host.indexOf('localhost') >= 0) {
-    //     console.log('*** localhost');
-    // }
-
-    // Website you wish to allow to connect
-    req.headers.host.indexOf('localhost') >= 0 ?
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080'):
-        res.setHeader('Access-Control-Allow-Origin', 'http://carpusconsulting.com');
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type');
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    // Pass to next layer of middleware
-    console.log("Add Access-Control  Headers?" + JSON.stringify(res._headers, null, 2));
-    console.log('res:' + JSON.stringify(Object.keys(res)));
-    next();
-});
-*/
 // ==========================================================
 function simpleDBQuery(query){
     return new Promise(function(resolve, reject) {
@@ -333,8 +303,5 @@ router.get('/GroupData/:groupName', function(req, res) {
         res.status(404).json(err);
     })
 });
-// app.configure(function() {
-//     app.use(allowCrossDomain);
-// });
 
 module.exports =  {router, handleDisconnect};
