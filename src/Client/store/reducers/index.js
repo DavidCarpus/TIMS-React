@@ -7,6 +7,7 @@ import MainMenusReducer from './MainMenuData';
 import FAQReducer from './FAQData';
 import PageAsidesReducer from './PageAsides';
 import EB2ServicesReducer from './EB2Services';
+import SystemIndexReducer from './SystemIndex';
 import { routerReducer as routing } from 'react-router-redux';
 
 
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     MainMenus : MainMenusReducer,
     PageAsides : PageAsidesReducer,
     EB2Services: EB2ServicesReducer,
+    SystemIndex: SystemIndexReducer,
     routing
 });
 

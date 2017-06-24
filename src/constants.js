@@ -40,6 +40,11 @@ const EB2ServicesConstants = {
     FETCH_DATA_SUCCESS: 'FETCH_EB2SERVICES_DATA_SUCCESS',
     FETCH_DATA_FAILURE: 'FETCH_EB2SERVICES_DATA_FAILURE',
 }
+const SystemIndexConstants = {
+    FETCH_DATA: 'FETCH_SYSTEMINDEX_DATA',
+    FETCH_DATA_SUCCESS: 'FETCH_SYSTEMINDEX_DATA_SUCCESS',
+    FETCH_DATA_FAILURE: 'FETCH_SYSTEMINDEX_DATA_FAILURE',
+}
 
 
 module.exports = {
@@ -49,4 +54,5 @@ module.exports = {
     MainMenuConstants,
     PageAsidesConstants,
     EB2ServicesConstants,
+    SystemIndexConstants,
 }
