@@ -26,7 +26,7 @@
             {"id": 4, "desc":"Economic Development", "link": "/EconomicDevelopment"},
             {"id": 5, "desc":"Library Trustees", "link": "/LibraryTrustees"},
             {"id": 6, "desc":"Planning Board", "link": "/PlanningBoard"},
-            {"id": 7, "desc":"Recreation Committee", "link": "/Recreation"},
+            {"id": 7, "desc":"Recreation Commission", "link": "/Recreation"},
             {"id": 8, "desc":"Sewer Commission", "link": "/SewerCommission"},
             {"id": 9, "desc":"Supervisors of the Checklist", "link": "/ChecklistSupervisors"},
             {"id": 10, "desc":"Town House Commitee", "link": "/TownHouse"},

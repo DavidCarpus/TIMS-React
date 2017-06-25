@@ -9,7 +9,7 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  /*height: 150px;*/
   padding: 20px;
   color: white;
 }
@@ -29,7 +29,7 @@
   font-family: sans-serif;
 }
 .navbar-nav {
-    position: absolute;
+    position: relative;
     bottom: 0px;
-    left: 120px;
+    left: 10px;
 }

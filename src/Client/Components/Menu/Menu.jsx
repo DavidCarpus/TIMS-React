@@ -4,6 +4,8 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import Nav from 'react-bootstrap/lib/Nav';
+// import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
+
 import { IndexLinkContainer } from 'react-router-bootstrap';
 // import { Link } from 'react-router';
 import s from './Menu.css'
@@ -66,6 +68,9 @@ class MainMenu extends React.Component {
     }
 }
 
+// id='custom-bootstrap-menu'
+
+// className="bs-navbar-collapse"
 
 export default class Menu extends React.Component {
     render(){
@@ -74,10 +79,9 @@ export default class Menu extends React.Component {
                 <Col md={12}>
                     <Navbar
                         collapseOnSelect
-                        id='custom-bootstrap-menu'
                         >
 
-                        <Navbar.Header>
+                        <Navbar.Header >
                             <IndexLinkContainer to='/' >
                                 <img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="React" />
                             </IndexLinkContainer>
@@ -85,7 +89,7 @@ export default class Menu extends React.Component {
                         </Navbar.Header>
 
                         <Navbar.Collapse
-                            className="bs-navbar-collapse">
+                            >
                             <Nav>
                                 {this.props.menus.menus
                                     .map( (menu, index) =>
@@ -93,6 +97,7 @@ export default class Menu extends React.Component {
                                 )}
                             </Nav>
                         </Navbar.Collapse>
+
                     </Navbar>
                 </Col>
             </div>
