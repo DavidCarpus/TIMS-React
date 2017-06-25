@@ -29,6 +29,17 @@ function isVideoLink(line) {
         return true;
     }
 }
+//=======================================
+function hasURL(line) {
+    var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    // var expression = HTTPS?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+
+    var regex = new RegExp(expression);
+    if (line.match(regex)) {
+        console.log('Found URL in:', line);
+        return true;
+    }
+}
 
 //=======================================
 function extractDBData(email) {
@@ -58,27 +69,34 @@ function extractDBData(email) {
                 results.mainpage = false;
             }
         }
-        if (line.startsWith('DESC:') || line.startsWith('DESCRIPTION')) {
-            results.desc = line;
-        }
+        if (line.startsWith('DESC:')) {                 results.description = line.replace(/DESC\:/i,'').trim();        }
+        if (line.startsWith('DESCRIPTION')) {    results.description = line.replace(/DESCRIPTION/i,'').trim();        }
 
         if(line.indexOf('AGENDA') >= 0 ) {            results.recordtype = 'Agendas';        }
         if(line.indexOf('MINUTES') >= 0 ) {            results.recordtype = 'Minutes';        }
         if(line.indexOf('DOCUMENT') >= 0 ) {            results.recordtype = 'Document';        }
+        if(line.indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+        if(line.indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+        if(line == 'NOTICE' ) {            results.recordtype = 'Notice';        }
         if(line == 'USER' ) {            results.recordtype = 'User';        }
         if (isVideoLink(line)) {            results.recordtype = 'Video';        }
+
+        if (hasURL(line)) {            results.URL = line;        }
+
         if(line.indexOf('TERM:') >= 0 ) {            results.term = line.replace('TERM:','').trim();        }
         if(line.indexOf('OFFICE:') >= 0 ) {            results.office = line.replace('OFFICE:','').trim();        }
         if(line.indexOf('PHONE:') >= 0 ) {            results.phone = line.replace('PHONE:','').trim();        }
         if(line.indexOf('EMAIL:') >= 0 ) {            results.email = line.replace('EMAIL:','').trim();        }
 
-        if(line == 'NOTICE' ) {            results.recordtype = 'Notice';        }
         if(line == 'UPDATE' ) {            results.requestType = 'UPDATE';        }
         if(line == 'REMOVE' ) {            results.requestType = 'REMOVE';        }
     }) // bodyTextPart.map
 
     // TODO: Determine if header subject contains missing field data
     // console.log('header.subject:' + require('util').inspect(header.subject, { depth: null }));
+    if(header.subject[0].toUpperCase().indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+    if(header.subject[0].toUpperCase().indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+
     results.groupName = getGroupNameFromTextLine(header.subject[0]) || results.groupName || "";
     if (results.groupName == '') { delete results.groupName; }
 
