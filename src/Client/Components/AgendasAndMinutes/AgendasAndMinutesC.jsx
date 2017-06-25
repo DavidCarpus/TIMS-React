@@ -12,8 +12,21 @@ const mapStateToProps = (state, ownProps) => {
         ownProps.store.dispatch(fetchMeetingDocs(groupName))
     }
 
+    let sortedDocuments=[]
+    if (agendaState.documents) {
+         sortedDocuments = Object.keys(agendaState.documents)
+         .sort((a,b) => { return new Date(b) - new Date(a); })
+         .map(function(val) {
+             return [val, agendaState.documents[val] ] }
+         );
+         sortedDocuments = sortedDocuments.reduce( (acc, curr, i) => {
+             acc[curr[0]] = curr[1];
+             return acc;
+         }, {})
+    }
+
   return {
-      meetings: agendaState.documents || [],
+      meetings: sortedDocuments,
       meetingGroupName: agendaState.groupName,
       loading: agendaState.loading,
       title: ownProps.title ||  'Agendas And Minutes'

@@ -4,13 +4,16 @@ import  './SmartLink.css'
 var Config = require('../../config'),
 configuration = new Config();
 
-export default function SmartLink({id, link='', linkText}){
-    var lnkStyle={}
+export default function SmartLink({id=0, link='', linkText}){
+    var lnkStyle=''
     if (!link || typeof link === 'undefined') {
         link = '';
     }
     if (link.endsWith('pdf')) {
         lnkStyle='pdf_link'
+    }
+    if (link.endsWith('.doc') || link.endsWith('.docx')) {
+        lnkStyle='doc_link'
     }
     if (link.includes('youtube.com')) {
         lnkStyle='youtube_link'
