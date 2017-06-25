@@ -33,6 +33,9 @@ function requiredAttachmentsPresent(email, configuration) {
 function hasAllRequiredData(email) {
     let emailData = email.DBData
     let requiredFields = ['groupName', 'date', 'requestType', 'recordtype'];
+    if (email.DBData.recordtype === 'HelpfulLinks') {
+        requiredFields = [ 'date', 'requestType', 'recordtype'];
+    }
     return requiredFields.reduce((acc, field) => {
         if(emailData[field] == null)  {
             emailData.error = ( typeof emailData.error != 'undefined'  ) ? emailData.error : ''; // Init string as blank if needed
