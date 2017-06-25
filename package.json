@@ -25,12 +25,19 @@
         "redux-thunk": "^2.2.0"
     },
     "scripts": {
+        "eject": "react-scripts eject",
+
         "build-css": "node-sass-chokidar src/ -o src/",
         "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+
         "start": "react-scripts start -- --include-path ./src",
         "build": "react-scripts build",
+        "pushProd": "rsync -auv build/ A2:./miltonnh.us/www/ --delete  && rsync -auv server/ A2:./miltonnh.us/server/",
+
         "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject",
-        "dev": "concurrently \"yarn start\" \"yarn watch-css\" \"cd server && nodemon app.js\" "
+        "startServer": "cd server && node app.js",
+        "buildTest": "PUBLIC_URL=\"http://carpusconsulting.com/milton/\" react-scripts build",
+        "pushTest": "rsync -auv build/ A2:./www/milton/ --delete  && rsync -auv server/ A2:./www/milton.server/",
+        "dev": "concurrently \"yarn start\"  \"cd server && nodemon app.js\" "
     }
 }
