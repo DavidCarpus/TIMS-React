@@ -1,7 +1,7 @@
 var fs = require('fs');
 
-const DEFAULT_JSON_DIR='/home/dcarpus/code/milton_nh/react_miltonNH/nodeapi/db/json/';
-const DEFAULT_DB_PATH='/home/dcarpus/code/milton_nh/react_miltonNH/nodeapi/db/phpsqlite.db';
+const DEFAULT_JSON_DIR='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/json/';
+const DEFAULT_DB_PATH='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/phpsqlite.db';
 
 var JSON_DIR=DEFAULT_JSON_DIR;
 var DB_PATH=DEFAULT_DB_PATH;
