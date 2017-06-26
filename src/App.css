@@ -1,16 +1,16 @@
 .App {
   text-align: center;
 }
-
+/*
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-}
+}*/
 
 .App-header {
   background-color: #222;
-  /*height: 150px;*/
-  padding: 20px;
+  height: 10px;
+  padding: 10px;
   color: white;
 }
 
@@ -28,6 +28,7 @@
 
   font-family: sans-serif;
 }
+
 .navbar-nav {
     position: relative;
     bottom: 0px;

@@ -184,20 +184,21 @@ router.get('/Records/Notices/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
-        query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
-        query += " and ( recordtype='Minutes'  or recordtype='Agendas'  or recordtype='Video' )";
-        query += "  ORDER BY date ";
-        simpleDBQuery(query)
-        .then(rows => {
-            var toSend = rows.reduce( (newArray, row) => {
-                let key = row.date;
-                delete row.date;
-                (newArray[key] = newArray[key] || []).push(row);
-                return newArray;
-            }, {})
-            // console.log('Meetings:' + JSON.stringify(toSend));
-            res.json(toSend);
-        });
+    // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
+    query = "Select id, recordtype as type, fileLink as link, date from PublicRecords where pageLink='" + req.params.groupName +"'";
+    query += " and ( recordtype='Minutes'  or recordtype='Agendas'  or recordtype='Video' )";
+    query += "  ORDER BY date ";
+    simpleDBQuery(query)
+    .then(rows => {
+        var toSend = rows.reduce( (newArray, row) => {
+            let key = row.date;
+            delete row.date;
+            (newArray[key] = newArray[key] || []).push(row);
+            return newArray;
+        }, {})
+        // console.log('Meetings:' + JSON.stringify(toSend));
+        res.json(toSend);
+    });
 });
 // ==========================================================
 router.get('/GroupData/:groupName', function(req, res) {

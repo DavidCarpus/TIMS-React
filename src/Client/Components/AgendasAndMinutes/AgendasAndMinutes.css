@@ -4,3 +4,11 @@
     background-color: cornsilk;
     font-family: sans-serif;
 }
+
+.showMeetings{
+    display: block;
+}
+
+.hideMeetings{
+    display: none;
+}

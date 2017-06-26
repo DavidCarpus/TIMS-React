@@ -19,11 +19,24 @@ const mapStateToProps = (state, ownProps) => {
          .map(function(val) {
              return [val, agendaState.documents[val] ] }
          );
+
+        //  sortedDocuments = sortedDocuments.reduce( (acc, curr, i) => {
+        //      acc[curr[0]] = curr[1];
+        //      return acc;
+        //  }, {})
+
          sortedDocuments = sortedDocuments.reduce( (acc, curr, i) => {
-             acc[curr[0]] = curr[1];
+            //  console.log(curr[0]);
+             let year = (new Date(curr[0])).getFullYear();
+
+            //  console.log(year);
+             acc[year] = acc[year]? acc[year]: [];
+             acc[year].push(curr)
              return acc;
          }, {})
+        //  console.log(sortedDocuments);
     }
+
 
   return {
       meetings: sortedDocuments,
