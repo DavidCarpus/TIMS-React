@@ -36,7 +36,7 @@ function hasURL(line) {
 
     var regex = new RegExp(expression);
     if (line.match(regex)) {
-        console.log('Found URL in:', line);
+        // console.log('Found URL in:', line);
         return true;
     }
 }
@@ -46,6 +46,7 @@ function extractDBData(email) {
     // console.log('email:' + require('util').inspect(email, { color:true, depth: null }));
     let header = email.header.parts[0].body;
     let bodyData = email.bodyData
+    let emailSubject = header.subject[0].toUpperCase();
 
     let bodyLines = bodyData.trim().split("\n");
     let results = { mainpage: true, date: new Date(), requestType: 'ADD'};
@@ -77,6 +78,9 @@ function extractDBData(email) {
         if(line.indexOf('DOCUMENT') >= 0 ) {            results.recordtype = 'Document';        }
         if(line.indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
         if(line.indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+
+        if(line.indexOf('PAGETEXT') >= 0 ) {            results.recordtype = 'PageText';        }
+
         if(line == 'NOTICE' ) {            results.recordtype = 'Notice';        }
         if(line == 'USER' ) {            results.recordtype = 'User';        }
         if (isVideoLink(line)) {            results.recordtype = 'Video';        }
@@ -87,15 +91,32 @@ function extractDBData(email) {
         if(line.indexOf('OFFICE:') >= 0 ) {            results.office = line.replace('OFFICE:','').trim();        }
         if(line.indexOf('PHONE:') >= 0 ) {            results.phone = line.replace('PHONE:','').trim();        }
         if(line.indexOf('EMAIL:') >= 0 ) {            results.email = line.replace('EMAIL:','').trim();        }
+        if(line.indexOf('SECTION:') >= 0 ) {            results.section = line.replace('SECTION:','').trim();        }
 
         if(line == 'UPDATE' ) {            results.requestType = 'UPDATE';        }
         if(line == 'REMOVE' ) {            results.requestType = 'REMOVE';        }
+        if(line == 'REQUEST' ) {            results.requestType = 'REQUEST';        }
     }) // bodyTextPart.map
 
     // TODO: Determine if header subject contains missing field data
     // console.log('header.subject:' + require('util').inspect(header.subject, { depth: null }));
-    if(header.subject[0].toUpperCase().indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
-    if(header.subject[0].toUpperCase().indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+    if(emailSubject.indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+    if(emailSubject.indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+    if(emailSubject.startsWith('RE:') >= 0 ) {
+        // console.log('subject indicates PageText update');
+        emailSubject = header.subject[0]; // We need the 'original'/before uppercase
+        let subjectParts = emailSubject.replace('Re:','').trim().split("-");
+        if (subjectParts.length === 2) {
+            results.groupName = subjectParts[0].trim()
+            results.section = subjectParts[1].trim()
+            results.recordtype = 'PageText';
+            results.requestType = 'UPDATE';
+            results.bodyData = bodyData;
+            // console.log('*********PageText:', results);
+        }
+
+    }
+
 
     results.groupName = getGroupNameFromTextLine(header.subject[0]) || results.groupName || "";
     if (results.groupName == '') { delete results.groupName; }

@@ -16,6 +16,9 @@ var userProcessor = new UserProcessor()
 var HelpfulLinksProcessor = require('./HelpfulLinksProcessor').HelpfulLinksProcessor;
 var helpfulLinksProcessor = new HelpfulLinksProcessor()
 
+var PageTextProcessor = require('./PageTextProcessor').PageTextProcessor;
+var pageTextProcessor = new PageTextProcessor()
+
 
 function submit(email, imap) {
     if (typeof email.err != 'undefined') {
@@ -41,6 +44,9 @@ function submit(email, imap) {
             break;
         case 'HelpfulLinks':
             return helpfulLinksProcessor.process(email);
+            break;
+        case 'PageText':
+            return pageTextProcessor.process(email);
             break;
 
         default:

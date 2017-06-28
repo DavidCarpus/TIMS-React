@@ -1,0 +1,6 @@
+{
+  "name": "PageTextProcessor",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./PageTextProcessor.js"
+}
