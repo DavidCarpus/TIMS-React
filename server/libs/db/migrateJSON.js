@@ -142,24 +142,7 @@ Promise.all(list.filter(file => {return file == 'WasteTypes.json'}).map( (file) 
     process.exit()
 }
 )
-/*
 
-SELECT
-WTR.id, WTR.datatext, WTR.pkey, WTR.listName, WTR.listParentID,
-WT.id, WT.datatext, WT.pkey, WT.listName
-FROM `ListData` as WT
-LEFT JOIN `ListData` as WTR on WTR.pkey = WT.pkey
-WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
-
-
-UPDATE `ListData` as WT
-LEFT JOIN `ListData` as WTR on WTR.pkey = WT.pkey
-SET WTR.listParentID = WT.id
-WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
-
-
-UPDATE ListData AS WTR
-LEFT JOIN `ListData` as WT on WTR.pkey = WT.pkey
-SET WTR.listParentID = WT.id
-WHERE WTR.pkey is NOT NULL AND WTR.id != WT.id and WT.listName = 'WasteTypes'
-*/
+if (require.main === module) {
+    console.log('server/libs/db/migrateJSON.js - called directly');
+}

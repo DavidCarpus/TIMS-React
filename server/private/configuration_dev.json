@@ -26,6 +26,8 @@
 "expressPort":45001,
 "ui":{
     "ROOT_URL":"http://localhost:45001/api/"
-}
+},
+"attachmentPath": "/private/Attachments/",
+"markdownPath": "/private/Markdown/"
 
 }
