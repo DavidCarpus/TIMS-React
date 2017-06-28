@@ -18,8 +18,10 @@ var monthNames = [
   "November", "December"
 ];
 
+
+// console.log('process.env.NODE_ENV:', process.env.NODE_ENV || 'development');
 var knexConfig = require('../../server/libs/db/knexfile.js')
-var knex = require('knex')(knexConfig['development']);
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 //========================================
 function isValidLinkDesc(group, desc) {
@@ -28,7 +30,7 @@ function isValidLinkDesc(group, desc) {
     return false;
 }
 //========================================
-function translateAnchorDesc(origDesc) {
+function translateAnchorDesc(origDesc, groupName) {
     let translations = [
         {original: 'Agenda', alternatives:['Agenda ---MEETING']},
         {original: 'Workshop', alternatives:[]},
@@ -36,11 +38,17 @@ function translateAnchorDesc(origDesc) {
         {original: 'Minutes', alternatives:['Mnutes','MInutes','Mintues']},
         {original: 'Amended Agenda', alternatives:['AMENDED Agenda','Agenda Addendum','Agenda Amended','Agenda (Amended)']},
     ];
+
     let results = translations.filter( translation =>  (translation.original === origDesc || translation.alternatives.indexOf(origDesc) >= 0 ) )
-    if (! results || results.length <= 0) {
-        return null;
+    if ( results && results.length > 0) { // found a match
+        return results[0].original
     }
-    return results[0].original
+    if (groupName === 'TrustFunds' && (origDesc === 'Notice' || origDesc === 'NOTICE') ) {
+        return 'Meeting Notice'
+    }
+    // console.log('*** groupName/origDesc:', groupName , origDesc);
+
+    return null;
 }
 //========================================
 function parseHTMLData(pathData) {
@@ -80,7 +88,11 @@ function parseHTMLData(pathData) {
             let fields = row.split('|');
             fields.map(element => {
                 element = element.trim();
-                if (element.startsWith('Date:')) {
+                // if (element.startsWith('Date:')) {
+                //     record.dateStr = element.replace('Date:', '')
+                // }
+                // if (element.match(/Date:\d{1,2},? .*? \d{4}/) && ! isNaN(new Date(element.replace('Date:', '')).getTime())  ) {
+                if (element.startsWith('Date:') && ! isNaN(new Date(element.replace('Date:', '')).getTime())  ) {
                     record.dateStr = element.replace('Date:', '')
                 }
                 else if (element.startsWith('<a')) {
@@ -323,24 +335,11 @@ function uploadRecords(records, overwrite=false) {
                 return Promise.resolve(response);
             }
         }))
-        // .then(processedFiles => {
-        //     // let copiedFiles = processedFiles.filter(link=> link.status === 'copied');
-        //     // console.log('copied', copiedFiles);
-        //     // let skippedFiles = processedFiles.filter(link=> link.status === 'skip');
-        //     // console.log('skippedFiles:', skippedFiles);
-        //
-        //     return Promise.resolve(processedFiles)
-        // })
-
     }))
 }
 //========================================
 function enterIntoDB(record) {
-    // console.log('fileToEnterIntoDB:', record);
     // TODO: Check DB for record and add if not there
-    // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
-    // query += " and ( recordtype='Minutes'  or recordtype='Agendas'  or recordtype='Video' )";
-    // query += "  ORDER BY date ";
     // let sql = knex('PublicRecords').select('*').where(record).toString();
     // console.log('sql:', sql);
     return Promise.resolve(knex('PublicRecords').select('*').where(record)
