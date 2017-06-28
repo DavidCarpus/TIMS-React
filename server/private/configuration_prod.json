@@ -1,10 +1,11 @@
 {
 "imapProcess":{
     "imapcredentials":{
-        "user": "miltonnh@carpusconsulting.com",
-        "password": "MN){FMGxFJoZ",
-        "host": "mail.carpusconsulting.com",
-        "port": 143
+        "user": "website@miltonnh.us",
+        "password": "V17v_RKqo68W",
+        "host": "a2ss29.a2hosting.com",
+        "port": 993,
+        "tls": true
     },
     "downloadPath": {
             "notices": "./private/Attachments/"

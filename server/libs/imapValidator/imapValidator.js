@@ -2,7 +2,7 @@ var Config = require('../../config'),
 configuration = new Config();
 
 
-var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us']
+var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us']
 var validEmailAddresses= ['miltonnh@carpusconsulting.com']
 
 if (configuration.mode == 'development') {
