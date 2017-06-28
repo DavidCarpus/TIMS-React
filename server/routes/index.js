@@ -4,6 +4,7 @@ var cors = require('cors');
 var mysql = require('mysql');
 var fs = require('fs');
 var mime = require('mime');
+var marked = require('marked');
 
 var Config = require('../config');
 configuration = new Config();
@@ -35,6 +36,7 @@ function handleDisconnect() {
 router.use(cors());
 // ==========================================================
 function simpleDBQuery(query){
+    // console.log('query:', query);
     return new Promise(function(resolve, reject) {
         if(query.length <= 0) {
             reject('Missing Query')
@@ -210,15 +212,32 @@ router.get('/GroupData/:groupName', function(req, res) {
         query = "Select id, datadesc as description, pageLink as link from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
         var finalResult = simpleDBQuery(query)
         .then( groupData =>{
-            query = "Select id, datatext as text1, datadesc as description from ListData where pageLink='" + groupData[0].link + "' and listName='OrganizationalPageText'";
+            query = "Select id, html  as text1 from PageText where sectionName='text1' and pageLink='" + groupData[0].link +"'";
             return simpleDBQuery(query).
             then(pageTextData => {
                 if (pageTextData.length > 0) {
-                    groupData[0].pagetext = pageTextData;
+                    groupData[0].pagetext = groupData[0].pagetext? groupData[0].pagetext: [];
+                    groupData[0].pagetext.push(pageTextData[0])
                 }
                 return groupData[0];
             })
         })
+        .then( groupDataWithText =>{
+            // console.log(Object.keys(groupDataWithText));
+            query = "Select id, html  as description from PageText where sectionName='desc' and pageLink='" + groupDataWithText.link +"'";
+            // console.log('Appending desc query?: ', query);
+            return simpleDBQuery(query).
+            then(pageDescriptionData => {
+                // console.log('Appending desc data?');
+                if (pageDescriptionData.length > 0) {
+                    // console.log('Appending desc data');
+                    groupDataWithText.pagetext = groupDataWithText.pagetext? groupDataWithText.pagetext: [];
+                    groupDataWithText.pagetext.push(pageDescriptionData[0])
+                }
+                return groupDataWithText;
+            })
+        })
+
         .then(groupDataWithPageText =>{
             query = "Select id,name,term,phone, email, office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
             return simpleDBQuery(query).

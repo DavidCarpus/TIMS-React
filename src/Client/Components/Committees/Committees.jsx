@@ -21,7 +21,7 @@ export default class Committees extends React.Component {
 
                     <h1 style={{textAlign:'center'}}>{groupLabel}</h1>
 
-                    <RawText groupPageText={groupPageText} block='desc' />
+                    <RawText groupPageText={groupPageText} block='description' />
                     <RawText groupPageText={groupPageText} block='text1' />
                     <NoticesList
                         group={this.props.group}

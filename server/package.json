@@ -24,12 +24,14 @@
     "imap": "^0.8.19",
     "imap-promise": "^1.0.2",
     "imap-simple": "^3.1.0",
+    "marked": "^0.3.6",
     "morgan": "^1.8.2",
     "mysql": "^2.13.0",
     "request": "^2.81.0"
   },
   "devDependencies": {
     "knex": "^0.13.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "to-markdown": "^3.0.4"
   }
 }

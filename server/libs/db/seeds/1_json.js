@@ -118,7 +118,7 @@ exports.seed = function(knex, Promise) {
     console.log("Processing " + JSON_DIR);
 
     return new Promise(function(resolve, reject) {
-        resolve(Promise.all(list.map( (file) => {
+        resolve(Promise.all(list.filter(file => {return !(file.indexOf('OrganizationalPageText.json') >= 0)}).map( (file) => {
             console.log(file);
             return readJSONContent(JSON_DIR + file)
             .then(result => {

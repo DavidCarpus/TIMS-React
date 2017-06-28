@@ -20,7 +20,7 @@ export default class Assessing extends React.Component {
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Assessing Department</h1>
-                    <RawText groupPageText={groupPageText} block='text1' />
+                    <RawText groupPageText={groupPageText} block='description' />
 
                     <div >
                         <div  style={{width:'48%'}}>

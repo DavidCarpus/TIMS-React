@@ -17,7 +17,7 @@ export default class ParksRecreation extends React.Component {
             <div>
                 <Col md={10}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Parks and Recreation</h1>
-                    <RawText groupPageText={groupPageText} block='text1' />
+                    <RawText groupPageText={groupPageText} block='description' />
                     <EB2ServiceBlock groupName={group.link}/>
                     <NoticesList
                         group={this.props.group}
