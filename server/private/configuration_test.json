@@ -25,7 +25,7 @@
 },
 "expressPort":45002,
 "ui":{
-    "ROOT_URL":"http://www.carpusconsulting.com:45002/api/"
+    "ROOT_URL":"https://test.miltonnh.us:45102/api/"
 },
 "attachmentPath": "/private/Attachments/",
 "markdownPath": "/private/Markdown/"

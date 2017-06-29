@@ -21,6 +21,7 @@
     "cross-env": "^5.0.0",
     "event-to-promise": "^0.8.0",
     "express": "^4.15.2",
+    "https": "^1.0.0",
     "imap": "^0.8.19",
     "imap-promise": "^1.0.2",
     "imap-simple": "^3.1.0",

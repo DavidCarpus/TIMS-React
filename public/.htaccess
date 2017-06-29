@@ -1,4 +1,12 @@
 Options -MultiViews
 RewriteEngine On
+
 RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{HTTPS} !=on
+
+RewriteRule ^api/(.*[^/])/?$ http://%{HTTP_HOST}:45002/api/$1 [P,L]
+
+##https://stackoverflow.com/questions/1848500/htaccess-mod-rewrite-how-to-exclude-directory-from-rewrite-rule
+RewriteRule ^(images|static)($|/) - [L]
+
 RewriteRule ^ index.html [QSA,L]

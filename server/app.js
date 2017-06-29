@@ -1,6 +1,8 @@
 var express = require('express');
 var logger = require('morgan');
 var compression = require('compression')
+var fs = require('fs');
+var https = require('https');
 
 var Config = require('./config'),
 configuration = new Config();
@@ -121,6 +123,18 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+if (configuration.mode !== 'development') {
+    var sslOptions = {
+      key: fs.readFileSync('/home/carpusco/ssl/keys/9c0b4_2b379_71d7c09aa2fe8da6ef8ce0d771721ef2.key'),
+      cert: fs.readFileSync('/home/carpusco/ssl/certs/carpusconsulting_com_9c0b4_2b379_1506265500_c15e95dd9e5148c14cc4dd37f0181f0c.crt')
+  };
+  let httpsPort = (parseInt(configuration.expressPort)+100);
+    https.createServer(sslOptions, app).listen( httpsPort );
+    let d = new Date();
+    let ts = d.toString().replace('GMT-0400 (EDT)', '');
+    console.log(ts + ' HTTS Express server listening on port ' + (httpsPort ) );
+}
+
 
 app.listen(app.get('port'));
 let d = new Date();

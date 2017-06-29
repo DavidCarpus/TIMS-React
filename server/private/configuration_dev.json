@@ -27,7 +27,13 @@
 "ui":{
     "ROOT_URL":"http://localhost:45001/api/"
 },
-"attachmentPath": "/private/Attachments/",
-"markdownPath": "/private/Markdown/"
+
+
+"unused":{
+    "attachmentPath": "/private/Attachments/",
+    "markdownPath": "/private/Markdown/",
+    "ROOT_URL":"https://test.miltonnh.us:45101/api/"
+}
+
 
 }
