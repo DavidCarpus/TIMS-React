@@ -1,5 +1,6 @@
 [
     {"primary":"Main", "alternatives":["Main", "HomePage"]},
+    {"primary":"About", "alternatives":["About"]},
     {"primary":"Assessing", "alternatives":["Assessing"]},
     {"primary":"CodeEnforcement", "alternatives":["Code"]},
     {"primary":"ParksRecreation", "alternatives":["PnR"]},
