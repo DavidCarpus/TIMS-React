@@ -26,5 +26,6 @@ https://stackoverflow.com/questions/35206589/how-to-download-fetch-response-in-r
 
 https://stackoverflow.com/questions/305035/how-to-use-ssh-to-run-a-shell-script-on-a-remote-machine
 
-ssh A2 "nohup /home/carpusco/miltonnh.us/server/server.sh > miltonus.txt 2>miltonus.err < /dev/null &"
-ssh A2 "nohup /home/carpusco/www/milton.server/server.sh > milton.txt 2>milton.err < /dev/null &"
+ssh A2 "nohup /home/carpusco/miltonnh.us/server/server.sh > logs/miltonus.txt 2>logs/miltonus.err < /dev/null &"
+
+ssh A2 "nohup /home/carpusco/test.miltonnh.us/server/server.sh > logs/miltonustest.txt 2>logs/miltonustest.err < /dev/null &"
