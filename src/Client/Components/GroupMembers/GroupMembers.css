@@ -1,24 +1,31 @@
+@value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "../breakpoints.css";
+
 .office {
     float: left;
-    min-width:200px;
+    /*min-width:200px;*/
+    width:30%;
 }
 .name {
     float: left ;
-     min-width:175px;
+     /*min-width:175px;*/
+     width:30%;
  }
  .term {
      float: left ;
-  min-width:50px;
+  /*min-width:50px;*/
+  width:10%;
   }
 
   .phone {
       float: left ;
-   min-width:150px;
+   /*min-width:150px;*/
+   width:30%;
    }
 
 .memberBlock {
     clear: left;
     border-bottom: 1px solid black;
+    width:100%;
 }
 .groupMembersEmpty {
     clear: left;
@@ -26,7 +33,23 @@
 }
 .groupMembers {
     /*width:500px;*/
+    width:100%;
     clear: both;
     display: inline-block;
     border: 1px solid black;
+}
+
+@media bp-iphone5 {
+    .office {
+        width:48%;
+    }
+    .phone {
+        width:48%;
+    }
+    .term {
+        width:48%;
+     }
+     .name {
+         width:48%;
+      }
 }

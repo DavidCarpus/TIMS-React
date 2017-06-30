@@ -16,7 +16,7 @@ export default function GroupMembers({groupName, title, members, loading}){
 
      var id = groupName + '_Members'
 
-     let cols=['Office', 'Name', 'Phone', 'Term'];
+     let cols=['Office', 'Term', 'Name', 'Phone'];
      return (
          <div id={id} className='groupMembers'>
              <h2>{title}</h2>
