@@ -17,11 +17,13 @@ export default class EB2ServiceBlock extends React.Component {
           //   console.log('***DocumentList loading. ');
             return (<div>Loading</div>)
         }
+        let secure = (window.location.href.indexOf('https:') >= 0)
 
         return (
             <ul id={id} style={{listStyleType: 'none'}}>
+                {console.log(window.location.href)}
                 {this.props.services.map( (service, index) =>
-                    <EB2ServiceLink key={index} service={service}/>
+                    <EB2ServiceLink key={index} service={service} secure={secure}/>
                     )}
             </ul>
         );
