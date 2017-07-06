@@ -114,9 +114,9 @@ function processSimpleEmail(imapLib, credentials, paths) {
 
         .then(withExtractedBodies=>{ // Validate database field data and write out attachments
             return Promise.all(withExtractedBodies.map(msgWithBody => {
-                if (! imapValidator.hasAllRequiredData(msgWithBody) ){
-                    msgWithBody.err = (msgWithBody.err  || '') + 'Missing required information.(date, type, group, etc..).\n';
-                }
+                // if (! imapValidator.hasAllRequiredData(msgWithBody) ){
+                //     msgWithBody.err = (msgWithBody.err  || '') + 'Missing required information.(date, type, group, etc..).\n';
+                // }
                 // if (! imapValidator.requiredAttachmentsPresent(msgWithBody, configuration) ){
                 //     msgWithBody.err = (msgWithBody.err  || '') +'Missing required attachments.\n';
                 // }
@@ -161,6 +161,7 @@ function retrieveAttachmentData(msgWithBody, paths) {
                 return writeAttachment(attach, paths)
                 .then(writtenAttachment => {
                     msgWithBody.attachmentLocations = msgWithBody.attachmentLocations.concat(writtenAttachment.filename);
+                    console.log('Wrote: ', msgWithBody.attachmentLocations);
                     return Promise.resolve(msgWithBody);
                 })
             }))

@@ -9,6 +9,7 @@ function extractHeaderData(email) {
 
 //=======================================
 function getGroupNameFromTextLine(textLine) {
+
     let testLine = textLine.toUpperCase().split(' ').join(''); // Remove spaces from the line
     let foundGroup = groupNames.filter(group => {
         // console.log('group:', group, testLine);
@@ -41,6 +42,60 @@ function hasURL(line) {
     }
 }
 
+
+//=======================================
+function getRecordTypeFromLine(line) {
+    let recordTypes = [
+        {recordType: 'Agendas', searchMatches: ['AGENDA'] },
+        {recordType: 'Minutes', searchMatches: ['MINUTES'] },
+        {recordType: 'Notice', searchMatches: ['^NOTICE$'] },
+        {recordType: 'Document', searchMatches: ['DOCUMENT'] },
+        {recordType: 'HelpfulLinks', searchMatches: ['HELPFULLINK', 'HELPFUL LINK'] },
+        {recordType: 'PageText', searchMatches: ['PAGETEXT'] },
+        {recordType: 'Menu', searchMatches: ['MENU ADD:?', 'ADD MENU:?','MENU DELETE:?', 'DELETE MENU:?'] },
+        {recordType: 'User', searchMatches: ['USER ADD:?', 'ADD USER:?','USER DELETE:?', 'DELETE USER:?'] },
+        {recordType: 'BoardCommittee', searchMatches: ['BOARD ADD:?', 'ADD BOARD:?','BOARD DELETE:?', 'DELETE BOARD:?'] },
+        ]
+
+    ucaseLine = line.toUpperCase().trim();
+    if (isVideoLink(ucaseLine)) { return 'Video';}
+
+    let matches = recordTypes.filter(type => {
+        return  (type.recordType === ucaseLine) || type.searchMatches.reduce(function(sum, value) {
+            return sum || (ucaseLine.search(new RegExp(value, 'i')) >= 0);
+        }, false);
+    })
+    if (matches.length > 0) {
+        return matches[0].recordType
+    } else {
+        return null;
+    }
+}
+//=======================================
+function getRequestTypeFromLine(line) {
+    let requestTypes = [
+        {requestType: 'ADD', searchMatches: [ '^ADD$',
+            'MENU ADD:?','ADD MENU:?','USER ADD:?','ADD USER:?','BOARD ADD:?','ADD BOARD:?',] },
+        {requestType: 'REMOVE', searchMatches:['^REMOVE$','^DELETE$',
+            'MENU REMOVE:?','REMOVE MENU:?','USER REMOVE:?','REMOVE USER:?','BOARD REMOVE:?','REMOVE BOARD:?',
+            'MENU DELETE:?','DELETE MENU:?','USER DELETE:?','DELETE USER:?','BOARD DELETE:?','DELETE BOARD:?',
+            ] },
+        {requestType: 'UPDATE', searchMatches: ['^UPDATE$'] },
+        {requestType: 'REQUEST', searchMatches: ['^REQUEST$'] },
+        ]
+        ucaseLine = line.toUpperCase().trim();
+
+        let matches = requestTypes.filter(type => {
+            return  (type.requestType === ucaseLine) || type.searchMatches.reduce(function(sum, value) {
+                return sum || (ucaseLine.search(new RegExp(value, 'i')) >= 0);
+            }, false);
+        })
+        if (matches.length > 0) {
+            return matches[0].requestType
+        } else {
+            return null;
+        }
+}
 //=======================================
 function extractDBData(email) {
     // console.log('email:' + require('util').inspect(email, { color:true, depth: null }));
@@ -52,6 +107,7 @@ function extractDBData(email) {
     let results = { mainpage: true, date: new Date(), requestType: 'ADD'};
 
     bodyLines.map( line=>{
+        let originalLine = line;
         line = line.toUpperCase().trim();
         results.groupName = getGroupNameFromTextLine(line) || results.groupName || "";
 
@@ -70,38 +126,42 @@ function extractDBData(email) {
                 results.mainpage = false;
             }
         }
-        if (line.startsWith('DESC:')) {                 results.description = line.replace(/DESC\:/i,'').trim();        }
-        if (line.startsWith('DESCRIPTION')) {    results.description = line.replace(/DESCRIPTION/i,'').trim();        }
+        let recordtype = getRecordTypeFromLine(originalLine);
+        if (recordtype != null ) {results.recordtype=recordtype}
 
-        if(line.indexOf('AGENDA') >= 0 ) {            results.recordtype = 'Agendas';        }
-        if(line.indexOf('MINUTES') >= 0 ) {            results.recordtype = 'Minutes';        }
-        if(line.indexOf('DOCUMENT') >= 0 ) {            results.recordtype = 'Document';        }
-        if(line.indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
-        if(line.indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
-
-        if(line.indexOf('PAGETEXT') >= 0 ) {            results.recordtype = 'PageText';        }
-
-        if(line == 'NOTICE' ) {            results.recordtype = 'Notice';        }
-        if(line == 'USER' ) {            results.recordtype = 'User';        }
-        if (isVideoLink(line)) {            results.recordtype = 'Video';        }
+        let requestType = getRequestTypeFromLine(originalLine);
+        if (requestType != null ) {results.requestType=requestType}
 
         if (hasURL(line)) {            results.URL = line;        }
 
-        if(line.indexOf('TERM:') >= 0 ) {            results.term = line.replace('TERM:','').trim();        }
-        if(line.indexOf('OFFICE:') >= 0 ) {            results.office = line.replace('OFFICE:','').trim();        }
-        if(line.indexOf('PHONE:') >= 0 ) {            results.phone = line.replace('PHONE:','').trim();        }
-        if(line.indexOf('EMAIL:') >= 0 ) {            results.email = line.replace('EMAIL:','').trim();        }
-        if(line.indexOf('SECTION:') >= 0 ) {            results.section = line.replace('SECTION:','').trim();        }
 
-        if(line == 'UPDATE' ) {            results.requestType = 'UPDATE';        }
-        if(line == 'REMOVE' ) {            results.requestType = 'REMOVE';        }
-        if(line == 'REQUEST' ) {            results.requestType = 'REQUEST';        }
+        let trimMatches = [
+            {fieldName: 'description', searchMatches: [ '^DESC:','^DESCRIPTION:'] },
+            {fieldName: 'term', searchMatches: [ '^TERM:'] },
+            {fieldName: 'office', searchMatches: [ '^OFFICE:']},
+            {fieldName: 'phone', searchMatches: [ '^PHONE:']},
+            {fieldName: 'email', searchMatches: [ '^EMAIL:']},
+            {fieldName: 'menu', searchMatches: [ '^MENU ADD:', '^ADD MENU:',  '^BOARD ADD:', '^ADD BOARD:']},
+            {fieldName: 'name', searchMatches: [ '^USER ADD:', '^ADD USER:', '^USER DELETE:', '^DELETE USER:']},
+        ]
+        let matches = trimMatches.filter(type => {
+            return  (type.fieldName === line) || type.searchMatches.reduce(function(sum, value) {
+                return sum || (line.search(new RegExp(value, 'i')) >= 0);
+            }, false);
+        })
+        if (matches.length > 0) {
+            results[matches[0].fieldName] = originalLine.replace(/.*\:/i,'').trim();
+        }
+
     }) // bodyTextPart.map
 
     // TODO: Determine if header subject contains missing field data
-    // console.log('header.subject:' + require('util').inspect(header.subject, { depth: null }));
-    if(emailSubject.indexOf('HELPFUL LINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
-    if(emailSubject.indexOf('HELPFULLINK') >= 0 ) {            results.recordtype = 'HelpfulLinks';        }
+    recordtype = getRecordTypeFromLine(emailSubject);
+    if (recordtype != null ) {results.recordtype=recordtype}
+
+    requestType = getRequestTypeFromLine(emailSubject);
+    if (requestType != null ) {results.requestType=requestType}
+
     if(emailSubject.startsWith('RE:') >= 0 ) {
         // console.log('subject indicates PageText update');
         emailSubject = header.subject[0]; // We need the 'original'/before uppercase
@@ -114,9 +174,7 @@ function extractDBData(email) {
             results.bodyData = bodyData;
             // console.log('*********PageText:', results);
         }
-
     }
-
 
     results.groupName = getGroupNameFromTextLine(header.subject[0]) || results.groupName || "";
     if (results.groupName == '') { delete results.groupName; }
@@ -128,49 +186,4 @@ module.exports = {
     extractHeaderData,
     extractDBData,
     getGroupNameFromTextLine
-}
-
-//=====================================
-//=====================================
-let testEmail = { header:
-   { attributes:
-      { envelope:
-         { date: '2017-06-06T21:16:51.000Z',
-           subject: 'PlanningBoard',
-           from: [ { name: null, mailbox: 'miltonnh', host: 'jovaraanddavid.us' } ],
-           sender: [ { name: null, mailbox: 'miltonnh', host: 'jovaraanddavid.us' } ],
-           replyTo: [ { name: null, mailbox: 'miltonnh', host: 'jovaraanddavid.us' } ],
-           to:
-            [ { name: 'miltonnh',
-                mailbox: 'miltonnh',
-                host: 'jovaraanddavid.us' } ],
-           cc: null,
-           bcc: null,
-           inReplyTo: null,
-           messageId: '<20170606171651.Horde.30ayGKJPOGpQEyDDXwymTdC@jovaraanddavid.us>' },
-        date: '2017-06-06T21:16:52.000Z',
-        flags: [],
-        uid: 111,
-        modseq: '564' },
-     parts:
-      [ { which: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
-          size: 142,
-          body:
-           { date: [ 'Tue, 06 Jun 2017 17:16:51 -0400' ],
-             from: [ 'miltonnh@jovaraanddavid.us' ],
-             to: [ 'miltonnh <miltonnh@jovaraanddavid.us>' ],
-             subject: [ 'PlanningBoard' ] } } ],
-     seqNo: 1 },
-  attachmentPromises: [],
-  uid: 111,
-  bodyData: '\r\nuser\r\nremove\r\nname: Tom Gray\r\n\r\n' };
-
-
-
-
-//=====================================
-if (require.main === module) {
-    console.log('called directly');
-    console.log('testEmail:' + require('util').inspect(extractDBData(testEmail), { depth: null }));
-    process.exit();
 }

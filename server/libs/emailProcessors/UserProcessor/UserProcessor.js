@@ -8,21 +8,34 @@ var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 // var knex = require('knex')({client:'mysql'});
 
+var simpleAdd = require('../common').simpleAdd;
+var simpleRemove = require('../common').simpleRemove;
+
+//=============================================
+function validateData(requestedData) {
+    let errors=[];
+    console.log('requestedData:' + require('util').inspect(requestedData, { depth: null }));
+    if (! requestedData.DBData.groupName || requestedData.DBData.groupName.length <= 0) {
+        errors.push('Unable to determine organizational group name.')
+    }
+    let name = requestedData.DBData.name || getUserNameFromBody(requestedData.bodyData)
+    if ( name.length <= 0) {
+        errors.push('Unable to determine users name.')
+    }
+    return errors;
+}
+//=============================================
 function getUserNameFromBody(emailBodyData) {
     let lines = emailBodyData.trim().split("\n").filter(line => {return line.match('^name:.*') != null});
     // console.log('lines:' , lines);
     if (lines.length > 0) {
-        return lines[0].replace('name:','').trim();
+        let name = lines[0].replace('name:','').trim();
+        return name.trim();
     }
     return "";
 }
-
+//===========================================
 function translateToDBScheme(emailDBData, emailBodyData) {
-    let recordDesc = emailDBData.description;
-    if (typeof  recordDesc == 'undefined') {
-        recordDesc = 'Video';
-    }
-
     let entry =  {pageLink: emailDBData.groupName,
         recordtype: emailDBData.recordtype,
         name: getUserNameFromBody(emailBodyData),
@@ -39,51 +52,39 @@ function translateToDBScheme(emailDBData, emailBodyData) {
     if (typeof  emailDBData.email != 'undefined') {
         entry.email = emailDBData.email;
     }
+    if (typeof  emailDBData.user != 'undefined') {
+        entry.name = emailDBData.user;
+    }
+    if (typeof  emailDBData.name != 'undefined') {
+        entry.name = emailDBData.name;
+    }
     //https://www.sitepoint.com/community/t/capitalizing-first-letter-of-each-word-in-string/209644/3
     if (typeof  emailDBData.office != 'undefined') {
         entry.office = emailDBData.office.toLowerCase().replace(/\b[a-z]/g,function(f){return f.toUpperCase();});
     }
-    // console.log(emailDBData);
-    // let entry = Object.assign({}, emailDBData, {attachment: attachment});
     delete entry.attachmentLocations;
     delete entry.requestType;
+    delete entry.recordtype;
     return entry;
 }
-
+//===========================================
 class UserProcessor {
     process( emailData) {
-        console.log('UserProcessor - emailData:' , emailData);
+        let errors  = validateData(emailData);
+        if (errors.length > 0) {
+            emailData.err = errors
+            return Promise.resolve(emailData);
+        }
+
         let action = emailData.DBData.requestType;
         let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
         switch (action) {
             case 'REMOVE':
-                delete entry.recordtype;
-                return (knex('GroupMembers').where(entry).del()
-                .then(results => {
-                    entry.id = results;
-                    entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                    return Promise.resolve([entry]);
-                })
-                .catch(err => {
-                    // console.log('Record Delete failed.');
-                    entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                    return Promise.reject(err);
-                }))
-            break;
+                return simpleRemove('GroupMembers', entry, emailData.uid);
+                break;
             case 'ADD':
-                delete entry.recordtype;
-                return (knex('GroupMembers').where().insert(entry)
-                .then(results => {
-                    entry.id = results[0];
-                    entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                    return Promise.resolve([entry]);
-                })
-                .catch(err => {
-                    // console.log('Record Delete failed.');
-                    entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                    return Promise.reject(err);
-                }))
-            break;
+                return simpleAdd('GroupMembers', entry, emailData.uid);
+                break;
         default:
             return Promise.reject(' *** Unknown UserProcessor action:' + action + ' for DBData:' , emailData.DBData);
         }

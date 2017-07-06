@@ -1,114 +1,105 @@
 var mysql = require('mysql');
 var fs = require('fs');
 var marked = require('marked');
-var mailer = require('nodemailer-promise');
 
 var Config = require('../../../config'),
 configuration = new Config();
 
 var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
-// var knex = require('knex')({client:'mysql'});
 
-function translateToDBScheme(requestData) {
-    // console.log('Translate:',requestData);
-    let section=''
-    switch (requestData.section.toUpperCase()) {
+var sendAutomationEmail = require('../common').sendAutomationEmail;
+
+//=============================================
+function validateData(requestedData) {
+    let errors=[];
+    if (! requestedData.DBData.section) {
+        errors.push('Missing section in page text request for ' + requestedData.DBData.groupName)
+    } else {
+        let sectionName = translateSection(requestedData.DBData.section)
+        if ( sectionName.length <= 0) {
+            errors.push('Unknown section ' + (requestedData.DBData.section || '') + ' in request for text for ' + requestedData.DBData.groupName)
+        }
+    }
+
+    return errors;
+}
+//=============================================
+function translateSection(section) {
+    switch (section.toUpperCase()) {
         case 'DESCRIPTION':
         case 'DESC':
-            section='desc'
-            break;
+            return 'desc'
         case 'TEXT':
         case 'TEXT1':
-            section='text1'
-            break;
+            return 'text1'
         default:
-
+            throw new Error('Unknown page text section:', requestData.section)
     }
+}
+//===========================================
+function translateToDBScheme(requestData) {
     let entry =  {pageLink: requestData.groupName || '',
-        // date: new Date(requestData.date).toISOString(),
-        sectionName: section
+        sectionName: translateSection(requestData.section.toUpperCase())
     }
     delete entry.requestType;
+    delete entry.mainpage;
+    delete entry.date;
     return entry;
 }
-
+//===========================================
 function sendRequestedPageText(request, requestedData) {
-    // console.log('PageTextProcessor:sendRequestedPageText:', request);
-    let emailToSendTo = request.header.from
-
-    var sendEmail = mailer.config({
-        email: configuration.imapProcess.imapcredentials.user,
-        password: configuration.imapProcess.imapcredentials.password,
-        server: configuration.imapProcess.imapcredentials.host,
-        port: 465,
-    });
-    var options = {
+    console.log('PageTextProcessor:sendRequestedPageText:'+ requestedData.pageLink + '-' + requestedData.sectionName);
+    return sendAutomationEmail(request.header.from,  {
         subject: requestedData.pageLink + '-' + requestedData.sectionName,
-        senderName: 'Website automation',
-        receiver: emailToSendTo,
         text: requestedData.markdown,
-    };
-    // return Promise.resolve(options)
-    return sendEmail(options)
-    .then(function(info){
-        console.log('Emailed requested data:' + requestedData.pageLink + '-' + requestedData.sectionName)
+    })
+    .then(emailResult => {
+        console.log('emailResult:', emailResult);
         request.id = 0;
         return Promise.resolve([request]);
-    })   // if successful
-    // .then(function(info){console.log(info)})   // if successful
-    .catch(function(err){
-        console.log('got error'); console.log(err)
-    });   // if an error occurs
-
+    })
 }
+//===========================================
 function getCleanedTextBody(originalTextBody) {
     let bodyLines = originalTextBody.trim().split("\n");
     return bodyLines.map( line=>{
         let newLine = line;
-        if (line === 'UPDATE' || line === 'PAGETEXT' ) {
-            newLine = ''
-        }
-        if (line.indexOf('Quoting Website automation') >= 0) {
+        if (line === 'UPDATE' || line === 'PAGETEXT' || line.indexOf('Website automation') >= 0) {
             newLine = ''
         }
         newLine = newLine.replace(/^>/,'').trim()
         return newLine;
     }).join('\n')
 }
+//===========================================
 class PageTextProcessor {
     process( requestData) {
+        let errors  = validateData(requestData);
+        if (errors.length > 0) {
+            requestData.err = errors
+            return Promise.resolve(requestData);
+        }
+
         let action = requestData.DBData.requestType;
         let entry= translateToDBScheme(requestData.DBData)
         switch (action) {
             case 'REQUEST':
-                delete entry.requestType;
-                delete entry.mainpage;
-                delete entry.date;
-                // console.log('Fetch from db:', entry);
                 return (knex('PageText').select().where(entry)
                 .then(results => {
                     if (results.length > 0) {
                         return sendRequestedPageText(requestData, results[0])
                     } else {
-                        // console.log(knex('PageText').select().where(entry).toString());
                         return Promise.reject('Invalid Request')
                     }
                 })
-                // .catch(err => {
-                //     console.log('Page Text fetch error', err);
-                //      Promise.reject(err);
-                // })
                 )
             break;
             case 'UPDATE':
-                // Remove 'command' lines
                 let cleanText = getCleanedTextBody(requestData.DBData.bodyData);
                 let updateFields = {
-                    // Update the database with provided markdown
-                    markdown: cleanText,
-                    //  Update the database with markdown converted to HTML
-                    html: marked(cleanText)
+                    markdown: cleanText, // provided markdown
+                    html: marked(cleanText) //markdown converted to HTML
                 }
 
                 return knex('PageText').update(updateFields).where(entry)

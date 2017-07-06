@@ -8,6 +8,22 @@ var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 // var knex = require('knex')({client:'mysql'});
 
+var simpleAdd = require('../common').simpleAdd;
+var simpleRemove = require('../common').simpleRemove;
+
+//===========================================
+function validateData(requestedData) {
+    let errors=[];
+    if (! requestedData.attachmentLocations || requestedData.attachmentLocations.length <= 0) {
+        errors.push('Missing attachment data.')
+    }
+    if (! requestedData.DBData.groupName || requestedData.DBData.groupName.length <= 0) {
+        errors.push('Unable to determine organizational group name.')
+    }
+
+    return errors;
+}
+//===========================================
 function translateToDBScheme(noticeData, attachment) {
     let recordDesc = noticeData.description;
     if (typeof  recordDesc == 'undefined') {
@@ -30,26 +46,21 @@ function translateToDBScheme(noticeData, attachment) {
     delete entry.requestType;
     return entry;
 }
-
+//===========================================
 class NoticeProcessor {
     process( noticeData) {
+        let errors  = validateData(noticeData);
+        if (errors.length > 0) {
+            noticeData.err = errors
+            return Promise.resolve(noticeData);
+        }
+
         let action = noticeData.DBData.requestType;
-        // console.log('--------------');
         return Promise.all(noticeData.attachmentLocations.map(attachment => {
             let entry= translateToDBScheme(noticeData.DBData, attachment)
             switch (action) {
                 case 'ADD':
-                    return (knex('PublicRecords').insert(entry)
-                    .then(results => {
-                        entry.id = results[0];
-                        entry.uid = noticeData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                        return Promise.resolve(entry);
-                    })
-                    .catch(err => {
-                        entry.uid = noticeData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                        return Promise.reject(err);
-                    }))
-                    // console.log('knex:' , knex('PublicRecords').insert(entry).toString());
+                    return simpleAdd('PublicRecords', entry, noticeData.uid);
                     break;
                 default:
                     return Promise.reject(' *** Unknown action:' + action + ' for DBData:' , noticeData.DBData);

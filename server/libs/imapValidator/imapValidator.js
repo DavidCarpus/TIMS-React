@@ -2,7 +2,7 @@ var Config = require('../../config'),
 configuration = new Config();
 
 
-var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us']
+var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
 var validEmailAddresses= ['miltonnh@carpusconsulting.com']
 
 if (configuration.mode == 'development') {
@@ -33,7 +33,7 @@ function requiredAttachmentsPresent(email, configuration) {
 function hasAllRequiredData(email) {
     let emailData = email.DBData
     let requiredFields = ['groupName', 'date', 'requestType', 'recordtype'];
-    if (email.DBData.recordtype === 'HelpfulLinks') {
+    if (email.DBData.recordtype === 'HelpfulLinks' || email.DBData.recordtype === 'Menu' || email.DBData.recordtype === 'BoardCommittee') {
         requiredFields = [ 'date', 'requestType', 'recordtype'];
     }
     return requiredFields.reduce((acc, field) => {
@@ -49,7 +49,7 @@ function hasAllRequiredData(email) {
 //=======================================
 module.exports = {
     validateHostOrigins,
-    hasAllRequiredData,
+    // hasAllRequiredData,
     requiredAttachmentsPresent,
     // extractHeaderData,
     // extractDBData

@@ -19,6 +19,13 @@ var helpfulLinksProcessor = new HelpfulLinksProcessor()
 var PageTextProcessor = require('./PageTextProcessor').PageTextProcessor;
 var pageTextProcessor = new PageTextProcessor()
 
+var MenuProcessor = require('./MenuProcessor').MenuProcessor;
+var menuProcessor = new MenuProcessor()
+
+var BoardCommitteeProcessor = require('./BoardCommitteeProcessor').BoardCommitteeProcessor;
+var boardCommitteeProcessor = new BoardCommitteeProcessor()
+
+
 
 function submit(email, imap) {
     if (typeof email.err != 'undefined') {
@@ -48,6 +55,13 @@ function submit(email, imap) {
         case 'PageText':
             return pageTextProcessor.process(email);
             break;
+        case 'Menu':
+            return menuProcessor.process(email);
+            break;
+        case 'BoardCommittee':
+            return boardCommitteeProcessor.process(email);
+            break;
+
 
         default:
             console.log('===================');
@@ -55,6 +69,7 @@ function submit(email, imap) {
             return Promise.reject('Unknown recordtype:' + email.DBData.recordtype)
     }
     }
+
 }
 
 
