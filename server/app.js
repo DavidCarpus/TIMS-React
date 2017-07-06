@@ -18,6 +18,7 @@ var IMapProcessor = require('./libs/imap').IMapProcessor;
 let imap = new IMapProcessor(configuration.imapProcess);
 
 var emailSubmit = require('./libs/emailProcessors').submit;
+var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
 //===============================================
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -25,16 +26,38 @@ function sleep(ms) {
 //===============================================
 function imapProcess(delay, count=2) {
     imap.process()
-    .then(results => { // Submit email data into database
-        return Promise.all(results.map(entry => {
-            return emailSubmit(entry, imap);
+    .then(imapResults => {
+        // console.log('imapProcess imapResults:' + require('util').inspect(imapResults, { depth: null }));
+        // console.log('--------------');
+        return Promise.all(imapResults.map(entry => {
+            return emailSubmit(entry, imap)
+            .catch(submissionError => {
+                console.log('submissionError:' , submissionError);
+                return Promise.resolve(entry)
+            });
         }))
     })
-    .then(processedEmails => { // Archive emails on imap server
+    .then(processedEmails => {
+        // console.log('processedEmails:' + require('util').inspect(processedEmails, { depth: null }));
         return Promise.all(processedEmails.map(insertedEmail => {
-            let destFolder = 'Processed';
-            if (typeof insertedEmail[0].err != 'undefined') { destFolder = 'Errors';}
-            return Promise.resolve(imap.archiveMessage(insertedEmail[0].uid, destFolder));
+            let singleEmail = insertedEmail;
+            if (Array.isArray(singleEmail)) {                singleEmail = singleEmail[0];            }
+            if (Array.isArray(singleEmail)) {                singleEmail = singleEmail[0];            }
+
+            // console.log('ID:', singleEmail);
+            if (typeof singleEmail.err !== 'undefined' || typeof singleEmail.id === 'undefined') {
+                console.log('****' , singleEmail.err);
+                return sendAutomationEmail(singleEmail.header.from,
+                    {subject:"RE:" + singleEmail.header.subject,
+                    text:'ERROR:' + '\n' + singleEmail.err.join('\n') + '\n' + '==================\n' + singleEmail.bodyData})
+                .then( mailSent =>{
+                    return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Errors'));
+                })
+
+                err = 'Email not processed to DB.' + JSON.stringify(singleEmail);
+                console.log(err);
+            }
+            return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Processed'));
         }))
     })
     .then(entryResults => { // Loop imapProcess
@@ -142,7 +165,9 @@ let ts = d.toString().replace('GMT-0400 (EDT)', '');
 console.log(ts+ ' Express server listening on port ' + app.get('port'));
 
 if (configuration.mode == 'development') {
-    console.log('configuration:' , configuration);
+    console.log("Development mode");
+    // imapProcess(configuration.imapProcess.delay, 50);
+    // console.log('configuration:' , configuration);
 } else {
     console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
     console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);

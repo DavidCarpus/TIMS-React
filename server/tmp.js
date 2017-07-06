@@ -6,6 +6,7 @@ var IMapProcessor = require('./libs/imap').IMapProcessor;
 let imap = new IMapProcessor(configuration.imapProcess);
 
 var emailSubmit = require('./libs/emailProcessors').submit;
+var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -13,26 +14,45 @@ function sleep(ms) {
 
 function imapProcess(delay, count=2) {
     imap.process()
-    .then(results => {
-        return Promise.all(results.map(entry => {
-            return emailSubmit(entry, imap);
+    .then(imapResults => {
+        // console.log('imapProcess imapResults:' + require('util').inspect(imapResults, { depth: null }));
+        // console.log('--------------');
+        return Promise.all(imapResults.map(entry => {
+            return emailSubmit(entry, imap)
+            .catch(submissionError => {
+                console.log('submissionError:' , submissionError);
+                return Promise.resolve(entry)
+            });
         }))
     })
     .then(processedEmails => {
+        console.log('processedEmails:' + require('util').inspect(processedEmails, { depth: null }));
         return Promise.all(processedEmails.map(insertedEmail => {
-            let destFolder = 'Processed';
-            // console.log('DB processed email:', insertedEmail);
-            if (typeof insertedEmail[0].err != 'undefined') { destFolder = 'Errors';}
-            if (typeof insertedEmail[0].id == 'undefined') {
-                err = 'Email not processed to DB. (Missing ID)';
-                throw new Error(err)
+            let singleEmail = insertedEmail;
+            if (Array.isArray(singleEmail)) {                singleEmail = singleEmail[0];            }
+            if (Array.isArray(singleEmail)) {                singleEmail = singleEmail[0];            }
+
+            console.log('ID:', singleEmail);
+            if (typeof singleEmail.err !== 'undefined' || typeof singleEmail.id === 'undefined') {
+                console.log('****' , singleEmail.err);
+                return sendAutomationEmail(singleEmail.header.from,
+                    {subject:"RE:" + singleEmail.header.subject,
+                    text:'ERROR:' + '\n' + singleEmail.err.join('\n') + '\n' + '==================\n' + singleEmail.bodyData})
+                .then( mailSent =>{
+                    return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Errors'));
+                })
+
+                err = 'Email not processed to DB.' + JSON.stringify(singleEmail);
+                console.log(err);
             }
-            return Promise.resolve(imap.archiveMessage(insertedEmail[0].uid, destFolder));
+            return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Processed'));
         }))
     })
-
     .then(entryResults => {
-        console.log('Processed emails');
+        if (entryResults.length > 0 ) {
+            console.log('Processed emails');
+        }
+
         // console.log("Completed imap.process." , entryResults);
         if (count == -99) {
             console.log('Count set to -99. Triggering exit');
