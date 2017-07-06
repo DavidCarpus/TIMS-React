@@ -253,7 +253,7 @@ function logDebugRecords(tableRecords) {
                 if (record.date) {
                     dateStr = record.date.getDate() + ' ' + monthNames[record.date.getMonth()] + ' ' +  record.date.getFullYear();
                 }
-                console.error(dateStr, require('util').inspect(record.errors, {depth: null }));
+                console.error(dateStr, require('util').inspect(record.errors, {colors:true, depth: null }));
             } else {log
                 console.log(require('util').inspect(record, {colors:true, depth: null }));
             }
@@ -269,13 +269,13 @@ function scrapeWebURLPaths(webPaths) {
         return scrapeReq;
     }))
     .then(scrapedRecordsForPath => {
-        // scrapedRecordsForPath.map(pathRecords => {
-        //     let errors = pathRecords
-        //     .filter(record => { return (typeof record.errors !== 'undefined' || record.date === null)})
-        //     .map(rec => { return translateRecord(rec); })
-        //
-        //     logDebugRecords(errors)
-        // })
+        scrapedRecordsForPath.map(pathRecords => {
+            let errors = pathRecords
+            .filter(record => { return (typeof record.errors !== 'undefined' || record.date === null)})
+            .map(rec => { return translateRecord(rec); })
+
+            logDebugRecords(errors)
+        })
 
         // Only forward on error free records
         return Promise.resolve(scrapedRecordsForPath.map(pathRecords => {
