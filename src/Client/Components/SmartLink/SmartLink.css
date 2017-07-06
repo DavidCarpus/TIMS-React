@@ -22,6 +22,18 @@
     /*float: left;*/
     margin: 4px 5px 0 5px;
 }
+.jpgImage_link::before {
+    content: "";
+    display: inline-block;
+    background: url('../images/jpgImage.png') no-repeat;
+    background-size: 100% 100%;
+    /*background-color: red;*/
+    color: white;
+    width: 20px;
+    height: 20px;
+    /*float: left;*/
+    margin: 4px 5px -3px  5px;
+}
 .doc_link::before {
     content: "";
     display: inline-block;

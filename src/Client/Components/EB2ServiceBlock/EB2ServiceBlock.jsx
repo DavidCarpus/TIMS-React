@@ -21,7 +21,6 @@ export default class EB2ServiceBlock extends React.Component {
 
         return (
             <ul id={id} style={{listStyleType: 'none'}}>
-                {console.log(window.location.href)}
                 {this.props.services.map( (service, index) =>
                     <EB2ServiceLink key={index} service={service} secure={secure}/>
                     )}

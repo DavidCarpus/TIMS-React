@@ -9,7 +9,6 @@ export default class EB2ServiceLink extends React.Component {
     }
     render() {
         var service=this.props.service
-        console.log('this.props.secure:', this.props.secure);
         return (
             <a href={this.serviceLink(service, this.props.secure)}
                 title={service.desc}
