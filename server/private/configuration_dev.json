@@ -18,21 +18,27 @@
     }
 },
 "db_config":{
-  "host"     : "66.198.240.7",
-  "user"     : "carpusco_dcarpus",
-  "password" : "IT8DEa}fJA+y",
-  "database" : "carpusco_miltonDev"
+  "host"     : "localhost",
+  "user"     : "miltonWebsite",
+  "password" : "miltonWebsite",
+  "database" : "milton_nh"
 },
 "expressPort":45001,
 "ui":{
     "ROOT_URL":"http://localhost:45001/api/"
 },
+"attachmentPath": "/private/Attachments/",
 
 
 "unused":{
-    "attachmentPath": "/private/Attachments/",
     "markdownPath": "/private/Markdown/",
-    "ROOT_URL":"https://test.miltonnh.us:45101/api/"
+    "ROOT_URL":"https://test.miltonnh.us:45101/api/",
+    "db_config":{
+      "host"     : "66.198.240.7",
+      "user"     : "carpusco_dcarpus",
+      "password" : "IT8DEa}fJA+y",
+      "database" : "carpusco_miltonDev"
+    }
 }
 
 
