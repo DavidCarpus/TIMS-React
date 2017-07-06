@@ -118,7 +118,14 @@ exports.seed = function(knex, Promise) {
     console.log("Processing " + JSON_DIR);
 
     return new Promise(function(resolve, reject) {
-        resolve(Promise.all(list.filter(file => {return !(file.indexOf('OrganizationalPageText.json') >= 0)}).map( (file) => {
+        resolve(Promise.all(list.filter(file => {
+            if (file.indexOf('OrganizationalPageText.json') >= 0) { return false;}
+            if (file.indexOf('Menus.json') >= 0) { return false;}
+            if (file.indexOf('GroupNames.json') >= 0) { return false;}
+
+            return true;
+            })
+            .map( (file) => {
             console.log(file);
             return readJSONContent(JSON_DIR + file)
             .then(result => {
@@ -132,6 +139,9 @@ exports.seed = function(knex, Promise) {
                         return Promise.reject(out);
                     }
                 }))
+            })
+            .catch(err => {
+                console.log(file  + " err:" , err);
             })
         })));
     });

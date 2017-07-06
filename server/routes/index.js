@@ -96,6 +96,32 @@ router.get('/Links', function(req, res) {
 });
 // ==========================================================
 router.get('/Menus', function(req, res) {
+    var query = "Select * from Menus";
+     simpleDBQuery(query)
+     .then(rows => {
+         let groupedMenus = rows.reduce( (acc, curr, i) => {
+             let topMenu = curr.fullLink;
+             if (curr.fullLink !== curr.pageLink) {
+                 topMenu = topMenu.replace(curr.pageLink, '')
+             }
+             if (topMenu.endsWith('/') && curr.fullLink !== '/' ) {
+                 topMenu = topMenu.substring(0, topMenu.length - 1);
+             }
+             if (curr.fullLink === curr.pageLink) {
+                 acc[topMenu] = {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description,'menus':[]}
+             }
+             acc[topMenu] = acc[topMenu]? acc[topMenu]: {};
+             if (curr.fullLink !== curr.pageLink && acc[topMenu].menus) {
+                 acc[topMenu]['menus'].push( {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description})
+             }
+             return acc;
+         }, {})
+        //  console.log('Asides:' + JSON.stringify(rows));
+         res.json(groupedMenus);
+     });
+});
+// ==========================================================
+router.get('/Menus1', function(req, res) {
         // console.log(fs.readFileSync('Menus.json', 'utf8'));
         // TODO: Add error checking if file not there ar move data to db
         res.json(JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8')));

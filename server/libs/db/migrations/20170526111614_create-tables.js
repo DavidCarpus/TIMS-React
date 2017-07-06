@@ -44,8 +44,12 @@ exports.up = function(knex, Promise) {
     table.string('pageLink');
     table.text('question');
     table.text('answer');
+}).createTableIfNotExists('Menus', function (table) {
+    table.increments('id');
+    table.string('pageLink');
+    table.string('fullLink');
+    table.string('description');
 })
-
 };
 
 exports.down = function(knex, Promise) {
@@ -56,6 +60,7 @@ exports.down = function(knex, Promise) {
   .dropTableIfExists('GroupMembers')
   .dropTableIfExists('Prices')
   .dropTableIfExists('FAQ')
+  .dropTableIfExists('Menus')
   .then(function () {
     console.log('Tables were dropped')
   })
