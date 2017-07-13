@@ -78,20 +78,27 @@ function importMenus(knex = null) {
         })));
     })
 }
-//======================================
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('Menus').del()
-    .then(function () {
-        return importMenus(knex)
-    })
-    .catch(err => {
-        console.log('Menus import error:', err);
-    });
+
+exports.up = function(knex, Promise) {
+    console.log('Creating Menus Table')
+
+    return knex.schema.createTableIfNotExists('Menus', function (table) {
+        table.increments('id');
+        table.string('pageLink');
+        table.string('fullLink');
+        table.string('description');
+  })  .then( created => {
+        return importMenus(knex)}
+    )
+};
+
+exports.down = function(knex, Promise) {
+    console.log('Dropping Menus Table')
+  return knex.schema.dropTableIfExists('Menus');
 };
 
 if (require.main === module) {
-    console.log('server/libs/db/seeds/4_menus.js - called directly');
+    console.log('server/libs/db/migrations/20170710155319_Menus.js - called directly');
     importMenus(knexConnection)
     // importMenus()
     .then( data => {

@@ -15,7 +15,6 @@ function tableNameFromJSON(filename) {
         case 'WasteTypesRules':
         case 'OrganizationalPageText':
         case 'OrganizationalUnits':
-        case 'OrganizationalAsides':
             return 'ListData';
 
     case 'PublicRecords':
@@ -23,8 +22,6 @@ function tableNameFromJSON(filename) {
     case 'HelpfulInformation':
         return 'PublicRecords';
 
-    case 'OrganizationalMembers':
-        return 'GroupMembers';
     case 'FAQ':
         return 'FAQ';
     case 'FeeSchedule':
@@ -62,21 +59,6 @@ function objectInsert(filename, obj) {
         case 'PublicRecords':
             return [{ pageLink: obj.groupName, date:obj.date || (new Date()).toString(),
                 recordtype:obj.type, recorddesc:obj.desc || "", fileLink:obj.link, mainpage: obj.mainpage || false,}];
-            break;
-        case 'OrganizationalUnits':
-            return [{listName: basename , pageLink: obj.link, datatext:obj.desc, datadesc:obj.desc,listParentID:0}]
-            break;
-        case 'OrganizationalMembers':
-            var result = obj.members.map(member => {
-                return {pageLink:obj.link,name:member.name, term:member.term, phone:member.phone, office:member.office}
-            })
-            return result;
-            break;
-        case 'OrganizationalAsides':
-            var result = obj.asides.map(aside => {
-                return { listName: 'PageAsides', pageLink:obj.link, fileLink:aside.link, datatext:aside.desc, datadesc:aside.desc, listParentID:0}
-            })
-            return result;
             break;
         case 'FAQ':
             return [{pageLink: obj.link, question:obj.question, answer:obj.answer}]
@@ -122,6 +104,10 @@ exports.seed = function(knex, Promise) {
             if (file.indexOf('OrganizationalPageText.json') >= 0) { return false;}
             if (file.indexOf('Menus.json') >= 0) { return false;}
             if (file.indexOf('GroupNames.json') >= 0) { return false;}
+            if (file.indexOf('Groups.json') >= 0) { return false;}
+            if (file.indexOf('OrganizationalAsides.json') >= 0) { return false;}
+            if (file.indexOf('OrganizationalUnits.json') >= 0) { return false;}
+            if (file.indexOf('OrganizationalMembers.json') >= 0) { return false;}
 
             return true;
             })

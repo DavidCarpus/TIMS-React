@@ -26,15 +26,8 @@ exports.up = function(knex, Promise) {
     table.string('servicedesc');
     table.text('urlLink');
     table.text('img');
-}).createTableIfNotExists('GroupMembers', function (table) {
-    table.increments('id');
-    table.string('pageLink');
-    table.text('name');
-    table.string('term');
-    table.string('office');
-    table.string('phone');
-    table.string('email');
-}).createTableIfNotExists('Prices', function (table) {
+})
+.createTableIfNotExists('Prices', function (table) {
     table.increments('id');
     table.string('listName');
     table.string('pricedesc');
@@ -44,11 +37,6 @@ exports.up = function(knex, Promise) {
     table.string('pageLink');
     table.text('question');
     table.text('answer');
-}).createTableIfNotExists('Menus', function (table) {
-    table.increments('id');
-    table.string('pageLink');
-    table.string('fullLink');
-    table.string('description');
 })
 };
 

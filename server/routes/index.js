@@ -67,12 +67,14 @@ function flattenMenus(parent, menus, results) {
 }
 // ==========================================================
 router.get('/Links', function(req, res) {
-    let menus = JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8'));
-    let links =flattenMenus('',menus, [])
+    // let menus = JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8'));
+    // let links =flattenMenus('',menus, [])
+    let links = [];
+    console.log(links);
     links.push({desc:'Contact Us', link:'/ContactUs'})
     links.push({desc:'Employment', link:'/Employment'})
 
-    var query = "Select datadesc as description, fileLink as link from ListData where listName='HelpfulLinks'";
+    let query = "Select datadesc as description, fileLink as link from ListData where listName='HelpfulLinks'";
     simpleDBQuery(query)
     .then(rows => {
         rows.map(row => {
@@ -80,15 +82,31 @@ router.get('/Links', function(req, res) {
         })
     })
     .then(rows => {
-        // console.log(require('util').inspect(links, {colors:true, depth: null }));
-        // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
-        // res.json(JSON.stringify(links, null, 2) );
-        links.sort((a,b) => {
-            return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
+        console.log('Add Menus from DB');
+        let query = "Select description, pageLink, fullLink as link from Menus";
+        simpleDBQuery(query)
+        .then(rows => {
+            // console.log('rows:', rows);
+            rows.map(row => {
+                let link = row.link;
+                if (row.pageLink.startsWith('http')) {
+                    link = row.pageLink;
+                }
+                links.push({desc: row.description, link:link});
+            })
         })
-        // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
-        res.json(links);
+        .then(rows => {
+            // console.log(require('util').inspect(links, {colors:true, depth: null }));
+            // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
+            // res.json(JSON.stringify(links, null, 2) );
+            links.sort((a,b) => {
+                return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
+            })
+            // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
+            res.json(links);
+        })
     })
+
     .catch(err => {
         console.log('HelpfulLinks Err:', err);
     })
@@ -101,22 +119,32 @@ router.get('/Menus', function(req, res) {
      .then(rows => {
          let groupedMenus = rows.reduce( (acc, curr, i) => {
              let topMenu = curr.fullLink;
+             let subMenus = []
+
              if (curr.fullLink !== curr.pageLink) {
                  topMenu = topMenu.replace(curr.pageLink, '')
              }
              if (topMenu.endsWith('/') && curr.fullLink !== '/' ) {
                  topMenu = topMenu.substring(0, topMenu.length - 1);
              }
-             if (curr.fullLink === curr.pageLink) {
-                 acc[topMenu] = {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description,'menus':[]}
-             }
-             acc[topMenu] = acc[topMenu]? acc[topMenu]: {};
+
+             acc[topMenu] = (acc[topMenu] && typeof acc[topMenu] !== undefined) ? acc[topMenu]: {};
+
              if (curr.fullLink !== curr.pageLink && acc[topMenu].menus) {
                  acc[topMenu]['menus'].push( {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description})
              }
+
+             if (curr.fullLink !== curr.pageLink && !acc[topMenu].menus) {
+                 acc[topMenu]['menus'] = [{id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description}]
+             }
+
+             if (curr.fullLink === curr.pageLink) {
+                 acc[topMenu] = Object.assign(acc[topMenu], {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description})
+             }
              return acc;
          }, {})
-        //  console.log('Asides:' + JSON.stringify(rows));
+        //  res.status(200).send('<pre>' + JSON.stringify(groupedMenus, null, 2) + '</pre>');
+        //  console.log('groupedMenus:' + JSON.stringify(groupedMenus));
          res.json(groupedMenus);
      });
 });
@@ -128,8 +156,9 @@ router.get('/Menus1', function(req, res) {
 });
 // ==========================================================
 router.get('/Asides/:groupName', function(req, res) {
-        var query = "Select id, datadesc as description, fileLink as link from ListData where listName='PageAsides' and  pageLink= '" +
-        req.params.groupName +"' ";
+    // var query = "Select id, datadesc as description, fileLink as link from ListData where listName='PageAsides' and  pageLink= '" +
+    // req.params.groupName +"' ";
+    var query = "Select id, html as description, link from PageAsides where pageLink= '" +req.params.groupName +"' ";
          simpleDBQuery(query)
          .then(rows => {
             //  console.log('Asides:' + JSON.stringify(rows));
@@ -220,8 +249,8 @@ router.get('/Records/Notices/:groupName', function(req, res) {
 router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
     query = "Select id, recordtype as type, fileLink as link, date from PublicRecords where pageLink='" + req.params.groupName +"'";
-    query += " and ( recordtype='Minutes'  or recordtype='Agendas'  or recordtype='Video' )";
-    query += "  ORDER BY date ";
+    query += " and ( recordtype='Minutes'  or recordtype='Agenda'  or recordtype='Agendas'  or recordtype='Video'   or recordtype='Decision' )";
+    query += "  ORDER BY date, recordtype ";
     simpleDBQuery(query)
     .then(rows => {
         var toSend = rows.reduce( (newArray, row) => {
@@ -238,9 +267,12 @@ router.get('/Records/Meetings/:groupName', function(req, res) {
 router.get('/GroupData/:groupName', function(req, res) {
         var groupName = req.params.groupName;
 
-        query = "Select id, datadesc as description, pageLink as link from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
+        // query = "Select id, datadesc as description from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
+        query = "Select id, groupDescription as description from Groups where pageLink='" + groupName + "'";
+        console.log(query);
         var finalResult = simpleDBQuery(query)
         .then( groupData =>{
+            groupData[0].link = groupName;
             query = "Select id, html  as text1 from PageText where sectionName='text1' and pageLink='" + groupData[0].link +"'";
             return simpleDBQuery(query).
             then(pageTextData => {
@@ -268,7 +300,12 @@ router.get('/GroupData/:groupName', function(req, res) {
         })
 
         .then(groupDataWithPageText =>{
-            query = "Select id,name,term,phone, email, office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
+            // query = "Select id,name,term,phone, email, office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
+            query = "Select GroupMembers.id, concat(firstName, ' ', lastName) as name ,term,Users.phone, Users.emailAddress as email, GroupMembers.office from GroupMembers " +
+            " left Join Groups on Groups.id = GroupMembers.groupID " +
+            " left Join Users on Users.id = GroupMembers.userID " +
+            " where Groups.pageLink='" + groupDataWithPageText.link +"' ";
+            // console.log(query);
             return simpleDBQuery(query).
             then(members => {
                 if (members.length > 0) {

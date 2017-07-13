@@ -28,9 +28,10 @@
             {"id": 8, "desc":"Sewer Commission", "link": "/SewerCommission"},
             {"id": 9, "desc":"Supervisors of the Checklist", "link": "/ChecklistSupervisors"},
             {"id": 10, "desc":"Town House Commitee", "link": "/TownHouse"},
-            {"id": 11, "desc":"Trustees of Trust  Funds", "link": "/TrustFunds"},
-            {"id": 12, "desc":"Zoning Board of Adjustment (ZBA)", "link": "/Zoning"},
-            {"id": 13, "desc":"Board of Selectmen", "link": "/Selectmen"}
+            {"id": 11, "desc":"Town Forest", "link": "/TownForest"},
+            {"id": 12, "desc":"Trustees of Trust  Funds", "link": "/TrustFunds"},
+            {"id": 13, "desc":"Zoning Board of Adjustment (ZBA)", "link": "/Zoning"},
+            {"id": 14, "desc":"Board of Selectmen", "link": "/Selectmen"}
         ]
     }
 ]
