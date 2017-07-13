@@ -1,0 +1,30 @@
+@import "../../../../private/SASS/colors.scss";
+
+#ContactUs  {
+    // background-color: red;
+  color: $noticesLinks;
+}
+
+#ContactUs  a{
+    color: $noticesLinks;
+}
+
+#ContactUs  div{
+    clear: both;
+}
+
+#ContactUs  span.department{
+    width: 200px;
+    font-weight: bold;
+    float: left;
+}
+
+#ContactUs  span.contactName{
+    width: 250px;
+    float: left;
+}
+
+#ContactUs  span.phone{
+    width: 200px;
+    float: left;
+}
