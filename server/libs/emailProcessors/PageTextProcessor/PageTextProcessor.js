@@ -64,13 +64,17 @@ function sendRequestedPageText(request, requestedData) {
 function getCleanedTextBody(originalTextBody) {
     let bodyLines = originalTextBody.trim().split("\n");
     return bodyLines.map( line=>{
-        let newLine = line;
-        if (line === 'UPDATE' || line === 'PAGETEXT' || line.indexOf('Website automation') >= 0) {
-            newLine = ''
-        }
-        newLine = newLine.replace(/^>/,'').trim()
+        let newLine = [ '^UPDATE$','^PAGETEXT$','^ADD$','^SECTION:','Website automation wrote:']
+        .reduce( (acc,value) => {
+            if (acc.search(new RegExp(value, 'i')) >= 0) {
+                acc = "";
+            }
+            return acc.trim();
+        }, line.trim())
+
+        newLine = newLine.replace(/^>*/,'').trim()
         return newLine;
-    }).join('\n')
+    }).join('\n').trim()
 }
 //===========================================
 class PageTextProcessor {
@@ -83,6 +87,9 @@ class PageTextProcessor {
 
         let action = requestData.DBData.requestType;
         let entry= translateToDBScheme(requestData.DBData)
+        let cleanText = getCleanedTextBody(requestData.bodyData);
+        console.log('cleanText:', JSON.stringify(cleanText));
+
         switch (action) {
             case 'REQUEST':
                 return (knex('PageText').select().where(entry)
@@ -96,7 +103,6 @@ class PageTextProcessor {
                 )
             break;
             case 'UPDATE':
-                let cleanText = getCleanedTextBody(requestData.DBData.bodyData);
                 let updateFields = {
                     markdown: cleanText, // provided markdown
                     html: marked(cleanText) //markdown converted to HTML
@@ -111,8 +117,22 @@ class PageTextProcessor {
                 });
 
             break;
+            case 'ADD':
+                entry.markdown = cleanText, // provided markdown
+                entry.html =  marked(cleanText) //markdown converted to HTML
+
+                return (knex('PageText').insert(entry)
+                .then(results => {
+                    entry.id = 0;
+                    entry.uid = requestData.uid; // We need to return this so IMAP subsystem can move/delete it.
+                    console.log('Added:', entry);
+                    return Promise.resolve([entry]);
+                })
+                )
+            break;
             default:
-                return Promise.reject(' *** Unknown PageTextProcessor action:' + action + ' for DBData:' + JSON.stringify(requestData));
+            // console.log('entry:', entry);
+                return Promise.reject(' *** Unknown PageTextProcessor action:' + action + ' for DBData:' + JSON.stringify(entry, null, 2));
 
         }
     }
