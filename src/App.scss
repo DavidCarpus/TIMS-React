@@ -1,3 +1,5 @@
+@import "../private/SASS/colors.scss";
+
 .App {
   text-align: center;
 }
@@ -18,13 +20,8 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 #root  {
-  background-color: cornsilk;
+  background-color: $globalBackground;
 
   font-family: sans-serif;
 }

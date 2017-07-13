@@ -1,0 +1,26 @@
+@import "../../../../private/SASS/AgendasAndMinutes.scss";
+
+.showMeetings{
+    display: block;
+}
+
+.hideMeetings{
+    display: none;
+}
+
+.yearLabelClass {
+    display: block;
+    min-width: 100px;
+}
+
+.date {
+    // display: block;
+    min-width: 100px;
+    clear: right;
+    float: left;
+}
+.meetingElement {
+    // display: flex;
+    width: 120px;
+    // float: right;
+}

@@ -10,6 +10,7 @@
     "dependencies": {
         "axios": "^0.16.2",
         "bootstrap": "^3.3.7",
+        "classnames": "^2.2.5",
         "concurrently": "^3.4.0",
         "react": "^15.5.4",
         "react-bootstrap": "^0.31.0",
@@ -37,6 +38,7 @@
         "startTestServer": "cd server && node app.js",
         "buildTest": "PUBLIC_URL=\"http://carpusconsulting.com/milton/\" react-scripts build",
         "pushTest": "rsync -auv build/ A2:./test.miltonnh.us/www --delete  && rsync -auv server/ A2:./test.miltonnh.us/server/",
-        "dev": "concurrently \"yarn start\"  \"cd server && nodemon app.js\" "
+        "pushDev": "rsync -auv build/ A2:./dev.miltonnh.us/www --delete  && rsync -auv server/ A2:./dev.miltonnh.us/server/",
+        "dev": "concurrently \"yarn start\"  \"cd server && nodemon app.js\" \"npm run watch-css\" "
     }
 }

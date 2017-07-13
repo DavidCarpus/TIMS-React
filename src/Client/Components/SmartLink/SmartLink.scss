@@ -1,3 +1,11 @@
+@import "../../../../private/SASS/colors.scss";
+
+#notices a{
+    color: $noticesLinks;
+}
+
+$iconsize: 15px;
+
 .pdf_link::before {
     content: "";
     display: inline-block;
@@ -5,8 +13,8 @@
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
-    width: 10px;
-    height: 10px;
+    width: $iconsize;
+    height: $iconsize;
     /*float: left;*/
     margin: 4px 5px 0 5px;
 }
@@ -17,8 +25,8 @@
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
-    width: 10px;
-    height: 10px;
+    width: $iconsize;
+    height: $iconsize;
     /*float: left;*/
     margin: 4px 5px 0 5px;
 }
@@ -41,8 +49,8 @@
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
-    width: 15px;
-    height: 15px;
+    width: $iconsize;
+    height: $iconsize;
     /*float: left;*/
     margin: 0px 5px 0 5px;
 }

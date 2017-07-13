@@ -1,4 +1,5 @@
 import React from 'react';
+import  './EB2ServiceBlock.css'
 
 export default class EB2ServiceLink extends React.Component {
     imageLink(service, secure){
@@ -14,7 +15,7 @@ export default class EB2ServiceLink extends React.Component {
                 title={service.desc}
                 rel="noopener noreferrer"
                 target='_blank'>
-                 <img src={this.imageLink(service, this.props.secure)} alt='Service Icon' /></a>
+                 <img src={this.imageLink(service, this.props.secure)} alt='Service Icon' className="EB2ServiceBlockIcon" /></a>
         );
     }
 }

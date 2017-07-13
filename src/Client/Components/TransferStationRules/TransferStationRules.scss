@@ -1,0 +1,25 @@
+.feeschedule{
+    width: 100%;
+}
+.feeItem {
+max-width: 500px;
+width: 100%;
+clear: both;
+border: 1px solid black;
+margin: 0 auto;
+}
+.feeItemDesc {
+    width: 80%;
+    font-weight: bold;
+    /*background-color: red;*/
+    float: left;
+}
+.feeItemPrice{
+    width: 20%;
+/*width: 100px;*/
+    float: left;
+}
+.feeNote {
+    font-style: italic;
+    clear: both;
+}
