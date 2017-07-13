@@ -52,34 +52,39 @@ class BoardCommitteeProcessor {
         let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
         switch (action) {
             case 'ADD':
-                let listDataEntry = {listName: 'OrganizationalUnits', pageLink:entry.pageLink.replace(/\//, ''), datatext:entry.description};
-                let menuEntry = entry;
+            let listDataEntry = {
+                listName: 'OrganizationalUnits',
+                pageLink:entry.pageLink.replace(/\//, ''),
+                datatext:entry.description,
+                datadesc:entry.description
+            };
+            let menuEntry = entry;
 
-                return knex.transaction(function (t) {
-                  return knex("ListData")
+            return knex.transaction(function (t) {
+                return knex("ListData")
+                .transacting(t)
+                .insert(listDataEntry)
+                .then(function (response) {
+                    return knex('Menus')
                     .transacting(t)
-                    .insert(listDataEntry)
-                    .then(function (response) {
-                      return knex('Menus')
-                        .transacting(t)
-                        .insert(menuEntry)
-                    })
-                    .then(t.commit)
-                    .catch(t.rollback)
+                    .insert(menuEntry)
                 })
-                .then(results => {
-                  // transaction suceeded, data written
-                      entry.id = results[0];
-                      entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                      return Promise.resolve([entry]);
-                })
-                .catch(err => {
-                    entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
-                  // transaction failed, data rolled back
-                  return Promise.reject(err);
-                });
+                .then(t.commit)
+                .catch(t.rollback)
+            })
+            .then(results => {
+                // transaction suceeded, data written
+                entry.id = results[0];
+                entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
+                return Promise.resolve([entry]);
+            })
+            .catch(err => {
+                entry.uid = emailData.uid; // We need to return this so IMAP subsystem can move/delete it.
+                // transaction failed, data rolled back
+                return Promise.reject(err);
+            });
             break;
-        default:
+            default:
             console.log(require('util').inspect(entry, { depth: null }));
             return Promise.reject(' *** Unknown BoardCommitteeProcessor action:' + action + ' for DBData:' , emailData.DBData);
         }

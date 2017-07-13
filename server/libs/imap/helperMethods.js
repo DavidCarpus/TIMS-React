@@ -74,9 +74,11 @@ function getRecordTypeFromLine(line) {
 //=======================================
 function getRequestTypeFromLine(line) {
     let requestTypes = [
-        {requestType: 'ADD', searchMatches: [ '^ADD$',
+        {requestType: 'ADD', searchMatches: [
+            '^ADD$',
             'MENU ADD:?','ADD MENU:?','USER ADD:?','ADD USER:?','BOARD ADD:?','ADD BOARD:?',] },
-        {requestType: 'REMOVE', searchMatches:['^REMOVE$','^DELETE$',
+        {requestType: 'REMOVE', searchMatches:[
+            '^REMOVE$','^DELETE$',
             'MENU REMOVE:?','REMOVE MENU:?','USER REMOVE:?','REMOVE USER:?','BOARD REMOVE:?','REMOVE BOARD:?',
             'MENU DELETE:?','DELETE MENU:?','USER DELETE:?','DELETE USER:?','BOARD DELETE:?','DELETE BOARD:?',
             ] },
