@@ -50,7 +50,7 @@ export default class MainLayoutUI extends React.Component {
                       <Menu menus={this.props.MainMenus}/>
                   </header>
               </Row>
-              <Row id='MainLayoutUI' className="show-grid">
+              <Row id='MainLayoutUI' >
                   <main id="primaryArea" >
                       <Route exact path="/" render={(newProps)=>( <HomePage store={this.props.store} {...newProps} /> )} />
                       <Route path="/about" render={(newProps)=>( <About store={this.props.store} {...newProps} /> )} />

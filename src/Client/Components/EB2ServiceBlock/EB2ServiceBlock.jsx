@@ -20,16 +20,11 @@ export default class EB2ServiceBlock extends React.Component {
         let secure = (window.location.href.indexOf('https:') >= 0)
 
         return (
-            <ul id={id} style={{listStyleType: 'none'}}>
+            <span id={id} style={{listStyleType: 'none'}}>
                 {this.props.services.map( (service, index) =>
                     <EB2ServiceLink key={index} service={service} secure={secure}/>
                     )}
-            </ul>
+            </span>
         );
     }
 }
-/*
-
-
-
-*/
