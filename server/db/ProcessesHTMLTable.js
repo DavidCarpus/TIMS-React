@@ -33,19 +33,21 @@ function isValidLinkDesc(group, desc) {
 function translateAnchorDesc(origDesc, groupName) {
     let translations = [
         {original: 'Agenda', alternatives:['Agenda ---MEETING']},
-        {original: 'Workshop', alternatives:[]},
-        {original: 'Video', alternatives:['video']},
-        {original: 'Minutes', alternatives:['Mnutes','MInutes','Mintues']},
         {original: 'Amended Agenda', alternatives:['AMENDED Agenda','Agenda Addendum','Agenda Amended','Agenda (Amended)']},
+        {original: 'Decision', alternatives:['Decision']},
+        {original: 'Minutes', alternatives:['Mnutes','MInutes','Mintues']},
+        {original: 'Meeting Notice', alternatives:['Notice','NOTICE']},
+        {original: 'Video', alternatives:['video']},
+        {original: 'Workshop', alternatives:[]},
     ];
 
     let results = translations.filter( translation =>  (translation.original === origDesc || translation.alternatives.indexOf(origDesc) >= 0 ) )
     if ( results && results.length > 0) { // found a match
         return results[0].original
     }
-    if (groupName === 'TrustFunds' && (origDesc === 'Notice' || origDesc === 'NOTICE') ) {
-        return 'Meeting Notice'
-    }
+    // if (groupName === 'TrustFunds' && (origDesc === 'Notice' || origDesc === 'NOTICE') ) {
+    //     return 'Meeting Notice'
+    // }
     // console.log('*** groupName/origDesc:', groupName , origDesc);
 
     return null;
