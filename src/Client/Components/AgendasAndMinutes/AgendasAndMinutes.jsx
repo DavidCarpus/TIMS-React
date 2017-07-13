@@ -2,7 +2,6 @@ import React from 'react';
 import SmartLink from '../SmartLink'
 import  './AgendasAndMinutes.css'
 
-
 function formatDate(date) {
   var monthNames = [
     "January", "February", "March",
@@ -27,10 +26,10 @@ const YearBlock = ({yearMeetings, year, expanded}) => {
         {yearMeetings.map( (meeting, meetingIndex) => {
             return (
                 <div key={meetingIndex}>
-                    <span>{formatDate(new Date(meeting[0]))}</span>
+                    <span className="date">{formatDate(new Date(meeting[0]))}</span>
                     {meeting[1].map( (element, elementIndex) => {
                     return (
-                        <span  key={elementIndex}><SmartLink link={element.link} id={element.id} linkText={element.type} /></span>
+                        <span  className="meetingElement" key={elementIndex}><SmartLink link={element.link} id={element.id} linkText={element.type} /></span>
                     )
                 })}
                 </div>
@@ -80,10 +79,17 @@ export class AgendasAndMinutes extends React.Component {
 
                     //   if (year.date === '2017') {expandYear = true;}
                       if ( this.state.expandedYears.indexOf(year.date) >= 0) {expandYear = true;}
+                      let yearLabelClass=expandYear? 'expandedYearLabel':'contractedYearLabel';
+                      let yearLabelClasses = `yearLabelClass ${yearLabelClass}`
                     return (
                         <div   key={index1} >
-                        <a onClick={()=> this.toggle(year.date)}>
-                            {year.date} {expandYear?'^':'v'}</a>
+                            <span  className={yearLabelClasses} onClick={()=> this.toggle(year.date)}
+                                title={expandYear?'Contract':' Expand'}>
+                                <a >
+                                    {year.date}
+                                    {expandYear?' -':' +'}
+                                </a>
+                            </span>
 
                         <YearBlock yearMeetings={year.values} year={year.date}
                             expanded={expandYear}></YearBlock>
