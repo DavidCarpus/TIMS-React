@@ -30,6 +30,7 @@
     "mysql": "^2.13.0",
     "nodemailer": "^4.0.1",
     "nodemailer-promise": "^1.0.3",
+    "public-google-calendar": "^0.2.0",
     "request": "^2.81.0"
   },
   "devDependencies": {

@@ -17,6 +17,21 @@
         "validExtensions":["pdf"]
     }
 },
+"googleAPI":{
+"clientID":"MiltonMiniCal",
+"installed":
+    {"client_id":"870046666767-qmddl07b5rmbp58tccfhpi3k8fu8d290.apps.googleusercontent.com",
+        "project_id":"canvas-primacy-173510",
+        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+        "token_uri":"https://accounts.google.com/o/oauth2/token",
+        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret":"iOpvvCr_Ov4srpEjTuXoTKWd",
+        "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}
+},
+"calendarProcess": {
+    "infinite":true,
+    "delay": 360000
+},
 "db_config":{
   "host"     : "66.198.240.7",
   "user"     : "carpusco_dcarpus",
@@ -27,7 +42,11 @@
 "ui":{
     "ROOT_URL":"https://test.miltonnh.us:45102/api/"
 },
-"attachmentPath": "/private/Attachments/",
-"markdownPath": "/private/Markdown/"
+
+"unused":{
+    "attachmentPath": "/private/Attachments/",
+    "markdownPath": "/private/Markdown/",
+    "sendhost": "mail.miltonnh.us"
+}
 
 }
