@@ -66,12 +66,19 @@ function dbDateFormat(date) {
 }
 //===========================================
 function sendAutomationEmail(emailAddresses, emailContent) {
-    var sendEmail = mailer.config({
-        email: configuration.imapProcess.imapcredentials.user,
-        password: configuration.imapProcess.imapcredentials.password,
-        server: configuration.imapProcess.imapcredentials.host,
+    // tls: {
+    //     rejectUnauthorized: false
+    // },
+    // port: 465,
+    // port: 25,
+    let credentials = configuration.imapProcess.imapcredentials
+    let mailCredentials = {
+        email: credentials.senduser || credentials.user,
+        password: credentials.sendpassword || credentials.password,
+        server: credentials.sendhost || credentials.host,
         port: 465,
-    });
+    }
+    var sendEmail = mailer.config(mailCredentials);
     var options = {
         subject: emailContent.subject,
         senderName: 'Website automation',
@@ -79,15 +86,18 @@ function sendAutomationEmail(emailAddresses, emailContent) {
         text: emailContent.text
     };
     // return Promise.resolve(options)
+    console.log('Sending email to ', emailAddresses , ' via ' ,  mailCredentials.server);
     return sendEmail(options)
     .then(info => {
         console.log('Emailed :' , emailAddresses , emailContent.subject )
         return Promise.resolve([info]);
     })   // if successful
-    // .catch(err => {
-    //     console.log('got error'); console.log(err)
-    //     return Promise.reject(err);
-    // });   // if an error occurs
+    .catch(err => {
+        console.log('sendAutomationEmail error');
+        console.log('mailCredentials:', mailCredentials);
+        console.log(err)
+        return Promise.reject(err);
+    });   // if an error occurs
 }
 //===========================================
 function sendRequestedPageText(request, requestedData) {

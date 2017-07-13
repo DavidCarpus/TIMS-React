@@ -1,9 +1,9 @@
 {
 "imapProcess":{
     "imapcredentials":{
-        "user": "miltonnh@jovaraanddavid.us",
+        "user": "website@test.miltonnh.us",
         "password": "M$g;~5_2e.T#",
-        "host": "bankson.tchmachines.com",
+        "host": "mail.miltonnh.us",
         "port": 993,
         "tls": true
     },

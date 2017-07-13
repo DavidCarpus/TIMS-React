@@ -1,9 +1,66 @@
 {
 "imapProcess":{
     "imapcredentials":{
-        "user": "website@dev.miltonnh.us",
-        "password": "Ra4B}n5q4)vQ",
+        "user":
+        "website@dev.miltonnh.us",
+        "password":
+        "Ra4B}n5q4)vQ",
+        "host":
+            "a2ss29.a2hosting.com",
+        "port": 993,
+        "tls": true
+    },
+    "productionimapcredentials":{
+        "mode": "production",
+        "user": "website@miltonnh.us",
+        "password": "V17v_RKqo68W",
+        "host": "mail.miltonnh.us",
         "host": "a2ss29.a2hosting.com",
+        "port": 993,
+        "tls": true
+    },
+
+    "devimapcredentials":{
+        "mode": "dev",
+        "user":
+        "website@dev.miltonnh.us",
+        "password":
+        "Ra4B}n5q4)vQ",
+        "host":
+            "a2ss29.a2hosting.com",
+        "-senduser":
+            "website@dev.miltonnh.us",
+        "-sendpassword":
+            "Ra4B}n5q4)vQ",
+        "port": 993,
+        "tls": true
+    },
+    "testimapcredentials":{
+        "mode": "test",
+        "user":
+            "website@test.miltonnh.us",
+        "password":
+            "M$g;~5_2e.T#",
+        "host":
+            "a2ss29.a2hosting.com",
+        "-senduser":
+            "website@dev.miltonnh.us",
+        "-sendpassword":
+            "Ra4B}n5q4)vQ",
+        "sendhost":
+            "mail.test.miltonnh.us",
+        "port": 993,
+        "tls": true
+    ,
+        "user":
+                "test@miltonnh.us",
+        "password":
+                "M$g;~5_2e.T#",
+        "user": "website@test.miltonnh.us",
+        "password": "M$g;~5_2e.T#",
+        "host": "mail.miltonnh.us",
+        "host": "a2ss29.a2hosting.com",
+        "sendhost": "mail.miltonnh.us",
         "port": 993,
         "tls": true
     },
@@ -16,6 +73,21 @@
         "required": true,
         "validExtensions":["pdf"]
     }
+},
+"googleAPI":{
+"clientID":"MiltonMiniCal",
+"installed":
+    {"client_id":"870046666767-qmddl07b5rmbp58tccfhpi3k8fu8d290.apps.googleusercontent.com",
+        "project_id":"canvas-primacy-173510",
+        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+        "token_uri":"https://accounts.google.com/o/oauth2/token",
+        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret":"iOpvvCr_Ov4srpEjTuXoTKWd",
+        "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}
+},
+"calendarProcess": {
+    "infinite":false,
+    "delay": 360000
 },
 "db_config":{
   "host"     : "localhost",
