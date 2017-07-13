@@ -52,32 +52,6 @@ class DropdownMenu extends React.Component {
                     )}
                 </NavDropdown>
             )
-/*
-        // var parentIndex=this.props.index
-        return (
-                <NavDropdown eventKey={this.props.menu.id} title={this.props.menu.desc} id={this.props.menu.id}>
-                    {this.props.menu.menus.map( (submenu, index) =>
-                        ( !submenu.link.startsWith('http'))
-                        ?
-                        <IndexLinkContainer to={this.props.menu.link + submenu.link}
-                            key={this.props.menu.id + '.'+ submenu.id}
-                             id={this.props.menu.id + '.'+ submenu.id}
-                            >
-                            <MenuItem
-                                className={s.navItem}>{submenu.desc}
-                            </MenuItem>
-                        </IndexLinkContainer>
-                        :
-                        <MenuItem className={s.externalMenu}
-                            key={this.props.menu.id + '.'+ submenu.id}
-                            id={this.props.menu.id + '.'+ submenu.id}
-                            href={submenu.link}  target="_blank">
-                            {submenu.desc}
-                      </MenuItem>
-                    )}
-                </NavDropdown>
-            )
-            */
     }
 }
 /*
@@ -92,12 +66,13 @@ class DropdownMenu extends React.Component {
 
 class MainMenu extends React.Component {
     render(){
-        // console.log(JSON.stringify(this.props.menu))
+        // console.log(JSON.stringify(this.props.menu[1]))
         // const logo = {height: '90px'};
-        if (this.props.menu[1].menus.length > 0) {
+        if (this.props.menu[1].menus && this.props.menu[1].menus.length > 0) {
             // return (<span>Dropdown</span>)
             return ( <DropdownMenu menu={this.props.menu} index={this.props.index} /> )
         } else {
+            // console.log(JSON.stringify(this.props.menu[0]))
             return (
                 <IndexLinkContainer to={this.props.menu[0]}>
                     <NavItem id={this.props.menu[1].id }  eventKey={this.props.menu[1].id} >{this.props.menu[1].description}</NavItem>
@@ -116,6 +91,14 @@ class MainMenu extends React.Component {
 
 export default class Menu extends React.Component {
     render(){
+        // console.log(Object.entries(this.props.menus.menus));
+        let sortedMenus = Object.entries(this.props.menus.menus)
+            .sort((a,b) => {
+                let itemA = a[1].description.toUpperCase();
+                let itemB = b[1].description.toUpperCase();
+                return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
+            })
+            // console.log(sortedMenus)
         return (
             <div key={this.props.index} >
                 <Col md={12}>
@@ -133,14 +116,7 @@ export default class Menu extends React.Component {
                         <Navbar.Collapse
                             >
                             <Nav>
-                                {Object.entries(this.props.menus.menus)
-                                    .sort((a,b) => {
-                                        let itemA = a[1].description.toUpperCase();
-                                        let itemB = b[1].description.toUpperCase();
-                                        // return (a.toUpperCase() < b.toUpperCase()) ? -1 : (a.toUpperCase() > b.toUpperCase()) ? 1 : 0;
-                                        return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
-                                    })
-                                    .map( (menu, index) =>
+                                {sortedMenus.map( (menu, index) =>
                                     <MainMenu  key={index} menu={menu} index={menu.id} />
                                 )}
                             </Nav>
@@ -154,4 +130,5 @@ export default class Menu extends React.Component {
   }
 
 /*
+
 */
