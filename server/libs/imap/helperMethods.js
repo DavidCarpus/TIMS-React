@@ -142,6 +142,7 @@ function extractDBData(email) {
             {fieldName: 'term', searchMatches: [ '^TERM:'] },
             {fieldName: 'office', searchMatches: [ '^OFFICE:']},
             {fieldName: 'phone', searchMatches: [ '^PHONE:']},
+            {fieldName: 'section', searchMatches: [ '^SECTION:']},
             {fieldName: 'email', searchMatches: [ '^EMAIL:']},
             {fieldName: 'menu', searchMatches: [ '^MENU ADD:', '^ADD MENU:',  '^BOARD ADD:', '^ADD BOARD:']},
             {fieldName: 'name', searchMatches: [ '^USER ADD:', '^ADD USER:', '^USER DELETE:', '^DELETE USER:']},
