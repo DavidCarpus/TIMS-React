@@ -1,11 +1,13 @@
 var PublicGoogleCalendar = require('public-google-calendar')
   , publicGoogleCalendar = new PublicGoogleCalendar({ calendarId: 'townmiltonnh@gmail.com' });
+var knexConfig = require('../db/knexfile.js')
+var knexConnection = require('knex')(knexConfig['development']);
 
   //======================================
 
-function importCalendarEvents(knex = null) {
+function importCalendarEvents(knex = null, futureDays=14) {
     let tableName = 'CalendarEvents'
-    return pullEventsFromGoogleICAL(addDays(new Date(), -7),addDays(new Date(), 14))
+    return pullEventsFromGoogleICAL(addDays(new Date(), -7),addDays(new Date(), futureDays))
     .then(events => {
          return Promise.all(events.map(record => {
             let dataToInsert =
@@ -76,7 +78,8 @@ function importCalendarEvents(knex = null) {
     // https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
     if (require.main === module) {
         console.log('cpullEventsFromGoogleICALalled directly');
-        pullEventsFromGoogleICAL(addDays(new Date(), -1),addDays(new Date(), 14) )
+        // pullEventsFromGoogleICAL(addDays(new Date(), -1),addDays(new Date(), 30) )
+        importCalendarEvents(knexConnection, 30)
         .then(events=> {
             // return (knex('CalendarEntries').select().where(entry)
             // .then(results => {
