@@ -156,8 +156,6 @@ router.get('/Menus1', function(req, res) {
 });
 // ==========================================================
 router.get('/Asides/:groupName', function(req, res) {
-    // var query = "Select id, datadesc as description, fileLink as link from ListData where listName='PageAsides' and  pageLink= '" +
-    // req.params.groupName +"' ";
     var query = "Select id, html as description, link from PageAsides where pageLink= '" +req.params.groupName +"' ";
          simpleDBQuery(query)
          .then(rows => {
@@ -165,6 +163,16 @@ router.get('/Asides/:groupName', function(req, res) {
              res.json(rows);
          });
         //  res.json([]);
+});// ==========================================================
+router.get('/CalendarEvents/', function(req, res) {
+    // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
+    var query = "Select * from CalendarEvents where startDate >= NOW() order by startDate limit 4 ";
+     simpleDBQuery(query)
+     .then(rows => {
+        //  console.log('Asides:' + JSON.stringify(rows));
+         res.json(rows);
+     });
+    //  res.json([]);
 });
 // ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {
