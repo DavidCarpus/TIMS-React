@@ -6,7 +6,6 @@ import {fetchGroupNotices} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
 
 const mapStateToProps = (state, ownProps) => {
-
     var groupName=  ownProps.match.params.department;
     let recordState = state.OrganizationalUnits;
     let loading= recordState.loading
@@ -14,14 +13,21 @@ const mapStateToProps = (state, ownProps) => {
     if (groupName === 'TransferRules') {
         groupName = 'PublicWorks'
     }
+    let loadedGroupName = recordState.groupName
+    let selectedGroupName = ownProps.groupName
 
-    if (ownProps.store &&  recordState.groupName !== ownProps.groupName && !recordState.loading) {
+    if (ownProps.store && loadedGroupName !== selectedGroupName && !recordState.loading) {
         // Check if last group loaded was not in 'Department' mainMenu, do NOT load here. Will do it in componentWillMount
-        if (state.MainMenus && state.MainMenus.menus.length > 0) {
-            let chk = state.MainMenus.menus
-            .filter(menu => menu.desc === 'Departments')[0].menus
-            .filter(menu => menu.link === '/'+recordState.groupName)[0]
-            if (typeof chk !== 'undefined') {
+        if (state.MainMenus && state.MainMenus.menus && Object.keys(state.MainMenus.menus).length > 0 ) {
+            let deptMenu = state.MainMenus.menus['/Departments']
+            let newGroup = deptMenu.menus
+            .filter(menu =>  (menu.pageLink === '/'+selectedGroupName) )
+
+            let oldGroup = deptMenu.menus
+            .filter(menu =>  (menu.pageLink === '/'+loadedGroupName) )
+
+            // new group and old group both in 'Departments', fetch from here (otherwise do in componentWillMount )
+            if ( newGroup.length > 0 && oldGroup.length >  0) {
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
                 loading=true;
             }

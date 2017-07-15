@@ -19,11 +19,7 @@ export default class DepartmentsUI extends React.Component {
       if ( this.props.loading || ! this.props.groupData) {
           return (<div>DepartmentsUI Loading {this.props.groupName}</div>)
       }
-    //   if (this.props.groupData.link !== this.props.groupName) {
-    //       this.props.fetchData(this.props.groupName);
-    //       return (<div>DepartmentsUI Loading {this.props.groupName}</div>)
-    //   }
-    //   console.log(this.props);
+
     switch (this.props.groupName) {
         case 'Assessing':
             return (
