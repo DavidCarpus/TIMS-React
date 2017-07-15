@@ -45,7 +45,11 @@ const SystemIndexConstants = {
     FETCH_DATA_SUCCESS: 'FETCH_SYSTEMINDEX_DATA_SUCCESS',
     FETCH_DATA_FAILURE: 'FETCH_SYSTEMINDEX_DATA_FAILURE',
 }
-
+const CalendarDataConstants = {
+    FETCH_DATA: 'FETCH_CALENDAR_DATA',
+    FETCH_DATA_SUCCESS: 'FETCH_CALENDAR_DATA_SUCCESS',
+    FETCH_DATA_FAILURE: 'FETCH_CALENDAR_DATA_FAILURE',
+}
 
 module.exports = {
     PublicDocumentsConstants,
@@ -55,4 +59,5 @@ module.exports = {
     PageAsidesConstants,
     EB2ServicesConstants,
     SystemIndexConstants,
+    CalendarDataConstants,
 }
