@@ -8,6 +8,7 @@ import FAQReducer from './FAQData';
 import PageAsidesReducer from './PageAsides';
 import EB2ServicesReducer from './EB2Services';
 import SystemIndexReducer from './SystemIndex';
+import CalendarDataReducer from './CalendarData';
 import { routerReducer as routing } from 'react-router-redux';
 
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     PageAsides : PageAsidesReducer,
     EB2Services: EB2ServicesReducer,
     SystemIndex: SystemIndexReducer,
+    CalendarData: CalendarDataReducer,
     routing
 });
 
