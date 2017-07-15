@@ -18,7 +18,7 @@ export default class Assessing extends React.Component {
 
         return (
             <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+                <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Assessing Department</h1>
                     <RawText groupPageText={groupPageText} block='description' />
 
@@ -38,7 +38,7 @@ export default class Assessing extends React.Component {
                         title='Milton Assessors Documentation'
                         />
                     </Col>
-                    <Col md={2} mdPull={10}>
+                    <Col md={2} mdPull={9}>
                         <Aside
                             group={group}
                             store={this.props.store}

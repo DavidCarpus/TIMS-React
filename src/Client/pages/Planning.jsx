@@ -13,7 +13,7 @@ export default class Planning extends React.Component {
 
         return (
             <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+                <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>{group.description}</h1>
                     The Planning and Land Use Department consists of the following boards:
                     <ul>
@@ -35,7 +35,7 @@ export default class Planning extends React.Component {
                     <p>If you should have any questions please do not hesitate to contact Dana Crossley, Land Use Clerk, at 603-652-4501 x5 or
                         landuse@miltonnh-us.com</p>
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group} store={this.props.store} /></Col>
+                <Col md={2} mdPull={9}><Aside group={group} store={this.props.store} /></Col>
 
             </div>
         );

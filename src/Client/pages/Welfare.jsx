@@ -18,7 +18,7 @@ export default class Welfare extends React.Component {
 
         return (
             <Row id={group.link} className="show-grid">
-            <Col md={10}  mdPush={2} id="contentArea"  >
+            <Col md={9}  mdPush={2} id="contentArea"  >
                 <h1 style={{textAlign:'center'}}>{group.description}</h1>
 
                         <quote>The Town has a basic legal duty to administer welfare as described in New Hampshire RSA 165:1-I, which states “Whenever a person in any town is poor and unable to support himself, he shall be relieved and maintained by the overseers of public welfare of such town…”</quote>
@@ -39,7 +39,7 @@ export default class Welfare extends React.Component {
 
                         <FAQList group={group} groupName={group.link}  store={this.props.store}/>
                         </Col>
-                        <Col md={2} mdPull={10}><Aside group={group}  store={this.props.store} /></Col>
+                        <Col md={2} mdPull={9}><Aside group={group}  store={this.props.store} /></Col>
                     </Row>
 
         );

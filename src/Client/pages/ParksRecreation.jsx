@@ -15,7 +15,7 @@ export default class ParksRecreation extends React.Component {
         // console.log('ParksRecreation:', this.props);
         return (
             <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+                <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Parks and Recreation</h1>
                     <RawText groupPageText={groupPageText} block='description' />
                     <EB2ServiceBlock groupName={group.link}/>
@@ -26,7 +26,7 @@ export default class ParksRecreation extends React.Component {
 
                     <TownNewsletters title={'Milton Town Gazette'} group={this.props.group} store={this.props.store} />
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={this.props.group} store={this.props.store}/></Col>
+                <Col md={2} mdPull={9}><Aside group={this.props.group} store={this.props.store}/></Col>
 
             </div>
         );

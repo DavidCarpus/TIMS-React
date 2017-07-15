@@ -42,6 +42,7 @@ export default class MainLayoutUI extends React.Component {
     componentWillMount() {
         this.props.fetchData();
     }
+
   render() {
       return (
           <Grid id="MainLayoutUI" className={s.body}>
@@ -64,7 +65,7 @@ export default class MainLayoutUI extends React.Component {
                       <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
                   </main>
               </Row>
-              <Row id='footer' className="show-grid">
+              <Row className="show-grid">
                   <Footer/>
               </Row>
           </Grid>

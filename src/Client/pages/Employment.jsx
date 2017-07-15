@@ -7,7 +7,7 @@ export default class Employment extends React.Component {
     render() {
         return (
             <div>
-                <Col md={12}  id="contentArea"  >
+                <Col md={10}  mdPush={1}  id="contentArea"  >
                     <h1>Employment Opportunities</h1>
                     <hr/>
                     <Link to='/Parks'>Summer Recreation Positions</Link>

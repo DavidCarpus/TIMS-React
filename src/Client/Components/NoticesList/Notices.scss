@@ -1,3 +1,6 @@
+@import "../../../../private/SASS/breakpoints.scss";
+@import "../../../../private/SASS/colors.scss";
+
 .mainNotice {
     width: 49%;
     min-height: 50px;
@@ -9,11 +12,21 @@
 }
 
 :global(#main_notices) {
-    /*background-color: green;*/
+    // background-color: green;
     display: inline-block;
     width: 80%;
 }
 
 .hidebullets {
     list-style: none;
+}
+#notices  {
+    background-color: rgba(200,200,200,0.5);
+}
+#notices a {
+    // background-color: rgba(200,200,200,0.8);
+    color: black;
+}
+#notices h2 {
+    color: black;
 }

@@ -15,7 +15,7 @@ export default class PublicWorks extends React.Component {
 
         return (
             <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+                <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>{group.description}</h1>
                         <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
                         <NoticesList group={group} groupName={group.link} store={this.props.store}/>
@@ -45,7 +45,7 @@ export default class PublicWorks extends React.Component {
                     <EB2ServiceBlock groupName={group.link}/>
                     Buy Transfer Station Stickers Online
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group} store={this.props.store} /></Col>
+                <Col md={2} mdPull={9}><Aside group={group} store={this.props.store} /></Col>
             </div>
         );
     }

@@ -12,7 +12,7 @@ export default class Sewer extends React.Component {
 
         return (
             <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+                <Col md={9}  mdPush={2} id="contentArea"  >
                         <h1 style={{textAlign:'center'}}>Sewer Department</h1>
 
                         <p>The wastewater facility services approximately 300 units in the town of Milton and treated approximately 22,593,000 gallons of sewerage at an average daily flow of 62,000 gallons. We continue to operate around 62% of plant design capacity allowing future growth within the community.</p>
@@ -29,7 +29,7 @@ export default class Sewer extends React.Component {
                         <SmartLink link='http://des.nh.gov/index.htm'
                             linkText='NH Department of Environmental Services (DES)'/>
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={group} groupName={group.link} store={this.props.store} /></Col>
+                <Col md={2} mdPull={9}><Aside group={group} groupName={group.link} store={this.props.store} /></Col>
 
             </div>
         )

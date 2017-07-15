@@ -12,7 +12,7 @@ export default class TownClerk extends React.Component {
 
         return (
             <div>
-                <Col md={9}  mdPush={3} id="contentArea"  >
+                <Col md={8}  mdPush={3} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Tax Collector/Town Clerk</h1>
 
                     <NoticesList group={group} store={this.props.store}/>
@@ -23,7 +23,7 @@ export default class TownClerk extends React.Component {
                     <DocumentList group={group}  store={this.props.store} />
 
                 </Col>
-                <Col md={3} mdPull={9}><Aside group={group}  store={this.props.store} /></Col>
+                <Col md={3} mdPull={8}><Aside group={group}  store={this.props.store} /></Col>
             </div>
         )
     }

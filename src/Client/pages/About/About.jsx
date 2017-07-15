@@ -16,14 +16,13 @@ render() {
     if (Array.isArray(group.pagetext)) {
         groupPageText = group.pagetext[0];
     }
-    console.log(group);
     return (
         <div>
-            <Col md={10}  mdPush={2} id="contentArea"  >
+            <Col md={10}  mdPush={1} id="contentArea"  >
             <h1 style={{textAlign:'center'}}>About the Town of Milton <br/>New Hampshire</h1>
                 <RawText groupPageText={groupPageText} block='description' />
             </Col>
-            <Col md={2} mdPull={10}><Aside group={group}   /></Col>
+            <Col md={1} mdPull={10}><Aside group={group}   /></Col>
         </div>
     );
 }

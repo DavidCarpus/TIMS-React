@@ -7,8 +7,8 @@ import  './Footer.css'
 export default class Footer extends React.Component {
     render(){
         return (
-            <footer>
-                <Row className="show-grid">
+            <footer id='footer'>
+                <Row>
                     <Col md={2} ></Col>
                     <Col md={3} ><SmartLink link='/ContactUs' linkText='Contact Us' /></Col>
                     <Col md={3} ><SmartLink link='/Employment' linkText='Employment'/></Col>

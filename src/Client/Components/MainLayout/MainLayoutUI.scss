@@ -3,3 +3,14 @@
 
   font-family: sans-serif;
 }
+
+#MainLayoutUI {
+    background: url('../images/MillAndTrain.jpg') repeat;
+    background-attachment: fixed;
+    // background-size: cover;
+    // background-size: 100% 100%;
+    background-size: contain;
+}
+#MainLayoutUI #contentArea{
+    background-color: rgba(200,200,200,0.8);
+}

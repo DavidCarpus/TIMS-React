@@ -8,6 +8,7 @@ import AgendasAndMinutes from '../AgendasAndMinutes'
 import NoticesList from '../NoticesList'
 
 import RawText  from '../RawText'
+import './Committees.css'
 
 export default class Committees extends React.Component {
     render() {
@@ -16,8 +17,8 @@ export default class Committees extends React.Component {
         var groupLabel = this.props.group.description ||  this.props.group.desc ||  this.props.groupName
 
         return (
-            <div>
-                <Col md={10}  mdPush={2} id="contentArea"  >
+            <div id='Committees'>
+                <Col md={9}  mdPush={2} id="contentArea"  >
 
                     <h1 style={{textAlign:'center'}}>{groupLabel}</h1>
 
@@ -33,7 +34,7 @@ export default class Committees extends React.Component {
 
                     <DocumentList groupName={groupName} group={this.props.group} store={this.props.store} />
                 </Col>
-                <Col md={2} mdPull={10}><Aside group={this.props.group} Name={groupName} store={this.props.store}/></Col>
+                <Col md={2} mdPull={9}><Aside group={this.props.group} Name={groupName} store={this.props.store}/></Col>
             </div>
         );
     }
