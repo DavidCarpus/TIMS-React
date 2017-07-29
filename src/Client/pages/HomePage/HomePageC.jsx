@@ -6,7 +6,8 @@ import HomePageUI from './HomePage'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-      group: {'link' : 'Home'}
+      group: {'link' : 'Home'},
+      municipalLongName:ownProps.Config.municipalLongName
     };
 }
 

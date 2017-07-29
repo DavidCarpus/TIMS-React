@@ -6,8 +6,10 @@ import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitDat
 const mapStateToProps = (state, ownProps) => {
     var groupName=  ownProps.match.params.committee;
     let recordState = state.OrganizationalUnits;
+    // console.log('CommitteesUI:fetchOrganizationalUnitData?', groupName, ownProps);
 
     if (groupName && ownProps.store && !recordState.loading && recordState.groupName !==   groupName) {
+        console.log('CommitteesUI:fetchOrganizationalUnitData', groupName);
         ownProps.store.dispatch(fetchOrganizationalUnitData(groupName));
     }
 
@@ -15,6 +17,7 @@ const mapStateToProps = (state, ownProps) => {
         currentGroupName: groupName,
         groupName: groupName,
         groupData: recordState.groupData,
+        groupLabel:  recordState.groupData.description ||  recordState.groupData.desc ||  groupName,
         group: recordState.groupData,
         groupPageText: recordState.groupData.pagetext ? recordState.groupData.pagetext[0]: '',
         loading: state.OrganizationalUnits.loading

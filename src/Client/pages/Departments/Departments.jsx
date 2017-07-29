@@ -16,7 +16,10 @@ const mapStateToProps = (state, ownProps) => {
     let loadedGroupName = recordState.groupName
     let selectedGroupName = ownProps.groupName
 
+    loading=recordState.loading;
+
     if (ownProps.store && loadedGroupName !== selectedGroupName && !recordState.loading) {
+        // console.log('DepartmentsUI:recordState:', recordState);
         // Check if last group loaded was not in 'Department' mainMenu, do NOT load here. Will do it in componentWillMount
         if (state.MainMenus && state.MainMenus.menus && Object.keys(state.MainMenus.menus).length > 0 ) {
             let deptMenu = state.MainMenus.menus['/Departments']
@@ -28,8 +31,9 @@ const mapStateToProps = (state, ownProps) => {
 
             // new group and old group both in 'Departments', fetch from here (otherwise do in componentWillMount )
             if ( newGroup.length > 0 && oldGroup.length >  0) {
+                // console.log('DepartmentsUI:fetchOrganizationalUnitData:', groupName);
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
-                loading=true;
+                loading= loading || true;
             }
         }
     }
