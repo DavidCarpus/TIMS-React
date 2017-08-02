@@ -17,3 +17,8 @@
     color: $footerLinks;
     font-weight: bold;
 }
+@media only print{
+    #footer {
+        display: none;
+    }
+}
