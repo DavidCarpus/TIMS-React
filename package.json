@@ -1,6 +1,7 @@
 {
     "name": "Milton",
     "version": "0.1.0",
+    "proxy": "http://localhost:45001",
     "private": true,
     "devDependencies": {
         "node-sass-chokidar": "^0.0.3",
