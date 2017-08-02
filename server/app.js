@@ -117,6 +117,11 @@ function imapProcess(delay, count=2) {
     // })
 }
 //===============================================
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 //https://github.com/expressjs/morgan
 logger.token('ts', function getTs (req) {
@@ -217,6 +222,7 @@ switch (configuration.mode) {
     case 'test':
         // ****** The 'Test' site email processing currently crashes the system.
         // ****** Problem with SSL certificates and email server
+        municipalLongName:Config.municipalLongName
 
         // console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
         // console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
