@@ -3,6 +3,7 @@ import styles from './PublicWorks.css'
 import { Col } from 'react-bootstrap';
 import Aside from '../Components/Aside'
 import NoticesList from '../Components/NoticesList'
+import RawText from '../Components/RawText'
 
 import SmartLink from '../Components/SmartLink'
 import EB2ServiceBlock from '../Components/EB2ServiceBlock'
@@ -11,13 +12,15 @@ import TransferStationRules from '../Components/TransferStationRules'
 export default class PublicWorks extends React.Component {
     render() {
         var group = this.props.group;
-        // var groupPageText = group.pagetext;
+        console.log('PublicWorks:group',group);
 
         return (
             <div>
                 <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>{group.description}</h1>
-                        <p>The Public Works Department consists of the Highway Department, Transfer Station, and Government Buildings.</p>
+
+                        <RawText groupPageText={this.props.group.pagetext} block='description' />
+
                         <NoticesList group={group} groupName={group.link} store={this.props.store}/>
 
                         <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'

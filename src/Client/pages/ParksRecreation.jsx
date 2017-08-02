@@ -11,13 +11,11 @@ import RawText from '../Components/RawText'
 export default class ParksRecreation extends React.Component {
     render() {
         var group = this.props.group;
-        var groupPageText = group.pagetext ? group.pagetext[0]: '';
-        // console.log('ParksRecreation:', this.props);
         return (
             <div>
                 <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Parks and Recreation</h1>
-                    <RawText groupPageText={groupPageText} block='description' />
+                    <RawText groupPageText={group.pagetext } block='description' />
                     <EB2ServiceBlock groupName={group.link}/>
                     <NoticesList
                         group={this.props.group}

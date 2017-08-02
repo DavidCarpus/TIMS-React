@@ -11,16 +11,12 @@ export default class Assessing extends React.Component {
 
     render() {
         var group = this.props.group;
-        var groupPageText = [];
-        if (Array.isArray(group.pagetext)) {
-            groupPageText = group.pagetext[0];
-        }
 
         return (
             <div>
                 <Col md={9}  mdPush={2} id="contentArea"  >
                     <h1 style={{textAlign:'center'}}>Assessing Department</h1>
-                    <RawText groupPageText={groupPageText} block='description' />
+                    <RawText groupPageText={group.pagetext} block='description' />
 
                     <div >
                         <div  style={{width:'48%'}}>
