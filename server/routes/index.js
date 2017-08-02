@@ -194,9 +194,11 @@ router.get('/fetchFile/:fileID', function(req, res) {
              let filename =  fullPath.replace(/^.*[\\\/]/, '')
              console.log('fetchFile:' + filename+ ' at ' + fullPath );
              var mimetype = mime.lookup(fullPath);
-            //  console.log('mimetype:' + mimetype);
+             console.log('mimetype:' + mimetype);
 
-            res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+             // this is only if you want to 'force' a 'download' and NOT let browser open the file
+            //  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+
             res.setHeader('Content-type', mimetype);
             res.sendFile(fullPath)
             // res.download(fullPath, filename)
