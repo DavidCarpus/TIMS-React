@@ -29,6 +29,7 @@ class DropdownMenu extends React.Component {
         let description = this.props.menu[1].description
         let id = this.props.menu[1].id
         // return (<span>{description}{id}</span>)
+        // className={s.navItem}>{submenu.description}
         return (
                 <NavDropdown eventKey={id} title={description} id={id}>
                     {subMenus.map( (submenu, index) =>
@@ -43,7 +44,7 @@ class DropdownMenu extends React.Component {
                             </MenuItem>
                         </IndexLinkContainer>
                         :
-                        <MenuItem className={s.externalMenu}
+                        <MenuItem className='externalMenu'
                             key={this.props.menu.id + '.'+ submenu.id}
                             id={this.props.menu.id + '.'+ submenu.id}
                             href={submenu.pageLink}  target="_blank">
