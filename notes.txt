@@ -5,27 +5,34 @@
 ************************************************
 News, Calendar, City Services, Notices, Employment, Contact us, Agenda/Minutes/Video, Road Construction, NIXLE
 
-RFPs
-
+## APPLY ONLINE form
 Alphabetic index of pages and documents
+
+Business listings
+Document Type - Forms
 ************************************************
 
 npm run migrate:rollback
 npm run migrate:latest
 npm run knex:seed:run json
 
-
 env NODE_ENV=test node_modules/.bin/knex seed:run json
-
-
 env NODE_ENV=test npm run start
 
 https://stackoverflow.com/questions/4672903/sending-mails-with-attachment-via-nodejs
-
 https://stackoverflow.com/questions/35206589/how-to-download-fetch-response-in-react-as-file
-
 https://stackoverflow.com/questions/305035/how-to-use-ssh-to-run-a-shell-script-on-a-remote-machine
 
-ssh A2 "nohup /home/carpusco/miltonnh.us/server/server.sh > logs/miltonus.txt 2>logs/miltonus.err < /dev/null &"
 
-ssh A2 "nohup /home/carpusco/test.miltonnh.us/server/server.sh > logs/miltonustest.txt 2>logs/miltonustest.err < /dev/null &"
+ssh A2 "nohup /home/carpusco/miltonnh.us/server/server.sh >> ~/logs/miltonus.txt 2>>~/logs/miltonus.err < /dev/null &"
+ssh A2 "pkill -f 'app.js production' && nohup /home/carpusco/miltonnh.us/server/server.sh >> ~/logs/miltonus.txt 2>>~/logs/miltonus.err < /dev/null &"
+
+ssh A2 "nohup /home/carpusco/test.miltonnh.us/server/server.sh > ~/logs/miltonustest.txt 2>~/logs/miltonustest.err < /dev/null &"
+ssh A2 "pkill -f 'app.js test' && nohup /home/carpusco/test.miltonnh.us/server/server.sh > ~/logs/miltonustest.txt 2>~/logs/miltonustest.err < /dev/null &"
+
+grep "Jul 05 2017" ../logDev1.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq
+grep "`date '+%b %d %Y'`" ./logDev.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq
+
+node db/ProcessesHTMLTable.js > ~/Desktop/ImportOut.txt 2>~/Desktop/ImportErrors.err
+
+https://numverify.com/documentation
