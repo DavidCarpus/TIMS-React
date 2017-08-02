@@ -1,0 +1,6 @@
+{
+  "name": "MiniCalendar",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MiniCalendarC.jsx"
+}
