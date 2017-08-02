@@ -1,3 +1,4 @@
+@import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
 
 .indexListLinks li {
@@ -7,4 +8,12 @@
 }
 .indexListLinks li a {
     color: blue;
+}
+#IndexPage .indexListLinks{
+    column-count: 3;
+}
+@media iphone5 {
+    #IndexPage .indexListLinks{
+        column-count: 1;
+    }
 }

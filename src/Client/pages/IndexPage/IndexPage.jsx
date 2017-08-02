@@ -35,12 +35,13 @@ export default class IndexPage extends React.Component {
     <li key={index}>{element}</li>
 */
 
+// <div style={{columnCount: 2}} className='indexListLinks'>
 render() {
     return (
-        <div>
+        <div id='IndexPage'>
             <Col md={12}  id="contentArea"  >
             <h1 style={{textAlign:'center'}}>{this.props.title}</h1>
-            <div style={{columnCount: 2}} className='indexListLinks'>
+            <div className='indexListLinks'>
             {this.props.links.map((keyElement, index) =>
                 <LinkBlock key={index} elementBlock={keyElement} index={index}></LinkBlock>
             )}
