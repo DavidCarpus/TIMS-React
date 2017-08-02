@@ -1,4 +1,12 @@
 {
+    "scripts": {
+        "kinit": "knex init",
+        "knex:seed:make": "knex --knexfile libs/db/knexfile.js seed:make",
+        "knex:seed:run": " knex  --knexfile libs/db/knexfile.js seed:run",
+        "migrate:latest": "knex  --knexfile libs/db/knexfile.js migrate:latest",
+        "migrate:rollback": "knex  --knexfile libs/db/knexfile.js migrate:rollback",
+        "migrate:make": "knex  --knexfile libs/db/knexfile.js migrate:make"
+    },
   "name": "knex",
   "version": "0.0.0",
   "private": true,
