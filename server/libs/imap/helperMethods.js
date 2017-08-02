@@ -100,13 +100,49 @@ function getRequestTypeFromLine(line) {
         }
 }
 //=======================================
+function getDateValueFromTextLine(line) {
+    let ucaseLine = line.toUpperCase().trim();
+    if (ucaseLine.search(new RegExp('^EXPIRE', 'i') ) >= 0) {
+        line = line.replace(new RegExp('^EXPIRE.*?[ :]', 'i'), '')
+        if (line.toUpperCase().trim().search(new RegExp('DAYS', 'i') ) >= 0) {
+            dte = line;
+        } else {
+            dte = Date.parse(line);
+        }
+        // console.log({expire: dte});
+        return {dateType:'expire', date: dte,}
+    }
+
+    if (ucaseLine.search(new RegExp('^DATE', 'i')) >= 0 ) {
+        line = line.replace(new RegExp('^DATE.*?[ :]', 'i'), '')
+        console.log('Date.parse(line):', line);
+        dte = new Date(line);
+        // dte = Date.parse(line);
+        // console.log({date: dte});
+        return {dateType:'date', date: dte,}
+    }
+    return null;
+
+    //
+    // dte = Date.parse(line);
+    // if (dte >= 0 ) {
+    //      if (line.indexOf('DATE') >= 0 ) {
+    //         console.log('imap:helperMethods:extractDBData - Setting results.date:', dte, ' from ', line);
+    //         results.date = dte;
+    //     }
+    // }
+}
+
+//=======================================
 function extractDBData(email) {
     // console.log('email:' + require('util').inspect(email, { color:true, depth: null }));
     let header = email.header.parts[0].body;
     let bodyData = email.bodyData
     let emailSubject = header.subject[0].toUpperCase();
 
-    let bodyLines = bodyData.trim().split("\n");
+    let bodyLines = bodyData.split("\n");
+    // console.log('bodyData:' + bodyData.replace(/ /g, '|'));
+
     let results = { mainpage: true, date: new Date(), requestType: 'ADD'};
 
     bodyLines.map( line=>{
@@ -114,14 +150,19 @@ function extractDBData(email) {
         line = line.toUpperCase().trim();
         results.groupName = getGroupNameFromTextLine(line) || results.groupName || "";
 
-        dte = Date.parse(line);
-        if (dte >= 0 ) {
-            if(line.indexOf('EXPIRE') >= 0 ) {
-                results.expire = dte;
-            } else {
-                results.date = dte;
-            }
+        let tmpDate = getDateValueFromTextLine(line);
+        if (tmpDate !== null) {
+            results[tmpDate.dateType] = tmpDate.date
         }
+        // dte = Date.parse(line);
+        // if (dte >= 0 ) {
+        //     if(line.indexOf('EXPIRE') >= 0 ) {
+        //         results.expire = dte;
+        //     } else if (line.indexOf('DATE') >= 0 ) {
+        //         console.log('imap:helperMethods:extractDBData - Setting results.date:', dte, ' from ', line);
+        //         results.date = dte;
+        //     }
+        // }
         if(line.indexOf('MAINPAGE') >= 0 ) {
             if (line == 'MAINPAGE') {
                 results.mainpage = true;
@@ -139,7 +180,7 @@ function extractDBData(email) {
 
 
         let trimMatches = [
-            {fieldName: 'description', searchMatches: [ '^DESC:','^DESCRIPTION:'] },
+            {fieldName: 'description', searchMatches: [ '^DESC:? ','^DESCRIPTION:'] },
             {fieldName: 'term', searchMatches: [ '^TERM:'] },
             {fieldName: 'office', searchMatches: [ '^OFFICE:']},
             {fieldName: 'phone', searchMatches: [ '^PHONE:']},
@@ -159,7 +200,7 @@ function extractDBData(email) {
 
     }) // bodyTextPart.map
 
-    // TODO: Determine if header subject contains missing field data
+    // Determine if header subject contains missing field data
     recordtype = getRecordTypeFromLine(emailSubject);
     if (recordtype != null ) {results.recordtype=recordtype}
 
@@ -182,6 +223,12 @@ function extractDBData(email) {
 
     results.groupName = getGroupNameFromTextLine(header.subject[0]) || results.groupName || "";
     if (results.groupName == '') { delete results.groupName; }
+
+    if (results.expire && results.expire.toUpperCase().search(new RegExp('DAYS', 'i') ) >= 0) {
+        let edate = new Date(results.date);
+        edate.setDate(edate.getDate() + parseInt(results.expire.replace(new RegExp('DAYS', 'i'), '')));
+        results.expire = edate
+    }
 
     return results;
 }
