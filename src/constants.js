@@ -51,6 +51,15 @@ const CalendarDataConstants = {
     FETCH_DATA_FAILURE: 'FETCH_CALENDAR_DATA_FAILURE',
 }
 
+const SingleNoticeDataConstants = {
+    FETCH_DATA: 'FETCH_SINGLE_NOTICE_DATA',
+    FETCH_DATA_SUCCESS: 'FETCH_SINGLE_NOTICE_DATA_SUCCESS',
+    FETCH_DATA_FAILURE: 'FETCH_SINGLE_NOTICE_DATA_FAILURE',
+}
+
+
+
+
 module.exports = {
     PublicDocumentsConstants,
     OrganizationalUnitConstants,
@@ -60,4 +69,5 @@ module.exports = {
     EB2ServicesConstants,
     SystemIndexConstants,
     CalendarDataConstants,
+    SingleNoticeDataConstants,
 }

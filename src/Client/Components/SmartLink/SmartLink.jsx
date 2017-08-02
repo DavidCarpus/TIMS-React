@@ -37,23 +37,27 @@ export default function SmartLink({id=0, link='', linkText}){
         return (<a
             className={lnkStyle}
             href={link}>{linkText}</a>)
+    } else if (link.startsWith('MD://')) {
+        link =  '/notice/' + id;
+        return (<a
+            className={'markdown_link'}
+            href={link}>{ linkText}</a>)
+            // href={link}>{'MARKDOWN:' + linkText}</a>)
     } else {
-        // TODO: Add link/call to 'downloader'
-        // if (lnkStyle === 'pdf_link') {
         if (lnkStyle.length > 0) {
             link = configuration.ui.ROOT_URL + 'fetchfile/' + id;
-            return (<a
-                className={lnkStyle}
-                href={link}>{linkText}</a>)
+            return (<Link to={link} className={lnkStyle} target="_blank" onClick={(event) => {
+                event.preventDefault(); window.open(link);
+            }} >{linkText}</Link>)
+
         } else if (reduxLink) {
             return(<Link  className={lnkStyle} to={link}>{linkText}</Link >)
         }
         else {
             link = configuration.ui.ROOT_URL + 'fetchfile/' + id;
-            return (<a
-                className={lnkStyle}
-                href={link}>{linkText}</a>)
-            }
-
+            return (<Link to={link} target="_blank" onClick={(event) => {
+                event.preventDefault(); window.open(this.makeHref(link));
+            }} >{linkText}</Link>)
+        }
     }
 }
