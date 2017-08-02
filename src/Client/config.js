@@ -8,12 +8,6 @@ let currEnv = process.env.NODE_ENV;
 // if (location.href.indexOf('localhost') > 0) {      currEnv = 'development' }
  if (location.href.indexOf('test.miltonnh') > 0) {      currEnv = 'test' } // eslint-disable-line no-restricted-globals
 
-// var dev_configuration = {'ui':{
-//     'ROOT_URL':'http://localhost:45000/api/'
-// }}
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? configuration.ui.ROOT_URL : './api/';
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : '/';
-// const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/' : 'http://www.carpusconsulting.com/milton/api/';
 
 module.exports = function(){
     switch(currEnv){

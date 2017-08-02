@@ -9,7 +9,6 @@ export default class Planning extends React.Component {
 
     render() {
         var group = this.props.group;
-        // var groupPageText = group.pagetext;
 
         return (
             <div>

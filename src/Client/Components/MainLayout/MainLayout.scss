@@ -1,10 +1,5 @@
 @import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
-// @value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "./breakpoints.css";
-
-.mainLayout {
-    /*background-color: yellow;*/
-}
 
 .primaryHeader{
     position: fixed;
@@ -22,13 +17,8 @@
     margin-top: 80px;
 }
 
-/*.contentArea {
-    background-color: green;
-    width: 75%;
-    max-width: 78%;
-    float: right;
-    padding: 0 2%;
-}*/
+
+
 @media  (max-device-width: 840px){
     .primaryArea {
         margin-top: 120px;
