@@ -4,7 +4,8 @@
     // background-color: red;
   color: $noticesLinks;
   background-color: rgba(200,200,200,0.8);
-
+  width: 80%;
+  margin: auto;
 }
 
 #ContactUs  a{
@@ -12,21 +13,30 @@
 }
 
 #ContactUs  div{
-    clear: both;
+    background-color: rgba(200,200,200,0.8);
+}
+#ContactUs  #departmentList{
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#ContactUs  #departmentList .row{
+    width: 100%;
+    margin: auto;
 }
 
 #ContactUs  span.department{
-    width: 200px;
+    width: 30%;
     font-weight: bold;
     float: left;
 }
 
 #ContactUs  span.contactName{
-    width: 250px;
-    float: left;
+    width: 30%;
+    // float: left;
 }
 
 #ContactUs  span.phone{
-    width: 200px;
-    float: left;
+    width: 30%;
+    // float: left;
 }

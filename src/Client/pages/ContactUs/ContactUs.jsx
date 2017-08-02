@@ -15,8 +15,8 @@ export default class ContactUs extends React.Component {
             {name:'Town Administrator', contactName: 'Heather Thibodeau ', phone:'603-652-4501 ext. 1'},
         ]
         return (
-            <div    >
-                <Col md={12} id="ContactUs">
+            <div >
+                <Col md={11}  mdPush={1} id="ContactUs" >
                 <b>Government Offices</b><br/>
                 Asessing, Building, Conservation, Economic Devlopment Committee, Health, Planning, Selectmen, Zoning
 
@@ -25,19 +25,21 @@ export default class ContactUs extends React.Component {
                 P.O. Box 310 Milton NH, 03851
                 </address>
 
+                <div  id='mainContact'>
                 Monday-Friday 8:00am - 4:00 pm<br/>
                 General Phone: 603-652-4501<br/>
                 Fax: 603-652-4120<br/>
+                </div>
 
-                <br/><br/>
+                <div id='departmentList'>
                 {departments.map( (department,index) =>
-                    <div key={department.id || index}>
+                    <div className='row' key={department.id || index}>
                         <span className='department'>{department.name}&nbsp;</span>
                         <span  className='contactName'>{department.contactName}&nbsp;</span>
                         <span  className='phone'>{department.phone}&nbsp;</span>
                     </div>
                 )}
-                <br/><br/>
+                </div>
                 </Col>
         </div>
         );
