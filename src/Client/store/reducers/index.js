@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import AgendasAndMinutesReducer from './AgendasAndMinutes';
-import PublicRecordsReducer from './PublicRecords';
+import GroupDocumentsReducer from './GroupDocuments';
 import PublicRecordsNoticesReducer from './PublicRecords_Notices';
 import OrganizationalUnitsReducer from './OrganizationalUnitData';
 import MainMenusReducer from './MainMenuData';
@@ -11,13 +11,17 @@ import SystemIndexReducer from './SystemIndex';
 import CalendarDataReducer from './CalendarData';
 import SingleNoticeReducer from './SingleNotice';
 import { routerReducer as routing } from 'react-router-redux';
+import PublicRecordsReducer from './PublicRecords';
+import AlertRequestsReducer from './AlertRequests';
+import { reducer as formReducer } from 'redux-form'
+
 
 
 // import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
     agendasAndMinutes: AgendasAndMinutesReducer,
-    PublicRecords: PublicRecordsReducer,
+    GroupDocuments:GroupDocumentsReducer,
     PublicNotices: PublicRecordsNoticesReducer,
     OrganizationalUnits: OrganizationalUnitsReducer,
     FAQ: FAQReducer,
@@ -28,7 +32,9 @@ const rootReducer = combineReducers({
     AlertRequests: AlertRequestsReducer,
     SystemIndex: SystemIndexReducer,
     CalendarData: CalendarDataReducer,
-    routing
+    PublicRecords: PublicRecordsReducer,
+    routing,
+    form: formReducer
 });
 
 export default rootReducer;

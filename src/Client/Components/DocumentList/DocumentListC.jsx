@@ -5,20 +5,23 @@ import DocumentListUI from './DocumentList'
 
 const mapStateToProps = (state, ownProps) => {
     let groupName =  ownProps.group.link;
-    let recordState = state.PublicRecords;
+    // console.log(state);
+    let recordState = state.GroupDocuments;
 
     if (groupName && ownProps.store && !recordState.loading && recordState.groupName !==   groupName) {
+        // console.log('fetchGroupDoc(groupName)', groupName, recordState);
         ownProps.store.dispatch(fetchGroupDoc(groupName))
     }
     let documents = [];
-    if (state.PublicRecords && state.PublicRecords.documents) {
-        documents = state.PublicRecords.documents;
+    if (recordState && recordState.documents) {
+        documents = recordState.documents;
     }
+    // console.log('documents:', documents);
     return {
         group: ownProps.group,
         documents: documents,
-        documentsGroupName: state.PublicRecords.groupName,
-        loading: state.PublicRecords.loading,
+        documentsGroupName: recordState.groupName,
+        loading: recordState.loading,
         title: ownProps.title || 'Documentation',
     };
 }
