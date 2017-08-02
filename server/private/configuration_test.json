@@ -28,6 +28,11 @@
         "client_secret":"iOpvvCr_Ov4srpEjTuXoTKWd",
         "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}
 },
+"numverify": {
+        "email": "website@test.miltonnh.us",
+        "password":"bFSiSjr1P058gHyFXhGg",
+        "apiaccesskey":"6c533ba0a25520d9a559427c70865f42"
+},
 "calendarProcess": {
     "infinite":true,
     "delay": 360000
@@ -42,6 +47,8 @@
 "ui":{
     "ROOT_URL":"https://test.miltonnh.us:45102/api/"
 },
+"municipalLongName": "Town of Milton New Hampshire",
+"municipalShortName": "Town of Milton",
 
 "unused":{
     "attachmentPath": "/private/Attachments/",

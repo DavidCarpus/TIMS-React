@@ -86,7 +86,7 @@
         "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}
 },
 "calendarProcess": {
-    "infinite":false,
+    "infinite":true,
     "delay": 360000
 },
 "db_config":{
@@ -97,12 +97,14 @@
 },
 "expressPort":45001,
 "ui":{
-    "ROOT_URL":"http://localhost:45001/api/"
+    "ROOT_URL":"/api/"
 },
 "attachmentPath": "/private/Attachments/",
-
+"municipalLongName": "Town of Milton New Hampshire Dev",
+"municipalShortName": "Town of Milton",
 
 "unused":{
+    "ROOT_URL":"http://localhost:45001/api/",
     "markdownPath": "/private/Markdown/",
     "ROOT_URL":"https://test.miltonnh.us:45101/api/",
     "db_config":{

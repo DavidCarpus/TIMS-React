@@ -42,6 +42,9 @@
 "ui":{
     "ROOT_URL":"https://test.miltonnh.us:45100/api/"
 },
+"municipalLongName": "Town of Milton New Hampshire",
+"municipalShortName": "Town of Milton",
+
 "unused":{
     "attachmentPath": "/private/Attachments/",
     "markdownPath": "/private/Markdown/",
