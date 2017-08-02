@@ -1,6 +1,7 @@
+@import "../../../../private/SASS/breakpoints.scss";
+
 .body {
   background-color: cornsilk;
-
   font-family: sans-serif;
 }
 
@@ -13,4 +14,10 @@
 }
 #MainLayoutUI #contentArea{
     background-color: rgba(200,200,200,0.8);
+}
+@media iphone5 {
+    #MainLayoutUI #contentArea {
+        width: 90%;
+        margin: auto;
+    }
 }
