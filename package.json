@@ -13,7 +13,7 @@
         "bootstrap": "^3.3.7",
         "classnames": "^2.2.5",
         "concurrently": "^3.4.0",
-        "email-validator": "^1.0.7",
+        "email-validator": "^1.1.1",
         "google-libphonenumber": "^3.0.0",
         "react": "^15.5.4",
         "react-bootstrap": "^0.31.0",
