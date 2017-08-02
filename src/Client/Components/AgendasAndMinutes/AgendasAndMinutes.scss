@@ -1,26 +1,25 @@
-@import "../../../../private/SASS/AgendasAndMinutes.scss";
+@import "../../../../private/SASS/colors.scss";
 
-.showMeetings{
-    display: block;
+.YearBlock  .header{
+    background-color: $meetingListToggleHeader;
 }
 
-.hideMeetings{
-    display: none;
-}
 
-.yearLabelClass {
-    display: block;
+.meetingBlock {
+    display: inline-block;
+    background-color: $meetingListBackground;
+    width: 100%;
+    padding-bottom: 5px;
+}
+.meetingBlock .date {
+    display: inline-block;
+    font-weight: bold;
+    width: 80px;
+}
+.meetingBlock .Entries {
+    display: inline-block;
+}
+.meetingBlock .meetingElement {
     min-width: 100px;
-}
-
-.date {
-    // display: block;
-    min-width: 100px;
-    clear: right;
-    float: left;
-}
-.meetingElement {
-    // display: flex;
-    width: 120px;
-    // float: right;
+    display: inline-block;
 }

@@ -8,14 +8,20 @@ const mapStateToProps = (state, ownProps) => {
     let agendaState = state.agendasAndMinutes;
 
     if (groupName && ownProps.store && !agendaState.loading && agendaState.groupName !==   groupName) {
-        // console.log('fetchMeetingDocs:' +agendaState.groupName + '-' +  groupName );
+        console.log('fetchMeetingDocs:' +agendaState.groupName + '-' +  groupName );
         ownProps.store.dispatch(fetchMeetingDocs(groupName))
     }
 
     let sortedDocuments=[]
     if (agendaState.documents) {
          sortedDocuments = Object.keys(agendaState.documents)
-         .sort((a,b) => { return new Date(b) - new Date(a); })
+         .sort((a,b) => {
+             let dateDiff = new Date(b) - new Date(a);
+            //  console.log(dateDiff);
+             if (dateDiff !== 0) { return dateDiff; }
+            //  console.log(a, b);
+             return new Date(b) - new Date(a);
+         })
          .map(function(val) {
              return [val, agendaState.documents[val] ] }
          );
@@ -36,7 +42,6 @@ const mapStateToProps = (state, ownProps) => {
          }, {})
         //  console.log(sortedDocuments);
     }
-
 
   return {
       meetings: sortedDocuments,

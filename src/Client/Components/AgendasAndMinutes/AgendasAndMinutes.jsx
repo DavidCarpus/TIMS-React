@@ -17,25 +17,40 @@ function formatDate(date) {
   return monthNames[monthIndex] + ' ' + day ;
 }
 
-
-const YearBlock = ({yearMeetings, year, expanded}) => {
-    // <div className={"expanded"}  >
-    // <span>
+const MeetingBlock = ({meetingElements, meetingDate}) => {
     return (
-        <span className={expanded? "showMeetings": "hideMeetings"} >
-        {yearMeetings.map( (meeting, meetingIndex) => {
-            return (
-                <div key={meetingIndex}>
-                    <span className="date">{formatDate(new Date(meeting[0]))}</span>
-                    {meeting[1].map( (element, elementIndex) => {
-                    return (
-                        <span  className="meetingElement" key={elementIndex}><SmartLink link={element.link} id={element.id} linkText={element.type} /></span>
-                    )
-                })}
+        <div className="meetingBlock" >
+            <div className="date" >
+                {formatDate(meetingDate)}
+            </div>
+            <div className="Entries" >
+            {meetingElements.map( element =>
+                <div  className="meetingElement" key={element.id}>
+                    <SmartLink link={element.link} id={element.id} linkText={element.type} />
                 </div>
-            )
-        })}
-        </span>
+            )}
+            </div>
+        </div >
+    )
+}
+
+// {console.log(JSON.stringify(element))}
+// {meeting[1].map( record =>
+//     <div>Record {record}</div>
+// )}
+
+const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
+    return (
+        <div  className='YearBlock'>
+            <div className='header' >
+                <span onClick={()=> toggleCollapseState(year)}>
+                    <a >{year} {expanded?'^^^':'vvv'}</a>
+                </span>
+            </div>
+            {expanded && yearRecords.map( meeting =>
+                <MeetingBlock key={meeting[0]} meetingElements={meeting[1]} meetingDate={new Date(meeting[0])}   / >
+            )}
+        </div>
     )
 }
 
@@ -43,11 +58,13 @@ const YearBlock = ({yearMeetings, year, expanded}) => {
 export class AgendasAndMinutes extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {expandedYears: [(new Date()).getFullYear().toString()]};
-    this.toggle = this.toggle.bind(this);
+    this.state = {expandedYears: []};
+    // this.state.expandedYears.push((new Date()).getFullYear().toString())
+    this.toggleYear = this.toggleYear.bind(this);
+
   }
 
-  toggle(yearToToggle){
+  toggleYear(yearToToggle){
       let expandedYears = this.state.expandedYears;
       let yearIndex = expandedYears.indexOf(yearToToggle);
       if ( yearIndex >= 0)  {
@@ -73,27 +90,11 @@ export class AgendasAndMinutes extends React.Component {
               <h2>{this.props.title}</h2>
               {currentMeetings
                   .sort((a,b) => { return b.date -a.date; })
-                  .map( (year, index1) => {
-                    //   if ( this.state.expandedYears.length === 0) {this.toggle(year.date)}
-                      let expandYear = false;
-
-                    //   if (year.date === '2017') {expandYear = true;}
-                      if ( this.state.expandedYears.indexOf(year.date) >= 0) {expandYear = true;}
-                      let yearLabelClass=expandYear? 'expandedYearLabel':'contractedYearLabel';
-                      let yearLabelClasses = `yearLabelClass ${yearLabelClass}`
+                  .map( year => {
                     return (
-                        <div   key={index1} >
-                            <span  className={yearLabelClasses} onClick={()=> this.toggle(year.date)}
-                                title={expandYear?'Contract':' Expand'}>
-                                <a >
-                                    {year.date}
-                                    {expandYear?' -':' +'}
-                                </a>
-                            </span>
-
-                        <YearBlock yearMeetings={year.values} year={year.date}
-                            expanded={expandYear}></YearBlock>
-                        </div>
+                        <YearBlock key={year.date} yearRecords={year.values} year={year.date}
+                            expanded={( this.state.expandedYears.indexOf(year.date) >= 0)}
+                            toggleCollapseState={this.toggleYear}></YearBlock>
                     )
                   })}
          </div>
@@ -102,13 +103,3 @@ export class AgendasAndMinutes extends React.Component {
  }
 
  export default AgendasAndMinutes;
-
-/*
-<li className={s.li}  key={index}>
-    {meeting.date} -
-    {meeting.values.map((element, index) => {
-        const text = element.desc || element.type;
-        return(<span  key={index}> <SmartLink link={element.link} id={element.id} linkText={text} />  </span>)
-    })}
-</li>
-*/
