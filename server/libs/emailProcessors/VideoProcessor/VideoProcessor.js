@@ -11,6 +11,7 @@ var knex = require('knex')(knexConfig[configuration.mode]);
 var simpleAdd = require('../common').simpleAdd;
 var simpleRemove = require('../common').simpleRemove;
 var dbDateFormat = require('../common').dbDateFormat;
+var getPublicRecordData = require('../common').getPublicRecordData;
 
 //=============================================
 function validateData(requestedData) {
@@ -24,36 +25,7 @@ function validateData(requestedData) {
     }
     return errors;
 }
-//=============================================
-function getURLFromBody(emailBodyData) {
-    let videoLines = emailBodyData.trim().split("\n").filter(line => {return line.match('https?:\/.*youtube.com\/.*') != null});
-    // console.log('videoLines:' , videoLines);
-    if (videoLines.length > 0) {
-        return videoLines[0];
-    }
-    return "";
-}
-//=============================================
-function translateToDBScheme(emailDBData, emailBodyData) {
-    let recordDesc = emailDBData.description;
-    if (typeof  recordDesc == 'undefined') {
-        recordDesc = 'Video';
-    }
 
-    let entry =  {pageLink: emailDBData.groupName,
-        date: new Date(emailDBData.date).toISOString(),
-        recordtype: emailDBData.recordtype,
-        recordDesc: recordDesc,
-        fileLink: getURLFromBody(emailBodyData),
-        mainpage: emailDBData.mainpage
-    }
-    if (typeof  emailDBData.expire != 'undefined') {
-        entry.expiredate = new Date(emailDBData.expire).toISOString();
-    }
-    delete entry.attachmentLocations;
-    delete entry.requestType;
-    return entry;
-}
 //=============================================
 class VideoProcessor {
     process( emailData) {
@@ -64,7 +36,8 @@ class VideoProcessor {
             return Promise.resolve([emailData]);
         }
 
-        let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
+        // let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
+        let entry=getPublicRecordData(emailData);
         let emailDate = new Date();
         if (entry.date) {
             emailDate = new Date(entry.date);

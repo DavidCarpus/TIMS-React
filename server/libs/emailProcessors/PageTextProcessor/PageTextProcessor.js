@@ -9,6 +9,7 @@ var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
 var sendAutomationEmail = require('../common').sendAutomationEmail;
+var getCleanedTextBody = require('../common').getCleanedTextBody;
 
 //=============================================
 function validateData(requestedData) {
@@ -59,22 +60,6 @@ function sendRequestedPageText(request, requestedData) {
         request.id = 0;
         return Promise.resolve([request]);
     })
-}
-//===========================================
-function getCleanedTextBody(originalTextBody) {
-    let bodyLines = originalTextBody.trim().split("\n");
-    return bodyLines.map( line=>{
-        let newLine = [ '^UPDATE$','^PAGETEXT$','^ADD$','^SECTION:','Website automation wrote:']
-        .reduce( (acc,value) => {
-            if (acc.search(new RegExp(value, 'i')) >= 0) {
-                acc = "";
-            }
-            return acc.trim();
-        }, line.trim())
-
-        newLine = newLine.replace(/^>*/,'').trim()
-        return newLine;
-    }).join('\n').trim()
 }
 //===========================================
 class PageTextProcessor {

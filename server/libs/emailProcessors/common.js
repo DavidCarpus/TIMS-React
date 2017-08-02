@@ -12,7 +12,9 @@ module.exports =
     simpleAdd,
     simpleRemove,
     dbDateFormat,
-    sendAutomationEmail
+    sendAutomationEmail,
+    getPublicRecordData,
+    getCleanedTextBody
 }
 //===========================================
 //===========================================
@@ -128,4 +130,85 @@ function sendRequestedPageText(request, requestedData) {
         console.log('got error'); console.log(err)
     });   // if an error occurs
 }
+//=============================================
+function getURLFromBody(emailBodyData) {
+    let videoLines = emailBodyData.trim().split("\n").filter(line => {return line.match('https?:\/.*youtube.com\/.*') != null});
+    // console.log('videoLines:' , videoLines);
+    if (videoLines.length > 0) {
+        return videoLines[0];
+    }
+    return "";
+}
+
 //===========================================
+function getCleanedTextBody(originalTextBody) {
+    let linesToRemove = [ '^UPDATE$','^PAGETEXT$','^ADD$','^SECTION:',
+    'Website automation wrote:','Quoting Website automation',
+        '^ADD$',
+        'MENU ADD:?','ADD MENU:?','USER ADD:?','ADD USER:?','BOARD ADD:?','ADD BOARD:?',
+        '^REMOVE$','^DELETE$',
+        'MENU REMOVE:?','REMOVE MENU:?','USER REMOVE:?','REMOVE USER:?','BOARD REMOVE:?','REMOVE BOARD:?',
+        'MENU DELETE:?','DELETE MENU:?','USER DELETE:?','DELETE USER:?','BOARD DELETE:?','DELETE BOARD:?',
+        '^NOTICE$','^RFP$','^DATE:','^DESCRIPTION:','^DESC:','^EXPIRE', '^PUBLIC RECORD: ?RFP'
+        ]
+    let bodyLines = originalTextBody.trim().split("\n");
+    return bodyLines.map( line=>{
+        let newLine = linesToRemove
+        .reduce( (acc,value) => {
+            // console.log('Chk:', value);
+            if (acc.search(new RegExp(value, 'i')) >= 0) {
+                acc = "";
+            }
+            return acc.trim();
+        }, line.trim())
+
+        newLine = newLine.replace(/^>*/,'').trim()
+        return newLine;
+    }).join('\n').trim()
+}
+
+//=============================================
+function getPublicRecordData(dataFromEmail) {
+    // console.log('MeetingProcessor:getPublicRecordData.');
+    // console.log('common:getPublicRecordData:dataFromEmail ', dataFromEmail);
+
+    let entry =  {pageLink: dataFromEmail.DBData.groupName,
+        date: new Date(dataFromEmail.DBData.date).toISOString(),
+        recordtype: dataFromEmail.DBData.recordtype,
+        recordDesc: dataFromEmail.DBData.description,
+        mainpage: dataFromEmail.DBData.mainpage
+    }
+
+    if (typeof  dataFromEmail.DBData.expire != 'undefined') {
+        entry.expiredate = new Date(dataFromEmail.DBData.expire).toISOString();
+    }
+    if (typeof  entry.recordDesc == 'undefined'  && dataFromEmail.DBData.recordtype === 'Video') {
+        entry.recordDesc = 'Video'
+    }
+    if ( dataFromEmail.DBData.recordtype === 'Video') {
+        entry.fileLink = getURLFromBody(dataFromEmail.bodyData)
+    }
+    // console.log('common:getPublicRecordData:attachments? ', dataFromEmail.attachmentLocations);
+
+    if (!dataFromEmail.attachmentLocations || dataFromEmail.attachmentLocations.length === 0) {
+        if (typeof  entry.recordDesc == 'undefined') { // 'Markdown style notice'
+            entry.recordDesc = 'Notice'
+        }
+        return entry;
+    }
+    // console.log('common:getPublicRecordData:attachments!!! ', dataFromEmail.attachmentLocations);
+
+    return dataFromEmail.attachmentLocations.map(attachment => {
+        // console.log('common:getPublicRecordData', attachment);
+
+        let recordData = JSON.parse(JSON.stringify(entry))
+        recordData.fileLink = attachment
+        if (typeof  entry.recordDesc == 'undefined' ){
+            if (dataFromEmail.DBData.recordtype === 'Agendas' || dataFromEmail.DBData.recordtype === 'Minutes') {
+                recordDesc = attachment.substring(attachment.lastIndexOf('/')+1)
+                recordDesc = recordDesc.substring(recordDesc.indexOf('_')+1, recordDesc.lastIndexOf('.'))
+            }
+        }
+        return recordData;
+    })
+}//===========================================
