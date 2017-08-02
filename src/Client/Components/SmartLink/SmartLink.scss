@@ -1,15 +1,19 @@
 @import "../../../../private/SASS/colors.scss";
 
-#notices a{
+#AgendasAndMinutes a{
     color: $noticesLinks;
+    display: block;
+    // border-style: solid;
+    // width: 100%;
+    // background-color: red;
 }
 
-$iconsize: 15px;
+$iconsize: 20px;
 
 .pdf_link::before {
     content: "";
     display: inline-block;
-    background: url('../images/pdf-icon.png') no-repeat;
+    background: url('../icons/pdf-icon.png') no-repeat;
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
@@ -21,7 +25,7 @@ $iconsize: 15px;
 .youtube_link::before {
     content: "";
     display: inline-block;
-    background: url('../images/youtube.png') no-repeat;
+    background: url('../icons/youtube.png') no-repeat;
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
@@ -33,7 +37,7 @@ $iconsize: 15px;
 .jpgImage_link::before {
     content: "";
     display: inline-block;
-    background: url('../images/jpgImage.png') no-repeat;
+    background: url('../icons/jpgImage.png') no-repeat;
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
@@ -45,7 +49,7 @@ $iconsize: 15px;
 .doc_link::before {
     content: "";
     display: inline-block;
-    background: url('../images/word.png') no-repeat;
+    background: url('../icons/word.png') no-repeat;
     background-size: 100% 100%;
     /*background-color: red;*/
     color: white;
@@ -53,4 +57,16 @@ $iconsize: 15px;
     height: $iconsize;
     /*float: left;*/
     margin: 0px 5px 0 5px;
+}
+.markdown_link::before {
+    content: "";
+    display: inline-block;
+    background: url('../icons/clipboard.png') no-repeat;
+    background-size: 100% 100%;
+    /*background-color: red;*/
+    color: white;
+    width: $iconsize;
+    height: $iconsize;
+    /*float: left;*/
+    margin: 4px 5px 0 5px;
 }

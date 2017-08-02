@@ -18,28 +18,12 @@ margin-right:  20px;*/
 .externalMenu a:before{
         content: "";
         display: block;
-        background: url('../images/external-128.png') no-repeat;
+        background: url('../icons/external-128.png') no-repeat;
         background-size: 100% 100%;
         background-color: #EEE;
         color: white;
         width: 10px;
         height: 10px;
         float: left;
-        margin: 5px 5px 0px 0px;
+        margin: 5px 5px 0px -15px;
 }
-/*@media bp-iphone5 {
-     :global(#navbar) a{
-            font-size: 2vmin;
-        }
-}*/
-
-/*.navbar-brand > img {
-    display: inline-block;
-}*/
-/*.navbar-header {
-  background-color: #F16E10;
-  width: 100%;
-}*/
-/*.dropdown-header {
-    color: black;
-}*/
