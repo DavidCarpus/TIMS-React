@@ -1,0 +1,29 @@
+@import "../../../../private/SASS/colors.scss";
+
+#PublicRecords a{
+    color: $documentationLinks;
+}
+
+#PublicRecords .MonthBlock {
+    background-color: $meetingListBackground;
+}
+#PublicRecords .YearBlock  .header{
+    background-color: $meetingListToggleHeader;
+}
+#PublicRecords .MonthBlock .header {
+    background-color: rgba(10,0,0,0.6);
+    color: white;
+}
+
+#PublicRecords .MonthBlock .Entries {
+    display: inline-block;
+}
+
+#PublicRecords .MonthBlock .date {
+    width: 80px;
+}
+
+#PublicRecords .MonthBlock .documentLink {
+    min-width: 150px;
+    display: inline-block;
+}

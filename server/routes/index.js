@@ -243,10 +243,16 @@ router.get('/FAQ/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {
-        query = "Select id, recorddesc as description, fileLink as link from PublicRecords where pageLink='" + req.params.groupName +"' and recordtype='Notice'";
+        query   = "Select id, recorddesc as description, fileLink as link, recordtype from PublicRecords "
         if (  req.params.groupName == 'Home') {
-            query = "Select id, recorddesc as description, fileLink as link from PublicRecords where mainpage=1 and recordtype='Notice'";
+            query += " where mainpage=1 ";
+        } else {
+            query += " where pageLink='" + req.params.groupName +"'";
         }
+
+        query += " and (recordtype='Notice' or recordtype='RFP')";
+        query += " and (expiredate is null or expiredate > now() ) ";
+// console.log('Records/Notice:query:', query);
          simpleDBQuery(query)
          .then(rows => {
             //  console.log('Notices:' + JSON.stringify(rows));
@@ -254,6 +260,80 @@ router.get('/Records/Notices/:groupName', function(req, res) {
          });
 });
 // ==========================================================
+router.get('/Records/NoticesFull/:groupName', function(req, res) {
+    query   = "Select id, recorddesc as description, fileLink as link, recordtype from PublicRecords "
+    if (  req.params.groupName == 'Home') {
+        query += " where mainpage=1 ";
+    } else {
+        query += " where pageLink='" + req.params.groupName +"'";
+    }
+
+        // query = "Select id, recorddesc as description, fileLink as link from PublicRecords where pageLink='" + req.params.groupName +"' and recordtype='Notice'";
+        // if (  req.params.groupName == 'Home') {
+        //     query = "Select id, recorddesc as description, fileLink as link from PublicRecords where mainpage=1 and recordtype='Notice'";
+        // }
+         simpleDBQuery(query)
+         .then(rows => {
+            //  console.log('Notices:' + JSON.stringify(rows));
+             res.json(rows);
+         });
+});
+// ==========================================================
+router.get('/Records/Notice/:noticeID', function(req, res) {
+        // query = "Select id, recorddesc as description, fileLink as link from PublicRecords where id=" + req.params.noticeID;
+        query = "Select PublicRecords.id, recorddesc as description, fileLink as link, PageText.html, Groups.groupDescription, recordtype "
+        query += " from PublicRecords "
+        query += " left join PageText on PageText.id = PublicRecords.PageTextID "
+        query += " left join Groups on PublicRecords.pageLink = Groups.pageLink "
+        query += " where PublicRecords.id=" + req.params.noticeID;
+        console.log(query);
+         simpleDBQuery(query)
+         .then(rows => {
+            //  console.log('Notices:' + JSON.stringify(rows));
+             res.json(rows);
+         });
+});
+// ==========================================================
+router.get('/Records/PublicDocs/:recordtype', function(req, res) {
+    // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.recordtype +"'";
+    let recordtype = ''
+    switch (req.params.recordtype.toUpperCase()) {
+        case 'NOTICES':
+        case 'NOTICE':
+            recordtype = 'Notice'
+        break;
+        case 'AGENDAS':
+        case 'AGENDA':
+            recordtype = 'Agenda'
+            break;
+        case 'RFPS':
+        case 'RFP':
+            recordtype = 'RFP'
+            break;
+        default:
+
+    }
+    query = "Select PublicRecords.id, recordtype as type, fileLink as link, date, PublicRecords.pageLink as groupName, Groups.groupDescription, PublicRecords.recorddesc "
+    query += "  from PublicRecords ";
+    query += "  left join Groups on Groups.groupName =  PublicRecords.pageLink ";
+    query += "  where recordtype='" + recordtype +"'";
+    query += "  and fileLink is not null";
+    query += "  ORDER BY date, recordtype ";
+    console.log(query);
+    simpleDBQuery(query)
+    .then(rows => {
+        var toSend = rows.reduce( (newArray, row) => {
+            let key = row.date;
+            delete row.date;
+            (newArray[key] = newArray[key] || []).push(row);
+            return newArray;
+        }, {})
+        // console.log('Meetings:' + JSON.stringify(toSend));
+        // res.status(200).send('<pre>' + JSON.stringify(toSend, null, 2) + '</pre>');
+
+        res.json(toSend);
+    });
+});// ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
     query = "Select id, recordtype as type, fileLink as link, date from PublicRecords where pageLink='" + req.params.groupName +"'";
@@ -271,6 +351,7 @@ router.get('/Records/Meetings/:groupName', function(req, res) {
         res.json(toSend);
     });
 });
+
 // ==========================================================
 router.get('/GroupData/:groupName', function(req, res) {
         var groupName = req.params.groupName;

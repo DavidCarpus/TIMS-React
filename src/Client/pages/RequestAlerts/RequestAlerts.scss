@@ -1,0 +1,19 @@
+@import "../../../../private/SASS/colors.scss";
+
+#RequestAlerts {
+    width: 80%;
+    margin: auto;
+    background-color: white;
+}
+#RequestAlerts .required {
+    color: red;
+}
+// .button{
+//     background-color: blue;
+// }
+
+.button:disabled{
+  opacity: 0.65;
+  background-color: red;
+  cursor: not-allowed;
+}

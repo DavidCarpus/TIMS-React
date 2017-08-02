@@ -1,0 +1,6 @@
+{
+  "name": "RequestAlerts",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./RequestAlerts.jsx"
+}

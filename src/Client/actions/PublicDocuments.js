@@ -23,7 +23,7 @@ export function fetchMeetingDocs(groupName) {
           })
           .catch( reason => {
             //   if (isEmpty(reason))  return;
-            //   console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
+              console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
               dispatch(fetchMeetingsFailure(reason));
           })
 
@@ -97,6 +97,52 @@ export function fetchGroupDocsFailure(groupName, error) {
 //========================================
 //========================================
 //========================================
+//========================================
+export function fetchPublicDocs(recordtype) {
+    if (! recordtype && process.env.NODE_ENV === 'development') {
+        debugger; // eslint-disable-line no-debugger
+    }
+
+    const request = axios({
+      method: 'get',
+      url: `${ROOT_URL}Records/PublicDocs/`+ recordtype,
+      // headers: []
+    });
+    return dispatch => {
+        dispatch({type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS});
+        request.then( response => {
+               dispatch(fetchPublicDocsSuccess(recordtype, response.data));
+          })
+          .catch( reason => {
+            //   if (isEmpty(reason))  return;
+            //   console.log(actionsName +'  fetchPublicDocDocs? : ' + JSON.stringify(reason));
+              dispatch(fetchPublicDocsFailure(reason));
+          })
+
+    }
+}
+//========================================
+export function fetchPublicDocsSuccess(recordtype, meetingDocs) {
+    // console.log(actionsName +'  fetchPublicDocsSuccess?:'+JSON.stringify(recordtype));
+
+    const action =   {
+    type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS_SUCCESS,
+    payload: meetingDocs,
+    recordtype: recordtype
+  };
+  return action;
+}
+//========================================
+export function fetchPublicDocsFailure(error) {
+    // console.log(actionsName +'  fetchPublicDocsFailure:'+JSON.stringify(error));
+  return {
+    type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS_FAILURE,
+    payload: error
+  };
+}
+//========================================
+//========================================
+//========================================
 export function fetchGroupNotices(groupName) {
     // console.log(actionsName +'  fetchGroupNotices'+JSON.stringify(groupName));
     if (! groupName && process.env.NODE_ENV === 'development' ) {
@@ -130,9 +176,12 @@ export function fetchGroupNoticesSuccess(groupName, docs) {
 }
 //========================================
 export function fetchGroupNoticesFailure(error) {
-    console.log(actionsName +'  fetchGroupNoticesFailure:'+JSON.stringify(error));
+    // console.log(actionsName +'  fetchGroupNoticesFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_FAILURE || 'Fail',
     payload: error
   };
 }
+//========================================
+//========================================
+//========================================
