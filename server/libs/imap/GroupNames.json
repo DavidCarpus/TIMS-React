@@ -1,5 +1,5 @@
 [
-    {"primary":"Main", "alternatives":["Main", "HomePage"]},
+    {"primary":"Main", "alternatives":["Main", "HomePage", "Home"]},
     {"primary":"About", "alternatives":["About"]},
     {"primary":"Assessing", "alternatives":["Assessing"]},
     {"primary":"CodeEnforcement", "alternatives":["Code"]},

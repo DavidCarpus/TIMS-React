@@ -36,6 +36,9 @@ function submit(email, imap) {
         case 'Notice':
             return noticeProcessor.process(email);
             break;
+        case 'RFP':
+            return noticeProcessor.process(email);
+            break;
         case 'Agendas':
         case 'Minutes':
             return meetingProcessor.process(email);

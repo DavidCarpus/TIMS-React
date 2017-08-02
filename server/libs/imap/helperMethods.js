@@ -49,6 +49,7 @@ function getRecordTypeFromLine(line) {
         {recordType: 'Agendas', searchMatches: ['AGENDA'] },
         {recordType: 'Minutes', searchMatches: ['MINUTES'] },
         {recordType: 'Notice', searchMatches: ['^NOTICE$'] },
+        {recordType: 'RFP', searchMatches: ['^RFP$', '^PUBLIC RECORD: ?RFP'] },
         {recordType: 'Document', searchMatches: ['DOCUMENT'] },
         {recordType: 'HelpfulLinks', searchMatches: ['HELPFULLINK', 'HELPFUL LINK'] },
         {recordType: 'PageText', searchMatches: ['PAGETEXT'] },
