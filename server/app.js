@@ -3,6 +3,7 @@ var logger = require('morgan');
 var compression = require('compression')
 var fs = require('fs');
 var https = require('https');
+var bodyParser = require('body-parser')
 
 var Config = require('./config'),
 configuration = new Config();
@@ -14,6 +15,10 @@ var routes = require('./routes/index').router;
 var handleDisconnect = require('./routes/index').handleDisconnect;
 
 var app = express();
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
 handleDisconnect(); // open (and keep open) a database connection used by routes
 //===============================================

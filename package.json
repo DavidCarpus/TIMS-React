@@ -13,6 +13,8 @@
         "bootstrap": "^3.3.7",
         "classnames": "^2.2.5",
         "concurrently": "^3.4.0",
+        "email-validator": "^1.0.7",
+        "google-libphonenumber": "^3.0.0",
         "react": "^15.5.4",
         "react-bootstrap": "^0.31.0",
         "react-dom": "^15.5.4",
@@ -24,6 +26,7 @@
         "react-router-dom": "^4.1.1",
         "react-router-redux": "^4.0.8",
         "redux": "^3.6.0",
+        "redux-form": "^7.0.3",
         "redux-promise-middleware": "^4.3.0",
         "redux-thunk": "^2.2.0"
     },

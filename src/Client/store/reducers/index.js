@@ -25,6 +25,7 @@ const rootReducer = combineReducers({
     PageAsides : PageAsidesReducer,
     EB2Services: EB2ServicesReducer,
     SingleNotice: SingleNoticeReducer,
+    AlertRequests: AlertRequestsReducer,
     SystemIndex: SystemIndexReducer,
     CalendarData: CalendarDataReducer,
     routing

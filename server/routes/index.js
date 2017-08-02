@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
+
+var submitAlertRequestData = require('../libs/AlertRequests').submitData;
+
 var mysql = require('mysql');
 var fs = require('fs');
 var mime = require('mime');
 var marked = require('marked');
+var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+var emailValidate = require("email-validator");
 
 var Config = require('../config');
 configuration = new Config();
@@ -484,4 +489,17 @@ router.get('/GroupData/:groupName', function(req, res) {
     })
 });
 
+// ==========================================================
+// ==========================================================
+router.post('/AlertRequests/', function(req, res) {
+    var data = req.body;
+    submitAlertRequestData(data)
+    .then(submission => {
+        console.log('submission:', submission);
+        res.json(data);
+    })
+});
+
+// ==========================================================
+// ==========================================================
 module.exports =  {router, handleDisconnect};

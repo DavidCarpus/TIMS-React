@@ -1,0 +1,6 @@
+{
+  "name": "AlertRequests",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./AlertRequests.js"
+}

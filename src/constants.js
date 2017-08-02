@@ -57,6 +57,11 @@ const SingleNoticeDataConstants = {
     FETCH_DATA_FAILURE: 'FETCH_SINGLE_NOTICE_DATA_FAILURE',
 }
 
+const AlertRequestsDataConstants = {
+    PUSH_DATA: 'PUSH_ALERT_REQUEST_DATA',
+    PUSH_DATA_SUCCESS: 'PUSH_ALERT_REQUEST_DATA_SUCCESS',
+    PUSH_DATA_FAILURE: 'PUSH_ALERT_REQUEST_DATA_FAILURE',
+}
 
 
 
@@ -70,4 +75,5 @@ module.exports = {
     SystemIndexConstants,
     CalendarDataConstants,
     SingleNoticeDataConstants,
+    AlertRequestsDataConstants
 }

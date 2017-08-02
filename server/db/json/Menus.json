@@ -33,5 +33,12 @@
             {"id": 13, "desc":"Zoning Board of Adjustment (ZBA)", "link": "/Zoning"},
             {"id": 14, "desc":"Board of Selectmen", "link": "/Selectmen"}
         ]
+    },
+    {"id": 6, "desc":"Public Records", "link": "/PublicRecords",
+    "menus": [
+        {"id": 1, "desc":"RFPs", "link": "/RFPS"},
+        {"id": 2, "desc":"Notices", "link": "/Notices"},
+        {"id": 3, "desc":"Agendas", "link": "/Agendas"}
+        ]
     }
 ]
