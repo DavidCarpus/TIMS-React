@@ -9,12 +9,14 @@
     "migrate:rollback": "knex  --knexfile libs/db/knexfile.js migrate:rollback",
     "migrate:make": "knex  --knexfile libs/db/knexfile.js migrate:make",
     "dev": "node imap.js",
-    "initDB": "npm run migrate:rollback && npm run migrate:latest && npm run knex:seed:run json"
+    "initDB": "npm run migrate:rollback && npm run migrate:latest && npm run knex:seed:run json",
+    "time": "grep \"`date '+%b %d %Y'`\" ../logDev.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq",
+    "timey": "grep \"`date --date='yesterday ' '+%b %d %Y'`\" ../logDev.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq"
   },
   "dependencies": {
     "MD5": "^1.3.0",
     "base64-stream": "^0.1.3",
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.17.2",
     "cheerio": "^1.0.0-rc.1",
     "compression": "^1.6.2",
     "cors": "^2.8.3",
