@@ -3,11 +3,28 @@ var PublicGoogleCalendar = require('public-google-calendar')
 var knexConfig = require('../db/knexfile.js')
 var knexConnection = require('knex')(knexConfig['development']);
 
-  //======================================
-
-function importCalendarEvents(knex = null, futureDays=14) {
+//======================================
+function insertEventIntoDatabase(knex, eventToinsert) {
     let tableName = 'CalendarEvents'
-    return pullEventsFromGoogleICAL(addDays(new Date(), -7),addDays(new Date(), futureDays))
+    return (knex(tableName).select().where({googleId: eventToinsert.googleId})
+    .then(results => {
+        if (results.length == 1) {
+            return Promise.resolve('Record ' + eventToinsert.googleId + ' already exists.');
+        } else {
+            return knex(tableName).insert(eventToinsert)
+            .then(result => {
+                eventToinsert.id = result[0];
+                return Promise.resolve(eventToinsert);
+            })
+            .catch(err => {console.log(tableName + ' import error:', err);})
+        }
+    })
+)
+}
+//======================================
+function importCalendarEvents(knex = null, futureDays=14, startDate=new Date() ) {
+    // if (startDate === null) { startDate = new Date()}
+    return pullEventsFromGoogleICAL(addDays(startDate, -7),addDays(new Date(), futureDays))
     .then(events => {
          return Promise.all(events.map(record => {
             let dataToInsert =
@@ -21,19 +38,7 @@ function importCalendarEvents(knex = null, futureDays=14) {
             }
             // console.log(dataToInsert);
             if (knex !== null) {
-                return (knex(tableName).select().where({googleId: dataToInsert.googleId})
-                .then(results => {
-                    if (results.length == 1) {
-                        return Promise.resolve('Record already exists.');
-                    } else {
-                        return knex(tableName).insert(dataToInsert)
-                        .then(result => {
-                            return Promise.resolve(result);
-                        })
-                        .catch(err => {console.log(tableName + ' import error:', err);})
-                    }
-                })
-            )
+                return insertEventIntoDatabase(knex, dataToInsert);
             } else {
                 return Promise.resolve(dataToInsert); // We are running from CLI and will output this
             }
@@ -41,14 +46,12 @@ function importCalendarEvents(knex = null, futureDays=14) {
     })
 }
 //======================================
-
   function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
   }
   //======================================
-
     function pullEventsFromGoogleICAL(startDate, endDate ){
         return new Promise(function(resolve,reject){
             let sDiff =     (new Date(startDate)).getTime() - (new Date()).getTime()
@@ -77,19 +80,12 @@ function importCalendarEvents(knex = null, futureDays=14) {
     // =================================================
     // https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
     if (require.main === module) {
-        console.log('cpullEventsFromGoogleICALalled directly');
-        // pullEventsFromGoogleICAL(addDays(new Date(), -1),addDays(new Date(), 30) )
         importCalendarEvents(knexConnection, 30)
         .then(events=> {
-            // return (knex('CalendarEntries').select().where(entry)
-            // .then(results => {
-
-            console.log(require('util').inspect(events, { depth: null }));
+            events.map(singleEvent => {
+                console.log(require('util').inspect(singleEvent, { depth: null }));
+            })
             process.exit();
-
-            // return events.map(oneEvent => {
-            //     return oneEvent.start;
-            // })
         })
     }
 
