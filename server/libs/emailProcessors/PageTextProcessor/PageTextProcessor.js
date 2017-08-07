@@ -43,14 +43,11 @@ function translateToDBScheme(requestData) {
     let entry =  {pageLink: requestData.groupName || '',
         sectionName: translateSection(requestData.section.toUpperCase())
     }
-    delete entry.requestType;
-    delete entry.mainpage;
-    delete entry.date;
     return entry;
 }
 //===========================================
 function sendRequestedPageText(request, requestedData) {
-    console.log('PageTextProcessor:sendRequestedPageText:'+ requestedData.pageLink + '-' + requestedData.sectionName);
+    // console.log('PageTextProcessor:sendRequestedPageText:'+ requestedData.pageLink + '-' + requestedData.sectionName);
     return sendAutomationEmail(request.header.from,  {
         subject: requestedData.pageLink + '-' + requestedData.sectionName,
         text: requestedData.markdown,

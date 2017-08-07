@@ -1,50 +1,34 @@
-var mysql = require('mysql');
-var fs = require('fs');
-
 var Config = require('../../../config'),
 configuration = new Config();
 
 var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
-// var knex = require('knex')({client:'mysql'});
 
 var simpleAdd = require('../common').simpleAdd;
-var simpleRemove = require('../common').simpleRemove;
 var getPublicRecordData = require('../common').getPublicRecordData;
 
-
 //=============================================
-function validateData(requestedData) {
-    let errors=[];
-    console.log('requestedData:' + require('util').inspect(requestedData, { depth: null }));
-    if (! requestedData.attachmentLocations || requestedData.attachmentLocations.length <= 0) {
-        errors.push('Missing attachment data.')
+function processTranslatedData(translatedData) {
+    if (translatedData.err ) {
+        return Promise.resolve( Object.assign({}, translatedData, {err: translatedData.err}));
     }
-    if (! requestedData.DBData.groupName || requestedData.DBData.groupName.length <= 0) {
-        errors.push('Unable to determine organizational group name.')
-    }
-    return errors;
+    return Promise.all(translatedData.map(entry => {
+        let {uid, from, requestType} = entry
+        switch (requestType) {
+            case 'ADD':
+                return simpleAdd('PublicRecords', entry, uid);
+                break;
+            default:
+                return Promise.reject(' *** Unknown action:' + requestType + ' for DBData:' , noticeData.DBData);
+        }
+    }))
 }
 //=============================================
 class MeetingProcessor {
     process( noticeData) {
-        let errors  = validateData(noticeData);
-        if (errors.length > 0) {
-            noticeData.err = errors
-            return Promise.resolve([noticeData]);
-        }
-        let action = noticeData.DBData.requestType;
         let prData = getPublicRecordData(noticeData);
-        return Promise.all(prData.map(entry => {
-            switch (action) {
-                case 'ADD':
-                    return simpleAdd('PublicRecords', entry, noticeData.uid);
-                    break;
-                default:
-                    return Promise.reject(' *** Unknown action:' + action + ' for DBData:' , noticeData.DBData);
 
-            }
-        }))
+        return processTranslatedData(prData)
     }
 }
 

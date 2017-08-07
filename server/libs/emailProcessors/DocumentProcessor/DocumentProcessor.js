@@ -8,62 +8,72 @@ var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
 var simpleAdd = require('../common').simpleAdd;
-
 //=============================================
-function validateData(requestedData) {
-    let errors=[];
-    console.log('requestedData:' + require('util').inspect(requestedData, { depth: null }));
-    if (! requestedData.attachmentLocations || requestedData.attachmentLocations.length <= 0) {
-        errors.push('Missing attachment data.')
+function processTranslatedDataEntry(entry) {
+    let {uid, from, requestType} = entry
+
+    switch (requestType) {
+        case 'ADD':
+            return simpleAdd('PublicRecords', entry, uid);
+            break;
+        default:
+            return Promise.reject(' *** Unknown action:' + requestType + ' for DBData:' , entry);
     }
-    if (! requestedData.DBData.groupName || requestedData.DBData.groupName.length <= 0) {
-        errors.push('Unable to determine organizational group name.')
-    }
-    return errors;
 }
 //=============================================
-function translateToDBScheme(noticeData, attachment) {
-    let recordDesc = noticeData.description;
-    if (typeof  recordDesc == 'undefined') {
-        recordDesc = attachment.substring(attachment.lastIndexOf('/')+1)
-        recordDesc = recordDesc.substring(recordDesc.indexOf('_')+1, recordDesc.lastIndexOf('.'))
+function processTranslatedData(translatedData) {
+    if (translatedData.err ) {
+        return Promise.resolve( Object.assign({}, translatedData, {err: translatedData.err}));
     }
-    let entry =  {pageLink: noticeData.groupName,
-        date: new Date(noticeData.date).toISOString(),
-        recordtype: noticeData.recordtype,
+    if (!Array.isArray(translatedData)) {
+        return processTranslatedDataEntry(translatedData)
+    }
+
+    return Promise.all(translatedData.map(entry => {
+        return processTranslatedDataEntry(entry)
+    }))
+}
+//=============================================
+function translateToDBScheme(dataFromEmail) {
+    let errors=[];
+    if (! dataFromEmail.DBData.groupName || dataFromEmail.DBData.groupName.length <= 0) {
+        errors.push('Unable to determine organizational group name.')
+    }
+
+    let recordDesc = dataFromEmail.DBData.description;
+    let entry =  {pageLink: dataFromEmail.DBData.groupName,
+        date: new Date(dataFromEmail.DBData.date).toISOString(),
+        recordtype: dataFromEmail.DBData.recordtype,
         recordDesc: recordDesc,
-        fileLink: attachment,
-        mainpage: noticeData.mainpage
+        mainpage: dataFromEmail.DBData.mainpage,
+        requestType :  dataFromEmail.DBData.requestType,
     }
-    if (typeof  noticeData.expire != 'undefined') {
-        entry.expiredate = new Date(noticeData.expire).toISOString();
+    if (typeof  dataFromEmail.DBData.expire != 'undefined') {
+        entry.expiredate = new Date(dataFromEmail.DBData.expire).toISOString();
     }
-    delete entry.attachmentLocations;
-    delete entry.requestType;
-    return entry;
+
+    if (errors.length > 0) { entry.err = errors; }
+    // console.log('DocumentProcessor:translateToDBScheme:', entry);
+
+    if (dataFromEmail.attachmentLocations) {
+        return dataFromEmail.attachmentLocations.map(attachment => {
+            if (typeof  recordDesc == 'undefined') {
+                recordDesc = attachment.substring(attachment.lastIndexOf('/')+1)
+                recordDesc = recordDesc.substring(recordDesc.indexOf('_')+1, recordDesc.lastIndexOf('.'))
+                entry.recordDesc = recordDesc
+            }
+            console.log('Add attachment ' , attachment);
+            return Object.assign({}, entry, {fileLink: attachment})
+        })
+    } else {
+        return Object.assign({}, entry, {err: ['Missing attachment data for document.']});
+    }
 }
 //=============================================
 class DocumentProcessor {
-    process( noticeData) {
-        let errors  = validateData(noticeData);
-        if (errors.length > 0) {
-            noticeData.err = errors
-            return Promise.resolve(noticeData);
-        }
-
-        let action = noticeData.DBData.requestType;
-        return Promise.all(noticeData.attachmentLocations.map(attachment => {
-            let entry= translateToDBScheme(noticeData.DBData, attachment)
-            switch (action) {
-                case 'ADD':
-                    return simpleAdd('PublicRecords', entry, noticeData.uid);
-                    break;
-                default:
-                    return Promise.reject(' *** Unknown action:' + action + ' for DBData:' , noticeData.DBData);
-
-            }
-        })
-        )
+    process( data) {
+        let entry =  translateToDBScheme(data)
+        return processTranslatedData(entry)
     }
 }
 

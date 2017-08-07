@@ -19,6 +19,11 @@ module.exports =
 //===========================================
 //===========================================
 function simpleAdd(tablename, entry, emailUID) {
+    delete entry.from;
+    delete entry.requestType;
+    delete entry.uid
+
+    // console.log('simpleAdd:entry:', entry);
     return (knex(tablename).where().insert(entry)
     .then(results => {
         entry.id = results[0];
@@ -169,14 +174,23 @@ function getCleanedTextBody(originalTextBody) {
 
 //=============================================
 function getPublicRecordData(dataFromEmail) {
-    // console.log('MeetingProcessor:getPublicRecordData.');
-    // console.log('common:getPublicRecordData:dataFromEmail ', dataFromEmail);
+    let errors=[];
+    // console.log('requestedData:' + require('util').inspect(requestedData, { depth: null }));
+    // if (! requestedData.attachmentLocations || requestedData.attachmentLocations.length <= 0) {
+    //     errors.push('Missing attachment data.')
+    // }
+    if (! dataFromEmail.DBData.groupName || dataFromEmail.DBData.groupName.length <= 0) {
+        errors.push('Unable to determine organizational group name.')
+    }
 
     let entry =  {pageLink: dataFromEmail.DBData.groupName,
         date: new Date(dataFromEmail.DBData.date).toISOString(),
         recordtype: dataFromEmail.DBData.recordtype,
         recordDesc: dataFromEmail.DBData.description,
-        mainpage: dataFromEmail.DBData.mainpage
+        mainpage: dataFromEmail.DBData.mainpage,
+        uid: dataFromEmail.DBData.uid,
+        from: dataFromEmail.header.from,
+        requestType :  dataFromEmail.DBData.requestType,
     }
 
     if (typeof  dataFromEmail.DBData.expire != 'undefined') {
@@ -191,9 +205,17 @@ function getPublicRecordData(dataFromEmail) {
     // console.log('common:getPublicRecordData:attachments? ', dataFromEmail.attachmentLocations);
 
     if (!dataFromEmail.attachmentLocations || dataFromEmail.attachmentLocations.length === 0) {
+        if ( ['Notice', 'Video'].indexOf(entry.recordtype) === -1 ) {
+            errors.push(`Missing attachment data for  ${entry.recordtype}.` )
+        }
+        if (errors.length > 0) { entry.err = errors; }
+        return entry;
+
+        // console.log('Missing attachment data.', entry);
         if (typeof  entry.recordDesc == 'undefined') { // 'Markdown style notice'
             entry.recordDesc = 'Notice'
         }
+        if (errors.length > 0) { entry.err = errors; }
         return entry;
     }
     // console.log('common:getPublicRecordData:attachments!!! ', dataFromEmail.attachmentLocations);
@@ -209,6 +231,7 @@ function getPublicRecordData(dataFromEmail) {
                 recordDesc = recordDesc.substring(recordDesc.indexOf('_')+1, recordDesc.lastIndexOf('.'))
             }
         }
+        if (errors.length > 0) { recordData.err = errors; }
         return recordData;
     })
 }//===========================================
