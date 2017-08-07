@@ -186,12 +186,15 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-if (configuration.mode !== 'development') {
+
+if (configuration.sslOptions) {
+    console.log('Found sslOptions, configuring...');
     var sslOptions = {
-      key: fs.readFileSync('/home/carpusco/ssl/keys/9c0b4_2b379_71d7c09aa2fe8da6ef8ce0d771721ef2.key'),
-      cert: fs.readFileSync('/home/carpusco/ssl/certs/carpusconsulting_com_9c0b4_2b379_1506265500_c15e95dd9e5148c14cc4dd37f0181f0c.crt')
-  };
-  let httpsPort = (parseInt(configuration.expressPort)+100);
+         key: fs.readFileSync(configuration.sslOptions.keyPath),
+        cert: fs.readFileSync(configuration.sslOptions.certPath)
+    };
+
+    let httpsPort = (parseInt(configuration.expressPort)+100);
     https.createServer(sslOptions, app).listen( httpsPort );
     let d = new Date();
     let ts = d.toString().replace('GMT-0400 (EDT)', '');
