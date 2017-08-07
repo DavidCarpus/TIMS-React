@@ -25,6 +25,9 @@ var menuProcessor = new MenuProcessor()
 var BoardCommitteeProcessor = require('./BoardCommitteeProcessor').BoardCommitteeProcessor;
 var boardCommitteeProcessor = new BoardCommitteeProcessor()
 
+var AlertRequestProcessor = require('./AlertRequestProcessor').AlertRequestProcessor;
+var alertRequestProcessor = new AlertRequestProcessor()
+
 
 
 function submit(email, imap) {
@@ -63,6 +66,9 @@ function submit(email, imap) {
             break;
         case 'BoardCommittee':
             return boardCommitteeProcessor.process(email);
+            break;
+        case 'AlertRequest':
+            return alertRequestProcessor.process(email);
             break;
 
 

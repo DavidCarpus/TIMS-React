@@ -87,9 +87,9 @@ function processSimpleEmail(imapLib, credentials, paths) {
             })); // End Promise.all messages
         })
 
-        .then(withAttachPromises => { // quick validate email envelope
-            return imapValidator.validateHostOrigins(withAttachPromises);
-        })
+        // .then(withAttachPromises => { // quick validate email envelope
+        //     return imapValidator.validateHostOrigins(withAttachPromises);
+        // })
 
         .then(validSender => { // Fetch email text body form server
             return Promise.all(validSender.map(attach => {

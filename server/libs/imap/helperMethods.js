@@ -1,5 +1,6 @@
 
 const groupNames = require('./GroupNames.json');
+let cellCarriers = require('../AlertRequests/cellCarriers.json')
 
 //=======================================
 function extractHeaderData(email) {
@@ -56,6 +57,7 @@ function getRecordTypeFromLine(line) {
         {recordType: 'Menu', searchMatches: ['MENU ADD:?', 'ADD MENU:?','MENU DELETE:?', 'DELETE MENU:?'] },
         {recordType: 'User', searchMatches: ['USER ADD:?', 'ADD USER:?','USER DELETE:?', 'DELETE USER:?'] },
         {recordType: 'BoardCommittee', searchMatches: ['BOARD ADD:?', 'ADD BOARD:?','BOARD DELETE:?', 'DELETE BOARD:?'] },
+        {recordType: 'AlertRequest', searchMatches: ['^.*: REQUESTED ALERT REGISTRATION'] },
         ]
 
     ucaseLine = line.toUpperCase().trim();
@@ -85,9 +87,11 @@ function getRequestTypeFromLine(line) {
             ] },
         {requestType: 'UPDATE', searchMatches: ['^UPDATE$'] },
         {requestType: 'REQUEST', searchMatches: ['^REQUEST$'] },
+        {requestType: 'VERIFY', searchMatches: ['^RE: REQUESTED ALERT REGISTRATION'] },
         ]
-        ucaseLine = line.toUpperCase().trim();
 
+        ucaseLine = line.toUpperCase().trim();
+        // console.log(ucaseLine);
         let matches = requestTypes.filter(type => {
             return  (type.requestType === ucaseLine) || type.searchMatches.reduce(function(sum, value) {
                 return sum || (ucaseLine.search(new RegExp(value, 'i')) >= 0);

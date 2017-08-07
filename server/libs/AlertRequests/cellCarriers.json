@@ -1,0 +1,11 @@
+ [
+    {"Carrier": "ALLTEL", "CarrierLabel":"Alltel", "email":"message.alltel.com"},
+    {"Carrier": "ATT", "CarrierLabel":"AT&T (formerly Cingular)", "email":"txt.att.net"},
+    {"Carrier": "BOOST", "CarrierLabel":"Boost Mobile", "email":"myboostmobile.com"},
+    {"Carrier": "METROPCS", "CarrierLabel":"Metro PCS", "email":"mymetropcs.com"},
+    {"Carrier": "NEXTEL", "CarrierLabel":"Nextel", "email":"messaging.nextel.com"},
+    {"Carrier": "SPRINT", "CarrierLabel":"Sprint (now Sprint Nextel)", "email":"messaging.sprintpcs.com"},
+    {"Carrier": "TMOBILE", "CarrierLabel":"T-Mobile", "email":"tmomail.net"},
+    {"Carrier": "USCELL", "CarrierLabel":"U.S. Cellular", "email":"email.uscc.net"},
+    {"Carrier": "VIRGIN", "CarrierLabel":"Virgin Mobile USA", "email":"vmobl.com"}
+]

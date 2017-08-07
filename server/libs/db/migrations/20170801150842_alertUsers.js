@@ -6,8 +6,7 @@ exports.up = function(knex, Promise) {
     table.string('contact').unique();
     table.string('carrier');
 
-    // table.timestamp('dateCreated');
-    table.timestamp('dateUpdated');
+    table.timestamps(true, true);
     table.timestamp('dateVerified');
     })
 };

@@ -1,26 +1,37 @@
 var Config = require('../../config'),
 configuration = new Config();
 
+let cellCarriers = require('../AlertRequests/cellCarriers.json')
 
-var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
+var validWebsiteHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
+// var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
 var validEmailAddresses= ['miltonnh@carpusconsulting.com']
+var validHostOrigins = validWebsiteHostOrigins.concat(cellCarriers.map(carrier => carrier.email))
 
 if (configuration.mode == 'development') {
     validHostOrigins.push('jovaraanddavid.us');
     validEmailAddresses.push('miltonnh@jovaraanddavid.us');
 }
-
 //=======================================
-function validateHostOrigins(emailsToValidate) {
+function validateOrigins(emailsToValidate, validOrigins) {
     return Promise.all(emailsToValidate.map(email => {
         let envelope = email.header.attributes.envelope;
-        if (validHostOrigins.indexOf(envelope.from[0].host) < 0) {
+        if (validOrigins.indexOf(envelope.from[0].host) < 0) {
             let errMsg = 'Invalid host sender.';
             email.err = errMsg;
         }
         return Promise.resolve(email);
-    })
-);
+    }));
+}
+//=======================================
+function validateWebEditHostOrigins(emailsToValidate) {
+    return validateOrigins(emailsToValidate, validWebsiteHostOrigins )
+}
+
+//=======================================
+function validateHostOrigins(emailsToValidate) {
+    // console.log('validateHostOrigins' + require('util').inspect(validHostOrigins, { depth: null }));
+    return validateOrigins(emailsToValidate, validHostOrigins )
 }
 //=======================================
 function requiredAttachmentsPresent(email, configuration) {
@@ -49,6 +60,7 @@ function hasAllRequiredData(email) {
 //=======================================
 module.exports = {
     validateHostOrigins,
+    validateWebEditHostOrigins,
     // hasAllRequiredData,
     requiredAttachmentsPresent,
     // extractHeaderData,
