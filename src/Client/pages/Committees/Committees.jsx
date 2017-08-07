@@ -11,6 +11,11 @@ import RawText  from '../../Components/RawText'
 import './Committees.css'
 
 export default class Committees extends React.Component {
+    componentWillMount() {
+        // console.log('DepartmentsUI:componentWillMount: ' ,this.props);
+        this.props.fetchOUData(this.props.groupName);
+    }
+
     render() {
         return (
             <div id='Committees'>

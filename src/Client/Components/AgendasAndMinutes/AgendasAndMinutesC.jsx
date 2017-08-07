@@ -8,7 +8,6 @@ const mapStateToProps = (state, ownProps) => {
     let agendaState = state.agendasAndMinutes;
 
     if (groupName && ownProps.store && !agendaState.loading && agendaState.groupName !==   groupName) {
-        console.log('fetchMeetingDocs:' +agendaState.groupName + '-' +  groupName );
         ownProps.store.dispatch(fetchMeetingDocs(groupName))
     }
 

@@ -32,8 +32,13 @@ const mapStateToProps = (state, ownProps) => {
             // new group and old group both in 'Departments', fetch from here (otherwise do in componentWillMount )
             if ( newGroup.length > 0 && oldGroup.length >  0) {
                 // console.log('DepartmentsUI:fetchOrganizationalUnitData:', groupName);
+                // console.log( 'DepartmentsUI: | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
+
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
-                loading= loading || true;
+                ownProps.store.dispatch(fetchPageAsides(groupName));
+                ownProps.store.dispatch(fetchGroupNotices(groupName));
+                ownProps.store.dispatch(fetchGroupDoc(groupName));
+                loading= true;
             }
         }
     }
