@@ -33,9 +33,6 @@ function processTranslatedData(translatedData) {
     }
     return Promise.all(translatedData.map(entry => {
         let {uid, from, requestType, sdate, edate} = entry
-        delete entry.uid
-        delete entry.from;
-        delete entry.requestType;
         delete entry.sdate;
         delete entry.edate;
 

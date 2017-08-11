@@ -42,7 +42,6 @@ function processTranslatedData(translatedData) {
             return Promise.resolve([translatedData]);
         })
         .catch(err => {
-            translatedData.uid = uid; // We need to return this so IMAP subsystem can move/delete it.
             // transaction failed, data rolled back
             return Promise.reject(err);
         });

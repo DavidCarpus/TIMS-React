@@ -12,7 +12,6 @@ import TransferStationRules from '../Components/TransferStationRules'
 export default class PublicWorks extends React.Component {
     render() {
         var group = this.props.group;
-        console.log('PublicWorks:group',group);
 
         return (
             <div>
