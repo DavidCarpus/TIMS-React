@@ -3,6 +3,7 @@ import {    BrowserRouter as Router } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 
 import MainLayout from '../Components/MainLayout/MainLayout'
+import TransferStationRules from '../Components/TransferStationRules'
 import Departments from '../pages/Departments';
 import Committees from '../pages/Committees'
 import Employment from '../pages/Employment';
@@ -110,6 +111,11 @@ class WebApp extends Component {
                     <RequestAlerts store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
+            <Route path="/TransferRules" render={(newProps)=>(
+                <MainLayout>
+                    <TransferStationRules store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps}/>
+                </MainLayout>
+            )} />
             <Route path="/Departments/:department" render={this.DepartmentsPage} />
             <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
             <Route path="/PublicRecords/:recordtype" render={this.PublicRecordsPage} />
@@ -118,5 +124,6 @@ class WebApp extends Component {
     );
   }
 }
+// <Route path="/TransferRules" render={this.DepartmentsPage} />
 
 export default WebApp;
