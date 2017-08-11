@@ -92,14 +92,17 @@ class MainMenu extends React.Component {
 
 export default class Menu extends React.Component {
     render(){
-        // console.log(Object.entries(this.props.menus.menus));
-        let sortedMenus = Object.entries(this.props.menus.menus)
-            .sort((a,b) => {
+        let menus = this.props.menus.menus
+        let menusToSort = []
+        for (var key in menus) {
+            menusToSort.push([key, menus[key]])
+        }
+        let sortedMenus = menusToSort.sort((a,b) => {
                 let itemA = a[1].description.toUpperCase();
                 let itemB = b[1].description.toUpperCase();
                 return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
             })
-            // console.log(sortedMenus)
+            // console.log('sortedMenus:', sortedMenus)
         return (
             <div key={this.props.index} >
                 <Col md={12}>
