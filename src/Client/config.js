@@ -51,6 +51,10 @@ function isObject(item) {
 //======================================
 let mode=process.env.BUILD_MODE || process.env.NODE_ENV || 'production'
 // mode='test'
+if(window.location.hostname.startsWith('test.')) {
+    mode='test'
+}
+
 
 module.exports = function(){
     let mergedConf = mergeDeep({}, base_configuration);
