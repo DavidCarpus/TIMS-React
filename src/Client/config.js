@@ -2,6 +2,13 @@ var dev_configuration = require('privateConfig/configuration_dev.json');
 var prod_configuration = require('privateConfig/configuration_prod.json');
 var test_configuration = require('privateConfig/configuration_test.json');
 var base_configuration = require('privateConfig/configuration.json');
+
+if (!String.prototype.startsWith) {
+    // eslint-disable-next-line
+    String.prototype.startsWith = function(searchString, position){
+      return this.substr(position || 0, searchString.length) === searchString;
+  };
+}
 //======================================
 //======================================
 // https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
