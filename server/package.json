@@ -32,10 +32,13 @@
     "marked": "^0.3.6",
     "morgan": "^1.8.2",
     "mysql": "^2.13.0",
+    "node-wget": "^0.4.2",
     "nodemailer": "^4.0.1",
     "nodemailer-promise": "^1.0.3",
     "public-google-calendar": "^0.2.0",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "ssh2-sftp-client": "^1.1.0",
+    "wgetjs": "^0.3.6"
   },
   "devDependencies": {
     "knex": "^0.13.0",
