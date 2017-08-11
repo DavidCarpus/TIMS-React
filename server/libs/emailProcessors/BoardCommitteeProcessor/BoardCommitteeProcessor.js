@@ -61,12 +61,13 @@ function translateToDBScheme(emailData) {
     }
     if (typeof description === 'undefined' || description.length === 0) {
         errors.push('Missing description of Board/Committee.')
+        description=''
     }
 
     let entry =  {
         pageLink: menu.replace(/.*\//,'/'),
         fullLink: '/'+menu,
-        description: description || "",
+        description: description,
         requestType: requestType,
         uid: emailData.uid
     }
