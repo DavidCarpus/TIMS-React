@@ -1,47 +1,36 @@
 var fs = require('fs');
-var axios = require("axios");
 const cheerio = require('cheerio')
 var Config = require('../../config'),
 configuration = new Config();
-// var wget = require('node-wget');
-var wget = require('./wget');
+
 var knexConfig = require('../../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
+var pullLocalCopies = require('./serverIO').pullLocalCopies;
+var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
+var pushFileToServer = require('./serverIO').pushFileToServer;
+var fetchURL = require('./serverIO').fetchURL;
+var getServerFilePath = require('./serverIO').getServerFilePath;
+var initSFTP = require('./serverIO').initSFTP;
+var getSourceServerHost = require('./serverIO').getSourceServerHost;
+
 let logErrors = true
 // let logErrors = false
-console.log(configuration.mode);
-const localFileURL = '/home/dcarpus/code/milton_nh/currentMiltonWebsite/miltonnh-us.com'
-let serverPath = '/home/carpusco/test.miltonnh.us/server/private/Attachments/'
 
-if (configuration.mode === 'development') {
-    // logErrors = true
-    serverPath = '/home/dcarpus/code/milton_nh/react_miltonNH/server/private/Attachments/'
-} else if  (configuration.mode === 'production') {
-    serverPath = '/home/carpusco/miltonnh.us/server/private/Attachments/'
-}
-// let serverPath = '/home/carpusco/test.miltonnh.us/server/'
 let MIN_VALID_YEAR = 2007
 
-// const paths = require('./TablesToScrape.json');
-
-// let Client = require('ssh2');
-let Client = require('ssh2-sftp-client');
-
-// let sftpClientConnected = false
-let pk=require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa');
-let sftp = new Client();
-var connSettings = {
-    host: 'carpusco.wwwss29.a2hosted.com',
-    port: '7822',
-    username: 'carpusco',
-    privateKey: pk
-};
-// let sftpPromise = sftp.connect(connSettings)
-let serverDirs={}
+const meetingPaths = require('./TablesToScrape.json');
+// const meetingPaths = require('./TablesToScrapeTest.json');
 
 //========================================
 let validRecordType = (recordtype) => ["Agenda", "Minutes", "Video"].includes(recordtype)
+let isMailToLink = (uri) => uri.toLowerCase().startsWith('mailto')
+let ignoreMailToLink = (record) => !isMailToLink(record.uri)
+let onlyLocalDoc = (record) => ['Notice', 'HelpfulInformation', 'Document','Newsletter'].includes(record.recordtype) &&
+    (!record.remotePath.startsWith('http') ||
+    (record.remotePath.startsWith('http') && !record.remotePath.indexOf(getSourceServerHost() !== -1)))
+
+let ignoreExternalLinks = (record) => record.uri.indexOf(getSourceServerHost() !== -1)
 //========================================
 function translateRecordType(recordtype) {
     let translated = [
@@ -62,7 +51,10 @@ function translateRecordType(recordtype) {
     return recordtype
 }
 //========================================
-
+function isPhysicalFile(rec) {
+    if (rec.recordtype === 'Video') { return false}
+    return true
+}
 //========================================
 function newFilenameFromRecord(rec) {
     let oldKey = ''
@@ -79,127 +71,8 @@ let getY_M_D = (date) =>  date.getUTCFullYear() + "_" + (date.getUTCMonth()<9?'0
 let getRecordYear = (rec) => rec.date.getUTCFullYear()
 
 let conLogIfField = (obj, fieldName,lbl='rec') => obj[fieldName] && console.log(lbl+'.'+fieldName+':', obj);
-
-let matchHost = (host, uri) => uri.indexOf(host) !== -1
-let miltonnhusURI = (uri) => matchHost('miltonnh-us', uri)
-let localFileExists = (fullPath) => fs.existsSync(fullPath)
-let localFileMissing = (fullPath) => !localFileExists(fullPath)
-
-let baseURI = (host, uri) =>  uri.replace(new RegExp('https?://' + host + '/?'), '')
-let baseURIpath = (host, uri) =>
-    uri.replace(new RegExp('https?://' + host + '/?'), '').match(/(.*)\//) ?
-    uri.replace(new RegExp('https?://' + host + '/?'), '').match(/(.*)\//)[1]+'/':
-    '/'
-let localPathFromURI = (localBasePath, host, uri) =>localBasePath + '/' + baseURI(host, uri)
-
 //========================================
-function pullLocalCopies(records) {
-    let missingFiles = records.filter(rec => miltonnhusURI(rec.uri))
-    // .filter( (rec, index) => index<10 )
-
-    return Promise.all(
-        missingFiles.map(rec => {
-            let dest =localPathFromURI(localFileURL, 'miltonnh-us.com', rec.uri)
-            // console.log('Check:', dest);
-            if (localFileMissing(dest) ) {
-                // return pullLocalCopy(localFileURL, 'miltonnh-us.com', rec.uri)
-                return new Promise(function(resolve, reject) {
-                    wget( {url: rec.uri, dest: dest}, (err, response) => {
-                        if (err) {
-                            reject(err)
-                        } else {
-                            resolve(dest)
-                        }
-                    } )
-                })
-                .then(dest => {
-                    rec.dest = dest
-                    return rec
-                })
-            } else {
-                rec.local = localPathFromURI( localFileURL, 'miltonnh-us.com', rec.uri)
-                return Promise.resolve(rec)
-            }
-        })
-    )
-}
-//========================================
-function pullNewServerDirs(baseServerPath, pathsToDir) {
-    let serverDirs = {}
-    // Pull directories from a server using SFTP
-    if (configuration.mode !== 'development') {
-        return Promise.all(
-             pathsToDir.map( pathToDir => {
-                let fullPath = baseServerPath + pathToDir
-                return sftpPromise.then(() => {
-                    return sftp.list(fullPath);
-                })
-                .then((data) => {
-                    serverDirs[pathToDir]  =data
-                    return data.map(rec=> pathToDir+'/' +rec.name)
-                })
-                .catch((err) => {
-                    console.log('**sftp err:', fullPath , err);
-                })
-            })
-        )
-        .then(fileNames => {
-            return fileNames
-        })
-    } else {
-        // Pull directories 'LOCAL' with fs library
-        return Promise.all( pathsToDir.map( pathToDir => {
-            return new Promise(function(resolve, reject) {
-                fs.readdir(baseServerPath + pathToDir, function(err, items) {
-                    resolve (items.map(item => pathToDir+'/' + item) )
-                });
-            })
-        }))
-        .then(allPathItems => {
-            return allPathItems
-        })
-    } // else
-}
-//========================================
-function pushFileToServer( fullPathLocalFile, serverDest ) {
-    if (configuration.mode !== 'development') {
-        return  sftpPromise
-        .then( () => {
-            return sftp.put(fullPathLocalFile, serverDest, true ) ///Param 3=useCompression
-        })
-        .then( (data) => {
-            console.log('Uploaded:', serverDest.replace(/.*\//, ''));
-            return Promise.resolve(serverDest)
-        })
-        .catch(err => {
-            console.log("sftpPromise:put err", serverDest);
-            // reject("sftpPromise:err", err);
-            Promise.resolve("**sftpPromise:put err", serverDest);
-        })
-    } else {
-        return new Promise(function(resolve, reject) {
-            console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
-            var rd = fs.createReadStream(fullPathLocalFile);
-            rd.on("error", function(err) { reject(err); });
-            var wr = fs.createWriteStream(serverDest);
-            wr.on("error", function(err) { reject(err); });
-            wr.on("close", function(ex) { resolve(serverDest); });
-            rd.pipe(wr);
-            // fs.createReadStream(fullPathLocalFile).pipe(fs.createWriteStream(serverDest));
-        })
-    } // else
-}
-//========================================
-function fetchURL(url) {
-    return axios({
-      method: 'get',
-      url: url,
-  }).then(response => {
-      return response.data
-  });
-}
-//========================================
-function extractTableRows(originalHTML, groupName) {
+function extractMeetingTableRows(originalHTML, groupName) {
     let data = originalHTML;
     data = data.replace(/<\/tr>.*/g, '')
     let anchorRegEx = /<a .*?\"(\S*?)\".*?>(.*?)</;
@@ -260,43 +133,34 @@ function dbRecordsFromExtractedRow(rowData) {
         // console.log(dateElement.dateStr + ' document:', doc);
         let uri = doc.uri
         if (! uri.startsWith('http')) {
-            // uri = 'http://miltonnh-us.com' + (uri.startsWith('/')?'':'/') + uri
-            uri = 'http://miltonnh-us.com' + uri
+            uri = 'http://' + getSourceServerHost() + uri
         }
         let label = doc.label
         if (! validRecordType(label) ) {
             label = translateRecordType(doc.label)
         }
+        // if (! validRecordType(label) ) {
+        //     console.log('label still not valid?', label);
+        // }
 
-        return {groupName:groupName, date: meetingDate,  label:label, uri:uri}
-    })
-}
-//========================================
-function scrapeTableFromURL(pathToChk) {
-    return new Promise(function(resolve, reject) {
-        const request = axios({
-          method: 'get',
-          url: pathToChk.url,
-        });
-        return request.then( response => {
-            var $ = cheerio.load(response.data);
-            let data = $(pathToChk.query).html();
-            let records = parseHTMLData({url:pathToChk.url, data:data, group:pathToChk.group});
-            resolve(records)
-        })
+        return {groupName:groupName, date: meetingDate,  label:label, uri:uri, recordtype:label}
     })
 }
 //========================================
 //========================================
 function enterIntoDB(record) {
     // Check DB for record and add if not there
-    return knex('PublicRecords').select('*').where(record)
+    let checkRecord={}
+    Object.assign(checkRecord, record)
+    delete checkRecord.date
+    // console.log('sql ', knex('PublicRecords').select('*').where(checkRecord).toString());
+    return knex('PublicRecords').select('*').where(checkRecord)
     .then(results => {
         if (results.length === 0) {
             return knex('PublicRecords').insert(record)
-            .then(results => {
-                logErrors && console.log("Log to DB:" , record.recordtype, record.pageLink, record.date);
-            })
+            // .then(results => {
+            //     logErrors && console.log("Log to DB:" , record.recordtype, record.pageLink, record.recorddesc);
+            // })
         }
         return null
     })
@@ -313,23 +177,23 @@ function enterIntoDB(record) {
 }
 //========================================
 //========================================
-//========================================
-if (require.main === module) {
-    paths = [
-        {"group":"Selectmen", "url":"http://miltonnh-us.com/bos_agendas.php", "query":"table[border='1'][width='95%']"},
-    ]
-
-    Promise.all(paths.map(record => {
+function cloneMeetings(paths) {
+    // console.log('cloneMeetings');
+    return Promise.all(paths.map(record => {
         console.log(record.group);
         if (configuration.mode !== 'development') {
-            sftpPromise = sftp.connect(connSettings)
+            initSFTP()
         }
         return fetchURL(record.url)
         .then(wholePage => {
             var $ = cheerio.load(wholePage);
             return $(record.query).html();
         })
-        .then( onlyTable => extractTableRows(onlyTable, record.group) )
+        // .then( onlyTable => {
+        //     console.log('onlyTable:', onlyTable);
+        //     return onlyTable
+        // })
+        .then( onlyTable => extractMeetingTableRows(onlyTable, record.group) )
         .then(extractedRows => {
             let allRecords=[];
             extractedRows.map((extractedRow, index) => {
@@ -339,25 +203,29 @@ if (require.main === module) {
                 }
             })
             // return allRecords.filter(rec => rec.date.getUTCFullYear() === 2012)
-            allRecords.map(rec => {
-                if (! validRecordType(rec.label)) {
-                    logErrors && console.error("Invalid document type:", getY_M_D(rec.date) , '"'+rec.label+'"');
-                }
+            allRecords.filter(rec=>! validRecordType(rec.label)).map(rec => {
+                logErrors && console.error("Invalid document type:", getY_M_D(rec.date) , '"'+rec.label+'"');
             })
+            // console.log('allRecords:', allRecords);
+            // allRecords.filter(rec=>rec.recordtype === 'Video').map(rec => {
+            //     console.error('+++' +rec.recordtype + ":", getY_M_D(rec.date) , '"'+rec.label+'"');
+            // })
 
             return allRecords.filter(rec =>validRecordType(rec.label)  )
         })
-        .then( pullLocalCopies )
+        .then( pullLocalCopies)
         .then(pulledLocal => {
-            return pulledLocal.map(rec => {
+            // console.log('pulledLocal', pulledLocal.length);
+            pulledLocal.filter(isPhysicalFile).map(rec => {
                 rec.newFilename = newFilenameFromRecord(rec)
-                return rec
             })
+            return pulledLocal
         })
         .then(recWithDest => {
             // Fetch directories (by year) from new server
-            return pullNewServerDirs(serverPath, recWithDest.map(getRecordYear ).filter(onlyUnique) )
+            return pullNewServerDirs(getServerFilePath(), recWithDest.map(getRecordYear ).filter(onlyUnique) )
             .then( serverDirs => {
+                // let allPaths= [].concat.apply([], serverDirs)
                 let allPaths=[];
                 serverDirs.map( directory => {
                     directory.map( path => {
@@ -370,8 +238,8 @@ if (require.main === module) {
 
                 // Check converted records against server directories
                 return Promise.all(
-                    recWithDest.filter(notOnServer).map(rec => {
-                        let dest = serverPath + rec.date.getUTCFullYear() + '/' + rec.newFilename
+                    recWithDest.filter(notOnServer).filter(isPhysicalFile).map(rec => {
+                        let dest = getServerFilePath() + rec.date.getUTCFullYear() + '/' + rec.newFilename
                         return pushFileToServer(rec.local, dest)
                         .then( (pushReq)=> {
                             return rec
@@ -388,16 +256,245 @@ if (require.main === module) {
             return Promise.all(
                 filesCopied.map(rec => {
                     let dest = rec.date.getUTCFullYear() + '/' + rec.newFilename
-                    return enterIntoDB({pageLink:rec.groupName, recordtype: rec.label, date:rec.date, fileLink:dest})
+                    if (!isPhysicalFile(rec)) {
+                        dest = rec.uri
+                    }
+                    let dbEntry = {pageLink:rec.groupName, recordtype: rec.label, date:rec.date, fileLink:dest}
+                    return enterIntoDB(dbEntry)
+                    // return enterIntoDB({pageLink:rec.groupName, recordtype: rec.label, date:rec.date, fileLink:dest})
                 })
             ).then(entered => {
                 return entered
             })
         })
+    }))
+
+}
+//========================================
+function extractLinksFromTable(tableHTML) {
+    var myRe = /(<a.*?<\/a.*?>)/g
+    var links=[];
+    let defaultRecordtype = 'Document'
+
+    if (tableHTML.indexOf('width:164px') !== -1) {
+        // console.log('***tableHTML', tableHTML);
+        return links;
+    }
+
+    if (tableHTML.toUpperCase().indexOf('Helpful Information'.toUpperCase()) >= 0) {
+        defaultRecordtype = 'HelpfulInformation'
+    }
+    if (tableHTML.toUpperCase().indexOf('Notices'.toUpperCase()) >= 0) {
+        defaultRecordtype = 'Notice'
+    }
+    if (tableHTML.toUpperCase().indexOf('Gazette'.toUpperCase()) >= 0) {
+        defaultRecordtype = 'Newsletter'
+    }
+    while ((match = myRe.exec(tableHTML)) !== null) {
+        let recordtype = defaultRecordtype
+
+        var link =  match[0]
+        let uri=link.match(/"(.*?)"/)[0]
+        .replace(/"/g,"")
+        .trim()
+
+        let desc=link.match(/>?(.*)/)[0]
+        .replace(/<\/?span.*?>/ig,"")
+        .replace(/<\/?font.*?>/ig,"")
+        .replace(/<\/?strong.*?>/ig,"")
+        .replace(/<\/?a.*?>/ig,"")
+        .replace(/&amp;/g, '&')
+        .replace(/&apos;/g, "'")
+        .replace(/&nbsp;/g, " ")
+        .trim()
+
+        if (uri.toUpperCase().indexOf('HTTP') >= 0 && uri.toUpperCase().indexOf(getSourceServerHost().toUpperCase()) == -1 ) {
+            // console.log('HelpfulInformation: ', uri);
+            recordtype = 'HelpfulInformation'
+        }
+        if (uri.toUpperCase().indexOf('MAILTO') >= 0) {
+            recordtype = 'MailTo'
+        }
+        if (uri.toUpperCase().indexOf('.PHP') >= 0) {
+            console.log('Redirect: ', uri);
+            recordtype = 'Redirect'
+        }
 
 
-    })).then(allGroupsDone => {
-            // setTimeout(() => process.exit(), 5000);
-            process.exit()
+        uri = uri.replace(new RegExp('https?://'+getSourceServerHost() ), '')
+        let remotePath = uri
+        if(['Notice', 'HelpfulInformation','Document', 'Newsletter'].includes(recordtype)){
+            if (uri.startsWith('/') ) {
+                let origURI = uri
+                remotePath = uri.replace(/^\//, '')
+                uri = 'http://' + getSourceServerHost() + uri
+                // console.log('URI from ', origURI, 'to', uri );
+                // console.log('remotePath:', remotePath);
+            // } else {
+            //     console.log('*** ', uri);
+            }
+        }
+        links.push({uri:uri, desc:desc, remotePath:remotePath, recordtype:recordtype })
+    }
+
+    return links
+}
+//========================================
+function extractDocumentTableRows(tableHTML) {
+    let links = extractLinksFromTable(tableHTML)
+    // console.log('Links:', links);
+    return links;
+}
+//========================================
+function getTablesFromPage(pageHTML, query) {
+    // var myRe = /(<table border[\s\S]*?>[\s\S]*?<\/table)/ig
+    var myRe =   /(<table.*[\s\S]*?>[\s\S]*?<\/table)/g
+    var tables=[];
+    while ((match = myRe.exec(pageHTML)) !== null) {
+        // console.log('Check', query);
+        if (match[0].toUpperCase().indexOf(query.toUpperCase()) !== -1) {
+            // console.log('Matched Check', query, match[0]);
+            tables.push( match[0])
+        }
+    }
+    return tables
+}
+//========================================
+function cloneDocuments(paths) {
+    return Promise.all(paths.map(record => {
+        console.log(record.group);
+        if (configuration.mode !== 'development') {
+            initSFTP()
+        }
+        return fetchURL(record.url)
+        .then(wholePage => {
+            var $ = cheerio.load(wholePage);
+            tables = getTablesFromPage(wholePage, record.query)
+            return tables
+        })
+        .then(tablesHTML => {
+            return tablesHTML.map(table => {
+                // console.log('***tablesHTML', table);
+                let rows = extractDocumentTableRows(table, record.group)
+                // console.log('Rows:', rows);
+                return rows
+            })
+        })
+        .then(tableLinks => {
+            // console.log('tableLinks',tableLinks);
+            let allLinks= [].concat.apply([], tableLinks)
+            // console.log('allLinks',allLinks);
+            return allLinks
+        })
+        .then( allLinks => {
+            // console.log('allLinks', allLinks);
+            return pullLocalCopies(allLinks.filter(rec=>rec.recordtype!=='Redirect'))
+            .then(pulledFiles => {
+                // console.log('pulledFiles', pulledFiles);
+                return allLinks
+            })
+        } )
+        .then(mergedTableLinks => {
+            // console.log('mergedTableLinks', mergedTableLinks);
+            let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
+
+            return pullNewServerDirs(getServerFilePath(), ['Documents'] )
+            .then( serverDirs => {
+                // console.log('serverDirs', serverDirs);
+                let allPaths= [].concat.apply([], serverDirs)
+                mergedTableLinks = mergedTableLinks.map(rec => {
+                    rec.targetPath = targetPath = getServerFilePath()+ localFileURL(rec)
+                    return rec
+                })
+                //  console.log('mergedTableLinks', mergedTableLinks);
+        // uri = uri.replace('/images//stories/downloads'
+
+                let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
+                // let recordsToCopy = mergedTableLinks.filter(ignoreMailToLink).filter(notOnServer)
+                let recordsToCopy = mergedTableLinks.filter(onlyLocalDoc).filter(notOnServer)
+                // mergedTableLinks.filter(onlyLocalDoc).map(lnk => {
+                //     console.log('---', lnk.remotePath, lnk.uri);
+                // })
+                // console.log('recordsToCopy', mergedTableLinks.filter(record=>record.recordtype==='HelpfulInformation' &&(record.remotePath.startsWith('http') ))
+                    // (record.remotePath.startsWith('http') && !record.remotePath.indexOf(getSourceServerHost() !== -1)
+                // .filter(onlyLocalDoc)
+                // );
+
+                return Promise.all(
+                    recordsToCopy.map(rec => {
+                        // console.log('Push ', rec.local , 'to', rec.targetPath);
+                        return pushFileToServer(rec.local, rec.targetPath)
+                        .then( (pushReq)=> {
+                            return rec
+                        }).catch(err => console.log(err))
+                    })
+                )
+                .then(copiedFilesNeeded => mergedTableLinks )
+            })
+            .then (toLogToDB => {
+
+                let localFileURL = (rec) => rec.remotePath.indexOf('http') !== -1 ? rec.remotePath: 'Documents/' + rec.remotePath.replace(/uploads\//, '')
+                let notEB2Gov = (rec) =>  rec.remotePath.toUpperCase().indexOf('EB2GOV') === -1
+                let notnhtaxkiosk = (rec) =>  rec.remotePath.toUpperCase().indexOf('NHTAXKIOSK') === -1
+                // let notEB2Gov = (rec) =>  rec.remotePath.toUpperCase().indexOf('EB2GOV') === -1
+                logErrors = true
+
+                // toLogToDB.map(lnk => {
+                //     console.log('+++', lnk.remotePath, lnk.uri);
+                // })
+
+                return Promise.all(
+                toLogToDB
+                .filter(ignoreMailToLink)
+                .filter(notEB2Gov)
+                .filter(notnhtaxkiosk)
+                .map(rec => {
+                    let dbEntry = {pageLink:record.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:new Date(), fileLink:localFileURL(rec)}
+                    // console.log('lnk', dbEntry);
+                    return enterIntoDB(dbEntry)
+                })
+                )
+            })
+
+        })
+    }))
+}
+//========================================
+//========================================
+if (require.main === module) {
+    process.on('warning', e => console.warn(e.stack));
+    process.setMaxListeners(0);
+    paths = [
+        {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"Blind Exemption"},
+        {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"2009 Assessment"},
+        {"group":"CodeEnforcement", "url":"http://miltonnh-us.com/code.php", "query":"Helpful Information"},
+        {"group":"CodeEnforcement", "url":"http://miltonnh-us.com/code.php", "query":"Permits"},
+        {"group":"ParksRecreation", "url":"http://miltonnh-us.com/parks.php", "query":"Softball FIeld Renovation Committee Information"},
+        {"group":"ParksRecreation", "url":"http://miltonnh-us.com/parks.php", "query":"Arts in the Park"},
+        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Notices"},
+        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Voting and Election Information"},
+        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Additional Links and Information"},
+        {"group":"PlanningBoard", "url":"http://miltonnh-us.com/planning_board.php", "query":"Capital Improvement"},
+        {"group":"CemeteryTrustees", "url":"http://miltonnh-us.com/cemetery.php", "query":"Right to Inter"},
+        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"visitnh"},
+        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"Community FAQ"},
+        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"UNH"},
+        {"group":"Zoning", "url":"http://miltonnh-us.com/zba.php", "query":"Equitable Waiver"},
+
+    ]
+
+    // {"group":"Selectmen", "url":"http://miltonnh-us.com/bos_agendas.php", "query":"table[border='1'][width='95%']"},
+    // cloneMeetings(paths)
+
+    // cloneDocuments(paths)
+    cloneMeetings(meetingPaths)
+    .then(meetingsDone => {
+        return cloneDocuments(paths)
+    })
+    .then(done => {
+        // setTimeout(() => process.exit(), 5000);
+        process.exit()
     })
 }
+// TODO: Do Cemetery documents via old way (json file in server/db/json)
+// {"group":"Cemetery", "url":"http://miltonnh-us.com/cemetery.php", "query":"table[border='1'][style='width: 500px;']"},
