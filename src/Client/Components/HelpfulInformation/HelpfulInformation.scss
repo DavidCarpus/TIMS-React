@@ -1,0 +1,29 @@
+@import "../../../../private/SASS/breakpoints.scss";
+@import "../../../../private/SASS/colors.scss";
+
+#HelpfulInformation{
+    background-color:$documentListBackground;
+}
+
+#footer {
+    margin-top: 10px;
+    margin-bottom: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    background-color:$footerBackground;
+}
+
+
+#footer a{
+    color: $footerLinks;
+}
+#footer a:hover {
+    color: $footerLinks;
+    font-weight: bold;
+}
+@media only print{
+    #footer {
+        display: none;
+    }
+}

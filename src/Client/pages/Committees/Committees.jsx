@@ -6,6 +6,7 @@ import GroupMembers from '../../Components/GroupMembers'
 import AgendasAndMinutes from '../../Components/AgendasAndMinutes'
 import NoticesList from '../../Components/NoticesList'
 import DocumentList  from '../../Components/DocumentList'
+import HelpfulInformation  from '../../Components/HelpfulInformation'
 
 import RawText  from '../../Components/RawText'
 import './Committees.css'
@@ -30,6 +31,8 @@ export default class Committees extends React.Component {
                     <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>
                     <NoticesList group={this.props.group} store={this.props.store} />
                     <DocumentList  group={this.props.group} store={this.props.store} />
+                    <HelpfulInformation informationArray={this.props.group.helpfulinformation || []} />
+
 
                 </Col>
                 <Col md={2} mdPull={9}><Aside group={this.props.group} store={this.props.store}/></Col>

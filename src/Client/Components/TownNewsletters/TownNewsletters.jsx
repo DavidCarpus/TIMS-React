@@ -12,8 +12,7 @@ export default function  TownNewsletters({title, newsletters}){
                 .map((entry, index) =>
                 <div key={index}>
                     <li>
-                        <SmartLink link={entry.link}
-                            linkText={entry.description}/>
+                        <SmartLink id={entry.id} link={entry.fileLink} linkText={entry.description || entry.fileLink} />
                     </li>
                 </div>
             )}

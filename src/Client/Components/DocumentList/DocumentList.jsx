@@ -11,7 +11,7 @@ import React from 'react';
              <h2>{title} </h2>
              {documents.map( (document, index) =>
                      <div key={index} >
-                         <SmartLink link={document.link} linkText={document.description || document.link} />
+                         <SmartLink id={document.id} link={document.link} linkText={document.description || document.link} />
                      </div>
                  )}
          </div>

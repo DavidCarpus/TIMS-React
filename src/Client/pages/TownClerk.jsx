@@ -4,27 +4,28 @@ import Aside from '../Components/Aside'
 import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import NoticesList from '../Components/NoticesList'
 import DocumentList  from '../Components/DocumentList'
+import SmartLink from '../Components/SmartLink'
 import {  Col } from 'react-bootstrap';
+import HelpfulInformation  from '../Components/HelpfulInformation'
 
-export default class TownClerk extends React.Component {
-    render() {
-        var group = this.props.group;
+export default function TownClerk({group, store, loading, id, title='Tax Collector/Town Clerk'}){
+    if ( loading) {         return (<div>Loading</div>)     }
+    return (
+        <div>
+            <Col md={8}  mdPush={3} id="contentArea"  >
+                <h1 style={{textAlign:'center'}}>{title}</h1>
 
-        return (
-            <div>
-                <Col md={8}  mdPush={3} id="contentArea"  >
-                    <h1 style={{textAlign:'center'}}>Tax Collector/Town Clerk</h1>
+                <NoticesList group={group} store={store}/>
 
-                    <NoticesList group={group} store={this.props.store}/>
+                <OnlinePaymentsBlock/>
+                <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
 
-                    <OnlinePaymentsBlock/>
-                    <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
+                <DocumentList group={group}  store={store} />
 
-                    <DocumentList group={group}  store={this.props.store} />
+                <HelpfulInformation informationArray={group.helpfulinformation || []} />
+            </Col>
+            <Col md={3} mdPull={8}><Aside group={group}  store={store} /></Col>
+        </div>
+    )
 
-                </Col>
-                <Col md={3} mdPull={8}><Aside group={group}  store={this.props.store} /></Col>
-            </div>
-        )
-    }
 }
