@@ -4,7 +4,6 @@ import Aside from '../Components/Aside'
 import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
 import NoticesList from '../Components/NoticesList'
 import DocumentList  from '../Components/DocumentList'
-import SmartLink from '../Components/SmartLink'
 import {  Col } from 'react-bootstrap';
 import HelpfulInformation  from '../Components/HelpfulInformation'
 

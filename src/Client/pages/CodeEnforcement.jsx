@@ -3,7 +3,6 @@ import React from 'react';
 
  import Aside from '../Components/Aside'
  import DocumentList  from '../Components/DocumentList'
- import SmartLink from '../Components/SmartLink'
  import RawText from '../Components/RawText'
  import HelpfulInformation  from '../Components/HelpfulInformation'
 
