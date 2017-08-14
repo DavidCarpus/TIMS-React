@@ -14,6 +14,8 @@ import NoticesListUI from './NoticesList'
      if (state.PublicNotices && state.PublicNotices.documents) {
          notices = state.PublicNotices.documents;
      }
+     
+     notices = notices.filter(notice => notice.expiredate === null || notice.expiredate > new Date() )
 
      return {
          group: ownProps.group,

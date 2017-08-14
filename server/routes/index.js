@@ -226,7 +226,7 @@ router.get('/EB2Services/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Documents/:groupName', function(req, res) {
-        query = "Select id, recorddesc as description, fileLink as link from PublicRecords where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
+        query = "Select id, recorddesc as description, fileLink as link, expiredate from PublicRecords where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
         simpleDBQuery(query)
         .then(rows => {
             // console.log('Documents:' + JSON.stringify(rows));
@@ -250,7 +250,7 @@ router.get('/FAQ/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {
-        query   = "Select id, recorddesc as description, fileLink as link, recordtype from PublicRecords "
+        query   = "Select id, recorddesc as description, fileLink as link, recordtype, expiredate from PublicRecords "
         if (  req.params.groupName == 'Home') {
             query += " where mainpage=1 ";
         } else {
@@ -258,7 +258,7 @@ router.get('/Records/Notices/:groupName', function(req, res) {
         }
 
         query += " and (recordtype='Notice' or recordtype='RFP')";
-        query += " and (expiredate is null or expiredate > now() ) ";
+        // query += " and (expiredate is null or expiredate > now() ) ";
 // console.log('Records/Notice:query:', query);
          simpleDBQuery(query)
          .then(rows => {
@@ -268,7 +268,7 @@ router.get('/Records/Notices/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/NoticesFull/:groupName', function(req, res) {
-    query   = "Select id, recorddesc as description, fileLink as link, recordtype from PublicRecords "
+    query   = "Select id, recorddesc as description, fileLink as link, recordtype,expiredate from PublicRecords "
     if (  req.params.groupName == 'Home') {
         query += " where mainpage=1 ";
     } else {

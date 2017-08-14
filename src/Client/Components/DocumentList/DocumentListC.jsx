@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
     if (recordState && recordState.documents) {
         documents = recordState.documents;
     }
-    // console.log('documents:', documents);
+    documents = documents.filter(document => document.expiredate === null || document.expiredate > new Date() )
     return {
         group: ownProps.group,
         documents: documents,
