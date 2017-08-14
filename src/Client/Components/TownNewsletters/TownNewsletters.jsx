@@ -2,6 +2,8 @@ import React from 'react';
 import SmartLink from '../SmartLink'
 
 export default function  TownNewsletters({title, newsletters}){
+    if (newsletters.length === 0) {        return(null);    }
+
     return (
         <div>
             <h2>{title}</h2>
