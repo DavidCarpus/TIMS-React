@@ -11,7 +11,6 @@ var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
 var pushFileToServer = require('./serverIO').pushFileToServer;
 var fetchURL = require('./serverIO').fetchURL;
 var getServerFilePath = require('./serverIO').getServerFilePath;
-var initSFTP = require('./serverIO').initSFTP;
 var getSourceServerHost = require('./serverIO').getSourceServerHost;
 
 let logErrors = true
@@ -181,9 +180,6 @@ function cloneMeetings(paths) {
     // console.log('cloneMeetings');
     return Promise.all(paths.map(record => {
         console.log(record.group);
-        if (configuration.mode !== 'development') {
-            initSFTP()
-        }
         return fetchURL(record.url)
         .then(wholePage => {
             var $ = cheerio.load(wholePage);
@@ -363,9 +359,6 @@ function getTablesFromPage(pageHTML, query) {
 function cloneDocuments(paths) {
     return Promise.all(paths.map(record => {
         console.log(record.group);
-        if (configuration.mode !== 'development') {
-            initSFTP()
-        }
         return fetchURL(record.url)
         .then(wholePage => {
             var $ = cheerio.load(wholePage);

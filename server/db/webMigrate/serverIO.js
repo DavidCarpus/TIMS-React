@@ -32,7 +32,7 @@ module.exports = {
     pushFileToServer: pushFileToServer,
     fetchURL:fetchURL,
     getServerFilePath:getServerFilePath,
-    initSFTP:initSFTP,
+    // initSFTP:initSFTP,
     getSourceServerHost:getSourceServerHost,
 }
 
@@ -93,6 +93,7 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
     let serverDirs = {}
     // Pull directories from a server using SFTP
     if (configuration.mode !== 'development') {
+        initSFTP()
         return Promise.all(
              pathsToDir.map( pathToDir => {
                 let fullPath = baseServerPath + pathToDir
