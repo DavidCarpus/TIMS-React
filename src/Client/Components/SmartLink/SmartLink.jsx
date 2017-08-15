@@ -22,9 +22,16 @@ export default function SmartLink({id=0, link='', linkText}){
         lnkStyle='jpgImage_link'
         reduxLink = false
     }
+    if (link.endsWith('.xls') || link.endsWith('.xlsx')) {
+        lnkStyle='excel_link'
+        reduxLink = false
+    }
 
     if (link.includes('youtube.com')) {
         lnkStyle='youtube_link'
+        reduxLink = false
+    }
+    if (!link.startsWith('/')) {
         reduxLink = false
     }
     if (link.length === 0 ){
@@ -51,6 +58,7 @@ export default function SmartLink({id=0, link='', linkText}){
             }} >{linkText}</Link>)
 
         } else if (reduxLink) {
+            // console.log(link);
             return(<Link  className={lnkStyle} to={link}>{linkText}</Link >)
         }
         else {
