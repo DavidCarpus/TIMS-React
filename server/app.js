@@ -27,6 +27,7 @@ let imap = new IMapProcessor(configuration.imapProcess);
 
 var emailSubmit = require('./libs/emailProcessors').submit;
 var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
+var sendVerifications = require('./libs/AlertRequests').sendVerifications;
 
 var  calendar = require('./libs/calendar');
 
@@ -34,6 +35,29 @@ var  calendar = require('./libs/calendar');
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+//===============================================
+function alertVerificationProcess(delay, count=2) {
+    return sendVerifications(knex)
+    .then(results => {
+        // console.log(results);
+        return Promise.resolve('Done')
+    })
+    .then(done => {
+        return sleep(delay).then(out =>{
+            if (count > 0) {
+                --count;
+                if (configuration.alertVerificationProcess.infinite) {
+                    ++count;
+                }
+                return alertVerificationProcess(delay, count)
+            } else {
+                process.exit();
+            }
+        })
+    } )
+
+}
+
 //===============================================
 function calendarProcess(delay, count=2) {
     return calendar.importCalendarEvents(knex)
@@ -52,7 +76,6 @@ function calendarProcess(delay, count=2) {
             } else {
                 process.exit();
             }
-
         })
     } )
 
@@ -210,9 +233,15 @@ console.log(ts+ ' Express server listening on port ' + app.get('port'));
 console.log(configuration.mode + " mode");
 switch (configuration.mode) {
     case 'development':
+            console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
+            console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
+            imapProcess(configuration.imapProcess.delay, 50);
             console.log('configuration.calendarProcess.infinite:' , configuration.calendarProcess.infinite);
             console.log('configuration.calendarProcess.delay:' , configuration.calendarProcess.delay);
             calendarProcess(configuration.calendarProcess.delay, 50)
+            console.log('configuration.alertVerificationProcess.infinite:' , configuration.alertVerificationProcess.infinite);
+            console.log('configuration.alertVerificationProcess.delay:' , configuration.alertVerificationProcess.delay);
+            alertVerificationProcess(configuration.alertVerificationProcess.delay, 50)
         break;
     case 'production':
         console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);

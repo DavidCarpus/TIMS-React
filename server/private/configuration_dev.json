@@ -17,7 +17,9 @@
 },
 "expressPort":45001,
 "municipalLongName": "Town of Milton New Hampshire - Dev",
-
+"alertVerificationProcess":{
+    "delay": 1000
+},
 "unused":{
 }
 }

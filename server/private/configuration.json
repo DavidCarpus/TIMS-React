@@ -14,6 +14,10 @@
         "validExtensions":["pdf"]
     }
 },
+"alertVerificationProcess":{
+    "delay": 5000,
+    "infinite":true
+},
 "googleAPI":{
 "clientID":"MiltonMiniCal",
 "installed":

@@ -153,22 +153,32 @@ function submitData(submittedData) {
         })
 }
 
+//===========================================
+function sendVerifications(knexConnection){
+    return verifyCellNumbers(knexConnection)
+    .then(verifiedCellNumbers => {
+        (verifiedCellNumbers.length > 0) && console.log('verifiedCellNumbers:' + require('util').inspect(verifiedCellNumbers, { depth: null }));
+        return verifiedCellNumbers;
+    })
+    .then(cellsVerified => {
+        return verifyEmailAddresses(knexConnection)
+        .then(emailsVerified => {
+            (emailsVerified.length > 0) && console.log('emailsVerified:' + require('util').inspect(emailsVerified, { depth: null }));
+            return emailsVerified;
+        })
+    })
+
+}
+
 
 
 //===========================================
 //===========================================
 if (require.main === module) {
     let knexConnection = knex
-    verifyCellNumbers(knexConnection)
-    .then(verifiedCellNumbers => {
-        console.log('verifiedCellNumbers:' + require('util').inspect(verifiedCellNumbers, { depth: null }));
-        return verifiedCellNumbers;
-    })
-    .then(cellsVerified => {
-        return verifyEmailAddresses(knexConnection);
-    })
+    sendVerifications(knexConnection)
     .then(emailsVerified => {
-        console.log('emailsVerified:', emailsVerified);
+        console.log('Verifications sent:', emailsVerified);
     })
     .then(done => {
         process.exit();
@@ -178,3 +188,4 @@ if (require.main === module) {
 //===========================================
 module.exports.contactTypes = contactTypes;
 module.exports.submitData = submitData;
+module.exports.sendVerifications = sendVerifications;
