@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     table.string('carrier');
 
     table.timestamps(true, true);
+    table.timestamp('dateVerifiedSent');
     table.timestamp('dateVerified');
     })
 };

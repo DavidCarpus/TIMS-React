@@ -56,7 +56,9 @@ function validateData(submittedData) {
 }
 //===========================================
 function verifyCellNumbers() {
-    return knex("AlertUsers").where({dateVerified:0}).whereNotNull('carrier')
+    // console.log('sql', knex("AlertUsers").where({dateVerified:0}).whereNotNull('carrier').whereRaw("dateVerifiedSent < updated_at").toString() );
+
+    return knex("AlertUsers").where({dateVerified:0}).whereNotNull('carrier').whereRaw("dateVerifiedSent < updated_at")
     .then(recordsToVerify => {
         return Promise.all(recordsToVerify.map(recordToVerify => {
             return sendVerificationText(recordToVerify);
@@ -65,7 +67,7 @@ function verifyCellNumbers() {
 }
 //===========================================
 function verifyEmailAddresses() {
-    return knex("AlertUsers").where({dateVerified:0}).whereNull('carrier')
+    return knex("AlertUsers").where({dateVerified:0}).whereNull('carrier').whereRaw("dateVerifiedSent < updated_at")
     .then(recordsToVerify => {
         return Promise.all(recordsToVerify.map(recordToVerify => {
             return sendVerificationEmail(recordToVerify);
@@ -83,26 +85,36 @@ function sendVerificationEmail(recordToVerify) {
     })
     .then(emailResult => {
         console.log('emailResult:', emailResult);
-        return Promise.resolve(destEmail);
+        return knex("AlertUsers").where({contact: recordToVerify.contact }).update({dateVerifiedSent: new Date() })
+        .then(function (response) {
+            console.log( response );
+            return response
+        })
     })
 }
 //===========================================
 function sendVerificationText(recordToVerify) {
     let carrierData = cellCarriers.filter(carrier => carrier.Carrier == recordToVerify.carrier )
 
+    let updateData = {contact: recordToVerify.contact, }
+    console.log('updateData:', updateData, recordToVerify);
+
     let destEmail = recordToVerify.contact + '@' + carrierData[0].email;
     let subject='Requested alert registration.'
     let text='Please respond to verifyCellNumber.'
+    // return Promise.resolve(destEmail)
     return sendAutomationEmail(destEmail,  {
         subject: subject,
         text: text,
     })
     .then(emailResult => {
         console.log('emailResult:', emailResult);
-        return Promise.resolve(destEmail);
+        return knex("AlertUsers").where({contact: recordToVerify.contact }).update({dateVerifiedSent: new Date() })
+        .then(function (response) {
+            console.log( response );
+            return response
+        })
     })
-
-    return Promise.resolve(destEmail);
 }
 //===========================================
 function submitData(submittedData) {
