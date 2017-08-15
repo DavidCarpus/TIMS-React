@@ -287,6 +287,7 @@ function extractLinksFromTable(tableHTML) {
         .replace(/&amp;/g, '&')
         .replace(/&apos;/g, "'")
         .replace(/&nbsp;/g, " ")
+        .replace(/&#39;/g, "'")
         .trim()
 
         let sourceHostURI = (uri) => uri.toUpperCase().indexOf(getSourceServerHost().toUpperCase()) == -1
