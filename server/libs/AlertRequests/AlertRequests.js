@@ -96,9 +96,6 @@ function sendVerificationEmail(recordToVerify) {
 function sendVerificationText(recordToVerify) {
     let carrierData = cellCarriers.filter(carrier => carrier.Carrier == recordToVerify.carrier )
 
-    let updateData = {contact: recordToVerify.contact, }
-    console.log('updateData:', updateData, recordToVerify);
-
     let destEmail = recordToVerify.contact + '@' + carrierData[0].email;
     let subject='Requested alert registration.'
     let text='Please respond to verifyCellNumber.'
@@ -117,7 +114,7 @@ function sendVerificationText(recordToVerify) {
     })
 }
 //===========================================
-function submitData(submittedData) {
+function submitAlertRequestData(submittedData) {
     let alertUserData = {
         carrier: submittedData.phoneCarrier,
         contact: submittedData.contact,
@@ -169,23 +166,39 @@ function sendVerifications(knexConnection){
     })
 
 }
-
+//===========================================
+function sendNotifications(notificationData) {
+    console.log('sendNotifications(notificationData)', notificationData);
+}
 
 
 //===========================================
 //===========================================
 if (require.main === module) {
     let knexConnection = knex
-    sendVerifications(knexConnection)
-    .then(emailsVerified => {
-        console.log('Verifications sent:', emailsVerified);
-    })
-    .then(done => {
-        process.exit();
-    })
+
+    const index=2;
+    switch (process.argv[index]) {
+        case 'verify':
+            sendVerifications(knexConnection)
+            .then(emailsVerified => {
+                console.log('Verifications sent:', emailsVerified);
+            })
+            .then(done => {
+                process.exit();
+            })
+            break;
+        default:
+            console.log('Unknown parameter', process.argv[index]);
+            console.log('Need cli parameter:', ['verify']);
+            process.exit();
+            break;
+    }
+
+
 }
 
 //===========================================
 module.exports.contactTypes = contactTypes;
-module.exports.submitData = submitData;
+module.exports.submitAlertRequestData = submitAlertRequestData;
 module.exports.sendVerifications = sendVerifications;
