@@ -14,11 +14,22 @@ import NoticesListUI from './NoticesList'
      if (state.PublicNotices && state.PublicNotices.documents) {
          notices = state.PublicNotices.documents;
      }
-     
-     notices = notices.filter(notice => notice.expiredate === null || notice.expiredate > new Date() )
+     let checkDate = new Date()
+     checkDate.setDate(checkDate.getDate()-1)
+    //  notices.map(notice => {
+    //      let dte = new Date(notice.expiredate)
+    //     //  console.log('notice:', notice);
+    //      console.log("Chk:", dte , '|' , checkDate, typeof dte, Math.abs(new Date(notice.expiredate) - new Date(notice.date))< 60*60*24 );
+     //
+    //      (notice.expiredate === "0000-00-00")?  console.log('Zero Date?'): "";
+    //  } )
+
+     let alertnotices = notices.filter(notice => Math.abs(new Date(notice.expiredate) - new Date(notice.date)) < 60*60*24  && new Date(notice.expiredate) > checkDate )
+     notices = notices.filter(notice => notice.expiredate === null || notice.expiredate === "0000-00-00" || new Date(notice.expiredate) > checkDate )
 
      return {
          group: ownProps.group,
+         alertnotices:alertnotices,
          notices: notices,
          noticesGroupName: state.PublicNotices.groupName,
          title: ownProps.title || 'Notices'

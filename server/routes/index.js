@@ -250,7 +250,7 @@ router.get('/FAQ/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {
-        query   = "Select id, recorddesc as description, fileLink as link, recordtype, expiredate from PublicRecords "
+        query   = "Select id, recorddesc as description, fileLink as link, recordtype, date, expiredate from PublicRecords "
         if (  req.params.groupName == 'Home') {
             query += " where mainpage=1 ";
         } else {
@@ -268,7 +268,7 @@ router.get('/Records/Notices/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/NoticesFull/:groupName', function(req, res) {
-    query   = "Select id, recorddesc as description, fileLink as link, recordtype,expiredate from PublicRecords "
+    query   = "Select id, recorddesc as description, fileLink as link, recordtype,date, expiredate from PublicRecords "
     if (  req.params.groupName == 'Home') {
         query += " where mainpage=1 ";
     } else {

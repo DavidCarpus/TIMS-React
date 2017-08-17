@@ -17,6 +17,11 @@
     width: 80%;
 }
 
+#alerts {
+    animation: blinking 1s linear infinite;
+    text-decoration: blink;
+}
+
 .hidebullets {
     list-style: none;
 }
@@ -29,4 +34,15 @@
 }
 #notices h2 {
     color: black;
+}
+
+@keyframes blinking {
+  from,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  to {
+    opacity: 1;
+  }
 }
