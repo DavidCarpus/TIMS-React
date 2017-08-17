@@ -233,52 +233,32 @@ console.log(ts+ ' Express server listening on port ' + app.get('port'));
 console.log(configuration.mode + " mode");
 switch (configuration.mode) {
     case 'development':
-            console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
-            console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
-            imapProcess(configuration.imapProcess.delay, 50);
-            console.log('configuration.calendarProcess.infinite:' , configuration.calendarProcess.infinite);
-            console.log('configuration.calendarProcess.delay:' , configuration.calendarProcess.delay);
-            calendarProcess(configuration.calendarProcess.delay, 50)
-            console.log('configuration.alertVerificationProcess.infinite:' , configuration.alertVerificationProcess.infinite);
-            console.log('configuration.alertVerificationProcess.delay:' , configuration.alertVerificationProcess.delay);
-            alertVerificationProcess(configuration.alertVerificationProcess.delay, 50)
+        console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.' );
+        imapProcess(configuration.imapProcess.delay, 50);
+        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        calendarProcess(configuration.calendarProcess.delay, 50)
+        console.log('alertVerification process every', configuration.alertVerificationProcess.delay/1000, 'seconds', (configuration.alertVerificationProcess.infinite)?'inf.':'NOT inf.');
+        alertVerificationProcess(configuration.alertVerificationProcess.delay, 50)
         break;
     case 'production':
-        console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
-        console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
+        console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.');
         imapProcess(configuration.imapProcess.delay, 50);
-        console.log('configuration.calendarProcess.infinite:' , configuration.calendarProcess.infinite);
-        console.log('configuration.calendarProcess.delay:' , configuration.calendarProcess.delay);
+        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
         calendarProcess(configuration.calendarProcess.delay, 50)
         break;
     case 'test':
         // ****** The 'Test' site email processing currently crashes the system.
         // ****** Problem with SSL certificates and email server
-        municipalLongName:Config.municipalLongName
-
         // console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
         // console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
         // imapProcess(configuration.imapProcess.delay, 50);
 
-        console.log('configuration.calendarProcess.infinite:' , configuration.calendarProcess.infinite);
-        console.log('configuration.calendarProcess.delay:' , configuration.calendarProcess.delay);
+        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
         calendarProcess(configuration.calendarProcess.delay, 50)
 
         break;
     default:
 
 }
-
-// if (configuration.mode == 'development') {
-//     console.log("Development mode");
-//     // imapProcess(configuration.imapProcess.delay, 50);
-//     // console.log('configuration:' , configuration);
-// } else {
-//     console.log('configuration.imapProcess.infinite:' , configuration.imapProcess.infinite);
-//     console.log('configuration.imapProcess.delay:' , configuration.imapProcess.delay);
-//     imapProcess(configuration.imapProcess.delay, 50);
-// }
-//
-
 
 // http://handyjs.org/article/the-kick-ass-guide-to-creating-nodejs-cron-tasks
