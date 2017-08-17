@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
 
-var submitAlertRequestData = require('../libs/AlertRequests').submitData;
+var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
 var mysql = require('mysql');
 var fs = require('fs');
