@@ -10,24 +10,24 @@ export default function SmartLink({id=0, link='', linkText}){
     if (!link || typeof link === 'undefined') {
         link = '';
     }
-    if (link.endsWith('pdf')) {
+    if (link.toUpperCase().endsWith('PDF')) {
         lnkStyle='pdf_link'
         reduxLink = false
     }
-    if (link.endsWith('.doc') || link.endsWith('.docx')) {
+    if (link.toUpperCase().endsWith('.DOC') || link.toUpperCase().endsWith('.DOCX')) {
         lnkStyle='doc_link'
         reduxLink = false
     }
-    if (link.endsWith('.jpg') || link.endsWith('.jpeg')) {
+    if (link.toUpperCase().endsWith('.JPG') || link.toUpperCase().endsWith('.JPEG')) {
         lnkStyle='jpgImage_link'
         reduxLink = false
     }
-    if (link.endsWith('.xls') || link.endsWith('.xlsx')) {
+    if (link.toUpperCase().endsWith('.XLS') || link.toUpperCase().endsWith('.XLSX')) {
         lnkStyle='excel_link'
         reduxLink = false
     }
 
-    if (link.includes('youtube.com')) {
+    if (link.toUpperCase().includes('YOUTUBE.COM')) {
         lnkStyle='youtube_link'
         reduxLink = false
     }
