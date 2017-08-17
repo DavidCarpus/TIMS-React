@@ -4,3 +4,8 @@
 #HomePage {
     color: black;
 }
+
+#HomePage .title{
+    background-color: $meetingListBackground;
+    text-align: center;
+}

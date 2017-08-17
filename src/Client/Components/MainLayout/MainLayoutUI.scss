@@ -3,11 +3,15 @@
 .body {
   background-color: cornsilk;
   font-family: sans-serif;
+  // background-color: rgba(200,200,100,0.8);
 }
 
 #MainLayoutUI {
     background: url('../images/MillAndTrain.jpg') repeat;
     background-attachment: fixed;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: auto;
     // background-size: cover;
     // background-size: 100% 100%;
     background-size: contain;

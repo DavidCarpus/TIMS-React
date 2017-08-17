@@ -16,7 +16,7 @@ export default class HomePage extends React.Component {
         return (
             <div id='HomePage'>
                 <Col md={7} mdPush={3} id="contentArea">
-                    <div style={{textAlign:'center'}}>
+                    <div className="title">
                         <h1>Welcome to the {this.props.municipalLongName}</h1>
                         <address >
                         424 White Mountain Highway
