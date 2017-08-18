@@ -125,6 +125,13 @@ function getDateValueFromTextLine(line) {
         // console.log({date: dte});
         return {dateType:'date', date: dte,}
     }
+    let chk = line.search(/^\d\d\d\d-\d\d-\d\d$/)
+    if (chk != -1) {
+        // console.log('match', line)
+        dte = new Date(line);
+        return {dateType:'date', date: dte,}
+    }
+
     return null;
 
     //
