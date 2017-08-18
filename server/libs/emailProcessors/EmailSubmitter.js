@@ -42,9 +42,9 @@ function submit(email, imap) {
         case 'RFP':
             return noticeProcessor.process(email);
             break;
-        case 'Agendas':
+        case 'Agenda':
         case 'Minutes':
-            return meetingProcessor.process(email);
+            return meetingProcessor.process(email, true);
             break;
         case 'Document':
             return documentProcessor.process(email);

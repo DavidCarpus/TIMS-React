@@ -10,6 +10,7 @@ var knex = require('knex')(knexConfig[configuration.mode]);
 module.exports =
 {
     simpleAdd,
+    replaceAdd,
     simpleRemove,
     dbDateFormat,
     sendAutomationEmail,
@@ -18,13 +19,45 @@ module.exports =
 }
 //===========================================
 //===========================================
+function replaceAdd(tablename, entry, emailUID, keyFields) {
+    // console.log(knex(tablename).select().where(keyFields).toString());
+    return knex(tablename).select().where(keyFields)
+    .then(results => {
+        if (results.length > 0) { //Entry already exists... update it
+            delete entry.from;
+            delete entry.requestType;
+            delete entry.uid
+            return knex(tablename).where(keyFields).update(entry)
+            .then(results => {
+                entry.id = results[0];
+                entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
+                if(! Array.isArray(entry)){
+                    entry = [entry];
+                }
+                return Promise.resolve(entry);
+            })
+            .catch(err => {
+                entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
+                return Promise.reject(err);
+            })
+        } else {
+            console.log('knex(tablename).where().insert(entry):', knex(tablename).where().insert(entry).toString() );
+            return simpleAdd(tablename, entry, emailUID)
+        }
+    })
+    .catch(err => {
+        entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
+        return Promise.reject(err);
+    })
+}
+
 function simpleAdd(tablename, entry, emailUID) {
     delete entry.from;
     delete entry.requestType;
     delete entry.uid
 
-    // console.log('simpleAdd:entry:', entry);
-    return (knex(tablename).where().insert(entry)
+    // console.log('simpleAdd:entry:', entry, emailUID );
+    return knex(tablename).where().insert(entry)
     .then(results => {
         entry.id = results[0];
         entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
@@ -37,11 +70,11 @@ function simpleAdd(tablename, entry, emailUID) {
     .catch(err => {
         entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
         return Promise.reject(err);
-    }))
+    })
 }
 //===========================================
 function simpleRemove(tablename, entry, emailUID) {
-    return (knex(tablename).where(entry).del()
+    return knex(tablename).where(entry).del()
     .then(results => {
         entry.id = results;
         entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
@@ -54,22 +87,27 @@ function simpleRemove(tablename, entry, emailUID) {
     .catch(err => {
         entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
         return Promise.reject(err);
-    }))
+    })
 }
 //===========================================
-function dbDateFormat(date) {
-    var mm = date.getMonth() + 1; // getMonth() is zero-based
-    var dd = date.getDate();
-    var hh = date.getHours();
-    var MM = date.getMinutes();
+function dbDateFormat(date, dateOnly=false) {
+    var mm = date.getUTCMonth() + 1; // getMonth() is zero-based
+    var dd = date.getUTCDate();
+    var hh = date.getUTCHours();
+    var MM = date.getUTCMinutes();
 
-    return [date.getFullYear()+ '-',
+    if (dateOnly) {
+        return [date.getUTCFullYear()+ '-',
+                (mm>9 ? '' : '0')  + mm+ '-',
+                (dd>9 ? '' : '0') + dd+ ' ',
+            ].join('').trim();
+    }
+    return [date.getUTCFullYear()+ '-',
             (mm>9 ? '' : '0')  + mm+ '-',
             (dd>9 ? '' : '0') + dd+ ' ',
             (hh>9 ? '' : '0') + hh + ':',
             (MM>9 ? '' : '0')  +  MM,
-
-           ].join('');
+           ].join('').trim();
 }
 //===========================================
 function sendAutomationEmail(emailAddresses, emailContent) {
@@ -184,17 +222,17 @@ function getPublicRecordData(dataFromEmail) {
     }
 
     let entry =  {pageLink: dataFromEmail.DBData.groupName,
-        date: new Date(dataFromEmail.DBData.date).toISOString(),
+        date: new Date(dataFromEmail.DBData.date),
         recordtype: dataFromEmail.DBData.recordtype,
         recordDesc: dataFromEmail.DBData.description,
         mainpage: dataFromEmail.DBData.mainpage,
-        uid: dataFromEmail.DBData.uid,
+        uid: dataFromEmail.uid,
         from: dataFromEmail.header.from,
         requestType :  dataFromEmail.DBData.requestType,
     }
 
     if (typeof  dataFromEmail.DBData.expire != 'undefined') {
-        entry.expiredate = new Date(dataFromEmail.DBData.expire).toISOString();
+        entry.expiredate = new Date(dataFromEmail.DBData.expire);
     }
     if (typeof  entry.recordDesc == 'undefined'  && dataFromEmail.DBData.recordtype === 'Video') {
         entry.recordDesc = 'Video'
@@ -223,7 +261,8 @@ function getPublicRecordData(dataFromEmail) {
     return dataFromEmail.attachmentLocations.map(attachment => {
         // console.log('common:getPublicRecordData', attachment);
 
-        let recordData = JSON.parse(JSON.stringify(entry))
+        let recordData = {}
+        Object.assign(recordData, entry)
         recordData.fileLink = attachment
         if (typeof  entry.recordDesc == 'undefined' ){
             if (dataFromEmail.DBData.recordtype === 'Agendas' || dataFromEmail.DBData.recordtype === 'Minutes') {

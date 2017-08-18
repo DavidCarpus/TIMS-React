@@ -47,7 +47,7 @@ function hasURL(line) {
 //=======================================
 function getRecordTypeFromLine(line) {
     let recordTypes = [
-        {recordType: 'Agendas', searchMatches: ['AGENDA'] },
+        {recordType: 'Agenda', searchMatches: ['AGENDA','AGENDAS'] },
         {recordType: 'Minutes', searchMatches: ['MINUTES'] },
         {recordType: 'Notice', searchMatches: ['^NOTICE$'] },
         {recordType: 'RFP', searchMatches: ['^RFP$', '^PUBLIC RECORD: ?RFP'] },
