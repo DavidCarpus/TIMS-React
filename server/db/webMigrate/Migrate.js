@@ -192,7 +192,8 @@ function cloneMeetings(paths) {
             })
             // return allRecords.filter(rec => rec.date.getUTCFullYear() === 2012)
             allRecords.filter(rec=>! validRecordType(rec.label)).map(rec => {
-                logErrors && console.error("Invalid document type:", getY_M_D(rec.date) , '"'+rec.label+'"');
+                logErrors && console.error(rec.groupName , "Invalid document type:", getY_M_D(rec.date) , '"'+rec.label+'"');
+                // console.log(rec);
             })
 
             return allRecords.filter(rec =>validRecordType(rec.label)  )
@@ -421,8 +422,7 @@ if (require.main === module) {
 
     logErrors = false
     // cloneDocuments(documentPaths)
-    // cloneDocuments([{"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"Blind Exemption"},])
-
+    // cloneDocuments([{"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"2009 Assessment"},])
     cloneMeetings(meetingPaths)
     .then(meetingsDone => {
         return cloneDocuments(documentPaths)

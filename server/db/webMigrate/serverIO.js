@@ -148,7 +148,7 @@ function pushFileToServer( fullPathLocalFile, serverDest ) {
         })
     } else {
         return new Promise(function(resolve, reject) {
-            // console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
+            console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
             var rd = fs.createReadStream(fullPathLocalFile);
             rd.on("error", function(err) { reject(err); });
             var wr = fs.createWriteStream(serverDest);
