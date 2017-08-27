@@ -7,16 +7,11 @@
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
-    background-color:$footerBackground;
+    @include bkg;
+    a{         @include lnk('footer')     }
+    a:hover {         font-weight: bold;     }
 }
 
-#footer a{
-    color: $footerLinks;
-}
-#footer a:hover {
-    color: $footerLinks;
-    font-weight: bold;
-}
 @media only print{
     #footer {
         display: none;

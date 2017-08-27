@@ -1,27 +1,48 @@
 @import "../../../../private/SASS/breakpoints.scss";
+@import "../../../../private/SASS/colors.scss";
 
-.body {
-  background-color: cornsilk;
-  font-family: sans-serif;
-  // background-color: rgba(200,200,100,0.8);
-}
+// .body {
+//   background-color: cornsilk;
+//   font-family: sans-serif;
+//   // background-color: rgba(200,200,100,0.8);
+// }
 
 #MainLayoutUI {
     background: url('../images/MillAndTrain.jpg') repeat;
     background-attachment: fixed;
-    margin-left: 0px;
-    margin-right: 0px;
-    width: auto;
+    // margin-left: 0px;
+    // margin-right: 0px;
+    // width: auto;
+    // flex-direction: column;
+    // flex: 1;
     // background-size: cover;
     // background-size: 100% 100%;
+    width: 100%;
     background-size: contain;
-}
-#MainLayoutUI #contentArea{
-    background-color: rgba(200,200,200,0.8);
-}
-@media iphone5 {
-    #MainLayoutUI #contentArea {
-        width: 90%;
-        margin: auto;
+    .row {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        display: inline-flex;
+    }
+    .primary-header {
+        width: 80%;
+    }
+    header {
+        width: 100%;
     }
 }
+#MainLayoutUI #primary-content{
+    // background-color: $baseBackgroundColor;
+    font: bold $baseFont;
+    width: 100%;
+    // flex-direction: column;
+    // float: left;
+}
+//
+// @media iphone5 {
+//     #MainLayoutUI #contentArea {
+//         width: 90%;
+//         margin: auto;
+//     }
+// }

@@ -1,8 +1,7 @@
 @import "../../../../private/SASS/colors.scss";
 
-#DocumentList a{
-    color: $documentationLinks;
-}
 #DocumentList  {
-    background-color: $documentListBackground;
+    @include bkg;
+    a{        @include lnk('documentation')    }
+    a:hover {         font-weight: bold;     }
 }

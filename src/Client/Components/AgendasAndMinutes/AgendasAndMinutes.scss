@@ -2,12 +2,18 @@
 
 .YearBlock  .header{
     background-color: $meetingListToggleHeader;
+    // font: $documentationFont;
 }
 
+#AgendasAndMinutes {
+    a{        @include lnk('agendas')    }
+    a:hover {         font-weight: bold;     }
+}
 
 .meetingBlock {
     display: inline-block;
-    background-color: $meetingListBackground;
+    @include bkg
+    // background-color: $meetingListBackground;
     width: 100%;
     padding-bottom: 5px;
 }

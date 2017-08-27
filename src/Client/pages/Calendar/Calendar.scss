@@ -1,6 +1,8 @@
 @import "../../../../private/SASS/colors.scss";
 
 #calendar {
-    color: $documentationLinks;
-    background-color: $meetingListToggleHeader;
+    @include lnk('calendar')
+    @include bkg;
+    // color: $documentationLinks;
+    // background-color: $meetingListToggleHeader;
 }

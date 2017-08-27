@@ -1,13 +1,5 @@
 @import "../../../../private/SASS/colors.scss";
 
-#AgendasAndMinutes a{
-    color: $noticesLinks;
-    display: block;
-    // border-style: solid;
-    // width: 100%;
-    // background-color: red;
-}
-
 $iconsize: 20px;
 
 .pdf_link::before {

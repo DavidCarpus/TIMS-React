@@ -6,15 +6,6 @@
     min-height: 50px;
     display: inline-block;
     float: left;
-    /*margin: 10px 1%;*/
-    /*border: 2px solid black;*/
-    /*background-color: blue;*/
-}
-
-:global(#main_notices) {
-    // background-color: green;
-    display: inline-block;
-    width: 80%;
 }
 
 #alerts {
@@ -26,15 +17,14 @@
     list-style: none;
 }
 #notices  {
-    background-color: rgba(200,200,200,0.5);
+    @include bkg;
+    a{        @include lnk('notices')    }
+    a:hover {         font-weight: bold;     }
+    h2 {
+        color: black;
+    }
 }
-#notices a {
-    // background-color: rgba(200,200,200,0.8);
-    color: black;
-}
-#notices h2 {
-    color: black;
-}
+
 
 @keyframes blinking {
   from,

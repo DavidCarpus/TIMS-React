@@ -19,7 +19,7 @@ render() {
     maps.push('Tax Map OVERALL');
 
     return (
-        <div style={{width:'300px', display:'inline-block'}}>
+        <div style={{width:'400px', display:'inline-block'}}>
             Tax Maps
             <Dropdown
                 options={maps}

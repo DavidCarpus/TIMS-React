@@ -3,14 +3,12 @@
 #RequestAlerts {
     width: 80%;
     margin: auto;
-    background-color: white;
+    @include bkg;
+    // background-color: white;
 }
 #RequestAlerts .required {
-    color: red;
+    color: blue;
 }
-// .button{
-//     background-color: blue;
-// }
 
 .button:disabled{
   opacity: 0.65;

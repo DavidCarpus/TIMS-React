@@ -1,21 +1,18 @@
+@import "../../../../private/SASS/colors.scss";
 
 .logo {
     max-height: 110%;
-    /*background: rgba(255,255,255,0.9);*/
 }
 
-/*#custom-bootstrap-menu p.navbar-text:after {*/
-/*padding-right:  20px;
-margin-right:  20px;*/
-.externalMenu{
-    /*min-width: 240px;*/
-    padding-left: -10px;
+.internalMenu {
+    @include lnk('agendas')
+    // font: $documentationFont;
+    // background-color: $baseBackgroundSolid;
 }
-.externalMenu   a{
-    padding: 0px 0px;
-    /*background-color: red;*/
-}
-.externalMenu a:before{
+
+.externalMenu {
+    // background-color: $baseBackgroundSolid;
+    a:before{
         content: "";
         display: block;
         background: url('../icons/external-128.png') no-repeat;
@@ -25,5 +22,53 @@ margin-right:  20px;*/
         width: 10px;
         height: 10px;
         float: left;
-        margin: 5px 5px 0px -15px;
+        margin: 5px 5px 0px 5px;
+    }
 }
+// header .primary-header {
+//     background-color: $meetingListBackground;
+// }
+//
+#MainMenu {
+    width: 100%;
+    min-width: 280px;
+    margin-bottom: 10px;
+    font: $baseLinkFont;
+    // background-color: $baseBackgroundSolid;
+    // background-image: linear-gradient(to top,  $baseBackgroundSolid 0%, $baseBackgroundColor 95%);
+    // background: $baseBackground;
+    @include bkg;
+
+    .dropdownColor {
+        // background-color: $baseBackgroundSolid;
+        @include bkg;
+        // background-image: linear-gradient(to right,  $baseBackgroundSolid 0%, $baseBackgroundLight 95%);
+    }
+    .nav-link {
+        color:black;
+    }
+    // .nav-item {
+    //     padding-right: 5px;
+    // }
+}
+#Menubar {
+width: 80%;
+display: inline-flex;
+padding-left: 20px;
+
+// .container .row  {
+//     padding-top: .75rem;
+//     padding-bottom: .75rem;
+//     background-color: #E5EDF5;
+//     border: 1px solid #C9C1D5;
+//     color: #5F5F5F;
+// }
+}
+
+.ml-auto {
+    margin-left: auto!important
+}
+// .mainmenu  .container {
+//     background-color: $meetingListBackground;
+//     color: black;
+// }

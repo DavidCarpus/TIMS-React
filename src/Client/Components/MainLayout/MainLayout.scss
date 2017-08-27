@@ -1,29 +1,29 @@
 @import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
 
-.primaryHeader{
-    position: fixed;
-    z-index: 100;
-    width: 100%;
-    /*background-color: blue;*/
-    top: 0px;
-}
-
-.primaryArea {
-    position: relative;
-    width: 100%;
-    display: inline-block;
-    margin: 0 auto;
-    margin-top: 80px;
-}
-
-
-
-@media  (max-device-width: 840px){
-    .primaryArea {
-        margin-top: 120px;
-    }
-}
+// .primaryHeader{
+//     position: fixed;
+//     z-index: 100;
+//     width: 100%;
+//     /*background-color: blue;*/
+//     top: 0px;
+// }
+//
+// .primaryArea {
+//     position: relative;
+//     width: 100%;
+//     display: inline-block;
+//     margin: 0 auto;
+//     margin-top: 80px;
+// }
+//
+//
+//
+// @media  (max-device-width: 840px){
+//     .primaryArea {
+//         margin-top: 120px;
+//     }
+// }
 
 /*@media iphone5 {
     .contentArea {

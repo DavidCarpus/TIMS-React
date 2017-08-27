@@ -2,18 +2,21 @@
 
 #ContactUs  {
     // background-color: red;
-  color: $noticesLinks;
-  background-color: rgba(200,200,200,0.8);
+    @include lnk('contactus');
+    @include bkg;
+  // color: $noticesLinks;
+  // background-color: rgba(200,200,200,0.8);
   width: 80%;
   margin: auto;
 }
 
 #ContactUs  a{
-    color: $noticesLinks;
+    @include lnk('contactus')
 }
 
 #ContactUs  div{
-    background-color: rgba(200,200,200,0.8);
+    @include bkg;
+    // background-color: rgba(200,200,200,0.8);
 }
 #ContactUs  #departmentList{
     width: 100%;

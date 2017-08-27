@@ -6,6 +6,8 @@
 }
 
 #HomePage .title{
-    background-color: $meetingListBackground;
+    @include bkg;
+    // background-color: $meetingListBackground;
+    // background: $baseBackgroundPage;
     text-align: center;
 }

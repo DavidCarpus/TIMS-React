@@ -34,17 +34,12 @@ const MeetingBlock = ({meetingElements, meetingDate}) => {
     )
 }
 
-// {console.log(JSON.stringify(element))}
-// {meeting[1].map( record =>
-//     <div>Record {record}</div>
-// )}
-
 const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
     return (
         <div  className='YearBlock'>
             <div className='header' >
                 <span onClick={()=> toggleCollapseState(year)}>
-                    <a >{year} {expanded?'^^^':'vvv'}</a>
+                    <a >{year} {expanded?'...':'...'}</a>
                 </span>
             </div>
             {expanded && yearRecords.map( meeting =>

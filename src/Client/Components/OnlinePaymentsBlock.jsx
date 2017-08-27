@@ -6,8 +6,8 @@ export default class OnlinePaymentsBlock extends React.Component {
         const onlineAssessmentButton= {
             backgroundColor: 'blue',
             color: 'white',
-            width: '150px',
-            height: '40px',
+            width: '180px',
+            height: '80px',
             display:'inline-block',
             textAlign: 'center',
             borderRadius: '10px',

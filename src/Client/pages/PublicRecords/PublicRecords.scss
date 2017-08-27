@@ -1,18 +1,18 @@
 @import "../../../../private/SASS/colors.scss";
 
 #PublicRecords a{
-    color: $documentationLinks;
+    @include lnk('documentation')
 }
 
 #PublicRecords .MonthBlock {
-    background-color: $meetingListBackground;
+    // background-color: $meetingListBackground;
 }
 #PublicRecords .YearBlock  .header{
     background-color: $meetingListToggleHeader;
 }
 #PublicRecords .MonthBlock .header {
-    background-color: rgba(10,0,0,0.6);
-    color: white;
+    background-color: $meetingListMonthHeaderBG;
+    color: $meetingListMonthHeaderFG;
 }
 
 #PublicRecords .MonthBlock .Entries {
