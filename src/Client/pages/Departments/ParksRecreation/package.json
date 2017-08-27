@@ -1,0 +1,6 @@
+{
+  "name": "ParksRecreation",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ParksRecreation.jsx"
+}

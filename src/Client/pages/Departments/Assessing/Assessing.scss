@@ -1,9 +1,12 @@
+@import "../../../../../private/SASS/breakpoints.scss";
+@import "../../../../../private/SASS/colors.scss";
+
 .onlineAssessmentButton {
     background-color: blue;
     color: white;
     width: 170px;
     paddingTop: 5px;
-    height: 45px;
+    height: 55px;
     fontSize: 2vmin;
     display:inline-block;
     /*float:left;*/
@@ -11,3 +14,7 @@
     border-radius: 10px;
     background: radial-gradient(blue, grey);
 }
+
+// #Assessing #contentArea {
+//     background-color: $baseBackgroundPartial;
+// }

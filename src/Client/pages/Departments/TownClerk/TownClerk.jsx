@@ -1,17 +1,17 @@
 import React from 'react';
-import Aside from '../Components/Aside'
+import Aside from '../../../Components/Aside'
 
-import OnlinePaymentsBlock  from '../Components/OnlinePaymentsBlock'
-import NoticesList from '../Components/NoticesList'
-import DocumentList  from '../Components/DocumentList'
-import {  Col } from 'react-bootstrap';
-import HelpfulInformation  from '../Components/HelpfulInformation'
+import OnlinePaymentsBlock  from '../../../Components/OnlinePaymentsBlock'
+import NoticesList from '../../../Components/NoticesList'
+import DocumentList  from '../../../Components/DocumentList'
+import { Col, Row } from 'reactstrap';
+import HelpfulInformation  from '../../../Components/HelpfulInformation'
 
 export default function TownClerk({group, store, loading, id, title='Tax Collector/Town Clerk'}){
     if ( loading) {         return (<div>Loading</div>)     }
     return (
-        <div>
-            <Col md={8}  mdPush={3} id="contentArea"  >
+        <Row id='TownClerk'>
+            <Col  md={{size:9, push:3}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{title}</h1>
 
                 <NoticesList group={group} store={store}/>
@@ -22,9 +22,9 @@ export default function TownClerk({group, store, loading, id, title='Tax Collect
                 <DocumentList group={group}  store={store} />
 
                 <HelpfulInformation informationArray={group.helpfulinformation || []} />
-            </Col>
-            <Col md={3} mdPull={8}><Aside group={group}  store={store} /></Col>
-        </div>
+                </Col>
+            <Col md={{size:3, pull:9}}> <Aside group={group} store={store} /> </Col>
+        </Row>
     )
 
 }

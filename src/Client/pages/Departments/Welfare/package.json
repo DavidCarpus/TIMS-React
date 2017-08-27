@@ -1,0 +1,6 @@
+{
+  "name": "Welfare",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Welfare.jsx"
+}

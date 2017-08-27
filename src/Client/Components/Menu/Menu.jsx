@@ -1,96 +1,117 @@
 import React from 'react';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import NavDropdown from 'react-bootstrap/lib/NavDropdown';
-import Nav from 'react-bootstrap/lib/Nav';
-// import { Navbar, NavItem, MenuItem, MenuItemLink, Nav, NavDropdown } from 'react-bootstrap';
+import { NavLink as RRNavLink } from 'react-router-dom';
 
-import { IndexLinkContainer } from 'react-router-bootstrap';
-// import { Link } from 'react-router';
-import s from './Menu.css'
-import {  Col } from 'react-bootstrap';
-/*
-key={this.props.menu.id + '.'+ submenu.id}
-eventKey={this.props.menu.id + '.'+ submenu.id}
+import {
+    Navbar,
+    // NavbarBrand,
+    Container,
+    Button,
+    Collapse,
+    NavLink,
+    NavItem,
+    DropdownMenu,
+    Nav,
+    DropdownItem,
+    NavDropdown,
+    DropdownToggle,
+    NavbarToggler
+} from 'reactstrap';
 
-*/
-class DropdownMenu extends React.Component {
+import './Menu.css'
+
+//================================================
+class SubMenus extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            dropdownOpen: false
+        };
+    }
+
+    toggle() {
+        this.setState({
+            dropdownOpen: !this.state.dropdownOpen
+        });
+    }
+
     render(){
         let subMenus = this.props.menu[1].menus
         .sort((a,b) => {
             return (a.description < b.description) ? -1 : (a.description > b.description) ? 1 : 0;
         })
-        // .filter(element => {return ( element.fullLink !== this.props.menu[0])} )
-        // console.log('subMenus:' ,  JSON.stringify(subMenus))
-        // console.log('menu[1]:' , JSON.stringify( this.props.menu[1]))
-        // console.log('*** Menu:' , JSON.stringify( menu))
+        // .filter(element => !element.pageLink.startsWith('http') )
+        // subMenus.map(sm => console.log(sm))
 
-        let description = this.props.menu[1].description
-        let id = this.props.menu[1].id
-        // return (<span>{description}{id}</span>)
-        // className={s.navItem}>{submenu.description}
         return (
-                <NavDropdown eventKey={id} title={description} id={id}>
+            <NavDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                <DropdownToggle nav caret>
+                    {this.props.menu[1].description}
+                </DropdownToggle>
+
+                <DropdownMenu className='dropdownColor' >
                     {subMenus.map( (submenu, index) =>
-                        ( !submenu.pageLink.startsWith('http'))
-                        ?
-                        <IndexLinkContainer to={ this.props.menu[0] + submenu.pageLink}
-                            key={this.props.menu.id + '.'+ submenu.id}
-                             id={this.props.menu.id + '.'+ submenu.id}
-                            >
-                            <MenuItem
-                                className={s.navItem}>{submenu.description}
-                            </MenuItem>
-                        </IndexLinkContainer>
+                        submenu.pageLink.startsWith('http') ?
+                        <NavItem key={submenu.id } id={submenu.id } className='externalMenu' >
+                            <NavLink href={ submenu.pageLink}>
+                                {submenu.description}
+                            </NavLink>
+                        </NavItem>
                         :
-                        <MenuItem className='externalMenu'
-                            key={this.props.menu.id + '.'+ submenu.id}
-                            id={this.props.menu.id + '.'+ submenu.id}
-                            href={submenu.pageLink}  target="_blank">
-                            {submenu.description}
-                      </MenuItem>
+                        <DropdownItem key={this.props.menu.id + '.'+ submenu.id}>
+                            <NavItem id={submenu.id } className='internalMenu' >
+                                <NavLink tag={RRNavLink} to={this.props.menu[0] + submenu.pageLink}>
+                                    {submenu.description}
+                                </NavLink>
+                            </NavItem>
+                        </DropdownItem>
                     )}
-                </NavDropdown>
+                </DropdownMenu>
+            </NavDropdown>
+
             )
     }
 }
-/*
-<Link to={submenu.link}  target="_blank">{submenu.desc}</Link>
-
-<div className={s.externalMenu}
->
-<a  href={submenu.link} target='_blank'>{submenu.desc}</a>
-</div>
-
-*/
-
+//================================================
 class MainMenu extends React.Component {
     render(){
-        // console.log(JSON.stringify(this.props.menu[1]))
-        // const logo = {height: '90px'};
         if (this.props.menu[1].menus && this.props.menu[1].menus.length > 0) {
-            // return (<span>Dropdown</span>)
-            return ( <DropdownMenu menu={this.props.menu} index={this.props.index} /> )
+            return (
+                <NavItem>
+                <SubMenus menu={this.props.menu} index={this.props.index} />
+                </NavItem>
+            )
         } else {
             // console.log(JSON.stringify(this.props.menu[0]))
+            // <NavItem >
+            //     <NavLink tag={RRNavLink} to={this.props.menu[0]}>{this.props.menu[1].description}</NavLink>
+            // </NavItem>
             return (
-                <IndexLinkContainer to={this.props.menu[0]}>
-                    <NavItem id={this.props.menu[1].id }  eventKey={this.props.menu[1].id} >{this.props.menu[1].description}</NavItem>
-                </IndexLinkContainer>
+                <NavLink tag={RRNavLink} to={this.props.menu[0]}>
+                    <NavItem id={this.props.menu[1].id }  >{this.props.menu[1].description}</NavItem>
+                </NavLink>
             )
         }
     }
 }
-/*
-<span>Test</span>
-*/
-
-// id='custom-bootstrap-menu'
-
-// className="bs-navbar-collapse"
-
+//================================================
 export default class Menu extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.toggle = this.toggle.bind(this);
+      this.state = {
+        isOpen: true
+      };
+    }
+
+    toggle() {
+      this.setState({
+        isOpen: !this.state.isOpen
+      });
+    }
+
     render(){
         let menus = this.props.menus.menus
         let menusToSort = []
@@ -98,41 +119,111 @@ export default class Menu extends React.Component {
             menusToSort.push([key, menus[key]])
         }
         let sortedMenus = menusToSort.sort((a,b) => {
-                let itemA = a[1].description.toUpperCase();
-                let itemB = b[1].description.toUpperCase();
-                return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
-            })
-            // console.log('sortedMenus:', sortedMenus)
+            let itemA = a[1].description.toUpperCase();
+            let itemB = b[1].description.toUpperCase();
+            return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
+        })
+
+        // <div key={this.props.index} id='MainMenu'>
         return (
-            <div key={this.props.index} >
-                <Col md={12}>
-                    <Navbar
-                        collapseOnSelect
-                        >
-
-                        <Navbar.Header >
-                            <IndexLinkContainer to='/' >
-                                <img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="React" />
-                            </IndexLinkContainer>
-                            <Navbar.Toggle />
-                        </Navbar.Header>
-
-                        <Navbar.Collapse
-                            >
-                            <Nav>
-                                {sortedMenus.map( (menu, index) =>
-                                    <MainMenu  key={index} menu={menu} index={menu.id} />
-                                )}
-                            </Nav>
-                        </Navbar.Collapse>
-
+            <Container id='MainMenu'>
+                <Navbar  light toggleable id='Menubar'>
+                    <NavbarToggler right inverse color='red' onClick={this.toggle}><Button color="info">Menu</Button></NavbarToggler>
+                      <NavLink tag={RRNavLink} to='/'>
+                          <img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="HomePage" title="Home Page" />
+                      </NavLink>
+                      <Collapse isOpen={this.state.isOpen} navbar>
+                          <Nav className="ml-auto" navbar>
+                          {sortedMenus.map( (menu, index) =>
+                          <MainMenu  key={index} menu={menu} index={menu.id} />
+                          )}
+                          </Nav>
+                      </Collapse>
                     </Navbar>
-                </Col>
-            </div>
+                </Container>
         )
     }
-  }
-
+}
 /*
+</div>
+
+
+<Nav tabs>
+    <NavLink tag={RRNavLink} to='/'>
+        <img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="HomePage" title="Home Page" />
+    </NavLink>
+    <NavbarToggler right inverse color='red' onClick={this.toggle}><Button color="info">Menu</Button></NavbarToggler>
+
+        <Collapse isOpen={this.state.isOpen} >
+        <NavItem>
+          <NavLink href="#" active>Link</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink href="#">Link</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink href="#">Another Link</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink disabled href="#">Disabled Link</NavLink>
+        </NavItem>
+    </Collapse>
+</Nav>
+
+
+
+<Collapse isOpen={this.state.isOpen} >
+{sortedMenus.map( (menu, index) =>
+<MainMenu  key={index} menu={menu} index={menu.id} />
+)}
+</Collapse>
+
+
+<Navbar  light toggleable>
+      <NavbarToggler right onClick={this.toggle} />
+      <NavLink tag={RRNavLink} to='/'>
+          <img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="HomePage" title="Home Page" />
+      </NavLink>
+      <Collapse isOpen={this.state.isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+          {sortedMenus.map( (menu, index) =>
+          <MainMenu  key={index} menu={menu} index={menu.id} />
+          )}
+          </Nav>
+      </Collapse>
+    </Navbar>
+
+
+
+
+
+
+
+<Navbar light toggleable>
+<NavbarToggler right onClick={this.toggle} />
+<NavbarBrand href='/'>
+<img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="React" />
+</NavbarBrand>
+
+<Collapse isOpen={this.state.isOpen} navbar>
+<Nav className="ml-auto" navbar>
+{sortedMenus.map( (menu, index) =>
+<MainMenu  key={index} menu={menu} index={menu.id} />
+)}
+</Nav>
+</Collapse>
+</Navbar>
+
+
+<Nav tabs   >
+<NavbarToggler right onClick={this.toggle} />
+<NavLink tag={RRNavLink} to='/'>
+<img  src='/images/MiltonSeal.png' className="navbar-left"  width="70" height="70" alt="React" />
+</NavLink>
+{sortedMenus.map( (menu, index) =>
+<MainMenu  key={index} menu={menu} index={menu.id} />
+)}
+</Nav>
+
 
 */

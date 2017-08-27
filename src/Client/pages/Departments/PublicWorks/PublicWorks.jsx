@@ -1,18 +1,20 @@
 import React from 'react';
 import styles from './PublicWorks.css'
-import { Col } from 'react-bootstrap';
-import Aside from '../Components/Aside'
-import NoticesList from '../Components/NoticesList'
-import RawText from '../Components/RawText'
+import { Col, Row } from 'reactstrap';
+import Aside from '../../../Components/Aside'
+import NoticesList from '../../../Components/NoticesList'
+import RawText from '../../../Components/RawText'
 
-import SmartLink from '../Components/SmartLink'
-import EB2ServiceBlock from '../Components/EB2ServiceBlock'
-import TransferStationRules from '../Components/TransferStationRules'
+import SmartLink from '../../../Components/SmartLink'
+import EB2ServiceBlock from '../../../Components/EB2ServiceBlock'
+import TransferStationRules from '../../../Components/TransferStationRules'
+
+import  './PublicWorks.css'
 
 export default function PublicWorks({group, store, loading, id, title='Code Enforcement'}){
     return (
-        <div>
-            <Col md={9}  mdPush={2} id="contentArea"  >
+        <Row id='PublicWorks'>
+            <Col  md={{size:9, push:2}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{group.description}</h1>
 
                     <RawText groupPageText={group.pagetext} block='description' />
@@ -44,8 +46,8 @@ export default function PublicWorks({group, store, loading, id, title='Code Enfo
                 <EB2ServiceBlock groupName={group.link}/>
                 Buy Transfer Station Stickers Online
             </Col>
-            <Col md={2} mdPull={9}><Aside group={group} store={store} /></Col>
-        </div>
+        <Col md={{size:2, pull:9}}> <Aside group={group} store={store} /> </Col>
+    </Row>
     );
 
 }

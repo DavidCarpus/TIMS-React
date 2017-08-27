@@ -1,14 +1,14 @@
 import React from 'react';
-import Aside from '../Components/Aside'
-import SmartLink from '../Components/SmartLink'
-import NoticesList from '../Components/NoticesList'
+import Aside from '../../../Components/Aside'
+import SmartLink from '../../../Components/SmartLink'
+import NoticesList from '../../../Components/NoticesList'
 
-import {  Col } from 'react-bootstrap';
+import { Col, Row } from 'reactstrap';
 
 export default function Planning({group, store, loading, id, title='Parks and Recreation'}){
     return (
-        <div>
-            <Col md={9}  mdPush={2} id="contentArea"  >
+        <Row id='Planning'>
+            <Col  md={{size:9, push:2}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{group.description}</h1>
                 The Planning and Land Use Department consists of the following boards:
                 <ul>
@@ -29,9 +29,8 @@ export default function Planning({group, store, loading, id, title='Parks and Re
                 <br/>
                 <p>If you should have any questions please do not hesitate to contact Dana Crossley, Land Use Clerk, at 603-652-4501 x5 or
                     landuse@miltonnh-us.com</p>
-            </Col>
-            <Col md={2} mdPull={9}><Aside group={group} store={store} /></Col>
-
-        </div>
+                </Col>
+            <Col md={{size:2, pull:9}}> <Aside group={group} store={store} /> </Col>
+        </Row>
     );
 }

@@ -1,13 +1,15 @@
 import React from 'react';
-import Assessing from '../Assessing'
-import CodeEnforcement from '../CodeEnforcement'
-import ParksRecreation from '../ParksRecreation'
-import Planning from '../Planning'
-import PublicWorks from '../PublicWorks'
-import TownClerk from '../TownClerk'
-import Welfare from '../Welfare'
+import Assessing from './Assessing'
+import CodeEnforcement from './CodeEnforcement'
+import ParksRecreation from './ParksRecreation'
+import Planning from './Planning'
+import PublicWorks from './PublicWorks'
+import TownClerk from './TownClerk'
+import Welfare from './Welfare'
 import TransferStationRules from '../../Components/TransferStationRules'
-import Sewer from '../Sewer'
+import Sewer from './Sewer'
+
+import  './Departments.css'
 
 export default class DepartmentsUI extends React.Component {
     componentWillMount() {

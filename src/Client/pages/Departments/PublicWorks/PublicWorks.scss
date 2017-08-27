@@ -1,4 +1,7 @@
-/*.feeschedule{
+@import "../../../../../private/SASS/breakpoints.scss";
+@import "../../../../../private/SASS/colors.scss";
+
+.feeschedule{
     width: 100%;
 }
 .feeItem {
@@ -20,7 +23,7 @@ margin: 0 auto;
 .feeNote {
     font-style: italic;
     clear: both;
-}*/
+}
 .transferMission {
     text-align: center;
 }

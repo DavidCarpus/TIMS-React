@@ -1,16 +1,16 @@
 import React from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'reactstrap';
 
 import  './Assessing.css'
-import Aside from '../Components/Aside'
-import DocumentList  from '../Components/DocumentList'
-import RawText from '../Components/RawText'
-import TaxMapForm  from '../Components/TaxMapForm'
+import Aside from '../../../Components/Aside'
+import DocumentList  from '../../../Components/DocumentList'
+import RawText from '../../../Components/RawText'
+import TaxMapForm  from '../../../Components/TaxMapForm'
 
 export default function Assessing({group, store, loading, id, title='Assessing Department'}){
     return (
-        <div>
-            <Col md={9}  mdPush={2} id="contentArea"  >
+        <Row id='Assessing'>
+            <Col  md={{size:8, push:3}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{title}</h1>
                 <RawText groupPageText={group.pagetext} block='description' />
 
@@ -24,10 +24,13 @@ export default function Assessing({group, store, loading, id, title='Assessing D
                 </div>
 
                 <DocumentList group={group} groupName={group.link} store={store} title='Milton Assessors Documentation' />
-                </Col>
-
-                <Col md={2} mdPull={9}> <Aside group={group} store={store} /> </Col>
-        </div>
+            </Col>
+            <Col md={{size:3, pull:8}}> <Aside group={group} store={store} /> </Col>
+        </Row>
     );
 
 }
+/*
+<Col md={2} mdPull={9}> <Aside group={group} store={store} /> </Col>
+
+*/

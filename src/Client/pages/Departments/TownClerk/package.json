@@ -1,0 +1,6 @@
+{
+  "name": "TownClerk",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./TownClerk.jsx"
+}

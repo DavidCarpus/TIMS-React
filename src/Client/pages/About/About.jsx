@@ -1,7 +1,9 @@
 import React from 'react';
-import Aside from '../../Components/Aside'
-import {  Col } from 'react-bootstrap';
+// import Aside from '../../Components/Aside'
+import { Col, Row } from 'reactstrap';
+// import {  Col } from 'react-bootstrap';
 import RawText from '../../Components/RawText'
+import './About.css'
 
 export default class About extends React.Component {
     componentWillMount() {
@@ -18,11 +20,12 @@ render() {
     }
     return (
         <div>
-            <Col md={10}  mdPush={1} id="contentArea"  >
-            <h1 style={{textAlign:'center'}}>About the {this.props.Config.municipalLongName}</h1>
-                <RawText groupPageText={groupPageText} block='description' />
-            </Col>
-            <Col md={1} mdPull={10}><Aside group={group}   /></Col>
+            <Row id='About'>
+                <Col  md={{size:10, push:1}} id='contentArea'>
+                    <h1 style={{textAlign:'center'}}>About the {this.props.Config.municipalLongName}</h1>
+                    <RawText groupPageText={groupPageText} block='description' />
+                </Col>
+            </Row>
         </div>
     );
 }
