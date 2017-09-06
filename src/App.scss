@@ -10,7 +10,7 @@
 }*/
 
 .App-header {
-  background-color: #222;
+  background-color: grey;
   height: 10px;
   padding: 10px;
   color: white;
@@ -22,12 +22,4 @@
 
 #root  {
   background-color: $globalBackground;
-
-  font-family: sans-serif;
-}
-
-.navbar-nav {
-    position: relative;
-    bottom: 0px;
-    left: 10px;
 }

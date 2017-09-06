@@ -28,7 +28,9 @@ export default class Footer extends React.Component {
                 <Row>
                     <Col md={padding} ></Col>
                     {links.map( (linkData, index) =>
-                        <Col key={index} md={colSize} ><SmartLink link={linkData.link} linkText={linkData.linkText} /></Col>
+                        <Col key={index} md={colSize} >
+                            <SmartLink link={linkData.link} linkText={linkData.linkText} />
+                        </Col>
                     )}
                 </Row>
             </footer>

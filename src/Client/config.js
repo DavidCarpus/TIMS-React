@@ -51,7 +51,7 @@ function isObject(item) {
 //======================================
 let mode=process.env.BUILD_MODE || process.env.NODE_ENV || 'production'
 // mode='test'
-if(window.location.hostname.startsWith('test.')) {
+if(window.location.hostname.startsWith('test') || window.location.hostname.startsWith('color')) {
     mode='test'
 }
 

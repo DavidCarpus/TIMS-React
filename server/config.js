@@ -45,11 +45,12 @@ function isObject(item) {
 //======================================
 let mode=process.env.NODE_ENV||'development'
 // mode='test'
+// console.log(__dirname);
 
 module.exports = function(){
     let mergedConf = mergeDeep({}, base_configuration);
     mergedConf = mergeDeep(mergedConf,
-        {mode: mode, ATTACHMENT_DIR:__dirname +  mergedConf.attachmentPath }
+        {mode: mode, ATTACHMENT_DIR:__dirname +  mergedConf.attachmentPath, ROOT_DIR: __dirname }
     );
 
     switch(mode){

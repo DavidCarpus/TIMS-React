@@ -1,0 +1,19 @@
+https://numverify.com/documentation
+
+curl 'http://apilayer.net/api/validate?access_key=6c533ba0a25520d9a559427c70865f42&number=16038410888'
+
+{
+"valid":true,"number":"16036523221","local_format":"6036523221",
+"international_format":"+16036523221","country_prefix":"+1","country_code":"US",
+"country_name":"United States of America","location":"Milton","carrier":"","line_type":"landline"}
+
+{"valid":true,"number":"14072423954","local_format":"4072423954",
+"international_format":"+14072423954","country_prefix":"+1","country_code":"US",
+"country_name":"United States of America","location":"Orlando","carrier":"AT&T Mobility LLC","line_type":"mobile"}
+
+{"valid":true,"number":"16038410888","local_format":"6038410888",
+"international_format":"+16038410888","country_prefix":"+1","country_code":"US",
+"country_name":"United States of America","location":"Somerswth","carrier":"","line_type":"landline"}
+
+
+https://www.carrierlookup.com/.

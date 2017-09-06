@@ -6,9 +6,11 @@ import NoticesList from '../../../Components/NoticesList'
 import DocumentList from '../../../Components/DocumentList'
 import TownNewsletters from '../../../Components/TownNewsletters'
 import RawText from '../../../Components/RawText'
-import Slideshow from '../../../Components/Slideshow'
+// import Slideshow from '../../../Components/Slideshow'
 import GroupMembers from '../../../Components/GroupMembers'
 import PageNavbar from '../../../Components/PageNavbar'
+
+// <Slideshow/>
 
 function pageNav() {
     return (
@@ -27,7 +29,6 @@ export default function ParksRecreation({group, store, loading, id, title='Parks
             <Col  md={{size:10, push:1}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{title}</h1>
                 <RawText groupPageText={group.pagetext } block='description' />
-                <Slideshow/>
                 <EB2ServiceBlock groupName={group.link}/>
 
                 <NoticesList group={group} store={store} groupName={group.link}/>

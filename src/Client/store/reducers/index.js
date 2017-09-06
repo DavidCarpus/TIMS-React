@@ -13,6 +13,8 @@ import SingleNoticeReducer from './SingleNotice';
 import { routerReducer as routing } from 'react-router-redux';
 import PublicRecordsReducer from './PublicRecords';
 import AlertRequestsReducer from './AlertRequests';
+import AuthenticationReducer from './Authentication';
+import ChangeRequestsReducer from './ChangeRequests';
 import { reducer as formReducer } from 'redux-form'
 
 
@@ -33,6 +35,9 @@ const rootReducer = combineReducers({
     SystemIndex: SystemIndexReducer,
     CalendarData: CalendarDataReducer,
     PublicRecords: PublicRecordsReducer,
+    Authentication: AuthenticationReducer,
+    ChangeRequests: ChangeRequestsReducer,
+
     routing,
     form: formReducer
 });

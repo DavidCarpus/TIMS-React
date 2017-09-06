@@ -1,0 +1,9 @@
+@import "../../../../private/SASS/colors.scss";
+
+
+#Admin {
+    background-color: $baseBackgroundColor;
+    label {
+        width: 8em;
+    }
+}

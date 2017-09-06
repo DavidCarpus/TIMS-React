@@ -1,3 +1,5 @@
+const { spawn } = require('child_process');
+
 var mysql = require('mysql');
 var Config = require('./config'),
 configuration = new Config();
@@ -17,7 +19,7 @@ function sleep(ms) {
 function imapProcess(delay, count=2) {
     imap.process()
     .then(imapResults => {
-        // console.log('imapProcess imapResults:' + require('util').inspect(imapResults, { depth: null }));
+        console.log(count, 'imapProcess imapResults:' + require('util').inspect(imapResults, { depth: null }));
         // console.log('--------------');
         return Promise.all(imapResults.map(entry => {
             // console.log('emailSubmit',entry);
@@ -37,18 +39,18 @@ function imapProcess(delay, count=2) {
 
             console.log('ID:', singleEmail);
             if (typeof singleEmail.err !== 'undefined' || typeof singleEmail.id === 'undefined') {
-                console.log('****' , singleEmail.err , singleEmail.id);
-                // return Promise.reject('Errors');
-                return sendAutomationEmail(singleEmail.header.from,
-                    {subject:"RE:" + singleEmail.header.subject,
-                    text:'ERROR:' + '\n' + singleEmail.err.join('\n') + '\n' + '==================\n' + singleEmail.bodyData})
-                .then( mailSent =>{
-                    if (archiveAfterInValid) {
-                        return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Errors'));
-                    } else {
-                        return Promise.resolve('Errors');
-                    }
-                })
+                console.log('****' , singleEmail.err , singleEmail.id || '');
+                return Promise.reject('Errors');
+                // return sendAutomationEmail(singleEmail.header.from,
+                //     {subject:"RE:" + singleEmail.header.subject,
+                //     text:'ERROR:' + '\n' + singleEmail.err.join('\n') + '\n' + '==================\n' + singleEmail.bodyData})
+                // .then( mailSent =>{
+                //     if (archiveAfterInValid) {
+                //         return Promise.resolve(imap.archiveMessage(singleEmail.uid, 'Errors'));
+                //     } else {
+                //         return Promise.resolve('Errors');
+                //     }
+                // })
 
                 err = 'Email not processed to DB.' + JSON.stringify(singleEmail);
                 console.log(err);
@@ -81,6 +83,7 @@ function imapProcess(delay, count=2) {
                 if (configuration.imapProcess.infinite) {
                     ++count;
                 }
+                console.log('new cnt:', count);
                 return imapProcess(delay, count)
             } else {
                 process.exit();
@@ -96,6 +99,37 @@ function imapProcess(delay, count=2) {
 // console.log('configuration.imapProcess:' , configuration.imapProcess);
 // console.log('configuration.imapcredentials.user:' , configuration.imapcredentials.user);
 
+const imapP = spawn('node', ['libs/imap/server.js']);
+
+const find = spawn('find', ['db', '-type', 'f']);
+const wc = spawn('wc', ['-l']);
+find.stdout.pipe(wc.stdin);
+
+find.on('exit', function (code, signal) {
+  console.log('find process exited with ' +
+              `code ${code} and signal ${signal}`);
+});
+find.stdout.on('data', (data) => {
+  console.log(`find stdout:\n${data}`);
+});
+
+find.stderr.on('data', (data) => {
+  console.error(`find stderr:\n${data}`);
+});
+wc.stdout.on('data', (data) => {
+  console.log(`Number of files ${data}`);
+});
+// process.stdin.pipe(child.stdin)
+
+imapP.on('exit', function (code, signal) {
+  console.log('find process exited with ' +
+              `code ${code} and signal ${signal}`);
+});
+imapP.stdout.on('data', (data) => {
+  console.log(`imapP stdout:\n${data}`);
+});
+
+
 if (process.argv.length >= 3 ) {
     const index=2;
     console.log(index + ': ' + process.argv[index]);
@@ -105,5 +139,5 @@ if (process.argv.length >= 3 ) {
     }
     imapProcess(configuration.imapProcess.delay, -99);
 } else {
-    imapProcess(configuration.imapProcess.delay, -99);
+    imapProcess(configuration.imapProcess.delay, 1);
 }

@@ -171,7 +171,7 @@ router.get('/Asides/:groupName', function(req, res) {
 });// ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
     // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
-    var query = "Select * from CalendarEvents where startDate >= NOW() order by startDate limit 4 ";
+    var query = "Select * from CalendarEvents where startDate >= NOW() order by startDate limit 20 ";
      simpleDBQuery(query)
      .then(rows => {
         //  console.log('Asides:' + JSON.stringify(rows));
@@ -317,6 +317,9 @@ router.get('/Records/PublicDocs/:recordtype', function(req, res) {
         case 'RFP':
             recordtype = 'RFP'
             break;
+        case 'VOTING':
+            recordtype = 'Voting'
+            break;
         default:
 
     }
@@ -364,7 +367,7 @@ router.get('/GroupData/:groupName', function(req, res) {
         var groupName = req.params.groupName;
 
         // query = "Select id, datadesc as description from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
-        query = "Select id, groupDescription as description from Groups where pageLink='" + groupName + "'";
+        query = "Select *, id, groupDescription as description from Groups where pageLink='" + groupName + "'";
         console.log(query);
         var finalResult = simpleDBQuery(query)
         .then( groupData =>{
@@ -401,7 +404,7 @@ router.get('/GroupData/:groupName', function(req, res) {
             " left Join Groups on Groups.id = GroupMembers.groupID " +
             " left Join Users on Users.id = GroupMembers.userID " +
             " where Groups.pageLink='" + groupDataWithPageText.link +"' ";
-            // console.log(query);
+            console.log(query);
             return simpleDBQuery(query).
             then(members => {
                 if (members.length > 0) {

@@ -1,5 +1,6 @@
 {
 "imapProcess":{
+    "infinite":false,
     "imapcredentials":{
         "user":
         "website@dev.miltonnh.us",

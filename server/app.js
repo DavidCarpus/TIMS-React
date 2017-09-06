@@ -4,6 +4,8 @@ var compression = require('compression')
 var fs = require('fs');
 var https = require('https');
 var bodyParser = require('body-parser')
+const passport = require('passport');
+// var busboy = require('connect-busboy');
 
 var Config = require('./config'),
 configuration = new Config();
@@ -15,10 +17,22 @@ var routes = require('./routes/index').router;
 var handleDisconnect = require('./routes/index').handleDisconnect;
 
 var app = express();
+
+// app.use(busboy());
+
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
+
+
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+const localSignupStrategy = require('./libs/passport/local-signup');
+const localLoginStrategy = require('./libs/passport/local-login');
+passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
 
 handleDisconnect(); // open (and keep open) a database connection used by routes
 //===============================================
@@ -158,20 +172,6 @@ app.use(timestamp)
 //     app.use(logger('combined'))
 // }
 
-Date.prototype.datetimestr = function() {
-  var mm = this.getMonth() + 1; // getMonth() is zero-based
-  var dd = this.getDate();
-  var hh = this.getHours();
-  var MM = this.getMinutes();
-
-  return [this.getFullYear(),
-          (mm>9 ? '' : '0') + mm,
-          (dd>9 ? '' : '0') + dd,
-          (hh>9 ? '' : '0') + hh,
-          (MM>9 ? '' : '0') + MM,
-
-         ].join('');
-};
 function timestamp (req, res, next) {
     var d = new Date();
     req.ts = d.toString().replace('GMT-0400 (EDT)', '');
@@ -186,18 +186,6 @@ app.use('/api', routes);
 
 // error handlers
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.json({
-      message: err.message,
-      error: err
-    });
-  });
-}
-
 // app.use(compression())
 
 // production error handler
@@ -209,6 +197,18 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.json({
+            message: err.message,
+            error: err
+        });
+    });
+}
 
 if (configuration.sslOptions) {
     console.log('Found sslOptions, configuring...');
@@ -233,8 +233,8 @@ console.log(ts+ ' Express server listening on port ' + app.get('port'));
 console.log(configuration.mode + " mode");
 switch (configuration.mode) {
     case 'development':
-        console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.' );
-        imapProcess(configuration.imapProcess.delay, 50);
+        // console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.' );
+        // imapProcess(configuration.imapProcess.delay, 50);
         console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
         calendarProcess(configuration.calendarProcess.delay, 50)
         console.log('alertVerification process every', configuration.alertVerificationProcess.delay/1000, 'seconds', (configuration.alertVerificationProcess.infinite)?'inf.':'NOT inf.');

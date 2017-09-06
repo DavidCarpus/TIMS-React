@@ -1,23 +1,20 @@
 ************************************************
 ~/bin/startWedDev.sh ALL
-
-
 ************************************************
 News, Calendar, City Services, Notices, Employment, Contact us, Agenda/Minutes/Video, Road Construction, NIXLE
 
 ## APPLY ONLINE form
-Alphabetic index of pages and documents
+## 'Contact Us' form instead of email links
 
 Business listings
 Document Type - Forms
 ************************************************
-
 npm run migrate:rollback
 npm run migrate:latest
 npm run knex:seed:run json
 
-env NODE_ENV=test node_modules/.bin/knex seed:run json
-env NODE_ENV=test npm run start
+NODE_ENV=test node_modules/.bin/knex seed:run json
+NODE_ENV=test npm run start
 
 https://stackoverflow.com/questions/4672903/sending-mails-with-attachment-via-nodejs
 https://stackoverflow.com/questions/35206589/how-to-download-fetch-response-in-react-as-file
@@ -36,3 +33,5 @@ grep "`date '+%b %d %Y'`" ./logDev.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2
 node db/ProcessesHTMLTable.js > ~/Desktop/ImportOut.txt 2>~/Desktop/ImportErrors.err
 
 https://numverify.com/documentation
+
+https://vladimirponomarev.com/blog/authentication-in-react-apps-jwt

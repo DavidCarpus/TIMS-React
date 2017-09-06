@@ -65,6 +65,16 @@ const AlertRequestsDataConstants = {
     PUSH_DATA_SUCCESS: 'PUSH_ALERT_REQUEST_DATA_SUCCESS',
     PUSH_DATA_FAILURE: 'PUSH_ALERT_REQUEST_DATA_FAILURE',
 }
+const AuthenticationConstants = {
+    PUSH_DATA: 'AUTHENTICATION_REQUEST_DATA',
+    PUSH_DATA_SUCCESS: 'AUTHENTICATION_REQUEST_DATA_SUCCESS',
+    PUSH_DATA_FAILURE: 'AUTHENTICATION_REQUEST_DATA_FAILURE',
+}
+const SubmitChangeConstants = {
+    PUSH_DATA: 'SUBMIT_CHANGE_REQUEST_DATA',
+    PUSH_DATA_SUCCESS: 'SUBMIT_CHANGE_REQUEST_DATA_SUCCESS',
+    PUSH_DATA_FAILURE: 'SUBMIT_CHANGE_REQUEST_DATA_FAILURE',
+}
 
 
 
@@ -78,5 +88,7 @@ module.exports = {
     SystemIndexConstants,
     CalendarDataConstants,
     SingleNoticeDataConstants,
-    AlertRequestsDataConstants
+    AlertRequestsDataConstants,
+    AuthenticationConstants,
+    SubmitChangeConstants
 }

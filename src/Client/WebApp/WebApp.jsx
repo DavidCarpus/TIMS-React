@@ -15,6 +15,7 @@ import ContactUs from '../pages/ContactUs'
 import IndexPage from '../pages/IndexPage'
 import PublicRecords from '../pages/PublicRecords'
 import RequestAlerts from '../pages/RequestAlerts'
+import Admin from '../pages/Admin'
 
 class WebApp extends Component {
     componentWillMount() {
@@ -119,11 +120,28 @@ class WebApp extends Component {
             <Route path="/Departments/:department" render={this.DepartmentsPage} />
             <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
             <Route path="/PublicRecords/:recordtype" render={this.PublicRecordsPage} />
+            <Route exact path="/Admin" render={(newProps)=>(
+                <MainLayout>
+                    <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
+                </MainLayout>
+            )} />
+                    <Route path="/Admin/:action" render={(newProps)=>(
+                            <MainLayout>
+                                <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
+                            </MainLayout>
+                        )} />
           </div>
         </Router>
     );
   }
 }
-// <Route path="/TransferRules" render={this.DepartmentsPage} />
+/*
+<Route path="/Admin/" render={(newProps)=>(
+<MainLayout>
+<Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
+</MainLayout>
+)} />
 
+     <Route path="/TransferRules" render={this.DepartmentsPage} />
+*/
 export default WebApp;

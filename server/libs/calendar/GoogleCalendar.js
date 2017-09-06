@@ -22,7 +22,8 @@ function insertEventIntoDatabase(knex, eventToinsert) {
 )
 }
 //======================================
-function importCalendarEvents(knex = null, futureDays=14, startDate=new Date() ) {
+function importCalendarEvents(knex = null, futureDays=31, startDate=new Date() ) {
+    console.log('importCalendarEvents:', futureDays);
     // if (startDate === null) { startDate = new Date()}
     return pullEventsFromGoogleICAL(addDays(startDate, -7),addDays(new Date(), futureDays))
     .then(events => {
