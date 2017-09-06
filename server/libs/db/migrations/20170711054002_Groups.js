@@ -50,8 +50,10 @@ function importOrganizationalUnits(knex = null) {
                         groupDescription:record.desc,
                         address:"",
                         phone:"",
+                        phone2:"",
                         fax:"",
                         hours:"",
+                        emailAddress:"",
                     }
                     if (dataToInsert.groupName.startsWith("http")) {
                         dataToInsert.groupName = dataToInsert.groupDescription.replace(new RegExp(' ', 'g'),'')
@@ -83,7 +85,9 @@ exports.up = function(knex, Promise) {
       table.string('groupDescription');
       table.string('address');
       table.string('phone');
+      table.string('phone2');
       table.string('fax');
+      table.string('emailAddress');
       table.text('hours');
   })
   .then( created => {

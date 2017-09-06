@@ -47,12 +47,14 @@ function importOrganizationalMembers(knex = null) {
                     // console.log('organization:' , require('util').inspect(organization, { depth: null }));
                     return Promise.all(organization.members.map( member =>{
                         let name=member.name.split(' ')
+                        console.log('member:', member);
 
                         let dataToInsert = {
                             // pageLink:organization.link,
                             firstName:name[0],
                             lastName:name[1],
-                            // phone:member.phone || '',
+                            phone:member.phone || '',
+                            emailAddress:member.emailAddress || '',
                         }
                         if (member.phone) {
                             dataToInsert.phone = member.phone

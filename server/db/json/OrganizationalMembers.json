@@ -35,7 +35,7 @@
     },
     {"id": 6, "link":"PlanningBoard",
         "members":[
-            {"office":"Chairman","name":"Brian Boyers",	"term":"2017"},
+            {"office":"Chairman","name":"Brian Boyers",	"term":"2017", "phone":"(603) 652-4501 x7"},
             {"office":"Vice Chairman","name":"Peter Hayward",	"term":"2017"},
             {"office":"Member","name":"Robert Bourdeau",	"term":"2018"},
             {"office":"Member","name":"Tim Long",	"term":"2018"},
@@ -76,5 +76,62 @@
             {"office":"Selectman","name":"Mike Bealieu",	"phone":"603-944-5574",	"term":""},
             {"office":"Selectman","name":"Andrew Rawson",	"phone":"603-534-1330",	"term":""}
         ]
+    },
+    {"id": 15, "link":"Assessing",
+        "members": [
+            {"office":"Assessing Director","name":"Kathy Wallingford",
+                "phone":"(603) 652-4501 x6", "fax":  "(603) 652-4120",
+                "emailAddress": "assessing@miltonnh-us.com"
+            },
+            {"office":"Marybeth Walker","name":"Contracted Assessor"}
+        ]
+    },
+    {"id": 16, "link":"TownClerk",
+        "members": [
+            {"office":"Town Clerk / Tax Collector","name":"Michelle Beauchamp",
+                "phone":"(603) 652-4501 x4", "emailAddress": "townclerktaxcollector@miltonnh-us.com"
+            },
+            {"office":"Deputy Town Clerks","name":"Diane DuBois",
+                "phone":"(603) 652-4501 x3", "emailAddress": "deputytc@miltonnh-us.com"},
+            {"office":"Assistant Tax Collector","name":"Norma Corrow",
+                "phone":"(603) 652-4501 x3", "emailAddress": "miltonatc@metrocast.net"},
+            {"office":"Assistant Tax Collector","name":"Jinette Sturman",
+                "phone":"(603) 652-4501 x3", "emailAddress": "miltonatc@metrocast.net"}
+        ]
+    },
+    {"id": 17, "link":"PublicWorks",
+        "members": [
+            {"name":"Public Works Dept.","office":" ", "phone":"(603) 652-9891" },
+            {"name":"Transfer Station","office":"Public Works Dept. ", "phone":"(603) 652-4125" },
+            {"name":"Highway Dept","office":"Public Works Dept. ", "phone":"(603) 652-9891" },
+            {"office":"Government Buildings","name":"Willis (Bill) Whitten", "phone":"(603) 652-9891"},
+            {"office":"Government Buildings Secretary","name":"Shawn Donell", "phone":"(603) 652-9891"}
+        ]
+    },
+    {"id": 18, "link":"CodeEnforcement",
+        "members": [
+            {"name":"Dana Crossley","office":"Land Use Clerk", "phone":"(603) 652-4501 x5" },
+            {"name":"Brian Boyers","office":"Code Enforcement", "phone":"(603) 652-4501 x7" },
+            {"name":"Brian Boyers","office":"Health Officer", "phone":"(603) 652-4501 x7" },
+            {"name":"Brian Boyers","office":"Building Inspector", "phone":"(603) 652-4501 x7" }
+        ]
+    },
+    {"id": 18, "link":"ParksRecreation", "emailAddress": "recreation@miltonnh-us.com",
+        "members": [
+            {"name":"Karen Brown","office":"Recreation Director", "phone":"(603) 652-4501 x8" },
+            {"name":"Cell Phone", "office":"Cell Phone", "phone":"(603) 652-4501 x8" }
+        ]
+    },
+    {"id": 19, "link":"Sewer",
+        "members": [
+            {"name":"Dale Sprague","office":"Operator" },
+            {"name":"Dana Crossley", "office":"Secretary", "phone":"(603) 652-4501 x5" }
+        ]
+    },
+    {"id": 20, "link":"Welfare",
+        "members": [
+            {"name":"Welfare Administration", "phone":"(603) 652-4501 x6" }
+        ]
     }
+
 ]
