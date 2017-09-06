@@ -29,7 +29,7 @@ export function fetchPageAsides(groupName) {
 }
 //========================================
 export function fetchPageAsidesSuccess(groupName, asides) {
-    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ MainMenuConstants.FETCH_PAGE_ASIDES_DATA_SUCCESS + JSON.stringify(asides));
+    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ PageAsidesConstants.FETCH_PAGE_ASIDES_DATA_SUCCESS + JSON.stringify(asides));
     const action =   {
     type: PageAsidesConstants.FETCH_PAGE_ASIDES_DATA_SUCCESS,
     payload: asides,

@@ -29,7 +29,7 @@ export function fetchSingleNotice(noticeID) {
 }
 //========================================
 export function fetchSingleNoticeSuccess( noticeData) {
-    // console.log(actionsName + ' *** fetchSingleNoticeSuccess:'+ MainMenuConstants.FETCH_DATA_SUCCESS + JSON.stringify(noticeData));
+    // console.log(actionsName + ' *** fetchSingleNoticeSuccess:'+ SingleNoticeDataConstants.FETCH_DATA_SUCCESS + JSON.stringify(noticeData));
     const action =   {
     type: SingleNoticeDataConstants.FETCH_DATA_SUCCESS,
     payload: noticeData,

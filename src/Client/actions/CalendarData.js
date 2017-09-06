@@ -29,7 +29,7 @@ export function fetchCalendarData() {
 }
 //========================================
 export function fetchCalendarDataSuccess( calendarData) {
-    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ MainMenuConstants.FETCH_DATA_SUCCESS + JSON.stringify(calendarData));
+    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ CalendarDataConstants.FETCH_DATA_SUCCESS + JSON.stringify(calendarData));
     const action =   {
     type: CalendarDataConstants.FETCH_DATA_SUCCESS,
     payload: calendarData,

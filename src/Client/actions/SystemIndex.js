@@ -29,7 +29,7 @@ export function fetchSystemIndex() {
 }
 //========================================
 export function fetchSystemIndexSuccess( asides) {
-    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ MainMenuConstants.FETCH_DATA_SUCCESS + JSON.stringify(asides));
+    // console.log(actionsName + ' *** fetchMeetingsSuccess:'+ SystemIndexConstants.FETCH_DATA_SUCCESS + JSON.stringify(asides));
     const action =   {
     type: SystemIndexConstants.FETCH_DATA_SUCCESS,
     payload: asides,
