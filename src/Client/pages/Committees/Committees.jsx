@@ -11,6 +11,19 @@ import HelpfulInformation  from '../../Components/HelpfulInformation'
 
 import RawText  from '../../Components/RawText'
 import './Committees.css'
+import PageNavbar from '../../Components/PageNavbar'
+
+
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+            {text:'^^^', target:'primary-content-top'},
+            {text:'Agendas', target:'AgendasAndMinutes-bookmark'},
+            {text:'Docs', target:'DocumentList-bookmark'},
+            // {text:'Contacts', target:'groupMembers-bookmark'}
+        ]}/>
+    )
+}
 
 export default class Committees extends React.Component {
     componentWillMount() {
@@ -21,6 +34,8 @@ export default class Committees extends React.Component {
     render() {
         return (
                 <Row id='Committees'>
+                    {pageNav()}
+
                     <Col  md={{size:10, push:1}} id='contentArea'>
                             <h1 style={{textAlign:'center'}}>{this.props.groupLabel}</h1>
 
