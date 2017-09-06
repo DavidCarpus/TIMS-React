@@ -10,6 +10,7 @@
     {"group":"Recreation", "url":"http://miltonnh-us.com/recreation.php", "query":"table[border='1'][style='width: 500px;']"},
     {"group":"Selectmen", "url":"http://miltonnh-us.com/bos_agendas.php", "query":"table[border='1'][width='95%']"},
     {"group":"SewerCommission", "url":"http://miltonnh-us.com/sewer_comm.php", "query":"table[border='1'][style='width: 500px;']"},
+    {"group":"TownForest", "url":"http://miltonnh-us.com/town-forest-committee.php", "query":"table[border='1'][style='width: 290px; height: 118px;']"},
     {"group":"TownHouse", "url":"http://miltonnh-us.com/town_house.php", "query":"table[border='1'][width='563']"},
     {"group":"TrustFunds", "url":"http://miltonnh-us.com/trust_funds.php", "query":"table[border='1'][width='563']"},
     {"group":"Zoning", "url":"http://miltonnh-us.com/zba.php", "query":"table[border='1'][width='563']"}

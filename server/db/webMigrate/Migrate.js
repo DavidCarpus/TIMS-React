@@ -13,22 +13,70 @@ var fetchURL = require('./serverIO').fetchURL;
 var getServerFilePath = require('./serverIO').getServerFilePath;
 var getSourceServerHost = require('./serverIO').getSourceServerHost;
 
+let mergeArrays = (arrays) => [].concat.apply([], arrays)
+
 let logErrors = true
 // let logErrors = false
 
 let MIN_VALID_YEAR = 2007
 
+process.on('uncaughtException', function (err) {
+  console.log('Migrate process:' , err);
+})
+
 const meetingPaths = require('./TablesToScrape.json');
+// const linkTable = require('./linkTable.json');
+const linkTable = require('./links.json');
+/*
+const linkTable = [
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_34_38756269.pdf", "group": "Selectmen", "desc": "Expenditure Report - July 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_33_2603528945.pdf", "group": "Selectmen", "desc": "Expenditure Report - May 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_32_3572920358.pdf", "group": "Selectmen", "desc": "Expenditure Report - April 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_31_3659131429.pdf", "group": "Selectmen", "desc": "Expenditure Report - March 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_30_4268575597.pdf", "group": "Selectmen", "desc": "Expenditure Report - December 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_28_635089335.pdf", "group": "Selectmen", "desc": "Expenditure Report - November 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_24_2198695748.pdf", "group": "Selectmen", "desc": "Expenditure Report - October 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_23_2498527688.pdf", "group": "Selectmen", "desc": "Expenditure Report - September 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_21_3787802024.pdf", "group": "Selectmen", "desc": "Expenditure Report - April 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_19_224619096.pdf", "group": "Selectmen", "desc": "Expenditure Report - March 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_22_1346458160.pdf", "group": "Selectmen", "desc": "Wex Savings- March and April, 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_29_1219483641.pdf", "group": "Selectmen", "desc": "MS-737 , 2017"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_27_472924982.pdf", "group": "Selectmen", "desc": "MS-737 , 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_27_3050141158.pdf", "group": "Selectmen", "desc": "MS-232 , 2016"},
+    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_16_3117202166.pdf", "group": "Selectmen", "desc": "2013-20115 Operating Budgett"},
+
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_56_1876060925.pdf", "date": "2017-03-16", "recordtype":"Voting", "group": "Voting", "desc": "March 16, 2017 Town Election Results "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_55_541945002.pdf", "date": "2017-03-14", "recordtype":"Voting", "group": "Voting", "desc": "Voting Delayed till 3/16/17"},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_53_2447204275.pdf", "date": "2016-12-30", "recordtype":"Voting", "group": "Voting", "desc": "2016 Town Report "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_52_694554272.pdf", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Article Information "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_51_3839351656.pdf", "date": "2017-03-14", "recordtype":"Voting", "group": "Voting", "desc": "March 14, 2017 Sample Ballot "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_49_1400993411.pdf", "date": "2017-02-11", "recordtype":"Voting", "group": "Voting", "desc": "Feb. 11 2017 Town Deliberative Minutes "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_50_2005824472.pdf", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_43_1821238400.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "2016 Voting Results"},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_46_1837045028.pdf",  "date": "2016-03-08", "recordtype":"Voting", "group": "Voting", "desc": "  School Voting Results "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_41_1658937858.pdf",  "date": "2016-01-30", "recordtype":"Voting", "group": "Voting", "desc": "Jan. 30 2016 Town Deliberative Minutes "},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_472924982.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "2016 MS7"},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_3257473031.pdf",  "date": "2017-03-16", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"},
+    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_2015577928.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "Proposed and Default Budget"},
+]
+*/
+/*
+{"uri":"11111111111", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"}
+*/
+
 // const meetingPaths = require('./TablesToScrapeTest.json');
 
 //========================================
 let validRecordType = (recordtype) => ["Agenda", "Minutes", "Video"].includes(recordtype)
 let isMailToLink = (uri) => uri.toLowerCase().startsWith('mailto')
 let ignoreMailToLink = (record) => !isMailToLink(record.uri)
-let onlyLocalDoc = (record) => ['Notice', 'HelpfulInformation', 'Document','Newsletter'].includes(record.recordtype) &&
+let onlyLocalDoc = (record) => ['Notice', 'HelpfulInformation', 'Document','Newsletter','Voting'].includes(record.recordtype) &&
     (!record.remotePath.startsWith('http') ||
     (record.remotePath.startsWith('http') && !record.remotePath.indexOf(getSourceServerHost() !== -1)))
 let isPhysicalFile  = (rec)  => (rec.recordtype === 'Video' ? false: true)
+
+let validYear = (meetingDate) => (meetingDate.getUTCFullYear() < (new Date()).getUTCFullYear()+1 &&
+                                                        meetingDate.getUTCFullYear() > MIN_VALID_YEAR )
 
 let ignoreExternalLinks = (record) => record.uri.indexOf(getSourceServerHost() !== -1)
 //========================================
@@ -69,6 +117,7 @@ let getRecordYear = (rec) => rec.date.getUTCFullYear()
 //========================================
 function extractMeetingTableRows(originalHTML, groupName) {
     let data = originalHTML;
+    // console.log('originalHTML:', originalHTML);
     data = data.replace(/<\/tr>.*/g, '')
     let anchorRegEx = /<a .*?\"(\S*?)\".*?>(.*?)</;
 
@@ -115,9 +164,8 @@ function dbRecordsFromExtractedRow(rowData) {
         logErrors && console.error("Invalid date:", dateElement.dateStr);
         return
     }
-    if (meetingDate.getUTCFullYear() > (new Date()).getUTCFullYear()+1 ||
-        meetingDate.getUTCFullYear() < MIN_VALID_YEAR ) {
-            logErrors && console.error("Invalid date:", dateElement.dateStr);
+    if (! validYear(meetingDate)) {
+        logErrors && console.error("Invalid date:", dateElement.dateStr);
         return
     }
     // if (! validRecordType()) {
@@ -125,7 +173,6 @@ function dbRecordsFromExtractedRow(rowData) {
     // }
 
     return rowData.filter(cell => cell.uri).map(doc => {
-        // console.log(dateElement.dateStr + ' document:', doc);
         let uri = doc.uri
         if (! uri.startsWith('http')) {
             uri = 'http://' + getSourceServerHost() + uri
@@ -134,14 +181,28 @@ function dbRecordsFromExtractedRow(rowData) {
         if (! validRecordType(label) ) {
             label = translateRecordType(doc.label)
         }
-        // if (! validRecordType(label) ) {
-        //     console.log('label still not valid?', label);
-        // }
 
         return {groupName:groupName, date: meetingDate,  label:label, uri:uri, recordtype:label}
     })
 }
 //========================================
+function updateFileDBFileLink(record) {
+    let checkRecord={}
+    Object.assign(checkRecord, {id: record.id} )
+    delete record.id
+    return knex('PublicRecords').update(record).where(checkRecord)
+    .then(results => {
+        if (results && results.length > 0) {
+            record.id = checkRecord.id;
+        }
+        return Promise.resolve([record]);
+    })
+    .catch(dberr => {
+        console.log("DBError:", dberr);
+        return Promise.reject(dberr);
+    })
+
+}
 //========================================
 function enterIntoDB(record) {
     // Check DB for record and add if not there
@@ -183,6 +244,7 @@ function cloneMeetings(paths) {
         })
         .then( onlyTable => extractMeetingTableRows(onlyTable, record.group) )
         .then(extractedRows => {
+            // console.log('extractedRows:',extractedRows);
             let allRecords=[];
             extractedRows.map((extractedRow, index) => {
                 if (extractedRow.length > 0 ) {
@@ -250,8 +312,7 @@ function cloneMeetings(paths) {
             )
         })
 
-    }))
-
+            }))
 }
 //========================================
 function extractLinksFromTable(tableHTML) {
@@ -329,8 +390,149 @@ function getTablesFromPage(pageHTML, query) {
     return tables
 }
 //========================================
+//  Rewrite the fileLinks in the PublicRecords table to change the old
+// sites URI to the relative path in the 'serverDirs'
+//========================================
+function migratePublicRecordURIs() {
+    // Fetch PublicRecords that startsWith the sourceHostURI
+    // console.log('sql ', knex('PublicRecords').select('*').where('fileLink', 'like', '%' + getSourceServerHost() + '%').toString());
+    return knex('PublicRecords').select('*').where('fileLink', 'like', '%' + getSourceServerHost() + '%')
+    .then(dbSelectResults => {
+        // then pullLocalCopies
+            // console.log('Records to migrate: ', dbSelectResults);
+            let publicRecordsToMigrate = dbSelectResults.map(rec => Object.assign(rec, {uri: rec.fileLink.replace('www.'+getSourceServerHost(), getSourceServerHost())}))
+                .filter(rec => !rec.uri.toLowerCase().endsWith('.php'))
+            // console.log('publicRecordsToMigrate:', publicRecordsToMigrate);
+            return pullLocalCopies(publicRecordsToMigrate)
+            .then(pulledFiles => {
+                // console.log('pulledFiles:', pulledFiles);
+                let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
+
+                return pullNewServerDirs(getServerFilePath(), ['Documents'] )
+                .then( serverDirs => {
+                    let allPaths= mergeArrays(serverDirs)
+                    publicRecordsToMigrate = publicRecordsToMigrate.map(rec => {
+                        rec.remotePath = rec.uri.replace(/^\//, '')
+                        rec.targetPath = getServerFilePath()+ localFileURL(rec)
+                        // console.log('New targetPath:', localFileURL(rec), 'from', rec.remotePath);
+                        return rec
+                    })
+                    // console.log('allPaths:', allPaths);
+                    // console.log('publicRecordsToMigrate:',publicRecordsToMigrate);
+                    let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
+                    // let linkToFile = (record) => (!record.remotePath.startsWith('http') ||
+                    // (record.remotePath.startsWith('http') && !record.remotePath.indexOf(getSourceServerHost() !== -1)))
+
+                    return Promise.all(
+                        publicRecordsToMigrate.filter(notOnServer)
+                        .map(rec => {
+                            uri = rec.uri.replace(new RegExp('https?://'+getSourceServerHost() ), '')
+                            let remotePath = uri
+                            if (uri.startsWith('/') ) {
+                                remotePath = uri.replace(/^\//, '')
+                            }
+                            rec.remotePath = remotePath
+
+                            // console.log('Push ', rec.local , 'to', rec.targetPath);
+                            return pushFileToServer(rec.local, rec.targetPath)
+                            .then( (pushReq)=> {
+                                return rec
+                            }).catch(err => console.log(err))
+                        })
+                    )
+                    .then(copiedFilesNeeded => publicRecordsToMigrate )
+                })
+                .then(pushedFiles => {
+                    let toDB = publicRecordsToMigrate.map(rec => {
+                        rec.remotePath = rec.uri.replace(/^\//, '')
+                        rec.targetPath = getServerFilePath()+ localFileURL(rec)
+                        rec.fileLink = localFileURL(rec)
+                        // console.log('New targetPath:', localFileURL(rec), 'from', rec.remotePath);
+                        return {id: rec.id, pageLink:rec.pageLink, fileLink: rec.fileLink}
+                    })
+
+                    console.log('Return toDB', toDB);
+                    return toDB
+                })
+            })
+            .then(toLogToDB => {
+                return Promise.all(
+                toLogToDB
+                .map(dbEntry => {
+                    console.log('updateFileDBFileLink', dbEntry);
+                    return updateFileDBFileLink(dbEntry)
+                })
+                )
+            })
+    })
+}
+//========================================
+function migrateLinks(linksToMigrate) {
+
+    linksToMigrate = linksToMigrate.map(record => {
+        uri = record.uri.replace(new RegExp('https?://'+getSourceServerHost() ), '')
+        let remotePath = uri
+        if (uri.startsWith('/') ) {
+            remotePath = uri.replace(/^\//, '')
+        }
+        record.remotePath = remotePath
+        if (! record.recordtype || typeof record.recordtype === 'undefined' ) {
+            record.recordtype = 'Document'
+        }
+        if (! record.date || typeof record.date === 'undefined' ) {
+            record.date = new Date()
+        }
+
+        return record;
+    })
+    return pullLocalCopies(linksToMigrate)
+    .then(pulledFiles  => {
+        let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
+        console.log('getServerFilePath:', getServerFilePath());
+
+        return pullNewServerDirs(getServerFilePath(), ['Documents'] )
+        .then( serverDirs => {
+            let allPaths= mergeArrays(serverDirs)
+            linksToMigrate = linksToMigrate.map(rec => {
+                rec.targetPath = targetPath = getServerFilePath()+ localFileURL(rec)
+                // console.log('Set targetPath:', targetPath);
+                return rec
+            })
+            // console.log('linksToMigrate:',linksToMigrate);
+            let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
+
+
+            return Promise.all(
+                linksToMigrate.filter(onlyLocalDoc).filter(notOnServer)
+                .map(rec => {
+                    console.log('Push ', rec.local , 'to', rec.targetPath);
+                    return pushFileToServer(rec.local, rec.targetPath)
+                    .then( (pushReq)=> {
+                        return rec
+                    }).catch(err => console.log(err))
+                })
+            )
+            .then(copiedFilesNeeded => pulledFiles )
+        })
+        .then(toLogToDB => {
+            // console.log('toLogToDB:', toLogToDB);
+            let localFileURL = (rec) => rec.remotePath.indexOf('http') !== -1 ? rec.remotePath: 'Documents/' + rec.remotePath.replace(/uploads\//, '')
+
+            return Promise.all(
+            toLogToDB
+            .map(rec => {
+                let dbEntry = {pageLink:rec.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
+                // console.log('lnk', dbEntry);
+                return enterIntoDB(dbEntry)
+            })
+            )
+        })
+    })
+}
+
+//========================================
 function cloneDocuments(paths) {
-    let mergeArrays = (arrays) => [].concat.apply([], arrays)
+    // let mergeArrays = (arrays) => [].concat.apply([], arrays)
 
     return Promise.all(paths.map(record => {
         console.log('Documents -', record.group);
@@ -357,13 +559,13 @@ function cloneDocuments(paths) {
                     rec.targetPath = targetPath = getServerFilePath()+ localFileURL(rec)
                     return rec
                 })
-                //  console.log('mergedTableLinks', mergedTableLinks);
 
                 let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
+                console.log('Check:', mergedTableLinks);
 
                 return Promise.all(
                     mergedTableLinks.filter(onlyLocalDoc).filter(notOnServer).map(rec => {
-                        // console.log('Push ', rec.local , 'to', rec.targetPath);
+                        console.log('Push ', rec.local , 'to', rec.targetPath);
                         return pushFileToServer(rec.local, rec.targetPath)
                         .then( (pushReq)=> {
                             return rec
@@ -373,6 +575,7 @@ function cloneDocuments(paths) {
                 .then(copiedFilesNeeded => mergedTableLinks )
             })
             .then (toLogToDB => {
+                // console.log('toLogToDB:', toLogToDB.length);
                 let localFileURL = (rec) => rec.remotePath.indexOf('http') !== -1 ? rec.remotePath: 'Documents/' + rec.remotePath.replace(/uploads\//, '')
                 let notEB2Gov = (rec) =>  rec.remotePath.toUpperCase().indexOf('EB2GOV') === -1
                 let notnhtaxkiosk = (rec) =>  rec.remotePath.toUpperCase().indexOf('NHTAXKIOSK') === -1
@@ -383,7 +586,10 @@ function cloneDocuments(paths) {
                 .filter(notEB2Gov)
                 .filter(notnhtaxkiosk)
                 .map(rec => {
-                    let dbEntry = {pageLink:record.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:new Date(), fileLink:localFileURL(rec)}
+                    if (! rec.date || typeof rec.date === 'undefined' ) {
+                        rec.date = new Date()
+                    }
+                    let dbEntry = {pageLink:record.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
                     // console.log('lnk', dbEntry);
                     return enterIntoDB(dbEntry)
                 })
@@ -398,6 +604,12 @@ function cloneDocuments(paths) {
 if (require.main === module) {
     process.on('warning', e => console.warn(e.stack));
     process.setMaxListeners(0);
+
+    // let meetingPaths = [
+    //         // {"group":"TownForest", "url":"http://miltonnh-us.com/town-forest-committee.php", "query":"table[border='1'][width='290']"}
+    //         {"group":"TownForest", "url":"http://miltonnh-us.com/town-forest-committee.php", "query":"table[border='1'][style='width: 290px; height: 118px;']"},
+    // ]
+
     let documentPaths = [
         {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"Blind Exemption"},
         {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"2009 Assessment"},
@@ -414,7 +626,6 @@ if (require.main === module) {
         {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"Community FAQ"},
         {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"UNH"},
         {"group":"Zoning", "url":"http://miltonnh-us.com/zba.php", "query":"Equitable Waiver"},
-
     ]
 
     // {"group":"Selectmen", "url":"http://miltonnh-us.com/bos_agendas.php", "query":"table[border='1'][width='95%']"},
@@ -423,14 +634,27 @@ if (require.main === module) {
     logErrors = false
     // cloneDocuments(documentPaths)
     // cloneDocuments([{"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"2009 Assessment"},])
+/*
+.then(done => {
+// setTimeout(() => process.exit(), 5000);
+process.exit()
+})
+
+
+migrateLinks(linkTable)
+*/
+
     cloneMeetings(meetingPaths)
     .then(meetingsDone => {
         return cloneDocuments(documentPaths)
     })
+    .then(migrateLinks(linkTable))
+    .then(migratePublicRecordURIs())
     .then(done => {
         // setTimeout(() => process.exit(), 5000);
         process.exit()
     })
+
 }
 // TODO: Do Cemetery documents via old way (json file in server/db/json)
 // {"group":"Cemetery", "url":"http://miltonnh-us.com/cemetery.php", "query":"table[border='1'][style='width: 500px;']"},
