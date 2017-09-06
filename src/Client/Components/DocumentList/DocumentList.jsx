@@ -8,6 +8,7 @@ import React from 'react';
 
      return (
          <div id='DocumentList'>
+             <a id="DocumentList-bookmark">DocumentList Start</a>
              <h2>{title} </h2>
              {documents.map( (document, index) =>
                      <div key={index} >

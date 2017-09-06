@@ -4,6 +4,7 @@
 
 #Asides {
     @include bkg;
+    @include fontConfig;
     a{        @include lnk('aside')    }
     a:hover {         font-weight: bold;     }
 }

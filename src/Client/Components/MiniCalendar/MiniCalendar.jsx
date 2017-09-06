@@ -36,12 +36,11 @@ export default class MiniCalendar extends React.Component {
             <aside id='MiniCalendar' className="MiniCalendar">
                 <div className="title">Upcoming Events</div>
                 {calendarData.map( (entry) =>
-                        <div className="entry" key={entry.id} >
-                            <div className="date">{entry.date}</div>
-                            <div className="description">{entry.description}</div>
-                        </div>
-                    )}
-
+                    <div className="entry" key={entry.id} >
+                        <div className="date">{entry.date}</div>
+                        <div className="description">{entry.description}</div>
+                    </div>
+                )}
             </aside>
         );
     }

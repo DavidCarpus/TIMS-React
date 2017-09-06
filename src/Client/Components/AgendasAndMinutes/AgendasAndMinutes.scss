@@ -1,31 +1,40 @@
 @import "../../../../private/SASS/colors.scss";
 
 .YearBlock  .header{
-    background-color: $meetingListToggleHeader;
+    // background-color: $meetingListToggleHeader;
     // font: $documentationFont;
 }
 
 #AgendasAndMinutes {
+    @include bkg;
+    @include fontConfig;
+
     a{        @include lnk('agendas')    }
     a:hover {         font-weight: bold;     }
-}
-
-.meetingBlock {
-    display: inline-block;
-    @include bkg
-    // background-color: $meetingListBackground;
-    width: 100%;
-    padding-bottom: 5px;
-}
-.meetingBlock .date {
-    display: inline-block;
-    font-weight: bold;
-    width: 80px;
-}
-.meetingBlock .Entries {
-    display: inline-block;
-}
-.meetingBlock .meetingElement {
-    min-width: 100px;
-    display: inline-block;
+    margin-bottom: 2em;
+    #AgendasAndMinutes-bookmark {
+        display: block;
+        position: relative;
+        top: $bookmarkOffset;
+        visibility: hidden;
+    }
+    .meetingBlock {
+        display: inline-block;
+        @include bkg
+        // background-color: $meetingListBackground;
+        width: 100%;
+        padding-bottom: 5px;
+    }
+    .meetingBlock .date {
+        display: inline-block;
+        font-weight: bold;
+        width: 90px;
+    }
+    .meetingBlock .Entries {
+        display: inline-block;
+    }
+    .meetingBlock .meetingElement {
+        min-width: 100px;
+        display: inline-block;
+    }
 }

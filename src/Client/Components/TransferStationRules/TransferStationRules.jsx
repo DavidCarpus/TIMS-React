@@ -20,16 +20,18 @@ class WasteType extends React.Component {
         )
     }
 }
- 
+
 export default class TransferStationRules extends React.Component {
     render() {
         // var dump = JSON.stringify(this.props.feeSchedule);
         return (
             <div id='TransferStationRules'>
+
                 <div id="contentArea"
                     style={{width:'100%'}}
                     >
 
+                <a id="TransferStationRules-bookmark">TransferStationRules Start</a>
                 <h2>Transfer Station Rules:</h2>
                 <ul>
                     <li>All vehicles entering the Station must have a current permit sticker attached to the lower left (driver’s) side of the windshield.</li>
@@ -68,6 +70,7 @@ export default class TransferStationRules extends React.Component {
                             </div>
                         )}
                     </div>
+                    
                 </div>
             </div>
         )

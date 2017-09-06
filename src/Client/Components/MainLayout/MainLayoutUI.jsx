@@ -11,6 +11,7 @@ export default class MainLayoutUI extends React.Component {
     //   <div id="MainLayoutUI" className="body">
       return (
           <Container id="MainLayoutUI" className="body">
+              <a id="primary-content-top">Top</a>
               <Row>
                   <header id="primary-header">
                       <Menu menus={this.props.MainMenus}/>

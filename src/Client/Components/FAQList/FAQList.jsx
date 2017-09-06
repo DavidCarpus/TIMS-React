@@ -1,4 +1,5 @@
 import React from 'react';
+import  './FAQList.css'
 
 class FAQ extends React.Component {
 
@@ -26,15 +27,15 @@ export default class FAQList extends React.Component {
     }
 
     render() {
-        var id = this.props.groupName + '_FAQ'
-
         if ( this.props.loading) {
             // console.log('***FAQList loading. ');
             return (<div>Loading</div>)
         }
 
         return (
-            <div id={id}>
+            <div id='FAQList'>
+                <a id="FAQList-bookmark">FAQList bookmark</a>
+
                 {this.props.questions.length > 0 ? <h2>{this.props.title}</h2> : ''}
                 { this.props.questions.map( (question, index) =>
                     <FAQ key={index} question={question} />

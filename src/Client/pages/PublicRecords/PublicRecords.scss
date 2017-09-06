@@ -1,29 +1,30 @@
 @import "../../../../private/SASS/colors.scss";
 
-#PublicRecords a{
-    @include lnk('documentation')
-}
+#PublicRecords{
+    #contentArea {
+    border-radius: 1em;
+    }
 
-#PublicRecords .MonthBlock {
-    // background-color: $meetingListBackground;
-}
-#PublicRecords .YearBlock  .header{
-    background-color: $meetingListToggleHeader;
-}
-#PublicRecords .MonthBlock .header {
-    background-color: $meetingListMonthHeaderBG;
-    color: $meetingListMonthHeaderFG;
-}
-
-#PublicRecords .MonthBlock .Entries {
-    display: inline-block;
-}
-
-#PublicRecords .MonthBlock .date {
-    width: 80px;
-}
-
-#PublicRecords .MonthBlock .documentLink {
-    min-width: 150px;
-    display: inline-block;
+    a{
+        @include lnk('documentation')
+    }
+    .YearBlock  .header{
+        background-color: $meetingListToggleHeader;
+    }
+    .MonthBlock {
+        .header {
+        background-color: $meetingListMonthHeaderBG;
+        color: $meetingListMonthHeaderFG;
+    }
+    .Entries {
+        display: inline-block;
+    }
+    .date {
+        width: 10em;
+    }
+    .documentLink {
+        min-width: 150px;
+        display: inline-block;
+    }
+    }
 }

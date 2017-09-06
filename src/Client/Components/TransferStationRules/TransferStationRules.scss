@@ -7,9 +7,9 @@
 .feeItem {
 max-width: 500px;
 width: 100%;
-clear: both;
+// clear: both;
 border: 1px solid black;
-margin: 0 auto;
+// margin: 0 auto;
 }
 .feeItemDesc {
     width: 80%;
@@ -27,5 +27,13 @@ margin: 0 auto;
     clear: both;
 }
 #TransferStationRules #contentArea {
+    border-radius: 1em;
+
     background-color: $baseBackgroundColor;
+    a#TransferStationRules-bookmark {
+        display: block;
+        position: relative;
+        top: -120px;
+        visibility: hidden;
+    }
 }

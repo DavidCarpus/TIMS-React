@@ -1,0 +1,55 @@
+@import "../../../../private/SASS/colors.scss";
+
+#ContactUs  {
+    // background-color: red;
+    @include lnk('contactus');
+    @include bkg;
+  // color: $noticesLinks;
+  // background-color: rgba(200,200,200,0.8);
+  width: 80%;
+  margin: auto;
+}
+
+#ContactUs{
+    width: 100%;
+    border-radius: 1em;
+    @include bkg;
+    // div{
+    //     @include bkg;
+    //     // background-color: rgba(200,200,200,0.8);
+    // }
+    a{
+        @include lnk('contactus')
+    }
+    a#ContactUs-bookmark {
+        display: block;
+        position: relative;
+        top: $bookmarkOffset;
+        visibility: hidden;
+    }
+    #departmentList{
+        width: 100%;
+        padding-top: 1em;
+        padding-bottom: 1em;
+
+        .row{
+            margin: auto;
+            margin-top: 0.5em;
+            width: 100%;
+        }
+        .department{
+            //  margin-top: 0.5em;
+            min-width: 20em;
+            // width: 30%;
+            font-weight: bold;
+            float: left;
+        }
+        .contactName{
+            min-width: 15em;
+            // width: 30%;
+        }
+        .phone{
+            // width: 30%;
+        }
+    }
+}

@@ -20,6 +20,7 @@ function formatDate(date) {
 const MeetingBlock = ({meetingElements, meetingDate}) => {
     return (
         <div className="meetingBlock" >
+
             <div className="date" >
                 {formatDate(meetingDate)}
             </div>
@@ -82,6 +83,8 @@ export class AgendasAndMinutes extends React.Component {
 // console.log('currentMeetings:',currentMeetings);
      return (
          <div id='AgendasAndMinutes'>
+             <a id="AgendasAndMinutes-bookmark">AgendasAndMinutes Start</a>
+
               <h2>{this.props.title}</h2>
               {currentMeetings
                   .sort((a,b) => { return b.date -a.date; })

@@ -1,0 +1,58 @@
+@import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/breakpoints.scss";
+
+#PageNavbar{
+    position: fixed;
+    z-index: 255;
+    top: 150px;
+    left: 20px;
+    right: 0;
+    width: 50px;
+    // background-color: red;
+    color: white;
+
+    ul > li > a {
+        padding: 0px;
+        height: 50px;
+        width: 4em;
+        border-radius: 50px;
+        // font-weight: bold;
+        color: $baseFontColor;
+        background-color: $baseBackgroundSolid;
+        // baseFontColor
+    }
+    ul > li > a :hover{
+        // padding: 0px;
+        height: 50px;
+        width: 4em;
+        border-radius: 50px;
+        // padding-top: 1em;
+        color: $baseBackgroundSolid;
+        background-color: $baseFontColor;
+    }
+
+    span {
+        position: relative;
+        padding-top: 1em;
+        // top: 1em;
+        width: 4em;
+        text-align: center;
+        margin: auto;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .nav-item {
+        padding-bottom: 1em;
+        margin: auto;
+
+        // background-color: green;
+        position: relative;
+    }
+}
+@media (min-device-width : 320px) and (max-device-width : 568px) {
+    #PageNavbar {
+        visibility: hidden;
+        color: red;
+    }
+}

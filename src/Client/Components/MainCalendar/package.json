@@ -1,0 +1,6 @@
+{
+  "name": "MainCalendar",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MainCalendarC.jsx"
+}

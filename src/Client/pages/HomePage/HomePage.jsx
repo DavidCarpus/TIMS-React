@@ -1,12 +1,30 @@
 import React from 'react';
 // import OnlinePaymentsBlock  from '../OnlinePaymentsBlock'
-import Aside from '../../Components/Aside'
+
+// import Aside from '../../Components/Aside'
+// import MiniCalendar from '../../Components/MiniCalendar'
 import NoticesList from '../../Components/NoticesList'
-import MiniCalendar from '../../Components/MiniCalendar'
+
+import MainCalendar from '../../Components/MainCalendar'
+import ContactUs from '../../Components/ContactUs'
+
 // import {  Col } from 'react-bootstrap';
 import { Col, Row } from 'reactstrap';
 
 import './HomePage.css';
+import PageNavbar from '../../Components/PageNavbar'
+
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+            {text:'^^^', target:'primary-content-top'},
+            {text:'Notices', target:'Notices-bookmark'},
+            {text:'Calendar', target:'MainCalendar-bookmark'},
+            {text:'Contacts', target:'ContactUs-bookmark'}
+        ]}/>
+    )
+}
+
 
 export default class HomePage extends React.Component {
     componentWillMount() {
@@ -17,35 +35,38 @@ export default class HomePage extends React.Component {
         // console.log(this.props);
         // <Col md={7} mdPush={3} id="contentArea">
         return (
-            <Row id='HomePage'>
-                  <Col  md={{size:7, push:3}}  xs={{size:12}}>
-                      <div className="title">
-                              <h1>Welcome to the {this.props.municipalLongName}</h1>
-                              <address >
-                                  424 White Mountain Highway<br/>
-                                  P.O. Box 310<br/>
-                                  Milton, NH 03851
-                              </address>
-                              603-652-4501
+            <div id='HomePage'>
+                {pageNav()}
+                <Row >
+                  <Col  md={{size:10, push:1}}  xs={{size:12}}>
+                      <div id="WelcomeTitle">
+                              <h1>Welcome to the</h1><h1>{this.props.municipalLongName}</h1>
                           </div>
                           <NoticesList
-                          group={this.props.group}
-                          store={this.props.store}
-                          groupName='Home'/>
-                  </Col>
-                  <Col md={{size:3, pull:7}} xs={{size:12}}>
-                      <Aside  group={this.props.group}  store={this.props.store} groupName={'Home'} />
-                  </Col>
-                  <Col   md='2'  sm={{size:7}}>
-                      <div className="title">
-                              <MiniCalendar />
-                      </div>
+                              group={this.props.group}
+                              store={this.props.store}
+                              groupName='Home'/>
+                          <MainCalendar />
+                          <ContactUs/>
                   </Col>
             </Row>
+        </div>
         );
     }
 }
 /*
+
+
+<Col md={{size:3, pull:7}} xs={{size:12}}>
+<Aside  group={this.props.group}  store={this.props.store} groupName={'Home'} />
+</Col>
+<Col   md='2'  sm={{size:7}}>
+<div className="title">
+<MiniCalendar />
+</div>
+</Col>
+
+
 <Col md={{size:3}}><Aside  group={this.props.group}  store={this.props.store} groupName={'Home'} /></Col>
 <Col md={{size: 7, offset: 3}} id="contentArea">
 <div className="title">

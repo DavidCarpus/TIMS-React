@@ -2,17 +2,33 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 
 import  './Assessing.css'
-import Aside from '../../../Components/Aside'
 import DocumentList  from '../../../Components/DocumentList'
 import RawText from '../../../Components/RawText'
 import TaxMapForm  from '../../../Components/TaxMapForm'
+import PageNavbar from '../../../Components/PageNavbar'
+import GroupMembers from '../../../Components/GroupMembers'
+
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+            {text:'^^^', target:'primary-content-top'},
+            {text:'Doc', target:'DocumentList-bookmark'},
+            {text:'Contacts', target:'groupMembers-bookmark'}
+        ]}/>
+    )
+}
 
 export default function Assessing({group, store, loading, id, title='Assessing Department'}){
+    // {pageNav()}
     return (
         <Row id='Assessing'>
-            <Col  md={{size:8, push:3}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>{title}</h1>
-                <RawText groupPageText={group.pagetext} block='description' />
+            {pageNav()}
+
+            <Col  md={{size:10, push:1}} id='contentArea'>
+                <div id="description">
+                    <h1 style={{textAlign:'center'}}>{title}</h1>
+                    <RawText id='description' groupPageText={group.pagetext} block='description' />
+                </div>
 
                 <div >
                     <div  style={{width:'48%'}}>
@@ -24,13 +40,9 @@ export default function Assessing({group, store, loading, id, title='Assessing D
                 </div>
 
                 <DocumentList group={group} groupName={group.link} store={store} title='Milton Assessors Documentation' />
+                <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail/>
+
             </Col>
-            <Col md={{size:3, pull:8}}> <Aside group={group} store={store} /> </Col>
         </Row>
     );
-
 }
-/*
-<Col md={2} mdPull={9}> <Aside group={group} store={store} /> </Col>
-
-*/

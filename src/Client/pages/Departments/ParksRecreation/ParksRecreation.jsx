@@ -1,18 +1,30 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
 
-import Aside from '../../../Components/Aside'
 import EB2ServiceBlock from '../../../Components/EB2ServiceBlock'
 import NoticesList from '../../../Components/NoticesList'
 import DocumentList from '../../../Components/DocumentList'
 import TownNewsletters from '../../../Components/TownNewsletters'
 import RawText from '../../../Components/RawText'
 import Slideshow from '../../../Components/Slideshow'
+import GroupMembers from '../../../Components/GroupMembers'
+import PageNavbar from '../../../Components/PageNavbar'
+
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+            {text:'^^^', target:'primary-content-top'},
+            {text:'Doc', target:'DocumentList-bookmark'},
+            {text:'Contact', target:'groupMembers-bookmark'}
+        ]}/>
+    )
+}
 
 export default function ParksRecreation({group, store, loading, id, title='Parks and Recreation'}){
     return (
         <Row id='ParksRecreation'>
-            <Col  md={{size:9, push:3}} id='contentArea'>
+            {pageNav()}
+            <Col  md={{size:10, push:1}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{title}</h1>
                 <RawText groupPageText={group.pagetext } block='description' />
                 <Slideshow/>
@@ -22,8 +34,9 @@ export default function ParksRecreation({group, store, loading, id, title='Parks
                 <DocumentList group={group} store={store} />
 
                 <TownNewsletters title={'Milton Town Gazette'} group={group} store={store} />
+                <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail />
+
                 </Col>
-            <Col md={{size:3, pull:9}}> <Aside group={group} store={store} /> </Col>
         </Row>
     );
 

@@ -2,25 +2,34 @@ import React from 'react';
 import { Col, Row } from 'reactstrap';
 
 import SmartLink from '../../../Components/SmartLink'
-import Aside from '../../../Components/Aside'
 import DocumentList  from '../../../Components/DocumentList'
 import RawText from '../../../Components/RawText'
+import GroupMembers from '../../../Components/GroupMembers'
+import PageNavbar from '../../../Components/PageNavbar'
 
-// export default class Sewer extends React.Component {
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+            {text:'^^^', target:'primary-content-top'},
+            {text:'Doc', target:'DocumentList-bookmark'},
+            {text:'Contacts', target:'groupMembers-bookmark'}
+        ]}/>
+    )
+}
+
 export default function Sewer({group, store, loading, id, title='Sewer Department'}){
     return (
         <Row id='Sewer'>
-            <Col  md={{size:9, push:2}} id='contentArea'>
+            {pageNav()}
+            <Col  md={{size:10, push:1}} id='contentArea'>
                     <h1 style={{textAlign:'center'}}>{title}</h1>
 
                     <RawText groupPageText={group.pagetext} block='description' />
+                    <SmartLink link='http://des.nh.gov/index.htm' linkText='NH Department of Environmental Services (DES)'/>
 
                     <DocumentList group={group} store={store} title='Milton Sewage Department Documentation' />
-                    <SmartLink link='http://des.nh.gov/index.htm'
-                        linkText='NH Department of Environmental Services (DES)'/>
+                    <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />
                 </Col>
-            <Col md={{size:2, pull:9}}> <Aside group={group} store={store} /> </Col>
         </Row>
     )
-
 }

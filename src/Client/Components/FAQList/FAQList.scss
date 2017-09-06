@@ -1,15 +1,14 @@
 @import "../../../../private/SASS/colors.scss";
 
-#DocumentList  {
+#FAQList  {
     @include bkg;
     @include fontConfig;
+    // background-color: red;
 
-    a{        @include lnk('documentation')    }
-    a:hover {         font-weight: bold;     }
-    a#DocumentList-bookmark {
+    a#FAQList-bookmark {
         display: block;
         position: relative;
-        top: $bookmarkOffset;
+        top: -120px;
         visibility: hidden;
     }
     margin-bottom: 5em;

@@ -1,6 +1,6 @@
 import React from 'react';
 import SmartLink from '../../Components/SmartLink'
-import {  Col } from 'react-bootstrap';
+import {  Col, Row } from 'reactstrap';
 import  './PublicRecords.css'
 
   var monthNames = [
@@ -9,6 +9,16 @@ import  './PublicRecords.css'
     "August", "September", "October",
     "November", "December"
   ];
+
+const publicRecordTypes = [
+     'RFP',
+     'NOTICE',
+     'AGENDA',
+     'RFPS',
+     'NOTICES',
+     'AGENDAS',
+     'VOTING',
+]
 
 function formatDate(date) {
 
@@ -77,7 +87,7 @@ const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
                 >
                 <div className='header' >
                     <a >
-                        {year} {expanded?'^^^':'vvv'}
+                        {year} {'...'}
                     </a>
                 </div>
 
@@ -88,6 +98,7 @@ const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
         </div>
     )
 }
+// {year} {expanded?'^^^':'vvv'}
 
 
 //-----------------------------------------------------------------------------
@@ -119,8 +130,8 @@ export default class PublicRecordsUI extends React.Component {
       var tmpStyle = {backgroundColor: 'white'}
 
       if ( this.props.loading) {         return (<div style={tmpStyle}>Loading</div>)     }
-      if (this.props.records.length === 0) {        return(null);    }
-      if (Object.keys(this.props.records).length === 0) { return null }
+    //   if (this.props.records.length === 0) {        return(null);    }
+    //   if (Object.keys(this.props.records).length === 0) { return null }
 
       var currentRecords = Object.keys(this.props.records)
           .map( _date  => {
@@ -128,34 +139,28 @@ export default class PublicRecordsUI extends React.Component {
           })
           .sort((a,b) => { return b.date -a.date; })
 
-    switch (this.props.recordType.toUpperCase()) {
-        case 'RFP':
-        case 'NOTICE':
-        case 'AGENDA':
-        case 'RFPS':
-        case 'NOTICES':
-        case 'AGENDAS':
-            return (
-                <Col md={10}  mdPush={1}  id="contentArea"  >
-                    <div  id='PublicRecords'>
-                        <h1>{this.props.recordType}</h1>
-                        {currentRecords
-                            .map( year => {
-                                return (
-                                    <YearBlock key={year.date} yearRecords={year.values} year={year.date}
-                                        expanded={( this.state.expandedYears.indexOf(year.date) >= 0)}
-                                        toggleCollapseState={this.toggleYear}></YearBlock>
-                                )
-                            })}
-                      </div>
+          if (publicRecordTypes.indexOf(this.props.recordType.toUpperCase()) !== -1 ) {
+              return (
+                  <Row id='PublicRecords'>
+                      <Col  md={{size:10, push:1}} id='contentArea'>
+                          <h1>{this.props.recordType}</h1>
+                          {currentRecords
+                              .map( year => {
+                                  return (
+                                      <YearBlock key={year.date} yearRecords={year.values} year={year.date}
+                                          expanded={( this.state.expandedYears.indexOf(year.date) >= 0)}
+                                          toggleCollapseState={this.toggleYear}></YearBlock>
+                                  )
+                              })}
+                    </Col>
+                    </Row>
+                    )
+          } else {
+              return (
+                  <Col md={10}  mdPush={1}  id="contentArea"  >
+                      <div  id='PublicRecords'>Unknown PublicRecords Type: {this.props.recordType}</div>
                   </Col>
-
-                  )
-        default:
-            return (
-                <div  style={tmpStyle}>Unknown PublicRecords Type: {this.props.recordType}</div>
-            );
-    }
-
+              )
+          }
   }
 }

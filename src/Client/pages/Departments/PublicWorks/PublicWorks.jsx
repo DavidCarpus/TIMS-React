@@ -1,36 +1,49 @@
 import React from 'react';
-import styles from './PublicWorks.css'
 import { Col, Row } from 'reactstrap';
-import Aside from '../../../Components/Aside'
+
 import NoticesList from '../../../Components/NoticesList'
 import RawText from '../../../Components/RawText'
 
 import SmartLink from '../../../Components/SmartLink'
 import EB2ServiceBlock from '../../../Components/EB2ServiceBlock'
 import TransferStationRules from '../../../Components/TransferStationRules'
+import GroupMembers from '../../../Components/GroupMembers'
+import PageNavbar from '../../../Components/PageNavbar'
 
-import  './PublicWorks.css'
+import styles from './PublicWorks.css'
+
+function pageNav() {
+    return (
+    <PageNavbar menus={[
+        {text:'^^^', target:'primary-content-top'},
+        {text:'Rules', target:'TransferStationRules-bookmark'},
+        {text:'Contact', target:'groupMembers-bookmark'}
+        ]}/>
+    )
+}
 
 export default function PublicWorks({group, store, loading, id, title='Code Enforcement'}){
     return (
         <Row id='PublicWorks'>
-            <Col  md={{size:9, push:2}} id='contentArea'>
+            {pageNav()}
+
+            <Col  md={{size:10, push:1}} id='contentArea'>
                 <h1 style={{textAlign:'center'}}>{group.description}</h1>
 
-                    <RawText groupPageText={group.pagetext} block='description' />
+                <RawText groupPageText={group.pagetext} block='description' />
 
-                    <NoticesList group={group} groupName={group.link} store={store}/>
+                <NoticesList group={group} groupName={group.link} store={store}/>
 
-                    <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
-                        linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
+                <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
+                linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
 
-                    <hr/>
-                    <h2>Transfer Station</h2>
-                    <p>
-                        603-652-4125
-                        Friday- Monday 7am- 3pm
-                        (last load accepted at 2:45pm) Closed Holidays
-                    </p>
+                <hr/>
+                <h2>Transfer Station</h2>
+                <p>
+                    603-652-4125
+                    Friday- Monday 7am- 3pm
+                    (last load accepted at 2:45pm) Closed Holidays
+                </p>
                 <div className={styles.transferMission}>
                     <h3>"If You Don't Know--Don't Throw, Please Ask"</h3>
                     <h3>Misson Statement</h3>
@@ -39,18 +52,13 @@ export default function PublicWorks({group, store, loading, id, title='Code Enfo
 
                 <TransferStationRules group={group} />
                 <hr/>
-                <SmartLink link='/TransferRules'
-                    linkText='Printable Transfer Station Rules'/>
+                <SmartLink link='/TransferRules' linkText='Printable Transfer Station Rules'/>
                 <hr/>
 
                 <EB2ServiceBlock groupName={group.link}/>
                 Buy Transfer Station Stickers Online
+                <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />
             </Col>
-        <Col md={{size:2, pull:9}}> <Aside group={group} store={store} /> </Col>
     </Row>
     );
-
 }
-
-/*
-*/

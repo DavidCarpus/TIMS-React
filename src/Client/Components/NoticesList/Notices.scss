@@ -3,7 +3,7 @@
 
 .mainNotice {
     width: 49%;
-    min-height: 50px;
+    // min-height: 50px;
     display: inline-block;
     float: left;
 }
@@ -18,13 +18,28 @@
 }
 #notices  {
     @include bkg;
+    @include fontConfig;
+    border-radius: 1em;
+    padding-bottom: 1em;
+    ul {
+        padding-left: 1em;
+    }
+
     a{        @include lnk('notices')    }
     a:hover {         font-weight: bold;     }
     h2 {
-        color: black;
+        @include fontConfig;
+        font-size: 2em;
+        line-height: normal;
+        // color: black;
+    }
+    a#Notices-bookmark {
+        display: block;
+        position: relative;
+        top: $bookmarkOffset;
+        visibility: hidden;
     }
 }
-
 
 @keyframes blinking {
   from,

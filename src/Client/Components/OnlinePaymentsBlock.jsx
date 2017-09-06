@@ -7,7 +7,7 @@ export default class OnlinePaymentsBlock extends React.Component {
             backgroundColor: 'blue',
             color: 'white',
             width: '180px',
-            height: '80px',
+            height: '3em',
             display:'inline-block',
             textAlign: 'center',
             borderRadius: '10px',

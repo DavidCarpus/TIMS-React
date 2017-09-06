@@ -1,0 +1,70 @@
+@import "../../../../private/SASS/breakpoints.scss";
+@import "../../../../private/SASS/colors.scss";
+
+#MainCalendar {
+    margin-top: 4em;
+    margin-bottom: 2em;
+    border-radius: 1em;
+
+    @include bkg();
+      text-align: left;
+      .eventDay {
+          display: inline-block;
+          min-width: 2em;
+          min-height: 2em;
+          background-color: red;
+          text-align: center;
+          border-radius: 2em;
+      }
+      .calDay {
+          display: inline-block;
+          text-align: center;
+          min-width: 2em;
+          min-height: 2em;
+      }
+      .outsideMonth {
+          color: grey;
+      }
+      .MonthTitle {
+          color: $miniCalendarDate;
+          padding-left: 5em;
+      }
+       a{
+          @include lnk('miniCalendar')
+          // color: $asideLinks;
+      }
+      .date {
+          color: $miniCalendarDate;
+          width: 100%;
+      }
+    //   #currentMonthBlock{
+    //       width: 15em;
+    //   }
+      #eventList {
+          column-count: 2;
+          .entry {
+              margin-bottom: 1em;
+              break-inside: avoid;
+          }
+      }
+      a#MainCalendar-bookmark {
+          display: block;
+          position: relative;
+          top: $bookmarkOffset;
+          visibility: hidden;
+      }
+      .title {
+          @include bkg;
+          @include fontConfig;
+          text-align: center;
+
+          height: 2em;
+          margin-bottom: 1em;
+
+      }
+      @media  iphone5{
+          #eventList {
+              column-count: 1;
+          }
+      }
+}

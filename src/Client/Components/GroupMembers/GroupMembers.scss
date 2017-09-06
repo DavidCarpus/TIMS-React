@@ -5,12 +5,12 @@
 .office {
     float: left;
     /*min-width:200px;*/
-    width:30%;
+    width:20%;
 }
 .name {
     float: left ;
      /*min-width:175px;*/
-     width:30%;
+     width:20%;
  }
  .term {
      float: left ;
@@ -21,8 +21,13 @@
   .phone {
       float: left ;
    /*min-width:150px;*/
-   width:30%;
+   width:20%;
    }
+   .email {
+       float: left ;
+    /*min-width:150px;*/
+    width:30%;
+    }
 
 .memberBlock {
     clear: left;
@@ -34,12 +39,19 @@
     clear: left;
     display: inline-block;
 }
-.groupMembers {
+#groupMembers {
     /*width:500px;*/
     width:100%;
     clear: both;
     display: inline-block;
     border: 1px solid black;
+    margin-bottom: 5em;
+    #addressBlock{
+        margin-top: 3em;
+    }
+    #hours {
+        margin-top: 3em;
+    }
 }
 
 @media iphone5 {
@@ -56,7 +68,14 @@
          width:48%;
       }
 }
-.groupMembers  {
+#groupMembers  {
     // background-color: rgba(200,200,200,0.8);
-    background-color: $groupMembersBackground;
+    @include bkg;
+    @include fontConfig;
+    a#groupMembers-bookmark {
+        display: block;
+        position: relative;
+        top: -120px;
+        visibility: hidden;
+    }
 }

@@ -7,6 +7,7 @@ export default function  NoticesList({alertnotices, notices}){
 
     return (
         <section id='notices'>
+            <a id="Notices-bookmark">Notices Start</a>
             <div id='alerts'>
                 <ul className="hidebullets">
                     {alertnotices.map( (notice,index) =>
@@ -16,8 +17,8 @@ export default function  NoticesList({alertnotices, notices}){
                     )}
                 </ul>
             </div>
-            <h2>Notices</h2>
 
+            <h2>Notices</h2>
             <ul className="hidebullets">
                 {notices.map( (notice,index) =>
                     <li key={notice.id || index}>
