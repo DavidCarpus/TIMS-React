@@ -49,8 +49,9 @@
         "startServer": "cd server && node app.js",
         "startTestServer": "cd server && node app.js",
         "buildTest": "PUBLIC_URL=\"http://carpusconsulting.com/milton/\" react-scripts build",
-        "pushTest": "rsync -auv build/ A2:./test.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./test.miltonnh.us/server/",
-        "pushDev": "rsync -auv build/ A2:./dev.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./dev.miltonnh.us/server/",
+        "pushTest": "rsync -auv build/ A2:./test.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./test.miltonnh.us/server/ --exclude node_modules",
+        "pushTest2": "rsync -auv build/ A2:./test2.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./test2.miltonnh.us/server/",
+        "pushDev": "rsync -auv build/ A2:./dev.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./dev.miltonnh.us/server/ --exclude node_modules",
         "dev": "concurrently \"yarn start\"  \"cd server && nodemon app.js\" \"npm run watch-css\" "
     }
 }
