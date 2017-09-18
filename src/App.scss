@@ -1,3 +1,4 @@
+@import "../private/SASS/breakpoints.scss";
 @import "../private/SASS/colors.scss";
 
 .App {
@@ -22,4 +23,33 @@
 
 #root  {
   background-color: $globalBackground;
+  background-image: linear-gradient(to bottom,  $globalBackground 0%, darkblue 80%);
+  // background-image: linear-gradient(to bottom,  darkblue 0%, $globalBackground 150%);
+}
+
+.fadeTopBottom {
+    background-image: linear-gradient(to bottom,  $baseBackgroundSolid 10%, white 60%);
+}
+
+.fadeBottomTop {
+    background-image: linear-gradient(to bottom,  white 10%, $baseBackgroundSolid 60%);
+}
+
+.externalMenu {
+    a:before{
+        content: "";
+        display: block;
+        background: url('Client/Components/icons/external-128.png') no-repeat;
+        background-size: 100% 100%;
+        width: 10px;
+        height: 10px;
+        float: left;
+        margin: 5px 5px 0px 5px;
+    }
+}
+
+@media small {
+    .hidePhone {
+        display: none;
+    }
 }
