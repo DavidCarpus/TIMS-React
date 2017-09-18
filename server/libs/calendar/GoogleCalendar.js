@@ -6,10 +6,15 @@ var knexConnection = require('knex')(knexConfig['development']);
 //======================================
 function insertEventIntoDatabase(knex, eventToinsert) {
     let tableName = 'CalendarEvents'
-    return (knex(tableName).select().where({googleId: eventToinsert.googleId})
+    return (knex(tableName).select().where(
+        {
+            googleId: eventToinsert.googleId,
+            startDate: new Date(eventToinsert.startDate)
+        }
+    )
     .then(results => {
-        if (results.length == 1) {
-            return Promise.resolve('Record ' + eventToinsert.googleId + ' already exists.');
+        if (results.length >= 1) {
+            return Promise.resolve('Record ' + eventToinsert.googleId + ' already exists.' + results.length);
         } else {
             return knex(tableName).insert(eventToinsert)
             .then(result => {
@@ -27,12 +32,13 @@ function importCalendarEvents(knex = null, futureDays=31, startDate=new Date() )
     // if (startDate === null) { startDate = new Date()}
     return pullEventsFromGoogleICAL(addDays(startDate, -7),addDays(new Date(), futureDays))
     .then(events => {
+        // console.log('***Pulled events:', events);
          return Promise.all(events.map(record => {
             let dataToInsert =
              {
                 startDate: record.start,
                 endDate: record.end,
-                googleId: record.id,
+                googleId: record.id.trim(),
                 summary: record.summary,
                 description: record.description,
                 location: record.location,
@@ -64,6 +70,8 @@ function importCalendarEvents(knex = null, futureDays=31, startDate=new Date() )
                      return dateDiff > sDiff && dateDiff < eDiff
                  })
                  .map(validDateRange => {
+                    //  console.log('validDateRange:', );
+                    //  console.log('validDateRange:', require('util').inspect(validDateRange, { depth: null }));
                      return {
                          status:validDateRange.status,
                          summary:validDateRange.summary,
@@ -81,11 +89,24 @@ function importCalendarEvents(knex = null, futureDays=31, startDate=new Date() )
     // =================================================
     // https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
     if (require.main === module) {
+        // let startDate=new Date();
+        // let futureDays = 12;
+        // pullEventsFromGoogleICAL(addDays(startDate, -7),addDays(new Date(), futureDays))
+        // .then(events => {
+        //     console.log('events:', events);
+        //     process.exit();
+        // })
+
         importCalendarEvents(knexConnection, 30)
         .then(events=> {
+            // console.log("***Imported events:");
             events.map(singleEvent => {
                 console.log(require('util').inspect(singleEvent, { depth: null }));
             })
+            process.exit();
+        })
+        .catch(err => {
+            console.log('importCalendarEvents Error:', err);
             process.exit();
         })
     }
