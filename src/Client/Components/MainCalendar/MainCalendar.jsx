@@ -13,6 +13,7 @@ import isThisMonth from 'date-fns/is_this_month'
 // import getMonth from 'date-fns/get_month'
 
 import { Col, Row } from 'reactstrap';
+import SmartLink from '../SmartLink'
 
 var monthNames = [
   "January", "February", "March",
@@ -118,6 +119,8 @@ function eventList(rawCalData) {
             <div className="description">{entry.description}</div>
         </div>
     )}
+    <SmartLink link="/calendar" id="0" linkText=" ... More" />
+
     </div>    )
 }
 
