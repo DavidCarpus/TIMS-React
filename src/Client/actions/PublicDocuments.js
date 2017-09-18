@@ -30,6 +30,30 @@ export function fetchMeetingDocs(groupName) {
     }
 }
 //========================================
+export function fetchDocumentsForMonth({groupName,documentType, year, month}) {
+    if (! groupName && process.env.NODE_ENV === 'development') {
+        debugger; // eslint-disable-line no-debugger
+    }
+
+    const request = axios({
+      method: 'get',
+      url: `${ROOT_URL}Records/DocumentsForMonth/`+ groupName +  '/'  + documentType +  '/'  + year +  '/'  + month
+      // headers: []
+    });
+    return dispatch => {
+        dispatch({type: PublicDocumentsConstants.FETCH_MEETING_DOCS});
+        request.then( response => {
+               dispatch(fetchPublicDocsSuccess(groupName, response.data));
+          })
+          .catch( reason => {
+            //   if (isEmpty(reason))  return;
+              console.log(actionsName +'  fetchDocumentsForMonth? : ' + JSON.stringify(reason));
+              dispatch(fetchPublicDocsFailure(reason));
+          })
+
+    }
+}
+//========================================
 export function fetchMeetingsSuccess(groupName, meetingDocs) {
     const action =   {
     type: PublicDocumentsConstants.FETCH_MEETING_DOCS_SUCCESS,

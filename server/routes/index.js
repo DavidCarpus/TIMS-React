@@ -16,8 +16,8 @@ configuration = new Config();
 var connection;
 
 function handleDisconnect() {
-  connection = mysql.createConnection(configuration.db_config); // Recreate the connection, since
-                                                  // the old one cannot be reused.
+  connection = mysql.createConnection(configuration.db_config);
+  // Recreate the connection, since the old one cannot be reused.
   connection.connect(function(err) {              // The server is either down
     if(err) {                                     // or restarting (takes a while sometimes).
         var d = new Date();
@@ -225,8 +225,23 @@ router.get('/EB2Services/:groupName', function(req, res) {
 
 });
 // ==========================================================
+router.get('/Records/DocumentsForMonth/:groupName/:documentType/:year/:month', function(req, res) {
+        console.log("groupName:",req.params.groupName );
+        query = "Select id, recorddesc as description, fileLink as link, date, expiredate from PublicRecords ";
+        query += " where pageLink='"  + req.params.groupName +"' and recordtype='" + req.params.documentType + "'";
+        query += " and year(date)='"  + req.params.year +"' and month(date)='" + req.params.month + "'";
+        console.log("query:",query);
+        simpleDBQuery(query)
+        .then(rows => {
+            // console.log('Documents:' + JSON.stringify(rows));
+            res.json(rows);
+        });
+});
+// ==========================================================
 router.get('/Records/Documents/:groupName', function(req, res) {
-        query = "Select id, recorddesc as description, fileLink as link, expiredate from PublicRecords where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
+        query = "Select id, recorddesc as description, fileLink as link, expiredate from PublicRecords ";
+        query += " where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
+
         simpleDBQuery(query)
         .then(rows => {
             // console.log('Documents:' + JSON.stringify(rows));
@@ -250,7 +265,7 @@ router.get('/FAQ/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {
-        query   = "Select id, recorddesc as description, fileLink as link, recordtype, date, expiredate from PublicRecords "
+        query   = "Select id, recorddesc as description, fileLink as link, recordtype, date, expiredate, pageLink from PublicRecords "
         if (  req.params.groupName == 'Home') {
             query += " where mainpage=1 ";
         } else {
@@ -258,6 +273,7 @@ router.get('/Records/Notices/:groupName', function(req, res) {
         }
 
         query += " and (recordtype='Notice' or recordtype='RFP')";
+        query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
         // query += " and (expiredate is null or expiredate > now() ) ";
 // console.log('Records/Notice:query:', query);
          simpleDBQuery(query)
@@ -348,7 +364,9 @@ router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
     query = "Select id, recordtype as type, fileLink as link, date from PublicRecords where pageLink='" + req.params.groupName +"'";
     query += " and ( recordtype='Minutes'  or recordtype='Agenda'  or recordtype='Agendas'  or recordtype='Video'   or recordtype='Decision' )";
+    query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
     query += "  ORDER BY date, recordtype ";
+    console.log('/Records/Meetings/:groupName', query);
     simpleDBQuery(query)
     .then(rows => {
         var toSend = rows.reduce( (newArray, row) => {
