@@ -16,6 +16,7 @@ import IndexPage from '../pages/IndexPage'
 import PublicRecords from '../pages/PublicRecords'
 import RequestAlerts from '../pages/RequestAlerts'
 import Admin from '../pages/Admin'
+import AdminSubmitChange from '../pages/Admin/SubmitChange'
 
 class WebApp extends Component {
     componentWillMount() {
@@ -125,11 +126,12 @@ class WebApp extends Component {
                     <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
                 </MainLayout>
             )} />
-                    <Route path="/Admin/:action" render={(newProps)=>(
-                            <MainLayout>
-                                <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
-                            </MainLayout>
-                        )} />
+            <Route path="/Admin/SubmitChange" render={(newProps)=>(
+                    <MainLayout>
+                        <AdminSubmitChange store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></AdminSubmitChange>
+                    </MainLayout>
+                )} />
+
           </div>
         </Router>
     );

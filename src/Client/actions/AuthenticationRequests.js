@@ -22,8 +22,13 @@ export function authenticationRequest(authenticationRequestsData) {
                dispatch(authenticationRequestsSuccess(response.data));
           })
           .catch( reason => {
+              if (reason.response) {
+                  dispatch(authenticationRequestsFailure(reason.response.data));
+              } else {
+                  console.log(actionsName , "No response from server.", reason);
+                  dispatch(authenticationRequestsFailure("No response from server."));
+              }
             //   console.log(actionsName + ' authenticationRequests? : ' + JSON.stringify(reason));
-              dispatch(authenticationRequestsFailure(reason.response.data));
           })
     }
 }

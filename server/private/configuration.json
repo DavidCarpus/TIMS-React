@@ -1,4 +1,5 @@
 {
+    "validEmailDomain": "miltonnh.us",
     "jwtSecret": "badSecret",
 "imapProcess":{
     "imapcredentials":{

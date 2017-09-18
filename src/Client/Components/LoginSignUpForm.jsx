@@ -7,12 +7,15 @@ let LoginSignUpForm = props => {
   const {
       handleSubmit,
     //   handleSignInSubmit,
+        // onSubmitSuccess,
       dbSubmit,
       validData,
       err,
   } = props
 
+console.log('LoginSignUpForm:props', props);
   // console.log('LoginSignUpForm:err:', err);
+  const hasErrors = err && !err.success;
 
   const validToSubmit = (validData['email'] && validData['password'] && !dbSubmit)
     return (
@@ -30,12 +33,16 @@ let LoginSignUpForm = props => {
                             <div>
                                 <button className='button' type="submit" disabled={!validToSubmit || dbSubmit}>Submit</button>
                             </div>
-                            {(err && !err.success  ) ? err.message : "Valid"}
+                            { hasErrors &&
+                                <div>{JSON.stringify(err.errors)}{JSON.stringify(err.message)}</div>
+                            }
                 </div>
             </form>
         </div>
     )
 }
+
+// {(err && !err.success  ) ? err.message : "Valid"}
 
 //==================================================
 const selector = formValueSelector('LoginSignUpForm') // <-- same as form name

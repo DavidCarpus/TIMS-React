@@ -4,13 +4,13 @@ var Config = require('../config'),
 configuration = new Config();
 
 const ROOT_URL = configuration.ui.ROOT_URL
-const actionsName='AuthenticationRequests';
+const actionsName='submitChangeRequest';
 //========================================
 export function submitChangeRequest(submitChangeRequestsData) {
 
     var body = new FormData();
     Object.keys(submitChangeRequestsData).forEach(( key ) => {
-        // console.log('body.append:', key, JSON.stringify(submitChangeRequestsData[ key ]));
+        console.log('body.append:', key, JSON.stringify(submitChangeRequestsData[ key ]));
         if (key === 'file') {
             body.append(key, submitChangeRequestsData[ key ][0]);
         }
@@ -19,15 +19,7 @@ export function submitChangeRequest(submitChangeRequestsData) {
         }
 
     });
-    // console.log('onChangesSubmit:body:', body);
 
-    // var axiosConfig = {
-    //   onUploadProgress: function(progressEvent) {
-    //     var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-    //     console.log('percentCompleted:', percentCompleted);
-    //   }
-    // };
-    // console.log(actionsName + ' submitChangeRequests', Object.keys(submitChangeRequestsData));
     const req= {
         method: 'post',
         url: `${ROOT_URL}auth/changeRequest/`,
@@ -47,8 +39,13 @@ export function submitChangeRequest(submitChangeRequestsData) {
                dispatch(submitChangeRequestsSuccess(response.data));
           })
           .catch( reason => {
-            //   console.log(actionsName + ' submitChangeRequests? : ' + JSON.stringify(reason));
-              dispatch(submitChangeRequestsFailure(reason.response.data));
+            if (reason.response) {
+                dispatch(submitChangeRequestsFailure(reason.response.data));
+            } else {
+                console.log(actionsName , "No response from server.");
+                dispatch(submitChangeRequestsFailure("No response from server."));
+            }
+
           })
     }
 }
@@ -63,7 +60,7 @@ export function submitChangeRequestsSuccess( submitChangeRequestsResultsData) {
 }
 //========================================
 export function submitChangeRequestsFailure(error) {
-    console.log(actionsName + 'submitChangeRequestsFailure:'+JSON.stringify(error));
+    console.log(actionsName , 'Failure:',JSON.stringify(error));
   return {
     type: SubmitChangeConstants.PUSH_DATA_FAILURE,
     payload: error
