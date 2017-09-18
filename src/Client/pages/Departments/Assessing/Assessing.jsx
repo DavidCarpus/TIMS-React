@@ -11,9 +11,9 @@ import GroupMembers from '../../../Components/GroupMembers'
 function pageNav() {
     return (
     <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top'},
-            {text:'Doc', target:'DocumentList-bookmark'},
-            {text:'Contacts', target:'groupMembers-bookmark'}
+            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
+            {text:'Doc', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
+            {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
         ]}/>
     )
 }

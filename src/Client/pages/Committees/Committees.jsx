@@ -13,13 +13,12 @@ import RawText  from '../../Components/RawText'
 import './Committees.css'
 import PageNavbar from '../../Components/PageNavbar'
 
-
 function pageNav() {
     return (
     <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top'},
-            {text:'Agendas', target:'AgendasAndMinutes-bookmark'},
-            {text:'Docs', target:'DocumentList-bookmark'},
+            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
+            {text:'Agendas', target:'AgendasAndMinutes-bookmark', fontAwsomeIcon:'fa-calendar'},
+            {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
             // {text:'Contacts', target:'groupMembers-bookmark'}
         ]}/>
     )

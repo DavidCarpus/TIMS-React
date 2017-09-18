@@ -17,10 +17,11 @@ import PageNavbar from '../../Components/PageNavbar'
 function pageNav() {
     return (
     <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top'},
-            {text:'Notices', target:'Notices-bookmark'},
-            {text:'Calendar', target:'MainCalendar-bookmark'},
-            {text:'Contacts', target:'ContactUs-bookmark'}
+            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
+            {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'},
+            {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'},
+            {text:'Contacts', target:'ContactUs-bookmark', fontAwsomeIcon:'fa-address-book'}
+
         ]}/>
     )
 }
