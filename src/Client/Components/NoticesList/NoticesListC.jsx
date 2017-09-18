@@ -3,6 +3,9 @@ import NoticesListUI from './NoticesList'
  import { connect } from 'react-redux'
  import {fetchGroupNotices} from '../../actions/PublicDocuments'
 
+const isAlertNotice = (notice) => notice.expiredate && Math.abs(new Date(notice.expiredate) - new Date(notice.date)) < 60*60*24;
+  // && new Date(notice.expiredate) > new Date()
+
  const mapStateToProps = (state, ownProps) => {
      let groupName =  ownProps.group.link;
 
@@ -16,16 +19,9 @@ import NoticesListUI from './NoticesList'
      }
      let checkDate = new Date()
      checkDate.setDate(checkDate.getDate()-1)
-    //  notices.map(notice => {
-    //      let dte = new Date(notice.expiredate)
-    //     //  console.log('notice:', notice);
-    //      console.log("Chk:", dte , '|' , checkDate, typeof dte, Math.abs(new Date(notice.expiredate) - new Date(notice.date))< 60*60*24 );
-     //
-    //      (notice.expiredate === "0000-00-00")?  console.log('Zero Date?'): "";
-    //  } )
 
-     let alertnotices = notices.filter(notice => Math.abs(new Date(notice.expiredate) - new Date(notice.date)) < 60*60*24  && new Date(notice.expiredate) > checkDate )
-     notices = notices.filter(notice => notice.expiredate === null || notice.expiredate === "0000-00-00" || new Date(notice.expiredate) > checkDate )
+     let alertnotices = notices.filter(isAlertNotice)
+     notices = notices.filter(notice => !isAlertNotice(notice) ).sort((a,b) => { return b.date -a.date; })
 
      return {
          group: ownProps.group,
