@@ -1,4 +1,5 @@
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 // #Committees {
 //     a{
@@ -11,4 +12,7 @@
     @include fontConfig;
     // border: 2px solid;
     border-radius: 10px;
+}
+.blockSection {
+    @include blockSection;
 }

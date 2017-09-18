@@ -1,0 +1,12 @@
+@import "../../../../../private/SASS/breakpoints.scss";
+@import "../../../../../private/SASS/colors.scss";
+@import "../../../../../private/SASS/SectionStyling.scss";
+
+#description {
+    @include blockSection;
+}
+
+
+// #Assessing #contentArea {
+//     background-color: $baseBackgroundPartial;
+// }

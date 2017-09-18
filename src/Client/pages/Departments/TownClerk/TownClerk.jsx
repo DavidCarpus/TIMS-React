@@ -24,13 +24,17 @@ export default function TownClerk({group, store, loading, id, title='Tax Collect
         <Row id='TownClerk'>
             {pageNav()}
 
-            <Col  md={{size:10, push:1}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>{title}</h1>
+            <Col  md={{size:10, push:1}}>
+                <div className="blockSection">
+                    <h1 style={{textAlign:'center'}}>{title}</h1>
+                </div>
 
                 <NoticesList group={group} store={store}/>
 
-                <OnlinePaymentsBlock/>
-                <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
+                <div className="blockSection">
+                    <OnlinePaymentsBlock/>
+                    <p>The Town Clerk/Tax Collector's Office can process Hunting & Fishing Licenses, as well as Boat Registrations.</p>
+                </div>
 
                 <DocumentList group={group}  store={store} />
                 <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail/>

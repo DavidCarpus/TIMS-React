@@ -26,10 +26,13 @@ export default function ParksRecreation({group, store, loading, id, title='Parks
     return (
         <Row id='ParksRecreation'>
             {pageNav()}
-            <Col  md={{size:10, push:1}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>{title}</h1>
-                <RawText groupPageText={group.pagetext } block='description' />
-                <EB2ServiceBlock groupName={group.link}/>
+            <Col  md={{size:10, push:1}}>
+                <div className="blockSection">
+                    <h1 style={{textAlign:'center'}}>{title}</h1>
+                    <RawText groupPageText={group.pagetext } block='description' />
+                    <EB2ServiceBlock groupName={group.link}/>
+                </div>
+
 
                 <NoticesList group={group} store={store} groupName={group.link}/>
                 <DocumentList group={group} store={store} />

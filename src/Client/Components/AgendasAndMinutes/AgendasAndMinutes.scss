@@ -1,4 +1,5 @@
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 .YearBlock  .header{
     // background-color: $meetingListToggleHeader;
@@ -6,12 +7,10 @@
 }
 
 #AgendasAndMinutes {
-    @include bkg;
-    @include fontConfig;
+    // @include bkg;
+    // @include fontConfig;
+    @include blockSection;
 
-    a{        @include lnk('agendas')    }
-    a:hover {         font-weight: bold;     }
-    margin-bottom: 2em;
     #AgendasAndMinutes-bookmark {
         display: block;
         position: relative;

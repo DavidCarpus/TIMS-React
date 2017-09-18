@@ -1,9 +1,8 @@
 @import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 .mainNotice {
-    width: 49%;
-    // min-height: 50px;
     display: inline-block;
     float: left;
 }
@@ -13,31 +12,19 @@
     text-decoration: blink;
 }
 
-.hidebullets {
-    list-style: none;
-}
 #notices  {
-    @include bkg;
-    @include fontConfig;
-    border-radius: 1em;
-    padding-bottom: 1em;
-    ul {
-        padding-left: 1em;
-    }
+    @include blockSection;
+    padding-top: 0em;
 
-    a{        @include lnk('notices')    }
-    a:hover {         font-weight: bold;     }
-    h2 {
-        @include fontConfig;
-        font-size: 2em;
-        line-height: normal;
-        // color: black;
-    }
     a#Notices-bookmark {
         display: block;
         position: relative;
         top: $bookmarkOffset;
         visibility: hidden;
+    }
+    .posted {
+        padding-left: 2em;
+        font: 10px/10px Georgia, serif;
     }
 }
 

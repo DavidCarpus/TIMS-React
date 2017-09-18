@@ -21,11 +21,13 @@ export default function Sewer({group, store, loading, id, title='Sewer Departmen
     return (
         <Row id='Sewer'>
             {pageNav()}
-            <Col  md={{size:10, push:1}} id='contentArea'>
+            <Col  md={{size:10, push:1}}>
+                <div className="blockSection">
                     <h1 style={{textAlign:'center'}}>{title}</h1>
 
                     <RawText groupPageText={group.pagetext} block='description' />
-                    <SmartLink link='http://des.nh.gov/index.htm' linkText='NH Department of Environmental Services (DES)'/>
+                    <SmartLink link='http://des.nh.gov/index.htm' linkText=' ** NH Department of Environmental Services (DES)'/>
+                </div>
 
                     <DocumentList group={group} store={store} title='Milton Sewage Department Documentation' />
                     <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />

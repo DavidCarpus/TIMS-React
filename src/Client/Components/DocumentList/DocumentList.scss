@@ -1,16 +1,14 @@
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 #DocumentList  {
-    @include bkg;
-    @include fontConfig;
+    @include blockSection;
 
-    a{        @include lnk('documentation')    }
-    a:hover {         font-weight: bold;     }
     a#DocumentList-bookmark {
         display: block;
         position: relative;
         top: $bookmarkOffset;
         visibility: hidden;
     }
-    margin-bottom: 5em;
+    padding: 1em;
 }

@@ -21,9 +21,11 @@ render() {
     return (
         <div>
             <Row id='About'>
-                <Col  md={{size:10, push:1}} id='contentArea'>
-                    <h1 style={{textAlign:'center'}}>About the {this.props.Config.municipalLongName}</h1>
-                    <RawText groupPageText={groupPageText} block='description' />
+                <Col  md={{size:10, push:1}} >
+                    <div className="blockSection">
+                        <h1 style={{textAlign:'center'}}>About the {this.props.Config.municipalLongName}</h1>
+                        <RawText groupPageText={groupPageText} block='description' />
+                    </div>
                 </Col>
             </Row>
         </div>

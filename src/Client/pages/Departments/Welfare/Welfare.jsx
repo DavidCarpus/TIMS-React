@@ -22,11 +22,15 @@ export default function Welfare({group, store, loading, id, title='Welfare Depar
     return (
         <Row id='Welfare'>
             {pageNav()}
-            <Col  md={{size:9, push:2}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>{group.description}</h1>
-                <RawText groupPageText={group.pagetext} block='description' />
+            <Col  md={{size:9, push:2}}>
+                <div className="blockSection">
+                    <h1 style={{textAlign:'center'}}>{group.description}</h1>
+                    <RawText groupPageText={group.pagetext} block='description' />
+                </div>
                 <NoticesList group={group} store={store} groupName={group.Name}/>
-                <RawText groupPageText={group.pagetext } block='text1' />
+                <div className="blockSection">
+                    <RawText groupPageText={group.pagetext } block='text1' />
+                </div>
                 <DocumentList group={group}  groupName={group.link}  store={store}/>
                 <FAQList group={group} groupName={group.link}  store={store}/>
                 <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail />

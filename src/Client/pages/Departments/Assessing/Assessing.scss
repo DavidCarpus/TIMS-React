@@ -1,5 +1,6 @@
 @import "../../../../../private/SASS/breakpoints.scss";
 @import "../../../../../private/SASS/colors.scss";
+@import "../../../../../private/SASS/SectionStyling.scss";
 
 .onlineAssessmentButton {
     background-color: blue;
@@ -14,6 +15,13 @@
     border-radius: 10px;
     background: radial-gradient(blue, grey);
 }
+#description {
+    @include blockSection;
+}
+#assessmentAndMaps {
+    @include blockSection;
+}
+
 
 // #Assessing #contentArea {
 //     background-color: $baseBackgroundPartial;

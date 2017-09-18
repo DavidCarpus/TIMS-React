@@ -1,13 +1,16 @@
 @import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 #MainCalendar {
-    margin-top: 4em;
-    margin-bottom: 2em;
-    border-radius: 1em;
+    @include blockSection;
 
-    @include bkg();
-      text-align: left;
+    #calBlock {
+        min-width: 16em;
+    }
+
+    color: black;
+
       .eventDay {
           display: inline-block;
           min-width: 2em;
@@ -52,15 +55,6 @@
           position: relative;
           top: $bookmarkOffset;
           visibility: hidden;
-      }
-      .title {
-          @include bkg;
-          @include fontConfig;
-          text-align: center;
-
-          height: 2em;
-          margin-bottom: 1em;
-
       }
       @media  iphone5{
           #eventList {

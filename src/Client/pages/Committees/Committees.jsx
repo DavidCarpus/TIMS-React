@@ -35,12 +35,14 @@ export default class Committees extends React.Component {
                 <Row id='Committees'>
                     {pageNav()}
 
-                    <Col  md={{size:10, push:1}} id='contentArea'>
-                            <h1 style={{textAlign:'center'}}>{this.props.groupLabel}</h1>
+                    <Col  md={{size:10, push:1}} >
+                            <div className="blockSection">
+                                <h1 style={{textAlign:'center'}}>{this.props.groupLabel}</h1>
 
-                            <RawText groupPageText={this.props.groupPageText} block='description' />
-                            <RawText groupPageText={this.props.groupPageText} block='text1' />
-                            <GroupMembers group={this.props.group}  title={' Members'} />
+                                <RawText groupPageText={this.props.groupPageText} block='description' />
+                                <RawText groupPageText={this.props.groupPageText} block='text1' />
+                                <GroupMembers group={this.props.group}  title={' Members'} />
+                            </div>
 
                             <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>
                             <NoticesList group={this.props.group} store={this.props.store} />

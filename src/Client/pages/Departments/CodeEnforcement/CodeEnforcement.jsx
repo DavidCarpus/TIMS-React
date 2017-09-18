@@ -22,9 +22,12 @@ export default function CodeEnforcement({group, store, loading, id, title='Code 
         <Row id='CodeEnforcement'>
             {pageNav()}
 
-            <Col  md={{size:10, push:1}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
-                <RawText groupPageText={ group.pagetext} block='description' />
+            <Col  md={{size:10, push:1}}>
+                <div className="blockSection">
+                    <h1 style={{textAlign:'center'}}>{title}</h1>
+                    <RawText id='description' groupPageText={group.pagetext} block='description' />
+                </div>
+
 
                 <HelpfulInformation informationArray={group.helpfulinformation || []} />
                 <DocumentList group={group} store={store} title='Milton Code Enforcement Documentation' />
@@ -33,3 +36,6 @@ export default function CodeEnforcement({group, store, loading, id, title='Code 
         </Row>
     )
 }
+
+// <h1 style={{textAlign:'center'}}>Code Enforcement</h1>
+// <RawText groupPageText={ group.pagetext} block='description' />

@@ -3,6 +3,9 @@
 #RequestAlerts {
     width: 80%;
     margin: auto;
+    padding: 1em;
+    border-radius: 1em;
+
     @include bkg;
     // background-color: white;
 }
@@ -14,4 +17,7 @@
   opacity: 0.65;
   background-color: red;
   cursor: not-allowed;
+}
+input[name="contact"] {
+    width: 14em;
 }

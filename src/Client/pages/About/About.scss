@@ -1,4 +1,9 @@
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
+
+.blockSection {
+    @include blockSection;
+}
 
 
 #About #contentArea {

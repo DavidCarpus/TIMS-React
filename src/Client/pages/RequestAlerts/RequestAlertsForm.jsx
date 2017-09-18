@@ -27,7 +27,9 @@ class RequestAlertsForm extends Component {
       <form onSubmit={values => handleSubmit(values)}>
         <div>
             <label htmlFor='contact' className={validContact? '': 'required'}>Contact information: </label>
-            <Field name="contact" component="input" type="text"/>
+            <Field name="contact" component="input" type="text"
+                placeholder='Cell phone or email address'
+                />
         </div>
             {contactType === contactTypes.PHONE &&
                 <div>

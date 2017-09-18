@@ -27,17 +27,20 @@ export default function PublicWorks({group, store, loading, id, title='Code Enfo
         <Row id='PublicWorks'>
             {pageNav()}
 
-            <Col  md={{size:10, push:1}} id='contentArea'>
-                <h1 style={{textAlign:'center'}}>{group.description}</h1>
-
-                <RawText groupPageText={group.pagetext} block='description' />
+            <Col  md={{size:10, push:1}}>
+                <div className="blockSection">
+                    <h1 style={{textAlign:'center'}}>{group.description}</h1>
+                    <RawText groupPageText={group.pagetext} block='description' />
+                </div>
 
                 <NoticesList group={group} groupName={group.link} store={store}/>
 
-                <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
-                linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
+                <div className="blockSection">
+                    <SmartLink link='http://miltonnh-us.com/uploads/highway_30_2123914888.pdf'
+                        linkText='ORDINANCE REGULATING HEAVY HAULING OVER TOWN ROADS'/>
+                </div>
 
-                <hr/>
+                <div className="blockSection">
                 <h2>Transfer Station</h2>
                 <p>
                     603-652-4125
@@ -49,15 +52,17 @@ export default function PublicWorks({group, store, loading, id, title='Code Enfo
                     <h3>Misson Statement</h3>
                     <p>At the Milton Transfer Station our goal is to create a polite and friendly atmosphere while committing to a superior level of service to assist the residents in their recycling and disposal needs.</p>
                 </div>
+            </div>
 
                 <TransferStationRules group={group} />
-                <hr/>
-                <SmartLink link='/TransferRules' linkText='Printable Transfer Station Rules'/>
-                <hr/>
-
-                <EB2ServiceBlock groupName={group.link}/>
-                Buy Transfer Station Stickers Online
+                    <div className="blockSection">
+                    <SmartLink link='/TransferRules' linkText='Printable Transfer Station Rules'/>
+                    <br/>
+                    <EB2ServiceBlock groupName={group.link}/>
+                    Buy Transfer Station Stickers Online
+                </div>
                 <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />
+
             </Col>
     </Row>
     );

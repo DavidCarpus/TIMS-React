@@ -1,10 +1,13 @@
 @import "../../../../private/SASS/breakpoints.scss";
 @import "../../../../private/SASS/colors.scss";
+@import "../../../../private/SASS/SectionStyling.scss";
 
 #HelpfulInformation{
-    @include bkg;
+    @include blockSection;
+
+    // @include bkg;
     a{        @include lnk('helpfulInformation')    }
-    a:hover {         font-weight: bold;     }
-    margin-bottom: 2em;
+    // a:hover {         font-weight: bold;     }
+    // margin-bottom: 2em;
 
 }

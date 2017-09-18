@@ -24,14 +24,14 @@ export default function Assessing({group, store, loading, id, title='Assessing D
         <Row id='Assessing'>
             {pageNav()}
 
-            <Col  md={{size:10, push:1}} id='contentArea'>
-                <div id="description">
+            <Col  md={{size:10, push:1}} >
+                <div className="blockSection">
                     <h1 style={{textAlign:'center'}}>{title}</h1>
                     <RawText id='description' groupPageText={group.pagetext} block='description' />
                 </div>
 
-                <div >
-                    <div  style={{width:'48%'}}>
+                <div id='assessmentAndMaps'>
+                    <div  style={{width:'48%'}} >
                         <a href='http://data.avitarassociates.com/logondirect.aspx?usr=milton&pwd=milton'>
                             <div  className="onlineAssessmentButton">Assessment Data Review Online</div>
                         </a>
