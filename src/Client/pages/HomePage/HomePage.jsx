@@ -40,9 +40,6 @@ export default class HomePage extends React.Component {
                 {pageNav()}
                 <Row >
                   <Col  md={{size:10, push:1}}  xs={{size:12}}>
-                      <div id="WelcomeTitle">
-                              <h1>Welcome to the</h1><h1>{this.props.municipalLongName}</h1>
-                          </div>
                           <NoticesList
                               group={this.props.group}
                               store={this.props.store}
