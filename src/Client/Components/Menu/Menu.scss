@@ -1,6 +1,50 @@
 @import "../../../../private/SASS/colors.scss";
 @import "../../../../private/SASS/breakpoints.scss";
 
+.topbar{
+    // background-color: red;
+    // height: 11em;
+    // padding-bottom: 11em;
+}
+.townSeal {
+    padding: 0px;
+    width: 30%;
+    float: left;
+
+    // TODO: Remove height/width once higher resolution image provided
+    height: 10em;
+    width: 12em;
+
+    img {
+        // width: 100%;
+    }
+    // background-color: red;
+}
+
+.pictureBlock {
+    height: 10em;
+    display: inline-block;
+    width: 20%;
+    // margin-left: 70%;
+    float: left;
+    // background-color: green;
+}
+.left-bar {
+    padding: 1em 0px 0em 0em;
+    // padding-top: 2em;
+}
+
+#welcome {
+    text-align: center;
+    font-size: 2em;
+    line-height: 1em;
+    float: left;
+    width: 50%;
+    padding: 1em;
+    // margin-left: 30%;
+    // background-color: blue;
+}
+
 @media only print{
     #MainMenu {
         display: none;
@@ -11,47 +55,81 @@
     @include lnk('agendas')
 }
 
-.externalMenu {
-    a:before{
-        content: "";
-        display: block;
-        background: url('../icons/external-128.png') no-repeat;
-        background-size: 100% 100%;
-        width: 10px;
-        height: 10px;
-        float: left;
-        margin: 5px 5px 0px 5px;
-    }
+#menuToggle > button {
+    background-color: $baseBackgroundSolid;
+    color: $baseFontColor;
+    border-color: $baseFontColor;
+    margin-right: 2em;
 }
+
 
 @media small {
-    #Menubar {
-        width: 100%;
-        // height: 3em;
+    .sticky {
+        #Menubar {
+            width: 100%;
+            padding-bottom: 2em;
+            #menuToggle  {
+                padding: 0em;
+                padding-right: 12em;
+            }
+            .navbar-nav {
+                padding-top: 2em;
+            }
+        }
+        .topbar{
+            display: none;
+        }
+        .townSeal{
+            display: none;
+        }
     }
-    .sticky #Menubar {
+    .pictureBlock{
+        display: none;
+    }
+
+
+    #welcome {
+        display: none;
+        font-size: 1em;
+        line-height: 1em;
+        margin-left: 25%;
+    }
+    .townSeal {
+        height: 100%;
         // width: 100%;
-        height: 4em;
     }
+    .col {
+        padding: 0px;
+    }
+    #menuToggle  {
+        padding: 0em;
+        padding-bottom: 2em;
+        padding-right: 6em;
+        background-color: $baseBackgroundSolid;
+    }
+    .dropdown-menu{
+        left: 0rem;
+        min-width: unset;
+        width: unset;
+        //https://github.com/kenhub/giraffe/issues/17
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
 }
 
-#MainMenu {
-    img {
-        max-width: 80px;
-        max-height: 80px;
-    }
-    width: 100%;
-    margin: auto;
-    border-radius: 1em;
 
+
+#MainMenu {
     margin-bottom: 1em;
-    @include bkg;
+    width: 100%;
+    // margin: auto;
+    border-radius: 1em;
+    background-color: $baseBackgroundSolid;
+
+    // @include bkg;
     @include fontConfig;
-    #menuToggle > button > button{
-        background-color: $baseBackgroundSolid;
-        color: $baseFontColor;
-        border-color: $baseFontColor;
-    }
+
     .dropdownColor {
         @include bkg;
         @include fontConfig;
@@ -59,24 +137,39 @@
     .navbar-nav {
         right: 1em;
     }
-    .navbar-toggler {
-        border-color: $baseBackgroundLight;
-        color: $baseBackgroundLight;
-    }
+
     #Menubar {
+        // float: left;
         // width: 90%;
+        width: 100%;
         z-index: 100;
         display: inline-flex;
+        // padding: 0px;
+        // padding-left: 10em;
+        // margin: auto;
+        margin-left: 10%;
+        margin-top: 1em;
+        // background-color: blue;
+        // min-width: 10em;
+
         div > ul >  a {
             @include fontConfig;
-            // color: White;
+            background-color: $baseFontColor;
+            // color: $baseBackgroundColor;
+
+            color: White;
         }
         div > ul >  li >li > a{
             @include fontConfig;
+            background-color: $baseFontColor;
+            color: $baseBackgroundColor;
+            color: White;
         }
 
         .dropdown-menu{
             border-radius: 10px;
+            width: 45em;
+            // left: -10rem;
             a{
                 @include fontConfig;
             }
@@ -86,11 +179,13 @@
             color: $baseBackgroundSolid;
         }
     }
+
 }
 
 
 .navbar-nav .nav-link {
     @include fontConfig;
+    display: flex;
     :hover {
         background-color: $baseFontColor;
         color: $baseBackgroundSolid;
@@ -99,7 +194,14 @@
 }
 
 .ml-auto {
-    margin-left: auto!important
+    margin-left: auto!important;
+    > .nav-item {
+        text-align: center;
+    }
+    > .nav-link {
+        text-align: center;
+    }
+    // min-width: 90em;
 }
 
 
@@ -113,21 +215,35 @@
     border-radius: 0;
     margin: 0;
 
-    #Menubar {
-        height: 3em;
-
-        img {
-            max-width: 3em;
-            max-height: 3em;
-        }
-         div > ul {
-             @inclu/de bkg;
-             @include fontConfig;
-             background-color: $baseBackgroundSolid;
-         }
+    .townSeal {
+        // max-width: 50px;
+        height: 4em;
+        width: 6em;
+        // min-width: 4em;
+        // min-height: 4em;
+        padding: 0px;
     }
+
     #MainMenu {
+        border-style: solid;
         border-radius: 0px;
         background-color: $baseBackgroundSolid;
+        #Menubar {
+            margin-left: 0em;
+            width: unset;
+            // float: left;
+            div > ul {
+                @inclu/de bkg;
+                @include fontConfig;
+                background-color: $baseBackgroundSolid;
+            }
+        }
     }
+    .hideSticky {
+        display: none;
+    }
+    // .left-bar {
+    //     padding: 0px;
+    // }
+
 }
