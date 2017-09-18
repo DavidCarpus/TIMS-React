@@ -147,16 +147,17 @@ export default class MainCalendar extends React.Component {
     //     }
     // })
 
+    // <div className="title">Upcoming Events</div>
     // {JSON.stringify(entry)}
         return (
             <section id='MainCalendar' className="MainCalendar">
                 <a id="MainCalendar-bookmark">MainCalendar Start</a>
-                <div className="title">Upcoming Events</div>
+                <h2>Upcoming Events</h2>
                     <Row>
-                        <Col  md='6'  xs={{size:12}}>
+                        <Col  md='5'  xs={{size:12}} id='calBlock'>
                         {currentMonthBlock(this.props.calendarData)}
                         </Col>
-                        <Col  md='6'  xs={{size:12}}>
+                        <Col  md='7'  xs={{size:12}} id='listBlock'>
                         {eventList(this.props.calendarData)}
                     </Col>
                     </Row>
