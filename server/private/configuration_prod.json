@@ -14,7 +14,7 @@
 },
 "expressPort":45010,
 "ui":{
-    "ROOT_URL":"https://miltonnh.us:45110/api/"
+    "ROOT_URL":"/api/"
 },
 "sslOptions": {
     "keyPath": "/home/carpusco/ssl/keys/9c0b4_2b379_71d7c09aa2fe8da6ef8ce0d771721ef2.key",
