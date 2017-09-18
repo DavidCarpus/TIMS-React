@@ -157,11 +157,11 @@ function dbRecordsFromExtractedRow(rowData) {
     let meetingDate = dateElement.date
     let groupName = dateElement.groupName
 
-    if (isNaN(meetingDate.getTime() )) {
-        if (dateElement.dateStr.search(/^<strong>....<\/strong>$/) >= 0 ) {
+    if (!meetingDate || typeof meetingDate === 'undefined' || isNaN(meetingDate.getTime() )) {
+        if (dateElement.dateStr && dateElement.dateStr.search(/^<strong>....<\/strong>$/) >= 0 ) {
             return
         }
-        logErrors && console.error("Invalid date:", dateElement.dateStr);
+        logErrors && console.error("Invalid date:", JSON.stringify(dateElement));
         return
     }
     if (! validYear(meetingDate)) {
