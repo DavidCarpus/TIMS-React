@@ -22,6 +22,10 @@ export default function SmartLink({id=0, link='', linkText}){
         lnkStyle='jpgImage_link'
         reduxLink = false
     }
+    if (link.toUpperCase().endsWith('.PNG') ) {
+        lnkStyle='jpgImage_link'
+        reduxLink = false
+    }
     if (link.toUpperCase().endsWith('.XLS') || link.toUpperCase().endsWith('.XLSX')) {
         lnkStyle='excel_link'
         reduxLink = false
