@@ -15,7 +15,7 @@ const mapStateToProps = (state, ownProps) => {
 
     // console.log( 'selectedGroupName,loadedGroupName |' , selectedGroupName,  loadedGroupName );
 
-    if (groupName && ownProps.store && !recordState.loading && recordState.groupName.length > 0 && recordState.groupName !==   groupName) {
+    if (groupName && ownProps.store && !recordState.loading && recordState.groupName && recordState.groupName.length > 0 && recordState.groupName !==   groupName) {
         // console.log(' | ' + groupName + ' | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
         // console.log('CommitteesUI:fetchOrganizationalUnitData', groupName);
         // ownProps.store.dispatch(fetchOrganizationalUnitData(groupName));

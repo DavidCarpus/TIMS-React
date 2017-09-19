@@ -39,9 +39,9 @@ export default class IndexPage extends React.Component {
 render() {
     return (
         <div id='IndexPage'>
-            <Col md={12}  id="contentArea"  >
-            <h1 style={{textAlign:'center'}}>{this.props.title}</h1>
-            <div className='indexListLinks'>
+            <Col md={12}    >
+            <h1  style={{textAlign:'center'}}>{this.props.title}</h1>
+            <div className='indexListLinks blockSection'>
             {this.props.links.map((keyElement, index) =>
                 <LinkBlock key={index} elementBlock={keyElement} index={index}></LinkBlock>
             )}

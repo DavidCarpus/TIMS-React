@@ -1,6 +1,6 @@
-// @value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "../breakpoints.css";
-@import "../../../../private/SASS/breakpoints.scss";
-@import "../../../../private/SASS/colors.scss";
+// @value small as bp-small, large as bp-large, medium as bp-medium, iphone5 as bp-iphone5 as from "breakpoints.css";
+@import "breakpoints.scss";
+@import "colors.scss";
 
 .MiniCalendar .entry{
     padding-bottom: 10px;

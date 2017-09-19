@@ -1,0 +1,22 @@
+[
+    {"key": 1, "wasteType":"Recyclables",         "desc": "Paper: All paper products. Newspaper, Junk mail, card board (soda boxes, cearal boxes, etc) shreded paper, etc. \"anything that tears\""    },
+    {"key": 1, "wasteType":"Recyclables", "desc":"Tin Cans"},
+    {"key": 1, "wasteType":"Recyclables", "desc":"Aluminum foils and pet food cans"},
+    {"key": 1, "wasteType":"Recyclables", "desc":"Aluminum beverage cans are seperated into their own individual container."},
+    {"key": 1, "wasteType":"Recyclables", "desc":"Comigles"},
+    {"key": 1, "wasteType":"Recyclables", "desc":"#1 -#7 plastics (see recycling triangle on bottom or container)"},
+    {"key": 1, "wasteType":"Recyclables", "desc":"Glass"},
+    {"key": 2, "wasteType":"Bulky Waste",  "desc": "Large non-recyclable plastics, mattresses, rugs, non-wood furniture, sheet rock, pressure treated lumber, insulation."},
+    {"key": 3, "wasteType":"Metals", "desc":"Scrap iron: car parts, lawnmowers, bikes, strollers, etc."},
+    {"key": 3, "wasteType":"Metals", "desc":"Scrap Aluminum: siding, gutters, lawn furniture, grills, etc."},
+    {"key": 3, "wasteType":"Metals", "desc":"Copper Wire"},
+    {"key": 3, "wasteType":"Metals", "desc":"Scrap copper"},
+    {"key": 4, "wasteType":"Electronics", "desc": "TV's, microwaves, CPU's, monitors, DVD players, steros, printers, etc. (Anything with a circuit board)"},
+    {"key": 5, "wasteType":"Mercury Containing Items", "desc": "Florescent bulbs, compact florescent bulbs, thermometers, mercury cell batteries"},
+    {"key": 6, "wasteType":"Construction Debris","desc": "Painted/stained wood, shingles, plywood, particle board, wood furniture, plaster, ceramics, pane glass."},
+    {"key": 7, "wasteType":"Waste Oil","desc": "Used motor oil, transmission fluid, gear oil, cooking oil. NO FLAMABLE LIQUIDS"},
+    {"key": 8, "wasteType":"Household Hazardous Waste","desc": "All hazardous wastes are to be stored for disposal at your home until the Household Hazardous Waste Day events are held. "},
+    {"key": 8, "wasteType":"Household Hazardous Waste","desc": "HHWD events will be scheduled periodically throughout the year by the town. "},
+    {"key": 8, "wasteType":"Household Hazardous Waste","desc": "The date, time and location of these events will be posted ASAP."},
+    {"key": 9, "wasteType":"Burn Pit","desc": "Wood stove ash may be placed in burn pit only if ash is totally burned out. Brush and Limbs not over 5 inches in diameter."}
+]

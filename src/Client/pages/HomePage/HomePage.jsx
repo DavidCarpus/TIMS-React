@@ -21,7 +21,6 @@ function pageNav() {
             {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'},
             {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'},
             {text:'Contacts', target:'ContactUs-bookmark', fontAwsomeIcon:'fa-address-book'}
-
         ]}/>
     )
 }
@@ -33,8 +32,6 @@ export default class HomePage extends React.Component {
     }
 
     render() {
-        // console.log(this.props);
-        // <Col md={7} mdPush={3} id="contentArea">
         return (
             <div id='HomePage'>
                 {pageNav()}

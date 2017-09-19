@@ -132,23 +132,7 @@ export default class MainCalendar extends React.Component {
     render() {
     if ( this.props.loading) {         return (<div>Loading</div>)     }
     if (this.props.calendarData.length === 0) {        return(null);    }
-    // console.log("MainCalendar:calendarData:" , this.props.calendarData);
-    // let calendarData = this.props.calendarData.map( entry => {
-    //     let date =  new Date(entry.startDate)
-    //     let time = date.getHours() > 12 ? date.getHours()-12: date.getHours();
-    //     time += ":"
-    //     time += date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes();
-    //     time += date.getHours() > 12 ? ' PM': ' AM';
-    //     // console.log('TS', date.getTimezoneOffset());
-    //     return {
-    //         date: monthNames[date.getMonth()] + ' ' + date.getDate()+ ' - ' + time,
-    //         id:entry.id,
-    //         description:entry.summary
-    //     }
-    // })
 
-    // <div className="title">Upcoming Events</div>
-    // {JSON.stringify(entry)}
         return (
             <section id='MainCalendar' className="MainCalendar">
                 <a id="MainCalendar-bookmark">MainCalendar Start</a>

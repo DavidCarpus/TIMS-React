@@ -27,7 +27,7 @@ class WebApp extends Component {
         let  childProps = {Config: (this.props.Config)}
         // console.log(newProps);
         return (
-            <MainLayout>
+            <MainLayout {...childProps}>
             <Committees
                 fetchOUData={this.props.fetchOUData}
                 store={this.props.store}
@@ -42,7 +42,7 @@ class WebApp extends Component {
         let  childProps = {Config: (this.props.Config)}
         // console.log(newProps);
         return (
-            <MainLayout>
+            <MainLayout {...childProps}>
                 <Departments
                     fetchOUData={this.props.fetchOUData}
                     groupName={newProps.match.params.department}
@@ -56,7 +56,7 @@ class WebApp extends Component {
         let  childProps = {Config: (this.props.Config)}
         // console.log(newProps);
         return (
-            <MainLayout>
+            <MainLayout {...childProps}>
                 <PublicRecords
                     fetchOUData={this.props.fetchOUData}
                     groupName={newProps.match.params.department}
@@ -72,49 +72,49 @@ class WebApp extends Component {
         <Router >
             <div>
           <Route exact path="/" render={(newProps)=>(
-                  <MainLayout>
+                  <MainLayout {...childProps}>
                    <HomePage store={this.props.store} {...newProps} {...childProps} />
                    </MainLayout>
                )} />
             <Route path="/about" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <About store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/calendar" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <Calendar store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/ContactUs" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <ContactUs store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
 
             <Route path="/Notice/:noticeID" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <Notice store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/Employment" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <Employment store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
 
             <Route path="/Index" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                 <IndexPage store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/RequestAlerts" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                     <RequestAlerts store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/TransferRules" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                     <TransferStationRules store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
@@ -122,12 +122,12 @@ class WebApp extends Component {
             <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
             <Route path="/PublicRecords/:recordtype" render={this.PublicRecordsPage} />
             <Route exact path="/Admin" render={(newProps)=>(
-                <MainLayout>
+                <MainLayout {...childProps}>
                     <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
                 </MainLayout>
             )} />
             <Route path="/Admin/SubmitChange" render={(newProps)=>(
-                    <MainLayout>
+                    <MainLayout {...childProps}>
                         <AdminSubmitChange store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></AdminSubmitChange>
                     </MainLayout>
                 )} />
@@ -139,7 +139,7 @@ class WebApp extends Component {
 }
 /*
 <Route path="/Admin/" render={(newProps)=>(
-<MainLayout>
+<MainLayout {...childProps}>
 <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
 </MainLayout>
 )} />

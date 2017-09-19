@@ -1,5 +1,7 @@
-@import "../../../../private/SASS/breakpoints.scss";
-@import "../../../../private/SASS/colors.scss";
+@import "breakpoints.scss";
+@import "colors.scss";
+@import "SectionStyling.scss";
+
 
 // .body {
 //   background-color: cornsilk;
@@ -8,15 +10,9 @@
 // }
 
 #MainLayoutUI {
-    // background: url('../images/MillAndTrain.jpg') repeat;
+    @include mainLayoutBG()
+
     background-attachment: fixed;
-    // margin-left: 0px;
-    // margin-right: 0px;
-    // width: auto;
-    // flex-direction: column;
-    // flex: 1;
-    // background-size: cover;
-    // background-size: 100% 100%;
     width: 100%;
     background-size: contain;
     .row {
@@ -39,6 +35,7 @@
     }
 }
 #MainLayoutUI #primary-content{
+
     // background-color: $baseBackgroundColor;
     // font: bold $baseFont;
     // @include bkg;

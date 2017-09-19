@@ -1,0 +1,20 @@
+@import "colors.scss";
+
+.contentArea li {
+  background-color: cornsilk;
+  font-family: sans-serif; }
+
+.showMeetings {
+  background-color: $meetingListBackground
+ }
+
+.yearLabelClass {
+  background-color: $meetingListToggleHeader;
+}
+
+.yearLabelClass a {
+  color: black; }
+
+.yearLabelClass a:hover {
+  color: black;
+  font-weight: bold; }

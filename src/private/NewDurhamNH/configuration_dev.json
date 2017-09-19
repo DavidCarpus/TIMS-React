@@ -12,12 +12,13 @@
 },
 "db_config":{
   "host"     : "localhost",
-  "user"     : "miltonWebsite",
-  "password" : "miltonWebsite",
-  "database" : "milton_nh"
+  "user"     : "newdurhamWebsite",
+  "password" : "newDurhamWebsite",
+  "database" : "newdurham_nh"
 },
 "expressPort":45001,
-"municipalLongName": "Town of Milton New Hampshire - Dev",
+"municipalLongName": "New Durham",
+"stateLongName": "New Hampshire - Dev",
 "alertVerificationProcess":{
     "delay": 1000
 },

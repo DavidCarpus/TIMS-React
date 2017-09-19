@@ -15,7 +15,7 @@ import {
     NavItem,
     DropdownMenu,
     Nav,
-    DropdownItem,
+    // DropdownItem,
     NavDropdown,
     DropdownToggle,
     NavbarToggler,
@@ -29,20 +29,14 @@ import './Menu.css'
 
 const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
     const external = subMenuData.pageLink.startsWith('http')
-    const id = subMenuData.id
+    // const id = subMenuData.id
     const desc = subMenuData.description
     const lnk = external ? subMenuData.pageLink : menuData[0] + subMenuData.pageLink
 
     const ExternalLnk = () =>
-        <NavItem key={id } id={id } className='externalMenu' >
-            <NavLink href={lnk} > {desc}</NavLink>
-        </NavItem>
+        <NavLink href={lnk} className='externalMenu' title='External Website'> {desc}</NavLink>
     const InternalLnk = () =>
-        <DropdownItem key={ menuid+ '.'+ id}>
-            <NavItem key={id } id={id } className='internalMenu' >
-                <NavLink tag={RRNavLink} to={lnk}>{desc}</NavLink>
-            </NavItem>
-        </DropdownItem>
+        <NavLink tag={RRNavLink} to={lnk} className='internalMenu'>{desc} </NavLink>
     const colSize =(12/cols)
     // <ChkLnk></ChkLnk>
     return (
@@ -52,10 +46,6 @@ const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
         </Col>
     )
 }
-// {external ?
-//     <ExternalLnk id={id} lnk={lnk} desc={desc}></ExternalLnk>
-//     :<InternalLnk id={id} lnk={lnk} desc={desc}></InternalLnk>
-// }
 
 //================================================
 class SubMenus extends React.Component {
@@ -92,13 +82,12 @@ class SubMenus extends React.Component {
         .sort((a,b) => {
             return (a.description < b.description) ? -1 : (a.description > b.description) ? 1 : 0;
         })
-        // .filter(element => !element.pageLink.startsWith('http') )
-        // subMenus.map(sm => console.log(sm))
+
 //https://codepen.io/dustlilac/pen/Qwpxbp
-// console.log(this.props.menu);
-    const cols=Math.ceil(subMenus.length/5)
-    const dropdownWidthEm=cols*15 + 'em';
-    const leftShift=((cols-1)*-7) + 'em';
+        const cols=Math.ceil(subMenus.length/5)
+        const dropdownWidthEm=cols*12 + 'em';
+        const leftShift=((cols-1)*-6) + 'em';
+
         return (
             <NavDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}
                 onMouseEnter={this.toggleOpen}
@@ -113,11 +102,10 @@ class SubMenus extends React.Component {
                         <SubMenuLink menuid={this.props.menu.id}
                             menuData = {this.props.menu}
                             cols={cols}
-                            subMenuData={submenu} index={index}></SubMenuLink>
-                        // (index > 0 && (index%5 === 0)) ? <Col md={{size:10, push:1}}  xs={{size:12}} > : ""
-
-                        // (index > 0 && (index%5 === 0)) ? </Col > : ""
-
+                            subMenuData={submenu}
+                            key={index}
+                            index={index}
+                            ></SubMenuLink>
                     )}
                     </Row>
                 </DropdownMenu>
@@ -126,28 +114,12 @@ class SubMenus extends React.Component {
             )
     }
 }
-// submenu.pageLink.startsWith('http') ?
-// return (<NavItem key={submenu.id } id={submenu.id } className='externalMenu' >
-// <NavLink href={ submenu.pageLink} >
-//     {(index%5) + '-' + submenu.description}
-// </NavLink>
-// </NavItem>)
-// :
-// return (<DropdownItem key={this.props.menu.id + '.'+ submenu.id}>
-// <NavItem key={submenu.id } id={submenu.id } className='internalMenu' >
-//     <NavLink tag={RRNavLink} to={this.props.menu[0] + submenu.pageLink}>
-//         {(index%5)  + '-' + submenu.description}
-//     </NavLink>
-// </NavItem>
-// </DropdownItem>)
 //================================================
 class MainMenu extends React.Component {
     render(){
         if (this.props.menu[1].menus && this.props.menu[1].menus.length > 0) {
             return (
-                <NavItem>
                 <SubMenus menu={this.props.menu} index={this.props.index} />
-                </NavItem>
             )
         } else {
             return (
@@ -187,18 +159,20 @@ export default class Menu extends React.Component {
             let itemB = b[1].description.toUpperCase();
             return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
         })
+        console.log('this.props.configuration', this.props);
 
         return (
             <Sticky className="sticky-one" enter='10'>
                 <Container id='MainMenu' className='fadeBottomTop'>
                         <div className='townSeal'>
                             <Link to='/' >
-                                <img  src='/images/Welcome-to-Milton.jpg' className='townSeal'   alt="HomePage" title="Home Page" />
+                                <img  src={this.props.configuration.leftMenuImage} className='townSeal'   alt="HomePage" title="Home Page" />
                             </Link>
                         </div>
 
                         <div id='welcome' className='hideSticky'>
-                            Welcome to <br/>Milton New Hampshire
+                            Welcome to <br/>{this.props.configuration.municipalLongName}<br/>{this.props.configuration.stateLongName}
+
                         </div>
 
                         <div className='pictureBlock hideSticky'>

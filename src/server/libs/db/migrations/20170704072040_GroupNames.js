@@ -3,7 +3,7 @@ var knexConfig = require('../knexfile.js')
 var knexConnection = require('knex')(knexConfig['development']);
 
 
-const DEFAULT_JSON_DIR='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/json/';
+const DEFAULT_JSON_DIR='../../../private/' + process.env.REACT_APP_MUNICIPALITY + '/json/';
 var JSON_DIR=DEFAULT_JSON_DIR;
 //======================================
 function tableNameFromJSON(filename) {

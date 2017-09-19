@@ -1,6 +1,7 @@
 var fs = require('fs');
 
-const DEFAULT_JSON_DIR='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/json/';
+
+const DEFAULT_JSON_DIR='../../../private/' + process.env.REACT_APP_MUNICIPALITY + '/json/';
 const DEFAULT_DB_PATH='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/phpsqlite.db';
 
 var JSON_DIR=DEFAULT_JSON_DIR;

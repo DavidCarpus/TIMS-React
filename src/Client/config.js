@@ -1,7 +1,13 @@
-var dev_configuration = require('../private/configuration_dev.json');
-var prod_configuration = require('../private/configuration_prod.json');
-var test_configuration = require('../private/configuration_test.json');
-var base_configuration = require('../private/configuration.json');
+// const MUNICIPALITY='MiltonNH'
+const MUNICIPALITY=process.env.REACT_APP_MUNICIPALITY || 'NewDurhamNH'
+
+// $REACT_APP_MUNICIPALITY
+var dev_configuration = require('../private/' + MUNICIPALITY + '/configuration_dev.json');
+var prod_configuration = require('../private/' + MUNICIPALITY + '/configuration_prod.json');
+var test_configuration = require('../private/' + MUNICIPALITY + '/configuration_test.json');
+var base_configuration = require('../private/' + MUNICIPALITY + '/configuration.json');
+
+console.log("Env:", process.env);
 
 if (!String.prototype.startsWith) {
     // eslint-disable-next-line

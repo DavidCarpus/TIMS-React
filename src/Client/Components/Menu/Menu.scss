@@ -1,5 +1,6 @@
-@import "../../../../private/SASS/colors.scss";
-@import "../../../../private/SASS/breakpoints.scss";
+@import "colors.scss";
+@import "breakpoints.scss";
+@import "../../../Common.scss";
 
 .topbar{
     // background-color: red;
@@ -125,7 +126,7 @@
     width: 100%;
     // margin: auto;
     border-radius: 1em;
-    background-color: $baseBackgroundSolid;
+    @include menuBkg();
 
     // @include bkg;
     @include fontConfig;
@@ -133,6 +134,7 @@
     .dropdownColor {
         @include bkg;
         @include fontConfig;
+        @include menuDropdownBackground;
     }
     .navbar-nav {
         right: 1em;
@@ -152,44 +154,51 @@
         // background-color: blue;
         // min-width: 10em;
 
+        //*[@id="Menubar"]/nav/div[2]/ul/li[2]/li/div/div/div[3]/a
         div > ul >  a {
             @include fontConfig;
-            background-color: $baseFontColor;
-            // color: $baseBackgroundColor;
+            background-color: $menuBackgroundColor;
+            color: $menuTextColor;
 
-            color: White;
+        }
+        //*[@id="Menubar"]/nav/div[2]/ul/li[1]/a
+        div > ul >  li > a{
+            @include fontConfig;
+            background-color: $menuBackgroundColor;
+            color: $menuTextColor;
+
         }
         div > ul >  li >li > a{
             @include fontConfig;
-            background-color: $baseFontColor;
-            color: $baseBackgroundColor;
-            color: White;
+            background-color:  $menuBackgroundColor;
+            color: $menuTextColor;
         }
 
         .dropdown-menu{
             border-radius: 10px;
-            width: 45em;
+            width: 40em;
+            top: 2rem;
             // left: -10rem;
             a{
                 @include fontConfig;
             }
         }
-        .dropdown-item:focus, .dropdown-item:hover a{
-            background-color: $baseFontColor;
-            color: $baseBackgroundSolid;
-        }
     }
-
 }
 
+#MainMenu #Menubar > nav > div > ul > li >  div > div > div  {
+    a{
+        color: $baseBackgroundSolid;
+    }
+    a.externalMenu:before {
+        @include externalLinks('../icons');
+    }
 
-.navbar-nav .nav-link {
     @include fontConfig;
     display: flex;
     :hover {
         background-color: $baseFontColor;
         color: $baseBackgroundSolid;
-
     }
 }
 

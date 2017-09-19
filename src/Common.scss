@@ -1,0 +1,23 @@
+@import "breakpoints.scss";
+@import "colors.scss";
+
+@mixin externalLinks($iconPath){
+    // :before{
+        content: "";
+        display: block;
+        // background: url('Client/Components/icons/external-128.png') no-repeat;
+        background: url($iconPath + '/external-128.png') no-repeat;
+
+        background-size: 100% 100%;
+        width: 10px;
+        height: 10px;
+        float: left;
+        margin: 5px 5px 0px 5px;
+    // }
+}
+
+@media small {
+    .hidePhone {
+        display: none;
+    }
+}

@@ -11,8 +11,8 @@ function pageNav() {
     return (
     <PageNavbar menus={[
             {text:'^^^', target:'primary-content-top'},
-            {text:'Doc', target:'DocumentList-bookmark'},
-            {text:'Contacts', target:'groupMembers-bookmark'}
+            {text:'Doc', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
+            {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
         ]}/>
     )
 }

@@ -1,5 +1,8 @@
+var Config = require('../../config'),
+configuration = new Config();
+
 var PublicGoogleCalendar = require('public-google-calendar')
-  , publicGoogleCalendar = new PublicGoogleCalendar({ calendarId: 'townmiltonnh@gmail.com' });
+  , publicGoogleCalendar = new PublicGoogleCalendar({ calendarId: configuration.calendarId });
 var knexConfig = require('../db/knexfile.js')
 var knexConnection = require('knex')(knexConfig['development']);
 

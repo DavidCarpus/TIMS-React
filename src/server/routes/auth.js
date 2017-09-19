@@ -16,10 +16,10 @@ var knex = require('knex')(knexConfig[configuration.mode]);
 
 const router = new express.Router();
 
-const validEmails = require('../../private/ValidEmails.json');
+const validEmails = require('../../private/'+process.env.REACT_APP_MUNICIPALITY+'/ValidEmails.json');
 
-const uploadDir = path.join(__dirname, '/../../private/uploads/');
-const attachmentDir = path.join(__dirname, '/../../private/Attachments/');
+const uploadDir = path.join(__dirname, '/../../private/'+process.env.REACT_APP_MUNICIPALITY+'/uploads/');
+const attachmentDir = path.join(__dirname, '/../../private/'+process.env.REACT_APP_MUNICIPALITY+'/Attachments/');
 const getY_M_D = (date) =>  date.getUTCFullYear() + "_" + (date.getUTCMonth()<9?'0':'') + (date.getUTCMonth()+1) +  "_" + (date.getUTCDate()<10?'0':'') + (date.getUTCDate());
 
 const invalidEmail = (email) => typeof email !== 'string' || !validator.isEmail(email) ||

@@ -16,8 +16,8 @@ function pageNav() {
     return (
     <PageNavbar menus={[
         {text:'^^^', target:'primary-content-top'},
-        {text:'Rules', target:'TransferStationRules-bookmark'},
-        {text:'Contact', target:'groupMembers-bookmark'}
+        {text:'Rules', target:'TransferStationRules-bookmark', fontAwsomeIcon:'fa-file-text'},
+        {text:'Contact', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
         ]}/>
     )
 }

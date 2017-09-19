@@ -1,0 +1,11 @@
+[
+    {"key": 1, "wasteType":"Recyclables",        "note":"please rinse containers"    },
+    {"key": 2, "wasteType":"Bulky Waste",        "note":"see fee schedule"    },
+    {"key": 3, "wasteType":"Metals",        "note":"please remove as much cloth and plastic as possible"    },
+    {"key": 4, "wasteType":"Electronics",        "note":"see fee schedule"    },
+    {"key": 5, "wasteType":"Mercury Containing Items"    },
+    {"key": 6, "wasteType":"Construction Debris",        "note":"see fee schedule"    },
+    {"key": 7, "wasteType":"Waste Oil"    },
+    {"key": 8, "wasteType":"Household Hazardous Waste"    },
+    {"key": 9, "wasteType":"Burn Pit",        "note":"see fee schedule"    }
+]

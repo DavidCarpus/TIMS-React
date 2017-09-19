@@ -14,7 +14,9 @@ export default class MainLayoutUI extends React.Component {
               <a id="primary-content-top">Top</a>
               <Row>
                   <header id="primary-header">
-                      <Menu menus={this.props.MainMenus}/>
+                      <Menu menus={this.props.MainMenus}
+                          configuration = {this.props.Config}
+                          />
                   </header>
               </Row>
               <Row>
@@ -30,7 +32,7 @@ export default class MainLayoutUI extends React.Component {
   }
 }
 /*
-</div>
-
+municipalLongName={this.props.Config.municipalLongName}
+stateLongName={this.props.Config.stateLongName}
 
 */

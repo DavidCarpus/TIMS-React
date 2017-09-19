@@ -1,0 +1,30 @@
+[
+    {"desc":"Dog Licensing",
+        "link":"TownClerk",
+        "lnk":"Dogs/Main?towncode=916&source=DL",
+        "img":"Purple/DL_btn.gif"},
+    {"desc":"Vehicle Registration",
+        "link":"TownClerk",
+        "lnk":"EReg/Main?towncode=916&source=MV",
+        "img":"Orange/ER_btn.gif"},
+    {"desc":"Vital Records",
+        "link":"TownClerk",
+        "lnk":"Vitals/Main?towncode=916&Source=VR",
+        "img":"Custom/VitalRecord_Pink.png"
+    },
+    {"desc":"Beach Passes",
+        "link":"ParksRecreation",
+        "lnk":"POS/Main?towncode=4916&source=PS&sourceid=848",
+        "img":"Aqua/BP_btn.gif"
+    },
+    {"desc":"Boat Passes",
+        "link":"ParksRecreation",
+        "lnk":"POS/Main?towncode=4916&source=PS&sourceid=849",
+        "img":"Custom/BoatPasses.png"
+    },
+    {"desc":"Transfer Station",
+        "link":"PublicWorks",
+        "lnk":"POS/Main?towncode=916&source=PS&sourceid=889",
+        "img":"Green/TS_btn.gif"
+    }
+]

@@ -1,0 +1,59 @@
+$globalBackground: grey;
+$baseFont: 16px/20px Georgia, serif;
+$baseLinkFont:  italic  $baseFont;
+$baseFontColor: maroon;
+$bookmarkOffset: -9em;
+
+$baseBackgroundColor:  rgba(255,248,220,0.7);
+$baseBackgroundSolid:  rgba(255,248,220, 1.0);
+$baseBackgroundLight:  rgba(255,248,220,0.2);
+$baseBackgroundPartial:  rgba(255,248,220,0.8);
+
+@mixin bkg(){
+    background-image: linear-gradient(to right,  $baseBackgroundSolid 0%, $baseBackgroundColor 150%);
+    // background: url('../../Components/images/Parchment.01.jpg') repeat
+}
+@mixin rootBkg(){
+background-color: $globalBackground;
+background-image: linear-gradient(to bottom,  $globalBackground 0%, darkblue 80%);
+}
+@mixin lnk($section){
+    color: $baseFontColor;
+    font: $baseLinkFont;
+}
+@mixin fontConfig(){
+    color: $baseFontColor;
+    font: $baseFont;
+}
+
+$menuBackgroundColor:$baseFontColor;
+$menuTextColor:white;
+@mixin menuBkg(){
+    background-color: $baseBackgroundSolid;
+    // background-image: linear-gradient(to bottom,  $baseBackgroundLight 10%, $baseBackgroundSolid 80%);
+}
+@mixin menuDropdownBackground(){
+    background-image: linear-gradient(to bottom,  white 10%, $baseBackgroundSolid 60%);
+}
+
+
+$meetingListToggleHeader:$baseBackgroundSolid;
+
+$meetingListMonthHeaderBG: rgba(10,10,10,0.6);
+$meetingListMonthHeaderFG: white;
+
+$footerLinks: Aqua;
+$footerBackground:  grey;
+
+$miniCalendarTitle: $baseFontColor;
+$miniCalendarDate: $baseFontColor;
+
+$groupMembersBackground: $baseBackgroundColor;
+$groupMembersFont: $baseFont;
+
+// $baseLinkColor:  blue;
+// rgba(255,248,220,0.7); //Cornsilk
+// rgba(66,244,206,0.7); // 'aquamarine'
+// rgba(150,150,150,0.7); // 'grey'
+// rgba(12,75,49,0.7); // 'dark green'
+// rgb(0,29,82) //unh blue

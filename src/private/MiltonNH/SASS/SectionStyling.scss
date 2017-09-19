@@ -1,0 +1,36 @@
+@import "colors.scss";
+
+@mixin blockSection(){
+    @include bkg;
+    @include fontConfig;
+    border-radius: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 1em;
+
+    // padding-bottom: 1em;
+    // ul {
+    //     padding-left: 1em;
+    // }
+    a {
+        color: $baseFontColor;
+        font: $baseLinkFont;
+    }
+    a:hover {         font-weight: bold;     }
+
+    h2 {
+        @include fontConfig;
+        font-size: 2em;
+        line-height: normal;
+        text-align: center;
+        margin-bottom: 1em;
+
+        // color: black;
+    }
+    .hidebullets {
+        list-style: none;
+    }
+
+}
+@mixin mainLayoutBG(){
+}

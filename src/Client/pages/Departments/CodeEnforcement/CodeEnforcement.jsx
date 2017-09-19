@@ -11,8 +11,8 @@ import { Col, Row } from 'reactstrap';
      return (
      <PageNavbar menus={[
              {text:'^^^', target:'primary-content-top'},
-             {text:'Doc', target:'DocumentList-bookmark'},
-             {text:'Contact', target:'groupMembers-bookmark'}
+             {text:'Doc', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
+             {text:'Contact', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
          ]}/>
      )
  }

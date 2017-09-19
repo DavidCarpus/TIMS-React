@@ -8,7 +8,7 @@ configuration = new Config();
 var knexConfig = require('../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
-const validEmails = require('../../../private/ValidEmails.json');
+const validEmails = require('../../../private/'+process.env.REACT_APP_MUNICIPALITY+'/ValidEmails.json');
 
 const comparePassword = function comparePassword(password, storedPwd, callback) {
       bcrypt.compare(password, storedPwd, callback);

@@ -1,5 +1,8 @@
 {
-    "validEmailDomain": "miltonnh.us",
+    "validEmailDomain": "newdurham.us",
+    "leftMenuImage": "/images/NewDurhamLogo.png",
+    "calendarId": "aa9hgncu7psjenr81tl0ujder0@group.calendar.google.com",
+    "calendarURL":"https://calendar.google.com/calendar/embed?src=aa9hgncu7psjenr81tl0ujder0%40group.calendar.google.com&ctz=America/New_York",
     "jwtSecret": "badSecret",
 "imapProcess":{
     "imapcredentials":{

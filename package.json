@@ -38,20 +38,23 @@
         "redux-promise-middleware": "^4.3.0",
         "redux-thunk": "^2.2.0"
     },
+    "config": {
+        "muni": "MiltonNH",
+        "A2Path": "miltonnh.us",
+        "A2TestPath": "test.miltonnh.us"
+    },
     "scripts": {
         "eject": "react-scripts eject",
-        "build-css": "node-sass-chokidar src/ -o src/",
-        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+        "build-css": "node-sass-chokidar src/ -o src/  --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/ ",
+        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/  --watch --recursive",
         "start": "react-scripts start -- --include-path ./src",
         "build": "react-scripts build",
-        "pushProd": "rsync -auv build/ A2:./miltonnh.us/www/ --delete  && rsync -auv server/ A2:./miltonnh.us/server/",
+        "pushProd": "rsync -auv build/ A2:./$npm_package_config_A2Path/www/ --delete  && rsync -auv server/ A2:./$npm_package_config_A2Path/server/",
         "test": "react-scripts test --env=jsdom",
+        "tst": "echo $REACT_APP_MUNICIPALITY $npm_package_config_muni",
         "startServer": "cd server && node app.js",
         "startTestServer": "cd server && node app.js",
-        "buildTest": "PUBLIC_URL=\"http://carpusconsulting.com/milton/\" react-scripts build",
-        "pushTest": "rsync -auv build/ A2:./test.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./test.miltonnh.us/server/ --exclude node_modules",
-        "pushTest2": "rsync -auv build/ A2:./test2.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./test2.miltonnh.us/server/",
-        "pushDev": "rsync -auv build/ A2:./dev.miltonnh.us/www  --exclude .htaccess --delete  && rsync -auv server/ A2:./dev.miltonnh.us/server/ --exclude node_modules",
+        "pushTest": "rsync -auv build/ A2:./$npm_package_config_A2TestPath/www  --exclude .htaccess --delete  && rsync -auv src/server/ A2:./$npm_package_config_A2TestPath/server/ --exclude node_modules",
         "dev": "concurrently \"yarn start\"  \"cd src/server && nodemon app.js\" \"npm run watch-css\" "
     }
 }
