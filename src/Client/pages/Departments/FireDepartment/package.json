@@ -1,0 +1,6 @@
+{
+  "name": "FireDepartment",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FireDepartment.jsx"
+}

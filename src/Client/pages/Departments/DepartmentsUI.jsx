@@ -6,6 +6,11 @@ import Planning from './Planning'
 import PublicWorks from './PublicWorks'
 import TownClerk from './TownClerk'
 import Welfare from './Welfare'
+import CoppleCrownVillage from './CoppleCrownVillage'
+import EmergencyManagement from './EmergencyManagement'
+import FireDepartment from './FireDepartment'
+import ForestFireWarden from './ForestFireWarden'
+
 import TransferStationRules from '../../Components/TransferStationRules'
 import Sewer from './Sewer'
 
@@ -55,10 +60,28 @@ export default class DepartmentsUI extends React.Component {
             return (
                 <Welfare group={this.props.groupData} {...this.props}></Welfare>
             );
+        case 'CoppleCrownVillage':
+            return (
+                <CoppleCrownVillage group={this.props.groupData} {...this.props}></CoppleCrownVillage>
+            );
         case 'TransferRules':
             return (
                 <TransferStationRules group={this.props.groupData} {...this.props}></TransferStationRules>
             );
+        case 'EmergencyManagement':
+            return (
+                <EmergencyManagement group={this.props.groupData} {...this.props}></EmergencyManagement>
+            );
+        case 'FireDepartment':
+            return (
+                <FireDepartment group={this.props.groupData} {...this.props}></FireDepartment>
+            );
+
+        case 'ForestFireWarden':
+            return (
+                <ForestFireWarden group={this.props.groupData} {...this.props}></ForestFireWarden>
+            );
+
         default:
             return (
                 <div>Unknown department UI: {this.props.groupName}</div>
