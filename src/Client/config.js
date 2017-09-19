@@ -1,7 +1,7 @@
-var dev_configuration = require('../server/private/configuration_dev.json');
-var prod_configuration = require('../server/private/configuration_prod.json');
-var test_configuration = require('../server/private/configuration_test.json');
-var base_configuration = require('../server/private/configuration.json');
+var dev_configuration = require('../private/configuration_dev.json');
+var prod_configuration = require('../private/configuration_prod.json');
+var test_configuration = require('../private/configuration_test.json');
+var base_configuration = require('../private/configuration.json');
 
 if (!String.prototype.startsWith) {
     // eslint-disable-next-line

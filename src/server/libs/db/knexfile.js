@@ -1,6 +1,6 @@
-var configuration_dev = require('../../private/configuration_dev.json');
-var configuration_prod = require('../../private/configuration_prod.json');
-var configuration_test = require('../../private/configuration_test.json');
+var configuration_dev = require('../../../private/configuration_dev.json');
+var configuration_prod = require('../../../private/configuration_prod.json');
+var configuration_test = require('../../../private/configuration_test.json');
 
 module.exports = {
     development: {

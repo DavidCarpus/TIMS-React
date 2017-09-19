@@ -1,7 +1,7 @@
-var base_configuration = require('./private/configuration.json');
-var dev_configuration = require('./private/configuration_dev.json');
-var prod_configuration = require('./private/configuration_prod.json');
-var test_configuration = require('./private/configuration_test.json');
+var base_configuration = require('../private/configuration.json');
+var dev_configuration = require('../private/configuration_dev.json');
+var prod_configuration = require('../private/configuration_prod.json');
+var test_configuration = require('../private/configuration_test.json');
 
 //======================================
 //======================================
