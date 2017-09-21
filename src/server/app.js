@@ -243,6 +243,7 @@ let d = new Date();
 let ts = d.toString().replace('GMT-0400 (EDT)', '');
 console.log(ts+ ' Express server listening on port ' + app.get('port'));
 
+console.log(process.env.REACT_APP_MUNICIPALITY);
 console.log(configuration.mode + " mode");
 switch (configuration.mode) {
     case 'development':
