@@ -30,6 +30,9 @@ function isVideoLink(line) {
     if (line.match('HTTPS?:\/.*YOUTUBE.COM\/.*')) {
         return true;
     }
+    if (line.match('HTTPS?:\/.*TOWNHALLSTREAMS.COM\/.*')) {
+        return true;
+    }
 }
 //=======================================
 function hasURL(line) {

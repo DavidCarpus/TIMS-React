@@ -35,6 +35,11 @@ export default function SmartLink({id=0, link='', linkText}){
         lnkStyle='youtube_link'
         reduxLink = false
     }
+    if (link.toUpperCase().includes('TOWNHALLSTREAMS.COM')) {
+        lnkStyle='townHallStream_link'
+        reduxLink = false
+    }
+
     if (!link.startsWith('/')) {
         reduxLink = false
     }

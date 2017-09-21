@@ -26,6 +26,19 @@ $iconsize: 20px;
     /*float: left;*/
     margin: 4px 5px 0 5px;
 }
+.townHallStream_link::before {
+    content: "";
+    display: inline-block;
+    background: url('../icons/ths.png') no-repeat;
+    background-size: 100% 100%;
+    /*background-color: red;*/
+    color: white;
+    width: $iconsize;
+    // height: 100%;
+    height: 15px;
+    /*float: left;*/
+    margin: 4px 5px 0 5px;
+}
 .jpgImage_link::before {
     content: "";
     display: inline-block;

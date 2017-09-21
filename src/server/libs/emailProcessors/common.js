@@ -180,6 +180,11 @@ function getURLFromBody(emailBodyData) {
     if (videoLines.length > 0) {
         return videoLines[0];
     }
+    videoLines = emailBodyData.trim().split("\n").filter(line => {return line.match('https?:\/.*townhallstreams.com\/.*') != null});
+    if (videoLines.length > 0) {
+        return videoLines[0];
+    }
+
     return "";
 }
 
