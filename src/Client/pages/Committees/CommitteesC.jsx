@@ -2,7 +2,6 @@
 import CommitteesUI from './Committees'
 import { connect } from 'react-redux'
 import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
-import { fetchPageAsides } from '../../actions/PageAsides'
 import {fetchGroupNotices} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
 
@@ -33,14 +32,14 @@ const mapStateToProps = (state, ownProps) => {
                 // console.log( 'DepartmentsUI: | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
 
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
-                ownProps.store.dispatch(fetchPageAsides(groupName));
                 ownProps.store.dispatch(fetchGroupNotices(groupName));
                 ownProps.store.dispatch(fetchGroupDoc(groupName));
                 // loading= true;
             }
         }
     }
-
+    const agendas = typeof state.agendasAndMinutes.documents === 'undefined' ? {} : state.agendasAndMinutes.documents
+    // console.log('agendas:',agendas.keys());
     return {
         currentGroupName: groupName,
         groupName: groupName,
@@ -48,16 +47,22 @@ const mapStateToProps = (state, ownProps) => {
         groupLabel:  recordState.groupData.description ||  recordState.groupData.desc ||  groupName,
         group: recordState.groupData,
         groupPageText: recordState.groupData.pagetext ? recordState.groupData.pagetext[0]: '',
-        loading: state.OrganizationalUnits.loading
+        loading: state.OrganizationalUnits.loading,
+        documents: state.GroupDocuments.documents || [],
+        agendas: Object.keys(agendas),
+        notices: state.PublicNotices.documents || [],
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
 
-    //   fetchOUData: (groupName) => {
-    //       dispatch(fetchOrganizationalUnitData(groupName))
-    //  }
+      fetchOUData: (groupName) => {
+          dispatch(fetchOrganizationalUnitData(groupName))
+          dispatch(fetchOrganizationalUnitData(groupName))
+          dispatch(fetchGroupNotices(groupName))
+          dispatch(fetchGroupDoc(groupName))
+     }
   }
 }
 
