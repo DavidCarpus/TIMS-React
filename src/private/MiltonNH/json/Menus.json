@@ -38,8 +38,7 @@
     "menus": [
         {"id": 1, "desc":"RFPs", "link": "/RFPS"},
         {"id": 2, "desc":"Notices", "link": "/Notices"},
-        {"id": 3, "desc":"Agendas", "link": "/Agendas"},
-        {"id": 4, "desc":"Town Meeting", "link": "/Voting"}
+        {"id": 3, "desc":"Agendas", "link": "/Agendas"}
         ]
     }
 ]

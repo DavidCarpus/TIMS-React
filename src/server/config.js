@@ -1,9 +1,10 @@
+let mode=process.env.NODE_ENV||'development'
+const privateDir = mode === 'development' ? '../private/'+process.env.REACT_APP_MUNICIPALITY: '../private/'
 
-
-var base_configuration = require('../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration.json');
-var dev_configuration = require('../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_dev.json');
-var prod_configuration = require('../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_prod.json');
-var test_configuration = require('../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_test.json');
+var base_configuration = require(privateDir +'/configuration.json');
+var dev_configuration = require(privateDir +'/configuration_dev.json');
+var prod_configuration = require(privateDir +'/configuration_prod.json');
+var test_configuration = require(privateDir +'/configuration_test.json');
 
 //======================================
 //======================================
@@ -45,14 +46,13 @@ function isObject(item) {
 //======================================
 
 //======================================
-let mode=process.env.NODE_ENV||'development'
 // mode='test'
 // console.log(__dirname);
 
 module.exports = function(){
     let mergedConf = mergeDeep({}, base_configuration);
     mergedConf = mergeDeep(mergedConf,
-        {mode: mode, ATTACHMENT_DIR:__dirname +  mergedConf.attachmentPath, ROOT_DIR: __dirname }
+        {mode: mode, ATTACHMENT_DIR:__dirname + '/' + mergedConf.attachmentPath, ROOT_DIR: __dirname }
     );
 
     switch(mode){

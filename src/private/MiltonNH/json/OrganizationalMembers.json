@@ -110,7 +110,7 @@
     },
     {"id": 18, "link":"CodeEnforcement",
         "members": [
-            {"name":"Dana Crossley","office":"Land Use Clerk", "phone":"(603) 652-4501 x5" , "emailAddress":"landuse@miltonnh-us.com"},
+            {"name":"Dana Crossley","office":"Land Use Clerk", "phone":"(603) 652-4501 x5" },
             {"name":"Brian Boyers","office":"Code Enforcement", "phone":"(603) 652-4501 x7" },
             {"name":"Brian Boyers","office":"Health Officer", "phone":"(603) 652-4501 x7" },
             {"name":"Brian Boyers","office":"Building Inspector", "phone":"(603) 652-4501 x7" }

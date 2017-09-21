@@ -24,47 +24,12 @@ process.on('uncaughtException', function (err) {
   console.log('Migrate process:' , err);
 })
 
-const meetingPaths = require('./TablesToScrape.json');
-// const linkTable = require('./linkTable.json');
-const linkTable = require('./links.json');
-/*
-const linkTable = [
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_34_38756269.pdf", "group": "Selectmen", "desc": "Expenditure Report - July 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_33_2603528945.pdf", "group": "Selectmen", "desc": "Expenditure Report - May 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_32_3572920358.pdf", "group": "Selectmen", "desc": "Expenditure Report - April 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_31_3659131429.pdf", "group": "Selectmen", "desc": "Expenditure Report - March 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_30_4268575597.pdf", "group": "Selectmen", "desc": "Expenditure Report - December 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_28_635089335.pdf", "group": "Selectmen", "desc": "Expenditure Report - November 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_24_2198695748.pdf", "group": "Selectmen", "desc": "Expenditure Report - October 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_23_2498527688.pdf", "group": "Selectmen", "desc": "Expenditure Report - September 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_21_3787802024.pdf", "group": "Selectmen", "desc": "Expenditure Report - April 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_19_224619096.pdf", "group": "Selectmen", "desc": "Expenditure Report - March 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_22_1346458160.pdf", "group": "Selectmen", "desc": "Wex Savings- March and April, 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_29_1219483641.pdf", "group": "Selectmen", "desc": "MS-737 , 2017"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_27_472924982.pdf", "group": "Selectmen", "desc": "MS-737 , 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_27_3050141158.pdf", "group": "Selectmen", "desc": "MS-232 , 2016"},
-    // {"uri":"http://miltonnh-us.com/uploads/bos_budget_16_3117202166.pdf", "group": "Selectmen", "desc": "2013-20115 Operating Budgett"},
+const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
 
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_56_1876060925.pdf", "date": "2017-03-16", "recordtype":"Voting", "group": "Voting", "desc": "March 16, 2017 Town Election Results "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_55_541945002.pdf", "date": "2017-03-14", "recordtype":"Voting", "group": "Voting", "desc": "Voting Delayed till 3/16/17"},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_53_2447204275.pdf", "date": "2016-12-30", "recordtype":"Voting", "group": "Voting", "desc": "2016 Town Report "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_52_694554272.pdf", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Article Information "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_51_3839351656.pdf", "date": "2017-03-14", "recordtype":"Voting", "group": "Voting", "desc": "March 14, 2017 Sample Ballot "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_49_1400993411.pdf", "date": "2017-02-11", "recordtype":"Voting", "group": "Voting", "desc": "Feb. 11 2017 Town Deliberative Minutes "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_50_2005824472.pdf", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_43_1821238400.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "2016 Voting Results"},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_46_1837045028.pdf",  "date": "2016-03-08", "recordtype":"Voting", "group": "Voting", "desc": "  School Voting Results "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_41_1658937858.pdf",  "date": "2016-01-30", "recordtype":"Voting", "group": "Voting", "desc": "Jan. 30 2016 Town Deliberative Minutes "},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_472924982.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "2016 MS7"},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_3257473031.pdf",  "date": "2017-03-16", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"},
-    {"uri":"http://miltonnh-us.com/uploads/town_mtg_info_37_2015577928.pdf",  "date": "2016-03-16", "recordtype":"Voting", "group": "Voting", "desc": "Proposed and Default Budget"},
-]
-*/
-/*
-{"uri":"11111111111", "recordtype":"Voting", "group": "Voting", "desc": "Warrant Articles"}
-*/
-
-// const meetingPaths = require('./TablesToScrapeTest.json');
+const migrateDataDir = privateDir +'/migrate';
+const meetingPaths = require(migrateDataDir+'/TablesToScrape.json');
+const linkTable = require(migrateDataDir+'/links.json');
+const documentPaths = require(migrateDataDir+'/Documents.json');
 
 //========================================
 let validRecordType = (recordtype) => ["Agenda", "Minutes", "Video"].includes(recordtype)
@@ -291,7 +256,7 @@ function cloneMeetings(paths) {
                         .then( (pushReq)=> {
                             return rec
                         })
-                        .catch(err => console.log(err))
+                        .catch(err => console.log(err, rec))
                     })
                 )
                 .then( newFilesUploaded => {
@@ -437,7 +402,7 @@ function migratePublicRecordURIs() {
                             return pushFileToServer(rec.local, rec.targetPath)
                             .then( (pushReq)=> {
                                 return rec
-                            }).catch(err => console.log(err))
+                            }).catch(err => console.log(err, rec))
                         })
                     )
                     .then(copiedFilesNeeded => publicRecordsToMigrate )
@@ -509,7 +474,7 @@ function migrateLinks(linksToMigrate) {
                     return pushFileToServer(rec.local, rec.targetPath)
                     .then( (pushReq)=> {
                         return rec
-                    }).catch(err => console.log(err))
+                    }).catch(err => console.log(err, rec))
                 })
             )
             .then(copiedFilesNeeded => pulledFiles )
@@ -569,7 +534,7 @@ function cloneDocuments(paths) {
                         return pushFileToServer(rec.local, rec.targetPath)
                         .then( (pushReq)=> {
                             return rec
-                        }).catch(err => console.log(err))
+                        }).catch(err => console.log(err, rec))
                     })
                 )
                 .then(copiedFilesNeeded => mergedTableLinks )
@@ -610,23 +575,9 @@ if (require.main === module) {
     //         {"group":"TownForest", "url":"http://miltonnh-us.com/town-forest-committee.php", "query":"table[border='1'][style='width: 290px; height: 118px;']"},
     // ]
 
-    let documentPaths = [
-        {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"Blind Exemption"},
-        {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"2009 Assessment"},
-        {"group":"CodeEnforcement", "url":"http://miltonnh-us.com/code.php", "query":"Helpful Information"},
-        {"group":"CodeEnforcement", "url":"http://miltonnh-us.com/code.php", "query":"Permits"},
-        {"group":"ParksRecreation", "url":"http://miltonnh-us.com/parks.php", "query":"Softball FIeld Renovation Committee Information"},
-        {"group":"ParksRecreation", "url":"http://miltonnh-us.com/parks.php", "query":"Arts in the Park"},
-        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Notices"},
-        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Voting and Election Information"},
-        {"group":"TownClerk", "url":"http://miltonnh-us.com/taxes.php", "query":"Additional Links and Information"},
-        {"group":"PlanningBoard", "url":"http://miltonnh-us.com/planning_board.php", "query":"Capital Improvement"},
-        {"group":"CemeteryTrustees", "url":"http://miltonnh-us.com/cemetery.php", "query":"Right to Inter"},
-        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"visitnh"},
-        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"Community FAQ"},
-        {"group":"EconomicDevelopment", "url":"http://miltonnh-us.com/economic.php", "query":"UNH"},
-        {"group":"Zoning", "url":"http://miltonnh-us.com/zba.php", "query":"Equitable Waiver"},
-    ]
+    // let documentPaths = [
+    //     {"group":"Assessing", "url":"http://miltonnh-us.com/assessing.php", "query":"Blind Exemption"},
+    // ]
 
     // {"group":"Selectmen", "url":"http://miltonnh-us.com/bos_agendas.php", "query":"table[border='1'][width='95%']"},
     // cloneMeetings(paths)

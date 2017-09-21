@@ -1,18 +1,19 @@
 {
 "imapProcess":{
     "imapcredentials":{
-        "user": "website@test.miltonnh.us",
+        "user":
+        "website@newdurham.carpusconsulting.com",
         "password": "M$g;~5_2e.T#",
-        "host": "mail.miltonnh.us"
+        "host": "newdurham.carpusconsulting.com"
     }
 },
 "db_config":{
   "host"     : "66.198.240.7",
   "user"     : "carpusco_dcarpus",
   "password" : "IT8DEa}fJA+y",
-  "database" : "carpusco_miltonTest"
+  "database" : "carpusco_NewDurhamNHTest"
 },
-"expressPort":45002,
+"expressPort":45022,
 "ui":{
     "ROOT_URL":"/api/"
 },
@@ -21,7 +22,7 @@
     "certPath": "/home/carpusco/ssl/certs/carpusconsulting_com_9c0b4_2b379_1506265500_c15e95dd9e5148c14cc4dd37f0181f0c.crt"
 },
 
-"municipalLongName": "Town of Milton New Hampshire - Test",
+"municipalLongName": "Town of New Durham New Hampshire - Test",
 
 "unused":{
     "ROOT_URL":"https://test.miltonnh.us:45102/api/"

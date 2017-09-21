@@ -10,7 +10,7 @@
         "tls": true
     },
     "downloadPath": {
-            "notices": "./private/Attachments/"
+            "notices": "../private/Attachments/"
     },
     "delay": 5000,
     "infinite":true,
@@ -40,7 +40,7 @@
 },
 
 "numverify": {
-        "email": "website@test.miltonnh.us",
+        "email": "website@test.newdurhamnh.us",
         "password":"bFSiSjr1P058gHyFXhGg",
         "apiaccesskey":"6c533ba0a25520d9a559427c70865f42"
 },
@@ -49,9 +49,9 @@
 "ui":{
     "ROOT_URL":"/api/"
 },
-"municipalLongName": "Town of Milton New Hampshire",
-"municipalShortName": "Town of Milton",
-"attachmentPath": "./private/Attachments/",
+"municipalLongName": "Town of New Durham New Hampshire",
+"municipalShortName": "Town of New Durham",
+"attachmentPath": "../private/Attachments/",
 
 "unused":{
 }

@@ -5,14 +5,16 @@ configuration = new Config();
 // var wget = require('node-wget');
 var wget = require('./wget');
 
+const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
+
 const localFileURL = '/home/dcarpus/code/milton_nh/currentMiltonWebsite/miltonnh-us.com'
-let serverPath = '/home/carpusco/test.miltonnh.us/server/private/Attachments/'
+let serverPath = '/home/carpusco/test.miltonnh.us/private/Attachments/'
 
 if (configuration.mode === 'development') {
     // logErrors = true
-    serverPath = '/home/dcarpus/code/milton_nh/react_miltonNH/server/private/Attachments/'
+    serverPath = privateDir + '/Attachments/'
 } else if  (configuration.mode === 'production') {
-    serverPath = '/home/carpusco/miltonnh.us/server/private/Attachments/'
+    serverPath = '/home/carpusco/miltonnh.us/private/Attachments/'
 }
 
 let Client = require('ssh2-sftp-client');

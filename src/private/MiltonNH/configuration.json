@@ -10,7 +10,7 @@
         "tls": true
     },
     "downloadPath": {
-            "notices": "./private/Attachments/"
+            "notices": "../private/Attachments/"
     },
     "delay": 5000,
     "infinite":true,
@@ -51,7 +51,7 @@
 },
 "municipalLongName": "Town of Milton New Hampshire",
 "municipalShortName": "Town of Milton",
-"attachmentPath": "./private/Attachments/",
+"attachmentPath": "../private/Attachments/",
 
 "unused":{
 }

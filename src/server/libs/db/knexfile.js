@@ -1,6 +1,9 @@
-var configuration_dev = require('../../../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_dev.json');
-var configuration_prod = require('../../../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_prod.json');
-var configuration_test = require('../../../private/'+process.env.REACT_APP_MUNICIPALITY+'/configuration_test.json');
+let mode=process.env.NODE_ENV||'development'
+const privateDir = mode === 'development' ? '../../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../../private/'
+
+var configuration_dev = require(privateDir+'/configuration_dev.json');
+var configuration_prod = require(privateDir+'/configuration_prod.json');
+var configuration_test = require(privateDir+'/configuration_test.json');
 
 module.exports = {
     development: {
