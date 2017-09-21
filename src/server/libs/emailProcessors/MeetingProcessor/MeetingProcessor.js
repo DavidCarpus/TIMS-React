@@ -10,7 +10,11 @@ var getPublicRecordData = require('../common').getPublicRecordData;
 var dbDateFormat = require('../common').dbDateFormat;
 
 //=============================================
-function processTranslatedData(translatedData,replace) {
+function processData(emailData, replace) {
+    return processTranslatedData(getPublicRecordData(emailData), replace)
+}
+//=============================================
+function processTranslatedData(translatedData, replace) {
     if (translatedData.err ) {
         return Promise.resolve( Object.assign({}, translatedData, {err: translatedData.err}));
     }
@@ -32,12 +36,4 @@ function processTranslatedData(translatedData,replace) {
     }))
 }
 //=============================================
-class MeetingProcessor {
-    process( noticeData, replace=false) {
-        let prData = getPublicRecordData(noticeData);
-
-        return processTranslatedData(prData,replace)
-    }
-}
-
-module.exports.MeetingProcessor = MeetingProcessor;
+module.exports.processData = processData;

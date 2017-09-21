@@ -7,6 +7,13 @@ configuration = new Config();
 var knexConfig = require('../../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
+function processData( emailData) {
+    let entry= translateToDBScheme(emailData)
+    if (entry.err ) {
+        return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
+    }
+    return processTranslatedData(entry)
+}
 //===========================================
 function processTranslatedData(translatedData) {
     let {requestType, uid} = translatedData
@@ -75,14 +82,4 @@ function translateToDBScheme(emailData) {
     return entry;
 }
 //===========================================
-class BoardCommitteeProcessor {
-    process( emailData) {
-        let entry= translateToDBScheme(emailData)
-        if (entry.err ) {
-            return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
-        }
-        return processTranslatedData(entry)
-    }
-}
-
-module.exports.BoardCommitteeProcessor = BoardCommitteeProcessor;
+module.exports.processData = processData;

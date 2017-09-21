@@ -1,74 +1,54 @@
-var NoticeProcessor = require('./NoticeProcessor').NoticeProcessor;
-var noticeProcessor = new NoticeProcessor()
+var processAlertRequest = require('./AlertRequestProcessor').processAlertRequest;
+var processMeetingRequest = require('./MeetingProcessor').processData;
+var processNoticeRequest = require('./NoticeProcessor').processData;
+var processBoardCommitteeRequest = require('./BoardCommitteeProcessor').processData;
+var processMenuRequest = require('./MenuProcessor').processData;
+var processDocumentRequest = require('./DocumentProcessor').processData;
+var processVideoRequest = require('./VideoProcessor').processData;
+var processUserUpdateRequest = require('./UserProcessor').processData;
+var processPageTextRequest = require('./PageTextProcessor').processData;
+var processHelpfulLinkRequest = require('./HelpfulLinksProcessor').processData;
 
-var MeetingProcessor = require('./MeetingProcessor').MeetingProcessor;
-var meetingProcessor = new MeetingProcessor()
-
-var DocumentProcessor = require('./DocumentProcessor').DocumentProcessor;
-var documentProcessor = new DocumentProcessor()
-
-var VideoProcessor = require('./VideoProcessor').VideoProcessor;
-var videoProcessor = new VideoProcessor()
-
-var UserProcessor = require('./UserProcessor').UserProcessor;
-var userProcessor = new UserProcessor()
-
-var HelpfulLinksProcessor = require('./HelpfulLinksProcessor').HelpfulLinksProcessor;
-var helpfulLinksProcessor = new HelpfulLinksProcessor()
-
-var PageTextProcessor = require('./PageTextProcessor').PageTextProcessor;
-var pageTextProcessor = new PageTextProcessor()
-
-var MenuProcessor = require('./MenuProcessor').MenuProcessor;
-var menuProcessor = new MenuProcessor()
-
-var BoardCommitteeProcessor = require('./BoardCommitteeProcessor').BoardCommitteeProcessor;
-var boardCommitteeProcessor = new BoardCommitteeProcessor()
-
-var AlertRequestProcessor = require('./AlertRequestProcessor').AlertRequestProcessor;
-var alertRequestProcessor = new AlertRequestProcessor()
-
-
-
-function submit(email, imap) {
+function submit(email, imap, knex) {
     if (typeof email.err != 'undefined') {
         // 'Processors return a Promise.all / array so return array for errors as well'
         return Promise.resolve([email]);
     } else {
     switch (email.DBData.recordtype) {
         case 'Notice':
-            return noticeProcessor.process(email);
+            return processNoticeRequest(email);
             break;
         case 'RFP':
-            return noticeProcessor.process(email);
+            return processNoticeRequest(email);
             break;
         case 'Agenda':
         case 'Minutes':
-            return meetingProcessor.process(email, true);
+            return processMeetingRequest(email)
             break;
         case 'Document':
-            return documentProcessor.process(email);
+            return processDocumentRequest(email);
             break;
         case 'Video':
-            return videoProcessor.process(email);
+            return processVideoRequest(email);
             break;
         case 'User':
-            return userProcessor.process(email);
+            return processUserUpdateRequest(email);
             break;
         case 'HelpfulLinks':
-            return helpfulLinksProcessor.process(email);
+            return processHelpfulLinkRequest(email);
             break;
         case 'PageText':
-            return pageTextProcessor.process(email);
+            return processPageTextRequest(email);
             break;
         case 'Menu':
-            return menuProcessor.process(email);
+            return processMenuRequest(email);
             break;
         case 'BoardCommittee':
-            return boardCommitteeProcessor.process(email);
+            return processBoardCommitteeRequest(email);
             break;
         case 'AlertRequest':
-            return alertRequestProcessor.process(email);
+            return processAlertRequest(email, knex)
+            // return alertRequestProcessor.process(email);
             break;
 
 

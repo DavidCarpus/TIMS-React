@@ -12,6 +12,28 @@ var simpleAdd = require('../common').simpleAdd;
 var simpleRemove = require('../common').simpleRemove;
 
 //=============================================
+const processData = (emailData)  => {
+    let errors  = validateData(emailData);
+    if (errors.length > 0) {
+        emailData.err = errors
+        return Promise.resolve(emailData);
+    }
+
+    let action = emailData.DBData.requestType;
+    let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
+    switch (action) {
+        case 'REMOVE':
+            return simpleRemove('GroupMembers', entry, emailData.uid);
+            break;
+        case 'ADD':
+            return simpleAdd('GroupMembers', entry, emailData.uid);
+            break;
+    default:
+        return Promise.reject(' *** Unknown UserProcessor action:' + action + ' for DBData:' , emailData.DBData);
+    }
+}
+
+//=============================================
 function validateData(requestedData) {
     let errors=[];
     console.log('requestedData:' + require('util').inspect(requestedData, { depth: null }));
@@ -68,28 +90,4 @@ function translateToDBScheme(emailDBData, emailBodyData) {
     return entry;
 }
 //===========================================
-class UserProcessor {
-    process( emailData) {
-        let errors  = validateData(emailData);
-        if (errors.length > 0) {
-            emailData.err = errors
-            return Promise.resolve(emailData);
-        }
-
-        let action = emailData.DBData.requestType;
-        let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
-        switch (action) {
-            case 'REMOVE':
-                return simpleRemove('GroupMembers', entry, emailData.uid);
-                break;
-            case 'ADD':
-                return simpleAdd('GroupMembers', entry, emailData.uid);
-                break;
-        default:
-            return Promise.reject(' *** Unknown UserProcessor action:' + action + ' for DBData:' , emailData.DBData);
-        }
-
-    }
-}
-
-module.exports.UserProcessor = UserProcessor;
+module.exports.processData = processData;

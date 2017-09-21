@@ -11,6 +11,14 @@ var simpleAdd = require('../common').simpleAdd;
 var simpleRemove = require('../common').simpleRemove;
 
 //===========================================
+function processData(emailData) {
+    let entry= translateToDBScheme(emailData)
+    if (entry.err ) {
+        return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
+    }
+    return processTranslatedData([entry])
+}
+//===========================================
 function getMenuFromBody(emailBodyData) {
     let lines = emailBodyData.trim().split("\n")
     if (lines.length === 1 && lines[0].search(/\//) > 0) {
@@ -47,39 +55,4 @@ function translateToDBScheme(emailDBData, emailBodyData) {
     return entry;
 }
 //===========================================
-class MenuProcessor {
-    process( emailData) {
-        let entry= translateToDBScheme(emailData)
-        if (entry.err ) {
-            return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
-        }
-        return processTranslatedData([entry])
-/*
-        let bodyMenu = getMenuFromBody( emailData.bodyData)
-        if (! emailData.DBData.menu) {
-            if (bodyMenu.length === 0) {
-                let entry = [emailData];
-                entry[0].err = 'Missing menu data.'
-                return Promise.resolve(entry);
-            } else {
-                emailData.DBData.menu = bodyMenu;
-            }
-        }
-        let action = emailData.DBData.requestType;
-        let entry= translateToDBScheme(emailData.DBData, emailData.bodyData)
-        switch (action) {
-            case 'REMOVE':
-                return simpleRemove('Menus', entry, emailData.uid);
-                break;
-            case 'ADD':
-                return simpleAdd('Menus', entry, emailData.uid);
-                break;
-        default:
-            console.log(require('util').inspect(entry, { depth: null }));
-            return Promise.reject(' *** Unknown MenuProcessor action:' + action + ' for DBData:' , emailData.DBData);
-        }
-*/
-    }
-}
-
-module.exports.MenuProcessor = MenuProcessor;
+module.exports.processData = processData;

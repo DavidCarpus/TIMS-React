@@ -1,6 +1,3 @@
-// var mysql = require('mysql');
-// var fs = require('fs');
-
 var Config = require('../../../config'),
 configuration = new Config();
 
@@ -13,6 +10,15 @@ var dbDateFormat = require('../common').dbDateFormat;
 var getPublicRecordData = require('../common').getPublicRecordData;
 
 //=============================================
+const processData = (emailData)  => {
+    let entry= translateToDBScheme(emailData)
+    if (entry.err ) {
+        return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
+    }
+    return processTranslatedData([entry])
+}
+
+//=============================================
 function getClosestMeetingDate(pageLink, emailDate, sdate, edate) {
     return knex('PublicRecords').distinct('date')
     .where({pageLink: pageLink})
@@ -20,9 +26,9 @@ function getClosestMeetingDate(pageLink, emailDate, sdate, edate) {
     .orderBy('date', 'desc')
     .then(results => {
         if (results.length > 0) {
-            Promise.resolve(results[0].date);
+            return Promise.resolve(results[0].date);
         } else {
-            Promise.resolve(emailDate);
+            return Promise.resolve(emailDate);
         }
     })
 }
@@ -54,8 +60,7 @@ function translateToDBScheme(dataFromEmail) {
     if (typeof dataFromEmail.DBData.URL === 'undefined' || dataFromEmail.DBData.URL.length === 0) {
         errors.push('Missing URL in HelpfulLinks request.')
     }
-
-    let entry=getPublicRecordData(dataFromEmail);
+    entry=getPublicRecordData(dataFromEmail);
 
     let emailDate = new Date();
     if (entry.date) {
@@ -73,14 +78,4 @@ function translateToDBScheme(dataFromEmail) {
     return entry;
 }
 //=============================================
-class VideoProcessor {
-    process( emailData) {
-        let entry= translateToDBScheme(emailData)
-        if (entry.err ) {
-            return Promise.resolve( Object.assign({}, emailData, {err: entry.err}));
-        }
-        return processTranslatedData([entry])
-    }
-}
-
-module.exports.VideoProcessor = VideoProcessor;
+module.exports.processData = processData;

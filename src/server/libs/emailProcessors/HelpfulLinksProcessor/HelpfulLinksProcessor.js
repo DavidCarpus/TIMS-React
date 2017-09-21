@@ -8,6 +8,14 @@ var simpleAdd = require('../common').simpleAdd;
 var sendAutomationEmail = require('../common').sendAutomationEmail;
 
 //=============================================
+const processData = (emailData)  => {
+    let entry= translateToDBScheme(noticeData)
+    if (entry.err ) {
+        return Promise.resolve( Object.assign({}, noticeData, {err: entry.err}));
+    }
+    return processTranslatedData([entry])
+}
+//=============================================
 function processTranslatedData(translatedData) {
     if (translatedData.err ) {
         return Promise.resolve( Object.assign({}, translatedData, {err: translatedData.err}));
@@ -53,14 +61,4 @@ function translateToDBScheme(dataFromEmail) {
     return entry;
 }
 //===========================================
-class HelpfulLinksProcessor {
-    process( noticeData) {
-        let entry= translateToDBScheme(noticeData)
-        if (entry.err ) {
-            return Promise.resolve( Object.assign({}, noticeData, {err: entry.err}));
-        }
-        return processTranslatedData([entry])
-    }
-}
-
-module.exports.HelpfulLinksProcessor = HelpfulLinksProcessor;
+module.exports.processData = processData;

@@ -9,6 +9,9 @@ var knex = require('knex')(knexConfig[configuration.mode]);
 
 var simpleAdd = require('../common').simpleAdd;
 //=============================================
+const processData = (emailData)  => processTranslatedData(translateToDBScheme(emailData))
+
+//=============================================
 function processTranslatedDataEntry(entry) {
     let {uid, from, requestType} = entry
 
@@ -70,11 +73,4 @@ function translateToDBScheme(dataFromEmail) {
     }
 }
 //=============================================
-class DocumentProcessor {
-    process( data) {
-        let entry =  translateToDBScheme(data)
-        return processTranslatedData(entry)
-    }
-}
-
-module.exports.DocumentProcessor = DocumentProcessor;
+module.exports.processData = processData;

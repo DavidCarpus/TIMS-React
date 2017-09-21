@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+// var mysql = require('mysql');
 var fs = require('fs');
 
 var Config = require('../../../config'),
@@ -6,46 +6,18 @@ configuration = new Config();
 
 let cellCarriers = require('../../AlertRequests/cellCarriers.json')
 
-var knexConfig = require('../../db/knexfile.js')
-var knex = require('knex')(knexConfig[configuration.mode]);
+// var knexConfig = require('../../db/knexfile.js')
+// var knex = require('knex')(knexConfig[configuration.mode]);
+var knex = require('../../db/mysql').knex;
 
 var dbDateFormat = require('../common').dbDateFormat;
 
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var emailValidate = require("email-validator");
 
-//=============================================
-function translateToDBScheme(data) {
-    let errors=[];
-    let carrier = "";
-    let contact = "";
+// var mysql_pool = require('../../db/mysql').mysql_pool;
 
-    let from = data.header.from[0]
-
-    contact = from.match( /\d+/g )
-    if (contact) {  // Matches 'phoneNumber' pattern
-        let email= from.match(/@.*/g)[0].substring(1);
-        let carrierData= cellCarriers.filter(carrier => carrier.email.toUpperCase() === email.toUpperCase())[0];
-        carrier = (carrierData && carrierData.Carrier) || ""
-    } else {
-        let email= from.match(/<.*>/g)[0];
-        contact = email.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
-    }
-
-    let entry =  {contact: contact || '',
-        dateVerified: dbDateFormat(new Date()),
-        carrier: carrier,
-        contact:contact,
-    }
-    // console.log('entry:', entry);
-    // errors.push('Debugging translateToDBScheme...')
-    if (errors.length > 0) { entry.err = errors; }
-
-    return entry;
-}
-//=============================================
-class AlertRequestProcessor {
-    process( data) {
+function processData(data) {
         let action = data.DBData.requestType;
         let entry= translateToDBScheme(data)
         if (entry.err) {
@@ -78,6 +50,34 @@ class AlertRequestProcessor {
         }
 
     }
-}
+//=============================================
+function translateToDBScheme(data) {
+    let errors=[];
+    let carrier = "";
+    let contact = "";
 
-module.exports.AlertRequestProcessor = AlertRequestProcessor;
+    let from = data.header.from[0]
+
+    contact = from.match( /\d+/g )
+    if (contact) {  // Matches 'phoneNumber' pattern
+        let email= from.match(/@.*/g)[0].substring(1);
+        let carrierData= cellCarriers.filter(carrier => carrier.email.toUpperCase() === email.toUpperCase())[0];
+        carrier = (carrierData && carrierData.Carrier) || ""
+    } else {
+        let email= from.match(/<.*>/g)[0];
+        contact = email.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+    }
+
+    let entry =  {contact: contact || '',
+        dateVerified: dbDateFormat(new Date()),
+        carrier: carrier,
+        contact:contact,
+    }
+    // console.log('entry:', entry);
+    // errors.push('Debugging translateToDBScheme...')
+    if (errors.length > 0) { entry.err = errors; }
+
+    return entry;
+}
+//=============================================
+module.exports.processAlertRequest = processData;
