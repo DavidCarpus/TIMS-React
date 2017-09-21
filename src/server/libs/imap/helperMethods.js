@@ -114,9 +114,16 @@ function getDateValueFromTextLine(line) {
         if (line.toUpperCase().trim().search(new RegExp('DAYS', 'i') ) >= 0) {
             dte = line;
         } else {
-            dte = Date.parse(line);
+            const val = Number(line);
+            if (isNaN(line)) {
+                dte = Date.parse(line);
+                // console.log('Date.parse:', dte);
+            } else {
+                dte = val + ' DAYS'
+                // console.log('val:', dte);
+            }
         }
-        // console.log({expire: dte});
+        console.log({expire: dte});
         return {dateType:'expire', date: dte,}
     }
 
@@ -159,15 +166,7 @@ function extractDBData(email) {
         if (tmpDate !== null) {
             results[tmpDate.dateType] = tmpDate.date
         }
-        // dte = Date.parse(line);
-        // if (dte >= 0 ) {
-        //     if(line.indexOf('EXPIRE') >= 0 ) {
-        //         results.expire = dte;
-        //     } else if (line.indexOf('DATE') >= 0 ) {
-        //         console.log('imap:helperMethods:extractDBData - Setting results.date:', dte, ' from ', line);
-        //         results.date = dte;
-        //     }
-        // }
+
         if(line.indexOf('MAINPAGE') >= 0 ) {
             if (line == 'MAINPAGE') {
                 results.mainpage = true;
