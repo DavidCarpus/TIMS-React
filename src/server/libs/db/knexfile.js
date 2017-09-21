@@ -9,16 +9,19 @@ module.exports = {
     development: {
       client: 'mysql',
       connection: configuration_dev.db_config ,
+      pool: { min: 0, max: 7 },
       useNullAsDefault: true
   },
   production: {
     client: 'mysql',
     connection: configuration_prod.db_config ,
+    pool: { min: 0, max: 7 },
     useNullAsDefault: true
 },
   test: {
     client: 'mysql',
     connection: configuration_test.db_config ,
+    pool: { min: 0, max: 7 },
     useNullAsDefault: true
   }
 }

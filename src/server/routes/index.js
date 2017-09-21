@@ -13,48 +13,30 @@ var emailValidate = require("email-validator");
 
 var Config = require('../config');
 configuration = new Config();
-var connection;
-
-function handleDisconnect() {
-  connection = mysql.createConnection(configuration.db_config);
-  // Recreate the connection, since the old one cannot be reused.
-  connection.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-        var d = new Date();
-        var n = d.toString().replace('GMT-0400 (EDT)', '');
-
-      console.log(n + ' *** error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  connection.on('error', function(err) {
-    // console.log('db error', JSON.stringify(err));
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
+// var connection;
+var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
 router.use(cors());
 // ==========================================================
 function simpleDBQuery(query){
-    // console.log('query:', query);
     return new Promise(function(resolve, reject) {
-        if(query.length <= 0) {
-            reject('Missing Query')
-        }
-        connection.query(query, function(err, rows){
-            if (err) {
-                console.log(require('util').inspect(err, { depth: null }));
-                reject(err)
-            }
-
-            resolve( rows);
-        });
-    })
+        // console.log('mysql_pool', mysql_pool);
+        mysql_pool.getConnection(function(err, connection) {
+    		if (err) {
+    			connection.release();
+    	  		reject(' Error getting mysql_pool connection: ' + err);
+    	  		throw err;
+    	  	}
+            connection.query(query, function(err, rows){
+                if (err) {
+                    console.log(require('util').inspect(err, { depth: null }));
+                    reject(err)
+                }
+                connection.release();
+                resolve( rows);
+            });
+        })
+    });
 }
 // ==========================================================
 function flattenMenus(parent, menus, results) {
@@ -172,9 +154,10 @@ router.get('/Asides/:groupName', function(req, res) {
 router.get('/CalendarEvents/', function(req, res) {
     // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
     var query = "Select * from CalendarEvents where startDate >= NOW() order by startDate limit 20 ";
+    // console.log('/CalendarEvents', query);
+
      simpleDBQuery(query)
      .then(rows => {
-        //  console.log('Asides:' + JSON.stringify(rows));
          res.json(rows);
      });
     //  res.json([]);
@@ -366,7 +349,7 @@ router.get('/Records/Meetings/:groupName', function(req, res) {
     query += " and ( recordtype='Minutes'  or recordtype='Agenda'  or recordtype='Agendas'  or recordtype='Video'   or recordtype='Decision' )";
     query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
     query += "  ORDER BY date, recordtype ";
-    console.log('/Records/Meetings/:groupName', query);
+    // console.log('/Records/Meetings/:groupName', query);
     simpleDBQuery(query)
     .then(rows => {
         var toSend = rows.reduce( (newArray, row) => {
@@ -523,4 +506,5 @@ router.post('/AlertRequests/', function(req, res) {
 
 // ==========================================================
 // ==========================================================
-module.exports =  {router, handleDisconnect};
+// module.exports =  {router, handleDisconnect};
+module.exports =  {router};

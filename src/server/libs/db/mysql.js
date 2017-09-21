@@ -1,37 +1,21 @@
+var Config = require('../../config'),
+configuration = new Config();
+
+var knexConfig = require('./knexfile.js')
+var knex = require('knex')(knexConfig[configuration.mode]);
+
 var mysql = require('mysql');
 
-var pool  = mysql.createPool(configuration.db_config );
+const poolConfig = {
+  connectionLimit : 10,
+  host            : configuration.db_config.host,
+  user            : configuration.db_config.user,
+  password        : configuration.db_config.password,
+  database        : configuration.db_config.database,
+}
 
-exports.connection = {
-    query: function () {
-        var queryArgs = Array.prototype.slice.call(arguments),
-            events = [],
-            eventNameIndex = {};
+var mysql_pool  = mysql.createPool(poolConfig);
 
-        pool.getConnection(function (err, conn) {
-            if (err) {
-                if (eventNameIndex.error) {
-                    eventNameIndex.error();
-                }
-            }
-            if (conn) {
-                var q = conn.query.apply(conn, queryArgs);
-                q.on('end', function () {
-                    conn.release();
-                });
 
-                events.forEach(function (args) {
-                    q.on.apply(q, args);
-                });
-            }
-        });
-
-        return {
-            on: function (eventName, callback) {
-                events.push(Array.prototype.slice.call(arguments));
-                eventNameIndex[eventName] = callback;
-                return this;
-            }
-        };
-    }
-};
+exports.mysql_pool = mysql_pool;
+exports.knex = knex;

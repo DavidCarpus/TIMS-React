@@ -14,7 +14,6 @@ var knexConfig = require('./libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
 var routes = require('./routes/index').router;
-var handleDisconnect = require('./routes/index').handleDisconnect;
 
 var app = express();
 
@@ -49,7 +48,6 @@ const localLoginStrategy = require('./libs/passport/local-login');
 passport.use('local-signup', localSignupStrategy);
 passport.use('local-login', localLoginStrategy);
 
-handleDisconnect(); // open (and keep open) a database connection used by routes
 //===============================================
 var IMapProcessor = require('./libs/imap').IMapProcessor;
 let imap = new IMapProcessor(configuration.imapProcess);
