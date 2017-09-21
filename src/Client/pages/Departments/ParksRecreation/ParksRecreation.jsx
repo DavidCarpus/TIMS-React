@@ -8,7 +8,7 @@ import TownNewsletters from '../../../Components/TownNewsletters'
 import RawText from '../../../Components/RawText'
 // import Slideshow from '../../../Components/Slideshow'
 import GroupMembers from '../../../Components/GroupMembers'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 
 // <Slideshow/>
 

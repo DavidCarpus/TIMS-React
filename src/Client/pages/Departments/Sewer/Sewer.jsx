@@ -5,7 +5,7 @@ import SmartLink from '../../../Components/SmartLink'
 import DocumentList  from '../../../Components/DocumentList'
 import RawText from '../../../Components/RawText'
 import GroupMembers from '../../../Components/GroupMembers'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 
 function pageNav() {
     return (

@@ -11,18 +11,7 @@ import HelpfulInformation  from '../../Components/HelpfulInformation'
 
 import RawText  from '../../Components/RawText'
 import './Committees.css'
-import PageNavbar from '../../Components/PageNavbar'
-
-function pageNav() {
-    return (
-    <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
-            {text:'Agendas', target:'AgendasAndMinutes-bookmark', fontAwsomeIcon:'fa-calendar'},
-            {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
-            // {text:'Contacts', target:'groupMembers-bookmark'}
-        ]}/>
-    )
-}
+import {PageNavbar, addMenu} from '../../Components/PageNavbar'
 
 export default class Committees extends React.Component {
     componentWillMount() {
@@ -31,9 +20,26 @@ export default class Committees extends React.Component {
     }
 
     render() {
+        let pageNavMenus=[
+            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
+            {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
+        ]
+        // console.log('agendas:', this.props.agendas);
+        if (this.props.agendas.length > 0 ) {
+            pageNavMenus = addMenu(pageNavMenus, {text:'Agendas', target:'AgendasAndMinutes-bookmark', fontAwsomeIcon:'fa-clock-o'});
+        }
+        if (this.props.notices.length > 0 ) {
+            pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
+        }
+        if (this.props.documents.length > 0 ) {
+            pageNavMenus = addMenu(pageNavMenus, {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'});
+        }
+        // pageNavMenus = addMenu(pageNavMenus, {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'});
+        // pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
+
         return (
                 <Row id='Committees'>
-                    {pageNav()}
+                    <PageNavbar menus={pageNavMenus}/>
 
                     <Col  md={{size:10, push:1}} >
                             <div className="blockSection">

@@ -6,7 +6,7 @@ import DocumentList  from '../../../Components/DocumentList'
 import { Col, Row } from 'reactstrap';
 import GroupMembers from '../../../Components/GroupMembers'
 import HelpfulInformation  from '../../../Components/HelpfulInformation'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 
 function pageNav() {
     return (

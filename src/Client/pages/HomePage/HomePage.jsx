@@ -12,18 +12,7 @@ import ContactUs from '../../Components/ContactUs'
 import { Col, Row } from 'reactstrap';
 
 import './HomePage.css';
-import PageNavbar from '../../Components/PageNavbar'
-
-function pageNav() {
-    return (
-    <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
-            {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'},
-            {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'},
-            {text:'Contacts', target:'ContactUs-bookmark', fontAwsomeIcon:'fa-address-book'}
-        ]}/>
-    )
-}
+import {PageNavbar,addMenu} from '../../Components/PageNavbar'
 
 
 export default class HomePage extends React.Component {
@@ -32,9 +21,17 @@ export default class HomePage extends React.Component {
     }
 
     render() {
+        let pageNavMenus=[ {text:'^^^', target:'primary-content-top', hoverText:'Top'}]
+
+        if (this.props.notices.length > 0 ) {
+            pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
+        }
+        pageNavMenus = addMenu(pageNavMenus, {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'});
+        pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
+
         return (
             <div id='HomePage'>
-                {pageNav()}
+                <PageNavbar menus={pageNavMenus}/>
                 <Row >
                   <Col  md={{size:10, push:1}}  xs={{size:12}}>
                           <NoticesList

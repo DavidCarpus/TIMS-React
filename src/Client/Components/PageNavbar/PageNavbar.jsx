@@ -1,18 +1,24 @@
 import React from 'react';
  import  './PageNavbar.css'
  import {
-    //  Navbar,
-     // NavbarBrand,
-    //  Container,
-    //  Button,
-    //  Collapse,
      NavLink,
      NavItem,
      Nav,
  } from 'reactstrap';
 
+ // if (this.props.notices.length > 0 && pageNavMenus.filter(menu => matchText('Notices',menu)).length  === 0 ) {
+ //     pageNavMenus.push({text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'},);
+ // }
+export function addMenu(currentMenus, newMenu) {
+     const matchText = (text, menu) => menu.text === text;
+     if (currentMenus.filter(menu => matchText(newMenu.text,menu)).length  === 0 ) {
+         return currentMenus.concat(newMenu);
+     }
+     return currentMenus;
+ }
+
  //http://jsbin.com/iqiyuw/1/edit?html,js,output
- export default function PageNavbar({menus, loading}){
+ export function PageNavbar({menus, loading}){
      if ( loading) {         return (<div>Loading</div>)     }
      if (menus.length === 0) {        return(null);    }
 
@@ -38,18 +44,3 @@ import React from 'react';
              </div>
      )
  }
- /*
-        <Nav vertical>
-          <NavItem>
-            <NavLink href="#">Link</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="#">Link</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="#">Another Link</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink disabled href="#">Disabled Link</NavLink>
-          </NavItem>
-        </Nav>*/

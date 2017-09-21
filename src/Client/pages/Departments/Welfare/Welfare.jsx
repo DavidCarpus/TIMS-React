@@ -7,7 +7,7 @@ import RawText from '../../../Components/RawText'
 import FAQList  from '../../../Components/FAQList'
 import { Col, Row } from 'reactstrap';
 import GroupMembers from '../../../Components/GroupMembers'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 
 function pageNav() {
     return (

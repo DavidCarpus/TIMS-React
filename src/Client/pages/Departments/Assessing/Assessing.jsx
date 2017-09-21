@@ -5,7 +5,7 @@ import  './Assessing.css'
 import DocumentList  from '../../../Components/DocumentList'
 import RawText from '../../../Components/RawText'
 import TaxMapForm  from '../../../Components/TaxMapForm'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 import GroupMembers from '../../../Components/GroupMembers'
 
 function pageNav() {

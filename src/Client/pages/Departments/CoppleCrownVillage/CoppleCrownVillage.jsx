@@ -5,7 +5,7 @@ import { Col, Row } from 'reactstrap';
  import RawText from '../../../Components/RawText'
  import HelpfulInformation  from '../../../Components/HelpfulInformation'
  import GroupMembers from '../../../Components/GroupMembers'
- import PageNavbar from '../../../Components/PageNavbar'
+ import {PageNavbar} from '../../../Components/PageNavbar'
 
  function pageNav() {
      return (

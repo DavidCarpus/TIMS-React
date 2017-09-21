@@ -8,7 +8,7 @@ import SmartLink from '../../../Components/SmartLink'
 import EB2ServiceBlock from '../../../Components/EB2ServiceBlock'
 import TransferStationRules from '../../../Components/TransferStationRules'
 import GroupMembers from '../../../Components/GroupMembers'
-import PageNavbar from '../../../Components/PageNavbar'
+import {PageNavbar} from '../../../Components/PageNavbar'
 
 import styles from './PublicWorks.css'
 
