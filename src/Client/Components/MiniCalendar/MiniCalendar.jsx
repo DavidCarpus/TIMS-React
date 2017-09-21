@@ -9,10 +9,6 @@ var monthNames = [
 ];
 
 export default class MiniCalendar extends React.Component {
-    componentWillMount() {
-        this.props.fetchData(this.props);
-    }
-
     render() {
     if ( this.props.loading) {         return (<div>Loading</div>)     }
     if (this.props.calendarData.length === 0) {        return(null);    }

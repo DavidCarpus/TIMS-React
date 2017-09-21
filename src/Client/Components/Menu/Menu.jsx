@@ -159,7 +159,6 @@ export default class Menu extends React.Component {
             let itemB = b[1].description.toUpperCase();
             return (itemA < itemB) ? -1 : (itemA > itemB) ? 1 : 0;
         })
-        console.log('this.props.configuration', this.props);
 
         return (
             <Sticky className="sticky-one" enter='10'>

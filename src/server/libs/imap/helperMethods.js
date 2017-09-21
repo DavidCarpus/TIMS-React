@@ -136,15 +136,6 @@ function getDateValueFromTextLine(line) {
     }
 
     return null;
-
-    //
-    // dte = Date.parse(line);
-    // if (dte >= 0 ) {
-    //      if (line.indexOf('DATE') >= 0 ) {
-    //         console.log('imap:helperMethods:extractDBData - Setting results.date:', dte, ' from ', line);
-    //         results.date = dte;
-    //     }
-    // }
 }
 
 //=======================================

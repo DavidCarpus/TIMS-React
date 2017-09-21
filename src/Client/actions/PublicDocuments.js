@@ -23,7 +23,6 @@ export function fetchMeetingDocs(groupName) {
           })
           .catch( reason => {
             //   if (isEmpty(reason))  return;
-              console.log(actionsName +'  fetchMeetingDocs? : ' + JSON.stringify(reason));
               dispatch(fetchMeetingsFailure(reason));
           })
 

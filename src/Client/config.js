@@ -7,8 +7,6 @@ var prod_configuration = require('../private/' + MUNICIPALITY + '/configuration_
 var test_configuration = require('../private/' + MUNICIPALITY + '/configuration_test.json');
 var base_configuration = require('../private/' + MUNICIPALITY + '/configuration.json');
 
-console.log("Env:", process.env);
-
 if (!String.prototype.startsWith) {
     // eslint-disable-next-line
     String.prototype.startsWith = function(searchString, position){
