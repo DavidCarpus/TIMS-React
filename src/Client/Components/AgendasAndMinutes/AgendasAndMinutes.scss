@@ -27,13 +27,13 @@
     .meetingBlock .date {
         display: inline-block;
         font-weight: bold;
-        width: 90px;
+        min-width: 8em;
     }
     .meetingBlock .Entries {
         display: inline-block;
     }
     .meetingBlock .meetingElement {
-        min-width: 100px;
+        min-width: 7em;
         display: inline-block;
     }
 }

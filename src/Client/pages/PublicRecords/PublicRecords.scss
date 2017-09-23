@@ -23,8 +23,12 @@
         width: 10em;
     }
     .documentLink {
-        min-width: 150px;
+        min-width: 30em;
         display: inline-block;
+    }
+    .posted {
+        padding-left: 2em;
+        font: 10px/10px Georgia, serif;
     }
     }
 }

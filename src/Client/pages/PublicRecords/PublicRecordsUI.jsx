@@ -14,19 +14,17 @@ const publicRecordTypes = [
      'RFP',
      'NOTICE',
      'AGENDA',
+     'DOCUMENTS',
      'RFPS',
      'NOTICES',
      'AGENDAS',
      'VOTING',
 ]
 
+const dateStr =(date)=> date && (date.getUTCMonth()+1) + '/' + date.getUTCDate()+ '/' + date.getUTCFullYear()
+
 function formatDate(date) {
-
-  var day = date.getDate();
-  var monthIndex = date.getMonth();
-  // var year = date.getFullYear();
-
-  return monthNames[monthIndex] + ' ' + day ;
+  return monthNames[date.getMonth()] + ' ' + date.getDate() ;
 }
 
 //-----------------------------------------------------------------------------
@@ -48,10 +46,16 @@ const MonthBlock = ({monthRecords, month, year}) => {
                         let label = entry.recorddesc;
                         if (label === null) { label =  entry.groupDescription; }
                         if (label === null) { label =  entry.groupName === 'UNK' ? "Main" : ''; }
+
                         return (
                             entry.link &&
                             <div key={entry.id}  className='documentLink'>
                                 <SmartLink link={entry.link} id={entry.id} linkText={label } />
+                                    <span className="posted">
+                                        (Posted {dateStr(new Date(entry.date))})
+                                        {entry.groupName === 'UNK' ? "" : " - " +entry.groupName}
+                                    </span>
+                                    <br/>
                             </div>
 
                         )
