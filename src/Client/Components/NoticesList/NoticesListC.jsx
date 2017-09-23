@@ -26,6 +26,8 @@ const isAlertNotice = (notice) => notice.expiredate && Math.abs(new Date(notice.
  }
 
  const mapDispatchToProps = (dispatch) => {
+     return {
+     }
  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoticesListUI);

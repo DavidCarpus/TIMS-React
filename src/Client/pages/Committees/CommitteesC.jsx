@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
 import {fetchGroupNotices} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
+import {fetchMeetingDocs} from '../../actions/PublicDocuments'
 
 const mapStateToProps = (state, ownProps) => {
     var groupName=  ownProps.match.params.committee;
@@ -34,6 +35,7 @@ const mapStateToProps = (state, ownProps) => {
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
                 ownProps.store.dispatch(fetchGroupNotices(groupName));
                 ownProps.store.dispatch(fetchGroupDoc(groupName));
+                ownProps.store.dispatch(fetchMeetingDocs(groupName));
                 // loading= true;
             }
         }
@@ -62,7 +64,8 @@ const mapDispatchToProps = (dispatch) => {
           dispatch(fetchOrganizationalUnitData(groupName))
           dispatch(fetchGroupNotices(groupName))
           dispatch(fetchGroupDoc(groupName))
-     }
+          dispatch(fetchMeetingDocs(groupName))
+      }
   }
 }
 
