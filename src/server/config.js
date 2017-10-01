@@ -1,5 +1,6 @@
-let mode=process.env.NODE_ENV||'development'
-const privateDir = mode === 'development' ? '../private/'+process.env.REACT_APP_MUNICIPALITY: '../private/'
+let mode=process.env.INIT_MODE || process.env.NODE_ENV||'development'
+const privateDir = mode === 'development' || process.env.DEV_MACHINE ? '../private/'+process.env.REACT_APP_MUNICIPALITY: '../private/'
+// console.log('privateDir:', privateDir);
 
 var base_configuration = require(privateDir +'/configuration.json');
 var dev_configuration = require(privateDir +'/configuration_dev.json');

@@ -8,8 +8,33 @@
         "nodemon": "^1.11.0",
         "react-scripts": "1.0.7"
     },
+    "scripts": {
+        "eject": "react-scripts eject",
+        "build-css": "node-sass-chokidar src/ -o src/  --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/ ",
+        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/  --watch --recursive",
+        "start": "react-scripts start -- --include-path ./src",
+        "build": "react-scripts build",
+
+        "pushProd": "echo $REACT_APP_MUNICIPALITY && npm run pushProdClient  && npm run pushProdServer && npm run pushProdPrivate",
+        "pushProdClient": "rsync -auv build/ A2:./Prod/$REACT_APP_MUNICIPALITY/www  --exclude .htaccess --delete",
+        "pushProdServer": "rsync -auv src/server/ A2:./Prod/$REACT_APP_MUNICIPALITY/server/ --exclude node_modules",
+        "pushProdPrivate": "rsync -auv src/private/$REACT_APP_MUNICIPALITY/* A2:./Prod/$REACT_APP_MUNICIPALITY/private/",
+
+        "test": "react-scripts test --env=jsdom",
+        "tst": "rsync -auv src/private/$REACT_APP_MUNICIPALITY/* A2:./$REACT_APP_MUNICIPALITY/private/",
+        "startServer": "cd server && node app.js",
+        "startTestServer": "cd server && node app.js",
+
+        "pushTest": "echo $REACT_APP_MUNICIPALITY && npm run pushTestClient  && npm run pushTestServer && npm run pushTestPrivate",
+        "pushTestClient": "rsync -auv build/ A2:./TestSites/$REACT_APP_MUNICIPALITY/www  --exclude .htaccess --delete",
+        "pushTestServer": "rsync -auv src/server/ A2:./TestSites/$REACT_APP_MUNICIPALITY/server/ --exclude node_modules",
+        "pushTestPrivate": "rsync -auv src/private/$REACT_APP_MUNICIPALITY/* A2:./TestSites/$REACT_APP_MUNICIPALITY/private/",
+
+        "dev": "concurrently \"yarn start\"  \"cd src/server && nodemon app.js\" \"npm run watch-css\" "
+    },
     "dependencies": {
         "axios": "^0.16.2",
+        "bcrypt": "^1.0.3",
         "bootstrap": "4.0.0-alpha.6",
         "classnames": "^2.2.5",
         "concurrently": "^3.4.0",
@@ -22,6 +47,7 @@
         "react-addons-transition-group": "^15.6.0",
         "react-bootstrap": "^0.31.0",
         "react-collapsible": "^2.0.0",
+        "react-day-picker": "^6.1.0",
         "react-dom": "^15.6.1",
         "react-dropdown": "^1.2.5",
         "react-dropzone": "^4.1.1",
@@ -39,22 +65,9 @@
         "redux-thunk": "^2.2.0"
     },
     "config": {
-        "muni": "MiltonNH",
-        "A2Path": "miltonnh.us",
-        "A2TestPath": "test.miltonnh.us"
+        "muni": "$REACT_APP_MUNICIPALITY"
     },
-    "scripts": {
-        "eject": "react-scripts eject",
-        "build-css": "node-sass-chokidar src/ -o src/  --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/ ",
-        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/  --watch --recursive",
-        "start": "react-scripts start -- --include-path ./src",
-        "build": "react-scripts build",
-        "pushProd": "rsync -auv build/ A2:./$npm_package_config_A2Path/www/ --delete  && rsync -auv server/ A2:./$npm_package_config_A2Path/server/",
-        "test": "react-scripts test --env=jsdom",
-        "tst": "echo $REACT_APP_MUNICIPALITY $npm_package_config_muni",
-        "startServer": "cd server && node app.js",
-        "startTestServer": "cd server && node app.js",
-        "pushTest": "rsync -auv build/ A2:./$npm_package_config_A2TestPath/www  --exclude .htaccess --delete  && rsync -auv src/server/ A2:./$npm_package_config_A2TestPath/server/ --exclude node_modules",
-        "dev": "concurrently \"yarn start\"  \"cd src/server && nodemon app.js\" \"npm run watch-css\" "
+    "unusedScripts": {
+        "pushProd": "rsync -auv build/ A2:./$npm_package_config_A2Path/www/ --delete  && rsync -auv server/ A2:./$npm_package_config_A2Path/server/"
     }
 }

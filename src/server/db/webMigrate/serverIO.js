@@ -8,13 +8,16 @@ var wget = require('./wget');
 const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 
 const localFileURL = '/home/dcarpus/code/milton_nh/currentMiltonWebsite/miltonnh-us.com'
-let serverPath = '/home/carpusco/test.miltonnh.us/private/Attachments/'
+let serverPath = '/home/carpusco/TestSites/'+ process.env.REACT_APP_MUNICIPALITY + '/private/Attachments/'
 
-if (configuration.mode === 'development') {
-    // logErrors = true
+const mode = process.env.NODE_ENV||'development'
+
+console.log('serverIO - configuration.mode:', mode);
+if (mode === 'development') {
     serverPath = privateDir + '/Attachments/'
-} else if  (configuration.mode === 'production') {
-    serverPath = '/home/carpusco/miltonnh.us/private/Attachments/'
+} else if  (mode === 'production') {
+    // serverPath = '/home/carpusco/miltonnh.us/private/Attachments/'
+    serverPath = '/home/carpusco/Prod/'+ process.env.REACT_APP_MUNICIPALITY + '/private/Attachments/'
 }
 
 let Client = require('ssh2-sftp-client');
