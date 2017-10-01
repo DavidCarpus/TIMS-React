@@ -116,7 +116,7 @@ function extractMeetingTableRows(originalHTML, groupName) {
 function dbRecordsFromExtractedRow(rowData) {
     let dateElement = rowData[0]
     if (!dateElement || typeof dateElement === undefined) {
-        console.log("Missing date element???", rowData);
+        console.error("Missing date element???", rowData);
         return
     }
     let meetingDate = dateElement.date
@@ -163,7 +163,7 @@ function updateFileDBFileLink(record) {
         return Promise.resolve([record]);
     })
     .catch(dberr => {
-        console.log("DBError:", dberr);
+        console.error("DBError:", dberr);
         return Promise.reject(dberr);
     })
 
@@ -192,7 +192,7 @@ function enterIntoDB(record) {
         return Promise.resolve([record]);
     })
     .catch(dberr => {
-        console.log("DBError:", dberr);
+        console.error("DBError:", dberr);
         return Promise.reject(dberr);
     })
 }
@@ -256,7 +256,7 @@ function cloneMeetings(paths) {
                         .then( (pushReq)=> {
                             return rec
                         })
-                        .catch(err => console.log(err, rec))
+                        .catch(err => console.error(err, rec))
                     })
                 )
                 .then( newFilesUploaded => {
@@ -402,7 +402,7 @@ function migratePublicRecordURIs() {
                             return pushFileToServer(rec.local, rec.targetPath)
                             .then( (pushReq)=> {
                                 return rec
-                            }).catch(err => console.log(err, rec))
+                            }).catch(err => console.error(err, rec))
                         })
                     )
                     .then(copiedFilesNeeded => publicRecordsToMigrate )
@@ -415,8 +415,6 @@ function migratePublicRecordURIs() {
                         // console.log('New targetPath:', localFileURL(rec), 'from', rec.remotePath);
                         return {id: rec.id, pageLink:rec.pageLink, fileLink: rec.fileLink}
                     })
-
-                    console.log('Return toDB', toDB);
                     return toDB
                 })
             })
@@ -424,7 +422,6 @@ function migratePublicRecordURIs() {
                 return Promise.all(
                 toLogToDB
                 .map(dbEntry => {
-                    console.log('updateFileDBFileLink', dbEntry);
                     return updateFileDBFileLink(dbEntry)
                 })
                 )
@@ -453,7 +450,6 @@ function migrateLinks(linksToMigrate) {
     return pullLocalCopies(linksToMigrate)
     .then(pulledFiles  => {
         let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
-        console.log('getServerFilePath:', getServerFilePath());
 
         return pullNewServerDirs(getServerFilePath(), ['Documents'] )
         .then( serverDirs => {
@@ -470,11 +466,13 @@ function migrateLinks(linksToMigrate) {
             return Promise.all(
                 linksToMigrate.filter(onlyLocalDoc).filter(notOnServer)
                 .map(rec => {
-                    console.log('Push ', rec.local , 'to', rec.targetPath);
+                    if (configuration.mode !== 'development') {
+                        console.log('Push ', rec.local , 'to', rec.targetPath);
+                    }
                     return pushFileToServer(rec.local, rec.targetPath)
                     .then( (pushReq)=> {
                         return rec
-                    }).catch(err => console.log(err, rec))
+                    }).catch(err => console.error(err, rec))
                 })
             )
             .then(copiedFilesNeeded => pulledFiles )
@@ -526,7 +524,6 @@ function cloneDocuments(paths) {
                 })
 
                 let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
-                console.log('Check:', mergedTableLinks);
 
                 return Promise.all(
                     mergedTableLinks.filter(onlyLocalDoc).filter(notOnServer).map(rec => {

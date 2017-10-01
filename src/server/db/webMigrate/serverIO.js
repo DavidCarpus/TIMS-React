@@ -147,23 +147,23 @@ function pushFileToServer( fullPathLocalFile, serverDest ) {
             return Promise.resolve(serverDest)
         })
         .catch(err => {
-            console.log("sftpPromise:put err", serverDest);
+            console.log("sftpPromise:put err", fullPathLocalFile, serverDest);
             // reject("sftpPromise:err", err);
             Promise.resolve("**sftpPromise:put err", serverDest);
         })
     } else {
         return new Promise(function(resolve, reject) {
-            console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
+            // console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
             if (!serverDest || serverDest.length === 0 || !fullPathLocalFile || fullPathLocalFile.length === 0) {
                 // console.log('**** Invalid "Server" location .. ' serverDest);
-                return Promise.reject('**** Invalid "Server" paths .. ' + fullPathLocalFile + ' -- ' + serverDest)
+                return reject('**** Invalid "Server" paths .. ' + fullPathLocalFile + ' -- ' + serverDest)
             }
-            var rd = fs.createReadStream(fullPathLocalFile);
-            rd.on("error", function(err) { reject(err); });
-            var wr = fs.createWriteStream(serverDest);
-            wr.on("error", function(err) { reject(err); });
-            wr.on("close", function(ex) { resolve(serverDest); });
-            rd.pipe(wr);
+            // var rd = fs.createReadStream(fullPathLocalFile);
+            // rd.on("error", function(err) { reject(err); });
+            // var wr = fs.createWriteStream(serverDest);
+            // wr.on("error", function(err) { reject(err); });
+            // wr.on("close", function(ex) { resolve(serverDest); });
+            // rd.pipe(wr);
             // fs.createReadStream(fullPathLocalFile).pipe(fs.createWriteStream(serverDest));
         })
     } // else
