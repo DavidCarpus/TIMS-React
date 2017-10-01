@@ -442,7 +442,11 @@ function migrateLinks(linksToMigrate) {
             record.recordtype = 'Document'
         }
         if (! record.date || typeof record.date === 'undefined' ) {
-            record.date = new Date()
+            console.log('Setting "default" date for', record.desc);
+            let defaultDocumentDate = new Date()
+            defaultDocumentDate.setDate(defaultDocumentDate.getDate()-21)
+            record.date = defaultDocumentDate
+            // record.date = new Date()
         }
 
         return record;
@@ -482,18 +486,25 @@ function migrateLinks(linksToMigrate) {
             let localFileURL = (rec) => rec.remotePath.indexOf('http') !== -1 ? rec.remotePath: 'Documents/' + rec.remotePath.replace(/uploads\//, '')
 
             return Promise.all(
-            toLogToDB
-            .map(rec => {
-                let dbEntry = {pageLink:rec.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
-                // console.log('lnk', dbEntry);
-                return enterIntoDB(dbEntry)
-            })
+                toLogToDB
+                .map(rec => {
+                    if (! rec.date || typeof rec.date === 'undefined' ) {
+                        console.log('Setting "default" date for', rec.desc);
+                        let defaultDocumentDate = new Date()
+                        defaultDocumentDate.setDate(defaultDocumentDate.getDate()-21)
+                        rec.date = defaultDocumentDate
+                    }
+
+                    let dbEntry = {pageLink:rec.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
+                    // console.log('lnk', dbEntry);
+                    return enterIntoDB(dbEntry)
+                })
             )
         })
     })
 }
 
-//========================================
+//=======================================================
 function cloneDocuments(paths) {
     // let mergeArrays = (arrays) => [].concat.apply([], arrays)
 
@@ -549,7 +560,10 @@ function cloneDocuments(paths) {
                 .filter(notnhtaxkiosk)
                 .map(rec => {
                     if (! rec.date || typeof rec.date === 'undefined' ) {
-                        rec.date = new Date()
+                        // console.log('Setting "default" date for', rec.desc);
+                        let defaultDocumentDate = new Date()
+                        defaultDocumentDate.setDate(defaultDocumentDate.getDate()-21)
+                        rec.date = defaultDocumentDate
                     }
                     let dbEntry = {pageLink:record.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
                     // console.log('lnk', dbEntry);
@@ -604,5 +618,5 @@ migrateLinks(linkTable)
     })
 
 }
-// TODO: Do Cemetery documents via old way (json file in server/db/json)
+// TODO: Do Cemetery documents via old way (json file in private/json)
 // {"group":"Cemetery", "url":"http://miltonnh-us.com/cemetery.php", "query":"table[border='1'][style='width: 500px;']"},
