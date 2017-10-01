@@ -56,7 +56,7 @@ var emailSubmit = require('./libs/emailProcessors').submit;
 var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
 var sendVerifications = require('./libs/AlertRequests').sendVerifications;
 
-var  calendar = require('./libs/calendar');
+// var  calendar = require('./libs/calendar');
 
 //===============================================
 function sleep(ms) {
@@ -85,28 +85,28 @@ function alertVerificationProcess(delay, count=2) {
 
 }
 
-//===============================================
-function calendarProcess(delay, count=2) {
-    return calendar.importCalendarEvents(knex)
-    .then(results => {
-        // console.log(results);
-        return Promise.resolve('Done')
-    })
-    .then(done => {
-        return sleep(delay).then(out =>{
-            if (count > 0) {
-                --count;
-                if (configuration.calendarProcess.infinite) {
-                    ++count;
-                }
-                return calendarProcess(delay, count)
-            } else {
-                process.exit();
-            }
-        })
-    } )
-
-}
+// //===============================================
+// function calendarProcess(delay, count=2) {
+//     return calendar.importCalendarEvents(knex)
+//     .then(results => {
+//         // console.log(results);
+//         return Promise.resolve('Done')
+//     })
+//     .then(done => {
+//         return sleep(delay).then(out =>{
+//             if (count > 0) {
+//                 --count;
+//                 if (configuration.calendarProcess.infinite) {
+//                     ++count;
+//                 }
+//                 return calendarProcess(delay, count)
+//             } else {
+//                 process.exit();
+//             }
+//         })
+//     } )
+//
+// }
 
 //===============================================
 function imapProcess(delay, count=2) {
@@ -247,24 +247,33 @@ console.log(process.env.REACT_APP_MUNICIPALITY);
 console.log(configuration.mode + " mode");
 switch (configuration.mode) {
     case 'development':
+        var calendarProcess = require('./libs/calendar/ICSCalendar').calendarProcess;
+        console.log('ICSCalender process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        calendarProcess(configuration.calendarProcess.delay, configuration.calendarProcess.infinite, 50)
         // console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.' );
         // imapProcess(configuration.imapProcess.delay, 50);
-        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
-        calendarProcess(configuration.calendarProcess.delay, 50)
-        console.log('alertVerification process every', configuration.alertVerificationProcess.delay/1000, 'seconds', (configuration.alertVerificationProcess.infinite)?'inf.':'NOT inf.');
-        alertVerificationProcess(configuration.alertVerificationProcess.delay, 50)
+        // console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        // calendarProcess(configuration.calendarProcess.delay, 50)
+        // console.log('alertVerification process every', configuration.alertVerificationProcess.delay/1000, 'seconds', (configuration.alertVerificationProcess.infinite)?'inf.':'NOT inf.');
+        // alertVerificationProcess(configuration.alertVerificationProcess.delay, 50)
         break;
     case 'production':
         console.log('Imap process every', configuration.imapProcess.delay/1000, 'seconds', (configuration.imapProcess.infinite)?'inf.':'NOT inf.');
         imapProcess(configuration.imapProcess.delay, 50);
-        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
-        calendarProcess(configuration.calendarProcess.delay, 50)
+        var calendarProcess = require('./libs/calendar/ICSCalendar').calendarProcess;
+        console.log('ICSCalender process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        calendarProcess(configuration.calendarProcess.delay, configuration.calendarProcess.infinite, 50)
+        // console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        // calendarProcess(configuration.calendarProcess.delay, 50)
         break;
     case 'test':
         // ****** The 'Test' site email processing currently crashes the system.
         // ****** Problem with SSL certificates and email server
-        console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
-        calendarProcess(configuration.calendarProcess.delay, 50)
+        var calendarProcess = require('./libs/calendar/ICSCalendar').calendarProcess;
+        console.log('ICSCalender process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        calendarProcess(configuration.calendarProcess.delay, configuration.calendarProcess.infinite, 50)
+        // console.log('GCalendar process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
+        // calendarProcess(configuration.calendarProcess.delay, 50)
 
         break;
     default:

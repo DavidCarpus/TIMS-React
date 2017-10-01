@@ -5,11 +5,11 @@ import  startOfMonth from 'date-fns/start_of_month'
 import  startOfWeek from 'date-fns/start_of_week'
 import  endOfMonth from 'date-fns/end_of_month'
 import  endOfWeek from 'date-fns/end_of_week'
-import addMonths from 'date-fns/add_months'
+// import addMonths from 'date-fns/add_months'
 import addDays from 'date-fns/add_days'
 import getISOWeek from 'date-fns/get_iso_week'
 import isSameDay from 'date-fns/is_same_day'
-import isThisMonth from 'date-fns/is_this_month'
+// import isThisMonth from 'date-fns/is_this_month'
 // import getMonth from 'date-fns/get_month'
 
 import { Col, Row } from 'reactstrap';
@@ -51,13 +51,15 @@ function week(dates, events, pivotDate) {
 }
 
 function currentMonthBlock(events) {
-    let currDate  = new Date();
-    let matchDates = events.filter(evt => isThisMonth(new Date(evt.startDate) ))
-    // console.log('matchDates:', currDate, matchDates);
-    if (matchDates.length === 0) {
-        // console.log('No events remaining this month. Use Next Month.');
-        currDate  = addMonths(currDate, 1)
-    }
+    // let currDate  = new Date();
+    let currDate  = events[0].startDate
+    // console.log(events[0]);
+    // let matchDates = events.filter(evt => isThisMonth(new Date(evt.startDate) ))
+    // // console.log('matchDates:', currDate, matchDates);
+    // if (matchDates.length === 0) {
+    //     // console.log('No events remaining this month. Use Next Month.');
+    //     currDate  = addMonths(currDate, 1)
+    // }
 
     const startDate = startOfWeek(startOfMonth(currDate) );
     const endDate = endOfWeek(endOfMonth(currDate) );
@@ -94,28 +96,31 @@ function currentMonthBlock(events) {
 
 function eventList(rawCalData) {
     // console.log("MainCalendar:calendarData:" , rawCalData);
+    const timeStamp = (date) => (date.getHours()+date.getMinutes()+date.getSeconds() > 0) ?
+        (date.getHours() > 12 ? ""+(date.getHours()-12): (date.getHours()))  + ":" +
+        (date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes())  +
+        (date.getHours() > 12 ? ' PM': ' AM'):
+        ""
+
     let calendarData = rawCalData.map( entry => {
-        let date =  new Date(entry.startDate)
-        const ts=date.getHours()+date.getMinutes()+date.getSeconds()
-        // console.log('date:', date, ts);
-        let time = '';
-        if (ts > 0) {
-            time += date.getHours() > 12 ? date.getHours()-12: date.getHours();
-            time += ":"
-            time += date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes() ;
-            time += date.getHours() > 12 ? ' PM': ' AM';
-        }
-        // console.log('TS', date.getTimezoneOffset());
+        let sdate =  new Date(entry.startDate)
+
         return {
-            date: monthNames[date.getMonth()] + ' ' + date.getDate()+ (ts>0?' - ' + time:''),
+            dateStr: monthNames[sdate.getMonth()] + ' ' + sdate.getDate(),
+            sdate: sdate,
+            time: timeStamp(sdate) + (timeStamp(sdate).length > 0?'-':"") + timeStamp(new Date(entry.endDate)),
+            orig: entry,
             id:entry.id,
             description:entry.summary
         }
-    })
+    }).sort((a,b) =>  a.sdate -b.sdate )
+    // console.log("MainCalendar:calendarData:" , calendarData);
+    // <div className="date">{entry.sdate.getMonth() + '-' + entry.sdate.getDate()}</div>
     return (
 <div id="eventList">{calendarData.map( (entry) =>
         <div className="entry" key={entry.id} >
-            <div className="date">{entry.date}</div>
+            <div className="date">{entry.dateStr}</div>
+                <div className="date">{entry.time}</div>
             <div className="description">{entry.description}</div>
         </div>
     )}
@@ -156,3 +161,5 @@ export default class MainCalendar extends React.Component {
 //         <div className="description">{entry.description}</div>
 //     </div>
 // )}
+        // console.log("NON recurringEvents in range:", calendarData.filter(isNotRecurringEvent).filter(eventInRange));
+        // console.log("RecurringEvents in range:", calendarData.filter(isRecurringEvent).filter(eventInRange));

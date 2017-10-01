@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
+var startOfMonth = require('date-fns/start_of_month')
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -153,8 +154,11 @@ router.get('/Asides/:groupName', function(req, res) {
 });// ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
     // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
-    var query = "Select * from CalendarEvents where startDate >= NOW() order by startDate limit 20 ";
-    // console.log('/CalendarEvents', query);
+    const now = startOfMonth(new Date())
+    const nowStr = now.getUTCFullYear() + '-' + now.getUTCMonth() + '-' + now.getDate()
+    // var query = "Select * from CalendarEvents where endDate >= NOW() or endDate is null order by startDate limit 20 ";
+    var query = "Select * from CalendarEvents where endDate >= '" + nowStr + "' or endDate is null order by startDate limit 20 ";
+    console.log('/CalendarEvents', query);
 
      simpleDBQuery(query)
      .then(rows => {
