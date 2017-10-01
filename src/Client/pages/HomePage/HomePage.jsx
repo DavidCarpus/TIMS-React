@@ -27,7 +27,7 @@ export default class HomePage extends React.Component {
             pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
         }
         pageNavMenus = addMenu(pageNavMenus, {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'});
-        pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
+        pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'ContactUs-bookmark', fontAwsomeIcon:'fa-address-book'});
 
         return (
             <div id='HomePage'>
