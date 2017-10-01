@@ -2,10 +2,20 @@ import { connect } from 'react-redux'
 import PublicRecordsUI from './PublicRecordsUI'
 import {fetchPublicDocs} from '../../actions/PublicDocuments'
 
+// let updatedFilter=false
+
+let currentFilter = {}
+const updateFilter = (currentFilter, field, value ) => {
+    console.log('updateFilter', field, value);
+    currentFilter[field] = value
+    // updatedFilter=true
+}
+
 const mapStateToProps = (state, ownProps) => {
     var recordType=  ownProps.match.params.recordtype;
     let recordState = state.PublicRecords;
     let loading= recordState.loading
+    // console.log("ownProps.match.params:",   ownProps.match.params);
 
     let loadedRecordType = recordState.recordtype
     let selectedRecordType = recordType
@@ -27,41 +37,67 @@ const mapStateToProps = (state, ownProps) => {
                 loading=true;
             }
         }
+        console.log('Clear currentFilter.');
+        currentFilter = {}
+    }
+    if (!currentFilter.groupName || currentFilter.groupName.length === 0) {
+        if (ownProps.match.params.groupName) {
+            updateFilter(currentFilter, "groupName", ownProps.match.params.groupName)
+        }
+    }
+    // console.log("currentFilter", updatedFilter, currentFilter);
+    // if (ownProps.match.params.groupName) {
+    //     currentFilter.groupName = ownProps.match.params.groupName
+    // }
+
+    const now=new Date();
+    let filterRecords = (record) => {
+        let match = true;
+        if (currentFilter.groupName ){
+                if (record.groupName !== currentFilter.groupName ) {
+                    match = false;
+                }
+        }
+        if (now - new Date(record.date)  > 1000*60*60*24*365*1) {
+            match = false;
+        }
+
+        return match
     }
 
     let sortedRecords=[]
-    if (recordState.publicRecords) {
-        sortedRecords = Object.keys(recordState.publicRecords)
-        .sort((a,b) => {
-            let dateDiff = new Date(b) - new Date(a);
-            //  console.log(dateDiff);
+    if (recordState.publicRecords
+    && recordState.publicRecords.length > 0)
+    {
+        sortedRecords = recordState.publicRecords.sort((a,b) => {
+            let dateDiff = new Date(b.date) - new Date(a.date);
             if (dateDiff !== 0) { return dateDiff; }
-            //  console.log(a, b);
-            return a.groupName.localeCompare(b.groupName);
-            // return new Date(b) - new Date(a);
+            const grpCmp =  a.groupName.localeCompare(b.groupName);
+            if (grpCmp !== 0) { return grpCmp; }
+            if (a.recorddesc) {
+                return a.recorddesc.localeCompare(b.recorddesc);
+            }
+            return 0;
         })
-        .map(function(val) {
-            return [val, recordState.publicRecords[val] ] }
-        )
-
-        sortedRecords = sortedRecords.reduce( (acc, curr, i) => {
-            //  console.log(curr[0]);
-            let year = (new Date(curr[0])).getFullYear();
-
-            //  console.log(year);
-            acc[year] = acc[year]? acc[year]: [];
-            acc[year].push(curr)
-            return acc;
-        }, {})
-        //  console.log(sortedRecords);
     }
+    const groupSelection = sortedRecords.reduce( (acc, elem) => {
+        if (acc.filter( accElem => accElem.id === elem.groupName).length === 0) {
+            acc.push({id:elem.groupName,description:elem.groupDescription || elem.groupName})
+        }
+        return acc
+    },[{id:'',description:''}]).sort((a,b)=> a.description.localeCompare(b.description))
 
 
+    sortedRecords = sortedRecords.filter(filterRecords)
+
+    // updatedFilter=false
     return {
         recordType:  recordType,
         records:  sortedRecords,
         groupData:  recordState.groupData,
+        groupSelection: groupSelection,
         loading: loading,
+        currentFilter: currentFilter,
         store: ownProps.store
     };
 }
@@ -73,7 +109,8 @@ const mapDispatchToProps = (dispatch) => {
         //   dispatch(fetchPageAsides(groupName));
           dispatch(fetchPublicDocs(recordType));
         //   dispatch(fetchGroupDoc(groupName));
-       }
+    },
+    updateFilter: updateFilter
   }
 }
 

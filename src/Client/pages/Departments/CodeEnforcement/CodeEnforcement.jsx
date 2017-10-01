@@ -17,7 +17,7 @@ import { Col, Row } from 'reactstrap';
      )
  }
 
-export default function CodeEnforcement({group, store, loading, id, title='Code Enforcement'}){
+export default function CodeEnforcement({group, groupName, store, loading, id, title='Code Enforcement'}){
     return (
         <Row id='CodeEnforcement'>
             {pageNav()}
@@ -30,7 +30,7 @@ export default function CodeEnforcement({group, store, loading, id, title='Code 
 
 
                 <HelpfulInformation informationArray={group.helpfulinformation || []} />
-                <DocumentList group={group} store={store} title='Milton Code Enforcement Documentation' />
+                <DocumentList groupName={groupName} group={group} store={store} title='Milton Code Enforcement Documentation' />
                 <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />
             </Col>
         </Row>

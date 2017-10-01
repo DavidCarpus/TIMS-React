@@ -39,7 +39,8 @@
         {"id": 1, "desc":"RFPs", "link": "/RFPS"},
         {"id": 2, "desc":"Notices", "link": "/Notices"},
         {"id": 3, "desc":"Agendas", "link": "/Agendas"},
-        {"id": 4, "desc":"Documents", "link": "/Documents"}
+        {"id": 4, "desc":"Minutes", "link": "/Minutes"},
+        {"id": 5, "desc":"Documents", "link": "/Documents"}
         ]
     }
 ]

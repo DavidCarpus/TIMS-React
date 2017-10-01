@@ -1,4 +1,6 @@
 var fs = require('fs');
+var addDays = require('date-fns/add_days');
+// import addDays from 'date-fns/add_days'
 
 
 const DEFAULT_JSON_DIR='../../../private/' + process.env.REACT_APP_MUNICIPALITY + '/json/';
@@ -58,7 +60,7 @@ function objectInsert(filename, obj) {
             }
             break;
         case 'PublicRecords':
-            return [{ pageLink: obj.groupName, date:obj.date || (new Date()).toString(),
+            return [{ pageLink: obj.groupName, date:obj.date ||  addDays(new Date(), -28), viewcount: obj.viewcount || 0,
                 recordtype:obj.type, recorddesc:obj.desc || "", fileLink:obj.link, mainpage: obj.mainpage || false,}];
             break;
         case 'FAQ':
@@ -68,7 +70,7 @@ function objectInsert(filename, obj) {
             return [{ listName: basename,pricedesc:obj.desc, price:Number(obj.price.replace(/[^0-9\.]+/g,""))}];
             break;
         case 'HelpfulInformation':
-            return [{pageLink: 'CodeEnforcement', date:obj.date || (new Date()).toString(),
+            return [{pageLink: 'CodeEnforcement', date:obj.date || new Date(),
                         recordtype:'HelpfulInformation', recorddesc:obj.desc, fileLink:obj.link, mainpage: false,}];
             break;
         case 'EB2Services':

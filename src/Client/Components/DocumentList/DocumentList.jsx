@@ -24,6 +24,7 @@ import React from 'react';
                          </span>
                      </div>
                  )}
+                 <SmartLink link={"/PublicRecords/Documents/"+groupName} id="0" linkText=" ... More" />
          </div>
      )
  }

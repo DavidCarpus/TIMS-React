@@ -120,7 +120,7 @@ class WebApp extends Component {
             )} />
             <Route path="/Departments/:department" render={this.DepartmentsPage} />
             <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
-            <Route path="/PublicRecords/:recordtype" render={this.PublicRecordsPage} />
+            <Route path="/PublicRecords/:recordtype/" render={this.PublicRecordsPage} />
             <Route exact path="/Admin" render={(newProps)=>(
                 <MainLayout {...childProps}>
                     <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
@@ -138,6 +138,7 @@ class WebApp extends Component {
   }
 }
 /*
+<Route exact path="/PublicRecords/:recordtype/:groupName" render={this.PublicRecordsPage} />
 <Route path="/Admin/" render={(newProps)=>(
 <MainLayout {...childProps}>
 <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>

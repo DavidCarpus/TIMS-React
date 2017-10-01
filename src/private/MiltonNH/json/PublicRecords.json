@@ -39,62 +39,42 @@
         }
 
             ,
-            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Citizens Request Form for Selectmen Meeting",
+                "viewcount": 50,
                 "link":"http://miltonnh-us.com/uploads/bos_58_2804844146.pdf"
             },
-            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Request for Information under the Right to Know Law",
+                "viewcount": 40,
                 "link":"http://miltonnh-us.com/uploads/bos_52_1750322610.pdf"
             },
-            {"groupName":"Selectmen", "date": "2222-12-03","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Notification/Complaint Form",
+                "viewcount": 30,
                 "link":"http://miltonnh-us.com/uploads/bos_57_260010012.pdf"
             }
             ,
-            {"groupName":"Selectmen", "date": "2221-05-04","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Pet Ordinance",
+                "viewcount": 30,
                 "link":"http://miltonnh-us.com/images/stories/downloads/selectmen/ordinances/petordinancefinaladopted50409.pdf"
             },
-            {"groupName":"Selectmen", "date": "2221-04-04","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Sign Ordinance",
+                "viewcount": 30,
                 "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2026151269.pdf"
             },
-            {"groupName":"Selectmen", "date": "2221-04-04","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",
                 "desc": "Snow Removal Policy",
+                "viewcount": 50,
                 "link":"http://miltonnh-us.com/uploads/bos_ordinances_3_2307174134.pdf"
             },
-            {"groupName":"Selectmen", "date": "2221-05-04","type": "Document",
+            {"groupName":"Selectmen", "type": "Document",  "date": "2017-09-22",
                 "desc": "Milton Zoning Ordinance",
                 "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
             }
             ,
-            {"groupName":"Selectmen", "date": "2015-12-01","type": "Document",
-                "desc": "Budget - Operating Budget 2013-2015",
-                "link":"http://miltonnh-us.com/uploads/bos_ordinances_5_451608349.pdf"
-            },
-            {"groupName":"Selectmen", "date": "2016-11-01","type": "Document",
-                "desc": "Budget - November 2016 Expenditure Report",
-                "link":"http://miltonnh-us.com/uploads/bos_budget_28_635089335.pdf"
-            },
-            {"groupName":"Selectmen", "date": "2016-10-01","type": "Document",
-                "desc": "Budget - October 2016 Expenditure Report",
-                "link":"http://miltonnh-us.com/uploads/bos_budget_24_2198695748.pdf"
-            },
-            {"groupName":"Selectmen", "date": "2016-09-01","type": "Document",
-                "desc": "Budget - September 2016 Expenditure Report",
-                "link":"http://miltonnh-us.com/uploads/bos_budget_23_2498527688.pdf"
-            },
-            {"groupName":"Selectmen", "date": "2016-04-01","type": "Document",
-                "desc": "Budget - April 2016 Expenditure Report",
-                "link":"http://miltonnh-us.com/uploads/bos_budget_21_3787802024.pdf"
-            },
-            {"groupName":"Selectmen", "date": "2016-03-01","type": "Document",
-                "desc": "Budget - March 2016 Expenditure Report",
-                "link":"http://miltonnh-us.com/uploads/bos_budget_19_224619096.pdf"
-            }
-,
-
         {"mainpage": true,  "date": "2017-04-22", "groupName":"PublicWorks","type": "Notice",
             "desc": "Earth Day, Clean Up Day",
             "link":"http://miltonnh-us.com/uploads/public_works_29_656022802.pdf","dateposted":""

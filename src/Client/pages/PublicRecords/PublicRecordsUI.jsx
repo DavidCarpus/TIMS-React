@@ -2,108 +2,21 @@ import React from 'react';
 import SmartLink from '../../Components/SmartLink'
 import {  Col, Row } from 'reactstrap';
 import  './PublicRecords.css'
-
-  var monthNames = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
-  ];
+import FilterRecordsForm from './Filter/Filter'
 
 const publicRecordTypes = [
-     'RFP',
-     'NOTICE',
-     'AGENDA',
-     'DOCUMENTS',
-     'RFPS',
-     'NOTICES',
-     'AGENDAS',
-     'VOTING',
+    'RFP',
+    'NOTICE',
+    'AGENDA',
+    'DOCUMENTS',
+    'RFPS',
+    'NOTICES',
+    'MINUTES',
+    'AGENDAS',
+    'VOTING',
 ]
 
 const dateStr =(date)=> date && (date.getUTCMonth()+1) + '/' + date.getUTCDate()+ '/' + date.getUTCFullYear()
-
-function formatDate(date) {
-  return monthNames[date.getMonth()] + ' ' + date.getDate() ;
-}
-
-//-----------------------------------------------------------------------------
-const MonthBlock = ({monthRecords, month, year}) => {
-    return (
-        <div className='MonthBlock' >
-            <div className='header' >
-                {monthNames[monthRecords.month]}  - {year}<br/>
-            </div>
-        {monthRecords.values.map( (day) =>{
-            let recordDate = formatDate(new Date(day[0]))
-            return (
-                <div key={recordDate} >
-                    <div className='date' >
-                        {recordDate}
-                    </div>
-                    <div className='Entries' >
-                    {day[1].map(entry =>{
-                        let label = entry.recorddesc;
-                        if (label === null) { label =  entry.groupDescription; }
-                        if (label === null) { label =  entry.groupName === 'UNK' ? "Main" : ''; }
-
-                        return (
-                            entry.link &&
-                            <div key={entry.id}  className='documentLink'>
-                                <SmartLink link={entry.link} id={entry.id} linkText={label } />
-                                    <span className="posted">
-                                        (Posted {dateStr(new Date(entry.date))})
-                                        {entry.groupName === 'UNK' ? "" : " - " +entry.groupName}
-                                    </span>
-                                    <br/>
-                            </div>
-
-                        )
-                    })}
-                </div>
-                </div>
-            )
-        })}
-        <br/>
-    </div>
-    )
-}
-
-//-----------------------------------------------------------------------------
-const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
-    let recordsByMonth = yearRecords.reduce( (acc, curr, i) => {
-                let month = (new Date(curr[0])).getMonth();
-                acc[month] = acc[month]? acc[month]: [];
-                acc[month].push(curr)
-                return acc;
-            }, {})
-
-    var groupedByMonth = Object.keys(recordsByMonth)
-        .map( _month  => {
-            return {month:_month, values:  recordsByMonth[_month]}
-        }).sort((a,b) => {
-                return b.month - a.month
-        })
-
-    return (
-        <div  className='YearBlock'>
-            <span onClick={()=> toggleCollapseState(year)}
-                >
-                <div className='header' >
-                    <a >
-                        {year} {'...'}
-                    </a>
-                </div>
-
-            </span>
-            {expanded && groupedByMonth.map(element =>
-                    <MonthBlock key={element.month} month={element.month} monthRecords={element} year={year}></MonthBlock>
-                )}
-        </div>
-    )
-}
-// {year} {expanded?'^^^':'vvv'}
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -113,7 +26,7 @@ export default class PublicRecordsUI extends React.Component {
         this.toggleYear = this.toggleYear.bind(this);
         this.state = {expandedYears: []};
         // this.state.expandedYears.push((new Date()).getFullYear().toString())
-}
+    }
 
     componentWillMount() {
         this.props.fetchData(this.props.recordType);
@@ -130,41 +43,43 @@ export default class PublicRecordsUI extends React.Component {
         this.setState({expandedYears:expandedYears})
     }
 
-  render() {
-      var tmpStyle = {backgroundColor: 'white'}
+    render() {
+        var tmpStyle = {backgroundColor: 'white'}
 
-      if ( this.props.loading) {         return (<div style={tmpStyle}>Loading</div>)     }
-    //   if (this.props.records.length === 0) {        return(null);    }
-    //   if (Object.keys(this.props.records).length === 0) { return null }
-
-      var currentRecords = Object.keys(this.props.records)
-          .map( _date  => {
-              return {date:_date, values:  this.props.records[_date]}
-          })
-          .sort((a,b) => { return b.date -a.date; })
-
-          if (publicRecordTypes.indexOf(this.props.recordType.toUpperCase()) !== -1 ) {
-              return (
-                  <Row id='PublicRecords'>
-                      <Col  md={{size:10, push:1}} id='contentArea'>
-                          <h1>{this.props.recordType}</h1>
-                          {currentRecords
-                              .map( year => {
-                                  return (
-                                      <YearBlock key={year.date} yearRecords={year.values} year={year.date}
-                                          expanded={( this.state.expandedYears.indexOf(year.date) >= 0)}
-                                          toggleCollapseState={this.toggleYear}></YearBlock>
-                                  )
-                              })}
-                    </Col>
-                    </Row>
-                    )
-          } else {
-              return (
-                  <Col md={10}  mdPush={1}  id="contentArea"  >
-                      <div  id='PublicRecords'>Unknown PublicRecords Type: {this.props.recordType}</div>
-                  </Col>
-              )
-          }
-  }
+        if ( this.props.loading) {         return (<div style={tmpStyle}>Loading</div>)     }
+        //   if (this.props.records.length === 0) {        return(null);    }
+        //   if (Object.keys(this.props.records).length === 0) { return null }
+        if (publicRecordTypes.indexOf(this.props.recordType.toUpperCase()) === -1 ) {
+            return (
+                <Col md={10}  mdPush={1}  id="contentArea"  >
+                    <div  id='PublicRecords'>Unknown PublicRecords Type: {this.props.recordType}</div>
+                </Col>
+            )
+        }
+        var currentRecords = this.props.records
+        return (
+            <Row id='PublicRecords'>
+                <Col  md={{size:10, push:1}} id='contentArea'>
+                    <h1>{this.props.recordType}</h1>
+                    <FilterRecordsForm
+                        records={currentRecords}
+                        groupSelection={this.props.groupSelection}
+                        initialValues={this.props.currentFilter}
+                        currentFilter={this.props.currentFilter}
+                        updateFilter={this.props.updateFilter}>
+                    </FilterRecordsForm>
+                    {currentRecords.map(record =>
+                        <div key={record.id}  className='documentLink'>
+                            <SmartLink link={record.link} id={record.id} linkText={record.recorddesc || record.groupDescription } />
+                            <span className="posted">
+                                (Posted {dateStr(new Date(record.date))})
+                                {record.groupName === 'UNK' ? "" : " - " +record.groupName}
+                            </span>
+                            <br/>
+                        </div>
+                    )}
+                </Col>
+            </Row>
+        )
+    }
 }

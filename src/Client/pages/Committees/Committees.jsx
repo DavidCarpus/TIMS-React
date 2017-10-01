@@ -52,7 +52,7 @@ export default class Committees extends React.Component {
 
                             <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>
                             <NoticesList group={this.props.group} store={this.props.store} />
-                            <DocumentList  group={this.props.group} store={this.props.store} />
+                            <DocumentList groupName={this.props.groupName} group={this.props.group} store={this.props.store} />
                             <HelpfulInformation informationArray={this.props.group.helpfulinformation || []} />
 
                     </Col>
