@@ -17,6 +17,8 @@ configuration = new Config();
 // var connection;
 var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
+var getCalendarDataForMonth = require('../libs/calendar/ICSCalendar').getCalendarDataForMonth;
+
 router.use(cors());
 // ==========================================================
 function simpleDBQuery(query){
@@ -160,11 +162,24 @@ router.get('/CalendarEvents/', function(req, res) {
     var query = "Select * from CalendarEvents where endDate >= '" + nowStr + "' or endDate is null order by startDate limit 20 ";
     console.log('/CalendarEvents', query);
 
-     simpleDBQuery(query)
-     .then(rows => {
-         res.json(rows);
-     });
-    //  res.json([]);
+    simpleDBQuery(query)
+    .then(rows => {
+        // res.json(rows);
+        let startDate  = new Date();
+        calendarData = getCalendarDataForMonth(rows, startDate)
+        if (calendarData.length === 0 ) {
+            calendarData = getCalendarDataForMonth(recordState.CalendarData, addWeeks(startDate,1))
+        }
+
+        res.json(calendarData);
+
+    })
+    .catch(err =>{
+        console.error('Error getCalendarDataForMonth(rows, startDate)', err);
+    })
+
+
+
 });
 // ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {

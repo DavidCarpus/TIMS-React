@@ -5,10 +5,33 @@ var addDays = require('date-fns/add_days');
 var rp = require('request-promise-native');
 var icalendar = require('icalendar');
 
+var startOfMonth = require('date-fns/start_of_month');
+var endOfMonth = require('date-fns/end_of_month');
+var startOfWeek = require('date-fns/start_of_week');
+var endOfWeek = require('date-fns/end_of_week');
+
+var differenceInDays = require('date-fns/difference_in_days');
+var compareAsc = require('date-fns/compare_asc');
+var compareDesc = require('date-fns/compare_desc');
+var addWeeks = require('date-fns/add_weeks');
+var addMonths = require('date-fns/add_months');
+//
+// // import eachDay from 'date-fns/each_day'
+// import addDays from 'date-fns/add_days'
+
+
+
 var knexConfig = require('../db/knexfile.js')
 var knexConnection = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-const isRecurringEvent = (evt) =>typeof evt.rrule !== 'undefined' || typeof evt.rruleType !== 'undefined'
+// const isRecurringEvent = (evt) =>typeof evt.rrule !== 'undefined' || typeof evt.rruleType !== 'undefined'
+const isRecurringEvent = (evt) =>(typeof evt.rrule !== 'undefined' && evt.rrule !== null) ||
+        (typeof evt.rruleType !== 'undefined' && evt.rruleType !== null)
+const isNotRecurringEvent = (evt) => !isRecurringEvent(evt)
+const dateBetween = (start, end, chkDate) => compareDesc(start, chkDate) >=0 && compareAsc(end, chkDate) >=0
+let mergeArrays = (arrays) => [].concat.apply([], arrays)
+//===============================================
+//===============================================
 //===============================================
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -76,12 +99,99 @@ function insertEventIntoDatabase(knex, eventToinsert) {
     })
     )
 }
-//======================================
 
-function getDateEvents(icalEvents){
 
+//===============================================
+//===============================================
+//===============================================
+const nextMonthlyEventDate = (evt) =>  {
+    const dte = new Date(evt.startDate)
+    // console.log('nextMonthlyEventDate:', dateDisp(dte), evt.rruleData);
+    const frequency=parseInt(evt.rruleData,10)
+    let nextMonth = addWeeks(dte, 4)
+    if (nextMonth.getUTCMonth() === dte.getUTCMonth()) {
+        nextMonth = addWeeks(nextMonth, 1)
+    }
+    var quotient = Math.floor(nextMonth.getDate()/ 7);
+    var remainder = nextMonth.getDate() % 7;
+    let minD = 7*(frequency-1)
+    if ( quotient !== frequency && (nextMonth.getDate() <  minD || (quotient < 3 && remainder === 0))) {
+        nextMonth = addWeeks(nextMonth, 1)
+        quotient = Math.floor(nextMonth.getDate()/ 7);
+        remainder = nextMonth.getDate() % 7;
+    }
+    return nextMonth
 }
 
+//-----------------------------------------------------------------------------
+const expandRecurranceEvent = (evt, start, end, acc) => {
+    if (compareDesc(end, evt.startDate) >= 0 ) {
+        return acc
+    }
+    if ( dateBetween(start, end, evt.startDate)) {
+        acc.push(Object.assign({}, evt, {startDate:new Date(evt.startDate)}))
+    }
+    switch (evt.freq) {
+        case 'WEEKLY':
+            // console.log('Expand WEEKLY event:', evt);
+            const newWeeklyEvent = Object.assign({}, evt, {startDate:addWeeks(evt.startDate, 1)})
+            return expandRecurranceEvent(newWeeklyEvent, start, end, acc)
+        case 'MONTHLY':
+            // console.log('Expand MONTHLY event:', evt);
+            const nextByDay = nextMonthlyEventDate(evt)
+            const newMonthlyEvent = Object.assign({}, evt, {startDate:new Date(nextByDay)})
+            return expandRecurranceEvent(newMonthlyEvent, start, end, acc)
+        default:
+            console.log('**** UNK frequency to expand event:', evt);
+    }
+}
+//===========================================
+const getCalendarDataForMonth = (icalData, currDate) =>{
+    if (icalData.length === 0) return [];
+
+    const inLastWeekOfTheMonth = (date) => differenceInDays(endOfMonth(date), date ) < 7
+
+    let startDate = startOfWeek(startOfMonth(currDate) );
+    //remaining days of current month will still be displayed
+    if (inLastWeekOfTheMonth(currDate) && endOfWeek(currDate).getMonth() !== currDate.getMonth()) {
+        console.log('getCalendarDataForMonth:addMonth', endOfWeek(currDate), endOfWeek(currDate).getMonth() , currDate.getMonth());
+        currDate  = addMonths(currDate,1)
+        startDate = startOfWeek(startOfMonth(currDate) );
+    }
+    const endDate = endOfWeek(endOfMonth(currDate) );
+
+    let calendarData=[]
+    // console.log("icalData:", icalData);
+    const recurringEvents = icalData.filter(isRecurringEvent)
+
+    if (recurringEvents.length > 0) {
+        // console.log("Init icalData:", icalData)
+        const dateInRange = (chkDate) => dateBetween(startDate, endDate, chkDate)
+        const eventInRange = (evt) => dateInRange(evt.startDate) || dateInRange(evt.endDate)
+        const expandEvent = (evt) => expandRecurranceEvent(evt, startDate, addDays(endDate, -1), [])
+
+        // console.log("Expanded Evts:", icalData.filter(isRecurringEvent).map(expandEvent))
+        calendarData = mergeArrays(icalData.filter(isRecurringEvent).map(expandEvent))
+        .concat(icalData.filter(isNotRecurringEvent).filter(eventInRange))
+
+        calendarData = calendarData.map((evt, index)=>{
+            evt.id = index;
+            evt.startDate = new Date(evt.startDate)
+            // evt.startDate = new Date(evt.recurrenceID || evt.startDate)
+            return evt;
+        })
+        const movedEvents = calendarData.filter(evt => evt.recurrenceID !== null )
+
+        // filter out the calendarData events that are the original copies of events that were movedEvents
+        calendarData = calendarData.filter((evt) => {
+            const chk=movedEvents.filter(moved => moved.googleId === evt.googleId).length
+            return !chk || evt.recurrenceID !== null
+        })
+        calendarData = calendarData.filter((evt) => evt.startDate - addWeeks(currDate, -1)  > 0)
+    }
+    // console.log('calendarData:', calendarData);
+    return calendarData
+}
 // =================================================
 function translateEventFromICal(evt) {
     const untilDate = (datestr) => new Date(datestr.substring(0,4)+ '-' + datestr.substring(4,6) + '-' + datestr.substring(6,8) +
@@ -145,8 +255,10 @@ function pullEventsFromICS( icsURL ){
 }
 // =================================================
 if (require.main === module) {
-    calendarProcess(2000, false, 0)
+    // calendarProcess(2000, false, 0)
+
 }
 
 // =================================================
 module.exports.calendarProcess = calendarProcess;
+module.exports.getCalendarDataForMonth = getCalendarDataForMonth;
