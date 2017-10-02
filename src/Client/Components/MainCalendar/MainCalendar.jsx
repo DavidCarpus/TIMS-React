@@ -1,5 +1,6 @@
 import React from 'react';
 import  './MainCalendar.css'
+import {Link} from 'react-router-dom';
 
 import  startOfMonth from 'date-fns/start_of_month'
 import  startOfWeek from 'date-fns/start_of_week'
@@ -14,6 +15,8 @@ import isSameDay from 'date-fns/is_same_day'
 
 import { Col, Row } from 'reactstrap';
 import SmartLink from '../SmartLink'
+var Config = require('../../config'),
+configuration = new Config();
 
 var monthNames = [
   "January", "February", "March",
@@ -93,6 +96,27 @@ function currentMonthBlock(events) {
 */
 
 }
+const AgendaLink = (agendaID) => {
+    const link = configuration.ui.ROOT_URL + 'fetchfile/' + agendaID.agendaID;
+    const lnkStyle='agendaIcon'
+    const linkText='Agenda'
+
+    return (
+        <Link  className='agendaIcon'
+            to={configuration.ui.ROOT_URL + 'fetchfile/' + agendaID.agendaID}
+            onClick={(event) => {
+                event.preventDefault(); window.open(link);
+            }}>
+        <img  src='/images/icons/Agenda.png' className='agendaIcon'   alt="Agenda" title="Agenda" />
+        </Link >
+    )
+
+}
+// return (<Link to={link} className={lnkStyle} target="_blank" onClick={(event) => {
+//     event.preventDefault(); window.open(link);
+// }} >{linkText}</Link>)
+
+
 
 function eventList(rawCalData) {
     // console.log("MainCalendar:calendarData:" , rawCalData);
@@ -111,15 +135,17 @@ function eventList(rawCalData) {
             time: timeStamp(sdate) + (timeStamp(sdate).length > 0?'-':"") + timeStamp(new Date(entry.endDate)),
             orig: entry,
             id:entry.id,
+            agendaID: entry.publicRecords ? entry.publicRecords.id: null,
             description:entry.summary
         }
     }).sort((a,b) =>  a.sdate -b.sdate )
-    // console.log("MainCalendar:calendarData:" , calendarData);
+    console.log("eventList:calendarData:" , calendarData);
     // <div className="date">{entry.sdate.getMonth() + '-' + entry.sdate.getDate()}</div>
+    // {entry.agendaID && <div className="date">Agenda</div>}
     return (
 <div id="eventList">{calendarData.map( (entry) =>
         <div className="entry" key={entry.id} >
-            <div className="date">{entry.dateStr}</div>
+            <div className="date">{entry.dateStr} {entry.agendaID && <AgendaLink agendaID={entry.agendaID}></AgendaLink>}</div>
                 <div className="date">{entry.time}</div>
             <div className="description">{entry.description}</div>
         </div>
@@ -137,6 +163,10 @@ export default class MainCalendar extends React.Component {
     render() {
     if ( this.props.loading) {         return (<div>Loading</div>)     }
     if (this.props.calendarData.length === 0) {        return(null);    }
+
+    const sortedData = this.props.calendarData.sort((a,b) =>  a.startDate -b.startDate )
+    console.log('this.props.calendarData', sortedData);
+    // this.props.fetchCalendarDocuments(sortedData[0].startDate, sortedData[sortedData.length-1].startDate );
 
         return (
             <section id='MainCalendar' className="MainCalendar">

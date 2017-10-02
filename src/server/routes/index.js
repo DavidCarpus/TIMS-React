@@ -12,6 +12,8 @@ var marked = require('marked');
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var emailValidate = require("email-validator");
 
+var addDays = require('date-fns/add_days')
+
 var Config = require('../config');
 configuration = new Config();
 // var connection;
@@ -170,9 +172,45 @@ router.get('/CalendarEvents/', function(req, res) {
         if (calendarData.length === 0 ) {
             calendarData = getCalendarDataForMonth(recordState.CalendarData, addWeeks(startDate,1))
         }
+        return calendarData
+    })
+    .then( calData => {
+        // console.log('startDate:', calendarData[0].startDate);
+        // console.log('startDate:', addDays(new Date(calendarData[0].startDate), -1));
+        // console.log('endDate:', addDays(new Date(calendarData[calendarData.length-1].startDate), 1));
+        const year = (new Date(calData[0].startDate)).getUTCFullYear();
+        const month = (new Date(calData[0].startDate)).getMonth()+1;
+        query = "Select Groups.groupDescription, PublicRecords.id, PublicRecords.date, recordtype"
+        query += " from PublicRecords"
+        query += " left join Groups on Groups.pageLink= PublicRecords.pageLink"
+        query += " where year(date)='"  + year +"' and month(date)='" + month + "'";
+        query += " and recordtype = 'Agenda' "
+        // query += " and recordtype in ('Agenda', 'Minutes')"
 
-        res.json(calendarData);
+        console.log('query:', query);
+        return simpleDBQuery(query)
+        .then( recordData => {
+            // console.log('recordData:', recordData);
+            calData = calData.map(calendarEntry => {
+                const matchRecord = recordData.filter(docRecord =>
+                    docRecord.date.getMonth() === calendarEntry.startDate.getMonth() &&
+                    docRecord.date.getDate() === calendarEntry.startDate.getDate() &&
+                    calendarEntry.summary.indexOf(docRecord.groupDescription) >= 0
+                )
+                if (matchRecord.length > 0) {
+                    // console.log('matchRecord:',  matchRecord, '\n',calendarEntry.startDate, calendarEntry.summary);
+                    calendarEntry.publicRecords= {recordtype:matchRecord[0].recordtype, id:matchRecord[0].id}
+                }
 
+                return calendarEntry
+            })
+            // return recordData
+            return calData
+        })
+        .then( results => {
+            // res.status(200).send('<pre>' + JSON.stringify(results, null, 2) + '</pre>');
+            res.json(results);
+        })
     })
     .catch(err =>{
         console.error('Error getCalendarDataForMonth(rows, startDate)', err);
@@ -190,16 +228,16 @@ router.get('/fetchFile/:fileID', function(req, res) {
              if (!fullPath.startsWith('http')) {
                  let attachmentPath=configuration.attachmentPath;
                  fullPath = fullPath.replace("." + configuration.attachmentPath, '');
-                 console.log('fetchFile- append ATTACHMENT_DIR?:' + attachmentPath);
+                //  console.log('fetchFile- append ATTACHMENT_DIR?:' + attachmentPath);
                 //  fullPath = configuration.ATTACHMENT_DIR + fullPath
                  fullPath = __dirname + attachmentPath + fullPath
 
-                 console.log('fetchFile- appended ATTACHMENT_DIR?:' + fullPath);
+                //  console.log('fetchFile- appended ATTACHMENT_DIR?:' + fullPath);
                  fullPath = fullPath.replace('routes','') ;
                  fullPath = fullPath.replace('//', '/');
              }
              let filename =  fullPath.replace(/^.*[\\\/]/, '')
-             console.log('fetchFile:' + filename+ ' at ' + fullPath );
+             console.log('fetchFile:' + filename+ ' from ' + fullPath );
              var mimetype = mime.lookup(fullPath);
              console.log('mimetype:' + mimetype);
 
@@ -207,8 +245,9 @@ router.get('/fetchFile/:fileID', function(req, res) {
             //  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
 
             res.setHeader('Content-type', mimetype);
-            res.sendFile(fullPath)
-            // res.download(fullPath, filename)
+            // res.sendFile(fullPath)
+            console.log('download...');
+            res.download(fullPath, filename)
             //  res.json(rows);
          });
 });
@@ -241,7 +280,7 @@ router.get('/Records/DocumentsForMonth/:groupName/:documentType/:year/:month', f
 });
 // ==========================================================
 router.get('/Records/Documents/:groupName', function(req, res) {
-        query = "Select id, recorddesc as description, fileLink as link, expiredate from PublicRecords ";
+        query = "Select id, viewcount, recorddesc as description, fileLink as link, expiredate, date from PublicRecords ";
         query += " where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
 
         simpleDBQuery(query)
@@ -331,6 +370,13 @@ router.get('/Records/PublicDocs/:recordtype', function(req, res) {
         case 'AGENDA':
             recordtype = 'Agenda'
             break;
+        case 'MINUTES':
+            recordtype = 'Minutes'
+            break;
+        case 'DOCUMENTS':
+        case 'DOCUMENT':
+            recordtype = 'Document'
+            break;
         case 'RFPS':
         case 'RFP':
             recordtype = 'RFP'
@@ -352,10 +398,13 @@ router.get('/Records/PublicDocs/:recordtype', function(req, res) {
     .then(rows => {
         var toSend = rows.reduce( (newArray, row) => {
             let key = row.date;
-            delete row.date;
+            // delete row.date;
             (newArray[key] = newArray[key] || []).push(row);
             return newArray;
         }, {})
+
+        toSend = rows
+
         // console.log('Meetings:' + JSON.stringify(toSend));
         // res.status(200).send('<pre>' + JSON.stringify(toSend, null, 2) + '</pre>');
 
