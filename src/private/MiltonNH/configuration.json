@@ -1,5 +1,7 @@
 {
     "validEmailDomain": "miltonnh.us",
+    "sourceTownURI": "miltonnh-us",
+    "sourceTownDomain": "miltonnh-us.com",
     "leftMenuImage": "/images/Welcome-to-Milton.jpg",
     "calendarId": "townmiltonnh@gmail.com",
     "calendarURL":"https://calendar.google.com/calendar/embed?src=townmiltonnh%40gmail.com&showTabs=0&height=600&showCalendars=0&bgcolor=%23FFFFFF&showPrint=0&ctz=America/New_York",

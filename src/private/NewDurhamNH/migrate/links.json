@@ -1,2 +1,11 @@
 [
+    {"group":"Selectmen",
+        "uri":"https://www.newdurhamnh.us/sites/newdurhamnh/files/uploads/new_durham_town_hall_lchip_report.pdf", 
+        "desc":"2012 Town Hall Building Assessment"},
+    {"group":"Selectmen",
+        "uri":"https://www.newdurhamnh.us/sites/newdurhamnh/files/uploads/new_durham_10_year_tax_rate_comparison.pdf",
+        "desc":"10 Year Tax Rate Comparison"},
+    {"group":"Selectmen",
+        "uri":"https://www.newdurhamnh.us/board-selectmen/files/2011-forest-management-plan",
+        "desc":"2011 Forest Management Plan"}
 ]

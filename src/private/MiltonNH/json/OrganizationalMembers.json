@@ -130,7 +130,7 @@
     },
     {"id": 20, "link":"Welfare",
         "members": [
-            {"name":"Welfare Administration", "phone":"(603) 652-4501 x6" }
+            {"name":"Welfare Administration", "phone":"(603) 652-4501 x6", "emailAddress": "David.Carpus@gmail.com" }
         ]
     }
 

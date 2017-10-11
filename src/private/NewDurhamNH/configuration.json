@@ -1,5 +1,9 @@
 {
-    "validEmailDomain": "newdurham.us",
+    "validEmailDomain": "newdurhamnh.us",
+    "sourceTownURI": "newdurhamnh.us",
+    "sourceTownDomain": "www.newdurhamnh.us",
+    "sourceTownArchiveDomain": "newdurhamnharchive.vt-s.net",
+
     "leftMenuImage": "/images/NewDurhamLogo.png",
     "calendarId": "aa9hgncu7psjenr81tl0ujder0@group.calendar.google.com",
     "calendarURL":"https://calendar.google.com/calendar/embed?src=aa9hgncu7psjenr81tl0ujder0%40group.calendar.google.com&ctz=America/New_York",
