@@ -35,5 +35,7 @@
     .meetingBlock .meetingElement {
         min-width: 7em;
         display: inline-block;
+        a:hover {         font-weight: normal;   }
+
     }
 }

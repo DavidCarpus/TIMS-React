@@ -27,7 +27,7 @@ const MeetingBlock = ({meetingElements, meetingDate}) => {
             <div className="Entries" >
             {meetingElements.map( element =>
                 <div  className="meetingElement" key={element.id}>
-                    <SmartLink link={element.link} id={element.id} linkText={element.type} />
+                    <SmartLink link={element.link} id={element.id} linkText={element.description ? element.type + '-' + element.description: element.type } />
                 </div>
             )}
             </div>

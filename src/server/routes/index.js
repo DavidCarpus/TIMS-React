@@ -413,7 +413,7 @@ router.get('/Records/PublicDocs/:recordtype', function(req, res) {
 });// ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
-    query = "Select id, recordtype as type, fileLink as link, date from PublicRecords where pageLink='" + req.params.groupName +"'";
+    query = "Select id, recordtype as type, fileLink as link, date, recorddesc as description from PublicRecords where pageLink='" + req.params.groupName +"'";
     query += " and ( recordtype='Minutes'  or recordtype='Agenda'  or recordtype='Agendas'  or recordtype='Video'   or recordtype='Decision' )";
     query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
     query += "  ORDER BY date, recordtype ";
