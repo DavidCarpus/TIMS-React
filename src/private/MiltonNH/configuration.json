@@ -25,26 +25,10 @@
     "delay": 5000,
     "infinite":true
 },
-"googleAPI":{
-"clientID":"MiltonMiniCal",
-"installed":
-    {"client_id":"870046666767-qmddl07b5rmbp58tccfhpi3k8fu8d290.apps.googleusercontent.com",
-        "project_id":"canvas-primacy-173510",
-        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
-        "token_uri":"https://accounts.google.com/o/oauth2/token",
-        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
-        "client_secret":"iOpvvCr_Ov4srpEjTuXoTKWd",
-        "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}
-},
+
 "calendarProcess": {
     "infinite":true,
     "delay": 360000
-},
-
-"numverify": {
-        "email": "website@test.miltonnh.us",
-        "password":"bFSiSjr1P058gHyFXhGg",
-        "apiaccesskey":"6c533ba0a25520d9a559427c70865f42"
 },
 
 "expressPort":45001,

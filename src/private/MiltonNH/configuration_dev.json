@@ -1,21 +1,4 @@
 {
-"imapProcess":{
-    "infinite":false,
-    "imapcredentials":{
-        "user":
-        "website@dev.miltonnh.us",
-        "password":
-        "Ra4B}n5q4)vQ",
-        "host":
-            "a2ss29.a2hosting.com"
-    }
-},
-"db_config":{
-  "host"     : "localhost",
-  "user"     : "miltonWebsite",
-  "password" : "miltonWebsite",
-  "database" : "milton_nh"
-},
 "expressPort":45001,
 "municipalLongName": "The Town of Milton",
 "stateLongName": "New Hampshire - Dev",

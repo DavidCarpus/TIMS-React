@@ -1,27 +1,12 @@
 {
 "imapProcess":{
-    "infinite":false,
-    "imapcredentials":{
-        "user":
-        "website@newdurham.carpusconsulting.com",
-        "password":
-        "pm}PoZr1-z(d",
-        "host":
-            "a2ss29.a2hosting.com"
-    }
-},
-"db_config":{
-  "host"     : "localhost",
-  "user"     : "newdurhamWebsite",
-  "password" : "newDurhamWebsite",
-  "database" : "newdurham_nh"
+    "infinite":false
 },
 "expressPort":45001,
 "municipalLongName": "New Durham",
 "stateLongName": "New Hampshire - Dev",
 "alertVerificationProcess":{
     "delay": 1000
-},
-"unused":{
 }
+
 }

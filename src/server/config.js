@@ -1,11 +1,16 @@
 let mode=process.env.INIT_MODE || process.env.NODE_ENV||'development'
 const privateDir = mode === 'development' || process.env.DEV_MACHINE ? '../private/'+process.env.REACT_APP_MUNICIPALITY: '../private/'
+const credentialsDir = mode === 'development' || process.env.DEV_MACHINE ? '../../credentials/'+process.env.REACT_APP_MUNICIPALITY: '../credentials/'
 // console.log('privateDir:', privateDir);
 
 var base_configuration = require(privateDir +'/configuration.json');
 var dev_configuration = require(privateDir +'/configuration_dev.json');
 var prod_configuration = require(privateDir +'/configuration_prod.json');
 var test_configuration = require(privateDir +'/configuration_test.json');
+
+var dev_credentials = require(credentialsDir +'/configuration_dev.json');
+var prod_credentials = require(credentialsDir +'/configuration_prod.json');
+var test_credentials = require(credentialsDir +'/configuration_test.json');
 
 //======================================
 //======================================
@@ -58,12 +63,12 @@ module.exports = function(){
 
     switch(mode){
         case 'development':
-            // console.log(mergeDeep(mergedConf, dev_configuration ));
-            return mergeDeep(mergedConf, dev_configuration );
+            // console.log(mergeDeep(mergedConf, dev_configuration, dev_credentials  ));
+            return mergeDeep(mergedConf, dev_configuration,dev_credentials );
         case 'production':
-            return mergeDeep(mergedConf, prod_configuration );
+            return mergeDeep(mergedConf, prod_configuration,prod_credentials );
         case 'test':
-            return mergeDeep(mergedConf, test_configuration );
+            return mergeDeep(mergedConf, test_configuration,test_credentials );
         // default:
         //     return dev_configuration;
     }

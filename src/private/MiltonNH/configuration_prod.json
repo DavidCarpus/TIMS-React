@@ -1,29 +1,7 @@
 {
-"imapProcess":{
-    "imapcredentials":{
-        "user": "website@miltonnh.us",
-        "password": "V17v_RKqo68W",
-        "host": "a2ss29.a2hosting.com"
-    }
-},
-"db_config":{
-  "host"     : "66.198.240.7",
-  "user"     : "carpusco_dcarpus",
-  "password" : "IT8DEa}fJA+y",
-  "database" : "carpusco_milton"
-},
 "expressPort":45010,
 "ui":{
     "ROOT_URL":"/api/"
-},
-"sslOptions": {
-    "keyPath": "/home/carpusco/ssl/keys/9c0b4_2b379_71d7c09aa2fe8da6ef8ce0d771721ef2.key",
-    "certPath": "/home/carpusco/ssl/certs/carpusconsulting_com_9c0b4_2b379_1506265500_c15e95dd9e5148c14cc4dd37f0181f0c.crt"
-},
-
-
-"unused":{
 }
-
 
 }
