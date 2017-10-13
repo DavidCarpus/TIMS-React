@@ -37,6 +37,7 @@ const migrateDataDir = privateDir +'/migrate';
 const meetingPaths = require(migrateDataDir+'/TablesToScrape.json');
 const linkTable = require(migrateDataDir+'/links.json');
 const documentPaths = require(migrateDataDir+'/Documents.json');
+const pageData = require(migrateDataDir+'/PageData.json');
 
 //========================================
 let validRecordType = (recordtype) => ["Agenda", "Minutes", "Video"].includes(recordtype)
@@ -831,16 +832,14 @@ function migratePage(uri, conf) {
     return cachingFetchURL(uri)
     .then(fetchedData => wholePage = fetchedData.data)
     .then(wholePage => migrateGroupDesc(wholePage, conf) )
-    // .then(groupDesc => migrateMenuLinks(wholePage, conf) )
+    .then(groupDesc => migrateMenuLinks(wholePage, conf) )
     .then(menuLinks => migrateDocuments(wholePage, conf) )
-    // .then(wholePage => migrateAgendas(conf.agendaURI, conf))
-    // .then(wholePage => migrateMinutes(conf.minutesURI, conf))
     // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
     .then(documents => migrateAgendas(conf.agendaURI, conf) )
-    // return migrateAgendas(conf.agendaURI, conf)
     .then(agendas => migrateMinutes(conf.minutesURI, conf))
     .then(done => {
-        console.log('Done migratePage', conf.group);
+        // console.log('Done migratePage', conf.group);
+        return Promise.resolve('Done migratePage '+ conf.group)
     })
 }
 //========================================
@@ -855,13 +854,38 @@ if (require.main === module) {
         / +(\d\d)(\d\d)(\d\d)[ .]*/ ,
         /^(\d\d)(\d\d)(\d\d)[ .]*/ ,
     ]
+    const replaceTextBlocks = (origStr, replacements) => {
+        // if (!replacements) {
+        //     console.log('replaceTextBlocks -', origStr, replacements);
+        // }
+
+        replacements=replacements.map(replacement => {
+            // console.log('type:', typeof replacement[0],replacement[0]);
+            if (typeof replacement[0] === 'string') { //convert to RegExp
+                const modifiers = replacement[0].indexOf('/') >= 0 ? replacement[0].replace(/\/.*\//, ""):''
+                const search = replacement[0].indexOf('/') === -1 ? replacement[0] :
+                replacement[0].substr(0,replacement[0].lastIndexOf('/')).replace('/','').replace(String.fromCharCode(46),String.fromCharCode(92,46))
+                return [new RegExp(search,modifiers), replacement[1]]
+            } else { //RegExp
+                return [replacement[0], replacement[1]]
+            }
+        })
+        // console.log('replaceTextBlocks +', replacements);
+        return replacements.reduce( (acc, value) => {
+            return acc.replace(value[0], value[1])
+        }, origStr)
+    }
+    const removeTextBlocks = (origStr, regExpressionStrings) => {
+        return regExpressionStrings.reduce( (acc, value) => {
+            return acc.replace(new RegExp(value), '')
+        }, origStr)
+    }
 
     const dateFromURIText = (uri, recType='UNK') => {
         const regExpressions = dateRegExps.reduce( (acc, value) => {
             const dateSeq = uri.match(new RegExp(value))
             // index 0 of 'match' contains the full match (not split)
             if (dateSeq && dateSeq.length === 4 ) {
-                // console.log(value, 'matched', uri);
                 const year =Number(dateSeq[3]) < 100? Number(dateSeq[3])+2000: Number(dateSeq[3])
                 acc.push(new Date(year, Number(dateSeq[1])-1, dateSeq[2]))
             }
@@ -873,16 +897,10 @@ if (require.main === module) {
         // console.log('getMeetingDate:' + recType +'\n  ', uri  );
         return null
     }
-    // return labelFromURIText(rec.uri, [['BC',''],['Minutes',''],['.pdf',''],[' ','']], 'Minutes')
 
     const labelFromURIText = (uri, replacements, recType) => {
-        let label=replacements.reduce( (acc, value) => {
-            // console.log('replace(new RegExp(value[0]), value[1])', value[0], value[1]);
-            return acc.replace(new RegExp(value[0]), value[1])
-        }, uri)
-        label = dateRegExps.reduce( (acc, value) => {
-            return acc.replace(new RegExp(value), ' ')
-        },label)
+        let label=replaceTextBlocks(uri, replacements)
+        label=removeTextBlocks(label, dateRegExps)
 
         label = label.trim().replace(/^-/, '')
         if (label.length === 6 && !isNaN(label)) {
@@ -896,138 +914,33 @@ if (require.main === module) {
     }
 
 
-    migratePage('https://www.newdurhamnh.us/board-selectmen',
-    {
-        group: 'Selectmen',
-        menuLinkSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        descriptionSelector: '#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden',
-        agendaURI: {
-            selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody',
-            serverURIs:[
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2015%20BOS%20Meeting%20Agendas/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2015%20BOS%20Meeting%20Agendas/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2015%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200',
+    // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', pageConf.agendaURI.textReplacements)
+    // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', [['BOS',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],[/  /g,' '],[/Meeting/i,' ']])
 
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2016%20BOS%20Meeting%20Agendas/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2016%20BOS%20Meeting%20Agendas/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2016%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200',
+    Promise.all(pageData.map(rec => {
+        // console.log('rec', rec.group);
+        const pageConf = rec
 
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200',
-            ],
-            extractRecordLabel:  (rec) => {
-                return labelFromURIText(rec.uri, [['BOS',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Meeting/i,' ']], 'Agenda')
-            },
-            getMeetingDate:  (rec) => {
-                let uri = rec.uri.replace(/BOS /g,'').replace(/Agenda/g,'').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                const retrievedDate = dateFromURIText(uri, 'Agenda')
-                return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-            }
-        },
-        minutesURI: {
-            selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody',
-            serverURIs:[
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2015%20BOS%20Minutes/2015%20Approved/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2015%20BOS%20Minutes/2015%20Approved/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2015%20BOS%20Minutes/2015%20Approved/?Lower=41-60&Upper=1-200',
-
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2016%20BOS%20Minutes/2016%20Approved%20Minutes/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2016%20BOS%20Minutes/2016%20Approved%20Minutes/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2016%20BOS%20Minutes/2016%20Approved%20Minutes/?Lower=41-60&Upper=1-200',
-
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2017%20BOS%20Minutes/2017%20Approved%20BOS%20Minutes/?Lower=1-20&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2017%20BOS%20Minutes/2017%20Approved%20BOS%20Minutes/?Lower=21-40&Upper=1-200',
-                'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2017%20BOS%20Minutes/2017%20Approved%20BOS%20Minutes/?Lower=41-60&Upper=1-200',
-            ],
-            extractRecordLabel:  (rec) => {
-                return labelFromURIText(rec.uri, [['BOS',''],[/Minutes/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Final Approved/i,'Approved']], 'Minutes')
-            },
-            getMeetingDate:  (rec) => {
-                let uri = rec.uri.replace('BOS','').replace('Minutes','').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                const retrievedDate = dateFromURIText(uri, 'Minutes')
-                return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-            },
-        },
+        pageConf.agendaURI.extractRecordLabel =  (rec) => {
+            return labelFromURIText(rec.uri, pageConf.agendaURI.textReplacements, 'Agenda')
+        }
+        pageConf.agendaURI.getMeetingDate =  (rec) => {
+            const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.agendaURI.textReplacements), 'Agenda')
+            return (retrievedDate !== null) ? retrievedDate: rec.fileDate
+        }
+        pageConf.minutesURI.extractRecordLabel =  (rec) => {
+            return labelFromURIText(rec.uri, pageConf.minutesURI.textReplacements, 'Minutes')
+        }
+        pageConf.minutesURI.getMeetingDate =  (rec) => {
+            const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.minutesURI.textReplacements), 'Minutes')
+            return (retrievedDate !== null) ? retrievedDate: rec.fileDate
+        }
+        return migratePage(pageConf.uri, pageConf)
     })
-    .then(page =>
-    migratePage('https://www.newdurhamnh.us/conservation-commission',
-        {
-            group: 'ConservationCommission',
-            menuLinkSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-            descriptionSelector: '#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden',
-            agendaURI: {
-                selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody',
-                serverURIs:[
-                    'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_ConservationAgendas/2017%20Conservation',
-                    'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_ConservationAgendas/2016%20Conservation%20Commission%20Agendas/',
-                ],
-                extractRecordLabel:  (rec) => {
-                    return labelFromURIText(rec.uri, [['CCAgenda',''],['CC',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Conservation Commision/i,' ']], 'Agenda')
-                },
-                getMeetingDate:  (rec) => {
-                    let uri = rec.uri.replace('CCAgenda','').replace('CC','').replace('Agenda','').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                    const retrievedDate = dateFromURIText(uri, 'Agenda')
-                    return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-                },
-            },
-            minutesURI: {
-                selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody',
-                serverURIs:[
-                    'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_ConservationMin/2017%20Conservation/',
-                    'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_ConservationMin/2016%20Conservation%20Commission%20Minutes/'
-                ],
-                extractRecordLabel:  (rec) => {
-                    return labelFromURIText(rec.uri, [['CC',''],[/Minutes/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Conservation Committee/i,' ']], 'Minutes')
-                },
-                getMeetingDate:  (rec) => {
-                    let uri = rec.uri.replace('CC','').replace('Minutes','').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                    const retrievedDate = dateFromURIText(uri, 'Minutes')
-                    return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-                },
-            }
-        })
-        )
-        .then(page =>
-        migratePage('https://www.newdurhamnh.us/budget-committee',
-            {
-                group: 'BudgetCommittee',
-                menuLinkSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-                descriptionSelector: '#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden',
-                agendaURI: {
-                    selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table:nth-child(8) > tbody',
-                    serverURIs:[
-                        'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetAgendas/'
-                    ],
-                    extractRecordLabel:  (rec) => {
-                        return labelFromURIText(rec.uri, [['BCAgenda',''],['BC',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Budget Committee/i,' ']], 'Agenda')
-                    },
-                    getMeetingDate:  (rec) => {
-                        let uri = rec.uri.replace('BCAgenda','').replace('BC','').replace('Agenda','').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                        const retrievedDate = dateFromURIText(uri, 'Agenda')
-                        return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-                    },
-                },
-                minutesURI: {
-                    selector: 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody',
+)
 
-                    serverURIs:[
-                        'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2017Budget%20Committee%20Minutes/',
-                        'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2016/',
-                        'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2015/',
-                        'http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2014/',
-                    ],
-                    extractRecordLabel:  (rec) => {
-                        return labelFromURIText(rec.uri, [['BC',''],[/Minutes/i,''],[/\.pdf/i,''],[/\.doc/i,''],['  ',' '],[/Budget Committee/i,' ']], 'Minutes')
-                    },
-                    getMeetingDate:  (rec) => {
-                        let uri = rec.uri.replace('BC','').replace(/Minutes/i,'').replace('.pdf','').replace(/  /g,' ').replace(/^ */,'')
-                        const retrievedDate = dateFromURIText(uri, 'Minutes')
-                        return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-                    },
-                }
-            })
-        )
+    // Promise.resolve('test')
+
     .then(done => {
         console.log('done', done);
         // setTimeout(() => process.exit(), 5000);
