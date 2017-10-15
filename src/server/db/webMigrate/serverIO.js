@@ -49,6 +49,7 @@ module.exports = {
     getURLCacheLocation:getURLCacheLocation,
     cachedURIExists:cachedURIExists,
     cachingFetchURL:cachingFetchURL,
+    makeServerDirs: makeServerDirs
 }
 
 function initSFTP() {    if (sftpPromise==null)     sftpPromise = sftp.connect(connSettings)  }
@@ -164,7 +165,7 @@ function pullLocalCopy(remoteURI, localPath) {
             console.log('***Add index.html to localPath ', localPath);
             localPath = localPath + '/__index.html'
         }
-        if(finalResponse.headers['content-type'].startsWith( 'application/pdf')){
+        if(finalResponse.headers['content-type'].startsWith( 'application/pdf') && ! localPath.endsWith('.pdf')){
             console.log('***Add pdf extension to localPath ', localPath);
             localPath = localPath + '.pdf'
         }
@@ -181,7 +182,8 @@ function pullLocalCopy(remoteURI, localPath) {
     .catch(err => {
         // console.error("Error pulling ",remoteURI, err);
         console.error("Error pulling ",remoteURI);
-        return null;
+        throw("Error pulling ",remoteURI);
+        // return null;
     })
 }
 
@@ -230,6 +232,44 @@ function getRedirectLocation(record) {
     })
 }
 //========================================
+function makeServerDirs(baseServerPath, pathsToDir) {
+    if (configuration.mode !== 'development') {
+        return Promise.all(
+            pathsToDir.map( pathToDir => {
+               let fullPath = baseServerPath + pathToDir
+               if (!fullPath.endsWith('/')) {
+                   fullPath = fullPath + '/'
+               }
+               return sftpPromise.then(() => {
+                //    console.log('mkdir', fullPath);
+                   return sftp.mkdir(fullPath, true)
+                   .then(mkdirSuccess => {
+                    //    console.log('mkdirSuccess', mkdirSuccess);
+                       return fullPath
+                   })
+                   .catch(err => {
+                       console.log('mkdir Error', fullPath);
+                   })
+                //    mkdir(remoteFilePath, recursive);
+                })
+            })
+        )
+    } else {
+        return Promise.all(
+            pathsToDir.map( pathToDir => {
+               let fullPath = baseServerPath + pathToDir
+               if (!fullPath.endsWith('/')) {
+                   fullPath = fullPath + '/'
+               }
+            //    console.log('mkdir', fullPath);
+            //    return Promise.resolve([fullPath])
+               return mkdirp(fullPath.replace(/\/([^\/]+)$/,''))
+            })
+        )
+    }
+    // return Promise.resolve(['TBD'])
+}
+//========================================
 function pullNewServerDirs(baseServerPath, pathsToDir) {
     let serverDirs = {}
     // Pull directories from a server using SFTP
@@ -247,7 +287,8 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
                     return data.map(rec=> pathToDir+'/' +rec.name)
                 })
                 .catch((err) => {
-                    console.log('**sftp err:', fullPath , err);
+                    console.log('**sftp list err:', fullPath , err);
+                    return []
                 })
             })
         )
@@ -362,7 +403,16 @@ function getURLCacheLocation(uri) {
     const isArchiveDomain = (uri) => matchHost(configuration.sourceTownArchiveDomain, uri)
     const uriHost =isArchiveDomain(uri) ? configuration.sourceTownArchiveDomain: configuration.sourceTownURI
     const cacheURI =localPathFromURI(localFileBaseURL() + (isArchiveDomain(uri)? "/__archive": ''), uriHost, uri)
-    // console.log('getURLCacheLocation:cachURI','\n  ', uri, '\n  ', cacheURI);
+    const baseSrcURI = 'http://'+configuration.sourceTownDomain
+    uri = uri.replace(baseSrcURI, '').trim()
+    // console.log('getURLCacheLocation:cachURI','\n  ',
+    //     'uri', uri, '\n  ',
+    //     'localFileBaseURL', localFileBaseURL() , '\n  ',
+    //     (isArchiveDomain(uri)? "/__archive": ''),
+    //     uriHost, '\n  ',
+    //     cacheURI
+    // );
+    // console.log('**getURLCacheLocation:cachURI','\n  ', uri, '\n  ', cacheURI, baseSrcURI);
     return cacheURI.trim()
     // return (isPathToHTMLFile(cachURI) || isPathToPDFFile(cachURI))? cachURI: cachURI+'/__index.html'
 }
@@ -376,9 +426,14 @@ function cachingFetchURL(uri) {
     if (cachedURIExists(uri+'.pdf')) {
          activeURI = cacheURILocation+'.pdf'
     }
+    if (cachedURIExists(uri+'.doc')) {
+         activeURI = cacheURILocation+'.doc'
+    }
     if (cachedURIExists(uri+'/__index.html')) {
          activeURI = cacheURILocation+'/__index.html'
     }
+    // console.log('cachingFetchURL:', activeURI);
+    // return Promise.resolve(activeURI)
     // const activeURI = (cachedURIExists(uri)) ? cacheURILocation: uri
     // console.log('\n***cachingFetchURL', '\n  -',activeURI,  '\n  -',cacheURILocation, '\n  -', uri,'\n');
     // if (activeURI !== uri) {
@@ -394,9 +449,14 @@ function cachingFetchURL(uri) {
             }
             return fetchURL(writtenPath)
             .then(urlData =>{
-                // console.log('fetchURL(pulledFile)', pulledFile);
+                console.log('fetchURL(pulledFile)', urlData.location);
                 return Promise.resolve(urlData)
             })
+        })
+        .catch(err => {
+            // console.error('Err pulling cached file', uri);
+            // throw(new Error('Err pulling cached file', uri))
+            throw('Err pulling cached file:'+ uri)
         })
     } else {
         // console.log('**++ cachedURIExists', activeURI);

@@ -18,7 +18,7 @@ var getRedirectLocation = require('./serverIO').getRedirectLocation;
 var getURLCacheLocation = require('./serverIO').getURLCacheLocation;
 var cachedURIExists = require('./serverIO').cachedURIExists;
 var cachingFetchURL = require('./serverIO').cachingFetchURL;
-
+var makeServerDirs = require('./serverIO').makeServerDirs;
 
 let mergeArrays = (arrays) => [].concat.apply([], arrays)
 
@@ -56,6 +56,7 @@ const expandURI = (uri) => uri.startsWith('/') ? 'http://' + getSourceServerHost
 const remotePathFromExpandedURI = (uri) => uri.replace(new RegExp('https?://'+getSourceServerHost() ), '')
 
 const setDefault = (value, defaultValue)  => (! value || typeof value === 'undefined' ) ? defaultValue: value
+const onlyFileName = (fullPath) => fullPath.replace(/.*\//, '')
 
 //========================================
 function translateRecordType(recordtype) {
@@ -92,77 +93,6 @@ let onlyUnique = (value, index, self) => self.indexOf(value) === index;
 let getY_M_D = (date) =>  date.getUTCFullYear() + "_" + (date.getUTCMonth()<9?'0':'') + (date.getUTCMonth()+1) +  "_" + (date.getUTCDate()<10?'0':'') + (date.getUTCDate());
 let getRecordYear = (rec) => rec.date.getUTCFullYear()
 
-//========================================
-function extractMeetingTableRows(originalHTML, groupName) {
-    let data = originalHTML;
-    // console.log('originalHTML:', originalHTML);
-    data = data.replace(/<\/tr>.*/g, '')
-    let anchorRegEx = /<a .*?\"(\S*?)\".*?>(.*?)</;
-
-    return data.split('<tr>').map(row => {
-        let cells = row.split('\n')
-        .map(cell => cell.trim())
-        .filter( r => r.startsWith('<td')) // Ignore items that are NOT wrapped in a TD
-        .filter( r => r !== '<td>&#xA0;</td>')
-        .map(tagCell => tagCell
-            .replace(/<\/?td.*?>/g, '')
-            .replace(/<\/?tbody>/g, '')  //Strip out TD and tbody tags
-            .replace(/&#xA0;/g, '')
-        ).map(cellToReformat => {
-            cellToReformat = cellToReformat.replace(/<\/?span.*?>/g, '')
-            cellToReformat = cellToReformat.replace(/<\/?strong.*?>/g, '')
-
-            if (cellToReformat.startsWith('<a')) {
-                var match = anchorRegEx.exec(cellToReformat);
-                return  { label: match[2].trim(), uri: match[1]}
-            } else { // SHOULD be the first cell and a date
-                return {dateStr: cellToReformat, date:new Date(cellToReformat), groupName:groupName}
-            }
-        })
-        if (! cells[0] && cells.length > 0 ) {
-            logErrors && console.error( row.replace(/<td>&#xA0;<\/td>/g, '').trim()   )
-        }
-        return cells
-    })
-}
-//========================================
-function dbRecordsFromExtractedRow(rowData) {
-    let dateElement = rowData[0]
-    if (!dateElement || typeof dateElement === undefined) {
-        console.error("Missing date element???", rowData);
-        return
-    }
-    let meetingDate = dateElement.date
-    let groupName = dateElement.groupName
-
-    if (!meetingDate || typeof meetingDate === 'undefined' || isNaN(meetingDate.getTime() )) {
-        if (dateElement.dateStr && dateElement.dateStr.search(/^<strong>....<\/strong>$/) >= 0 ) {
-            return
-        }
-        logErrors && console.error("Invalid date:", JSON.stringify(dateElement));
-        return
-    }
-    if (! validYear(meetingDate)) {
-        logErrors && console.error("Invalid date:", dateElement.dateStr);
-        return
-    }
-    // if (! validRecordType()) {
-    //     logErrors && console.error("Invalid date:", dateElement.dateStr);
-    // }
-
-    return rowData.filter(cell => cell.uri).map(doc => {
-        let uri = doc.uri
-        if (! uri.startsWith('http')) {
-            uri = 'http://' + getSourceServerHost() + uri
-        }
-        let label = doc.label
-        if (! validRecordType(label) ) {
-            label = translateRecordType(doc.label)
-        }
-
-        return {groupName:groupName, date: meetingDate,  label:label, uri:uri, recordtype:label}
-    })
-}
 //========================================
 function updateFileDBFileLink(record) {
     let checkRecord={}
@@ -208,164 +138,6 @@ function enterIntoDB(record) {
         console.error("DBError:", dberr);
         return Promise.reject(dberr);
     })
-}
-//========================================
-//========================================
-// function cloneMeetings(paths) {
-//     // console.log('cloneMeetings');
-//     return Promise.all(paths.map(record => {
-//         console.log('Meetings -',record.group);
-//         return fetchURL(record.url)
-//         .then(urlData => {
-//             const wholePage = urlData.data
-//             var $ = cheerio.load(wholePage);
-//             return $(record.query).html();
-//         })
-//         .then( onlyTable => extractMeetingTableRows(onlyTable, record.group) )
-//         .then(extractedRows => {
-//             // console.log('extractedRows:',extractedRows);
-//             let allRecords=[];
-//             extractedRows.map((extractedRow, index) => {
-//                 if (extractedRow.length > 0 ) {
-//                     let dbRecords = dbRecordsFromExtractedRow(extractedRow)
-//                     Array.prototype.push.apply(allRecords, dbRecords);
-//                 }
-//             })
-//             // return allRecords.filter(rec => rec.date.getUTCFullYear() === 2012)
-//             allRecords.filter(rec=>! validRecordType(rec.label)).map(rec => {
-//                 logErrors && console.error(rec.groupName , "Invalid document type:", getY_M_D(rec.date) , '"'+rec.label+'"');
-//                 // console.log(rec);
-//             })
-//
-//             return allRecords.filter(rec =>validRecordType(rec.label)  )
-//         })
-//         .then( pullLocalCopies)
-//         .then(pulledLocal => {
-//             return pulledLocal.map(rec => {
-//                 if (isPhysicalFile(rec)) {
-//                     rec.newFilename = newFilenameFromRecord(rec)
-//                 }
-//                 return rec
-//             })
-//         })
-//         .then(recWithDest => {
-//             // Fetch directories (by year) from new server
-//             return pullNewServerDirs(getServerFilePath(), recWithDest.map(getRecordYear ).filter(onlyUnique) )
-//             .then( serverDirs => {
-//                 let allPaths=[];
-//                 serverDirs.map( directory => {
-//                     directory.map( path => {
-//                         allPaths.push(path)
-//                     })
-//                     return recWithDest
-//                 })
-//                 // console.log('serverDirs:', allPaths.sort( (a,b) => a.localeCompare(b)));
-//                 let notOnServer = (rec) => !allPaths.includes(rec.date.getUTCFullYear() + '/' +rec.newFilename)
-//
-//                 // Check converted records against server directories
-//                 return Promise.all(
-//                     recWithDest.filter(notOnServer).filter(isPhysicalFile).map(rec => {
-//                         let dest = getServerFilePath() + rec.date.getUTCFullYear() + '/' + rec.newFilename
-//                         return pushFileToServer(rec.local, dest)
-//                         .then( (pushReq)=> {
-//                             return rec
-//                         })
-//                         .catch(err => console.error(err, rec))
-//                     })
-//                 )
-//                 .then( newFilesUploaded => {
-//                     return recWithDest;
-//                 })
-//             })
-//         })
-//         .then(filesCopied => {
-//             // Log to database if not already there
-//             let fileLink = (record) => isPhysicalFile(record)
-//                 ? record.date.getUTCFullYear() + '/' + record.newFilename
-//                 : record.uri;
-//             return Promise.all(
-//                 filesCopied.map(rec => {
-//                     let dbEntry = {pageLink:rec.groupName, recordtype: rec.label, date:rec.date, fileLink:fileLink(rec)}
-//                     return enterIntoDB(dbEntry)
-//                 })
-//             )
-//         })
-//
-//             }))
-// }
-//========================================
-function extractLinksFromTable(tableHTML) {
-    var linkRegEx = /(<a.*?<\/a.*?>)/g
-    var links=[];
-    let defaultRecordtype = 'Document'
-
-    if (tableHTML.indexOf('width:164px') !== -1) {
-        return links;
-    }
-
-    if (tableHTML.toUpperCase().indexOf('Helpful Information'.toUpperCase()) >= 0) {
-        defaultRecordtype = 'HelpfulInformation'
-    }
-    if (tableHTML.toUpperCase().indexOf('Notices'.toUpperCase()) >= 0) {
-        defaultRecordtype = 'Notice'
-    }
-    if (tableHTML.toUpperCase().indexOf('Gazette'.toUpperCase()) >= 0) {
-        defaultRecordtype = 'Newsletter'
-    }
-    while ((match = linkRegEx.exec(tableHTML)) !== null) {
-        let recordtype = defaultRecordtype
-
-        var link =  match[0]
-        let uri=link.match(/"(.*?)"/)[0]
-        .replace(/"/g,"")
-        .trim()
-
-        let desc=link.match(/>?(.*)/)[0]
-        .replace(/<\/?span.*?>/ig,"")
-        .replace(/<\/?font.*?>/ig,"")
-        .replace(/<\/?strong.*?>/ig,"")
-        .replace(/<\/?a.*?>/ig,"")
-        .replace(/&amp;/g, '&')
-        .replace(/&apos;/g, "'")
-        .replace(/&nbsp;/g, " ")
-        .replace(/&#39;/g, "'")
-        .trim()
-
-        let sourceHostURI = (uri) => uri.toUpperCase().indexOf(getSourceServerHost().toUpperCase()) == -1
-        if (uri.toUpperCase().indexOf('HTTP') >= 0 && sourceHostURI(uri)){
-            recordtype = 'HelpfulInformation'
-        }
-        if (uri.toUpperCase().indexOf('MAILTO') >= 0) {
-            recordtype = 'MailTo'
-        }
-        if (uri.toUpperCase().indexOf('.PHP') >= 0) {
-            recordtype = 'Redirect'
-        }
-
-
-        uri = uri.replace(new RegExp('https?://'+getSourceServerHost() ), '')
-        let remotePath = uri
-        if(['Notice', 'HelpfulInformation','Document', 'Newsletter'].includes(recordtype)){
-            if (uri.startsWith('/') ) {
-                let origURI = uri
-                remotePath = uri.replace(/^\//, '')
-                uri = 'http://' + getSourceServerHost() + uri
-            }
-        }
-        links.push({uri:uri, desc:desc, remotePath:remotePath, recordtype:recordtype })
-    }
- links
-}
-//========================================
-function getTablesFromPage(pageHTML, query) {
-    var myRe =   /(<table.*[\s\S]*?>[\s\S]*?<\/table)/g
-    var tables=[];
-    while ((match = myRe.exec(pageHTML)) !== null) {
-        if (match[0].toUpperCase().indexOf(query.toUpperCase()) !== -1) {
-            tables.push( match[0])
-        }
-    }
-    return tables
 }
 //========================================
 //  Rewrite the fileLinks in the PublicRecords table to change the old
@@ -426,101 +198,36 @@ function migratePublicRecordURIs() {
             })
     })
 }
-//========================================
-// function migrateLinks(linksToMigrate) {
-//
-//     linksToMigrate = linksToMigrate.map(record => {
-//         rec.remotePath = remotePathFromExpandedURI(expandURI(rec.uri))
-//         record.recordtype = setDefault(record.recordtype, 'Document')
-//         record.date = setDefault(record.date, addDays(new Date(), -21))
-//         return record;
-//     })
-//     return Promise.resolve( pullLocalCopies(linksToMigrate)
-//     .then(pulledFiles  => {
-//         console.log('pulledFiles:', pulledFiles);
-//         let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
-//
-//         return pullNewServerDirs(getServerFilePath(), ['Documents'] )
-//         .then( serverDirs => {
-//             let allPaths= mergeArrays(serverDirs)
-//             linksToMigrate = linksToMigrate.map(rec => {
-//                 rec.targetPath = targetPath = getServerFilePath()+ localFileURL(rec)
-//                 return rec
-//             })
-//             let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
-//
-//             return Promise.all(
-//                 linksToMigrate.filter(onlyLocalDoc).filter(notOnServer)
-//                 .map(rec => pushFileToServer(rec.local, rec.targetPath)
-//                     .then( (pushReq)=> {
-//                         return rec
-//                     }).catch(err => console.error(err, rec))
-//                 )
-//             )
-//             .then(copiedFilesNeeded => pulledFiles )
-//         })
-//         .then(toLogToDB => {
-//             // console.log('toLogToDB:', toLogToDB);
-//             let localFileURL = (rec) => rec.remotePath.indexOf('http') !== -1 ? rec.remotePath: 'Documents/' + rec.remotePath.replace(/uploads\//, '')
-//
-//             return Promise.all(
-//                 toLogToDB
-//                 .map(rec => {
-//                     rec.date = setDefault(rec.date, addDays(new Date(), -21))
-//
-//                     let dbEntry = {pageLink:rec.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
-//                     // console.log('lnk', dbEntry);
-//                     return enterIntoDB(dbEntry)
-//                 })
-//             )
-//         })
-//     })
-//     .catch(pullErrors =>{
-//         console.log('pullErrors', pullErrors);
-//     })
-// )
-// }
-//=======================================================
-function pullDocumentLinksFromTables(record) {
-    // console.log('pullDocumentLinksFromTables(record)',record);
-    return fetchURL(record.url)
-    .then(urlData => {
-        const wholePage = urlData.data
-        var $ = cheerio.load(wholePage);
-        return getTablesFromPage(wholePage, record.query)
-    })
-    .then(tablesHTML =>  tablesHTML.map(table =>  extractLinksFromTable(table, record.group) ) )
-    .then(tableLinks => mergeArrays(tableLinks) )
-    .then( allLinks => {
-        return pullLocalCopies(allLinks.filter(rec=>rec.recordtype!=='Redirect'))
-        // .then(pulledFiles => {
-        //     return allLinks
-        // })
-    } )
-    .then(allTableLinks => {
-        // console.log('allTableLinks:',allTableLinks);
-        return allTableLinks
-    })
-}
 //=======================================================
 function pullLinksFromMenus(wholePage, selector) {
-    // console.log('pullLinksFromMenus:', selector);
+    // console.log('pullLinksFromMenus:', wholePage.length, selector);
     var $ = cheerio.load(wholePage);
     const result = $(selector).children().map( (i, el)  => {
-        let uri = expandURI($($(el).html()).attr('href'))
-        remotePath = remotePathFromExpandedURI(uri)
-        return {desc: $(el).text(), uri:uri, remotePath:remotePath, recordtype:'TBD'}
+        let links = $(el).find('a')
+        if (links.length === 0) {
+            console.error('Missing link', $(el).html().replace(/\t/g,''));
+            return { uri: null, desc: $(el).text().trim(), remotePath:'' }
+        }
+        return $(links).map( (lnkIndex, linkEl) => {
+            let link = $(linkEl).attr('href')
+            let uri = expandURI(link)
+            remotePath = remotePathFromExpandedURI(uri)
+            return {desc: $(linkEl).text(), uri:uri, remotePath:remotePath, recordtype:'TBD'}
+        }).get()
     })
     .get()
-    // console.log('pullLinksFromMenus',result);
+    // console.log('pullLinksFromMenus', result);
     return result;
 }
 //=======================================================
 function pullRedirectLinksFromMenus(wholePage, selector) {
     // console.log('pullRedirectLinksFromMenus:', wholePage.length, selector);
-    const filterURIs = (rec) => rec.remotePath.indexOf('/links/') >= 0 || rec.remotePath.indexOf('/pages/') >= 0;
+    const filterURIs = (rec) => rec.remotePath.indexOf('/links/') >= 0 ||
+        rec.remotePath.indexOf('/pages/') >= 0 ||
+        (rec.remotePath.startsWith('http') && rec.remotePath.indexOf( getSourceServerHost()) === -1) // Redirects to existing server
 
-    let filteredLinks = pullLinksFromMenus(wholePage, selector).filter(filterURIs).map(rec => {
+    let filteredLinks = pullLinksFromMenus(wholePage, selector)
+    .filter(filterURIs).map(rec => {
         rec.recordtype = 'Redirect'
         return rec
     })
@@ -530,13 +237,15 @@ function pullRedirectLinksFromMenus(wholePage, selector) {
 //=======================================================
 function pullDocumentLinksFromMenus(wholePage, selector) {
     // console.log('pullDocumentLinksFromMenus(record)',wholePage.length,selector);
-    const filterURIs = (rec) => rec.remotePath.indexOf('/files/') >= 0;
+    const filterURIs = (rec) => rec.remotePath.indexOf('/files/') >= 0 ||
+        rec.remotePath.indexOf('/uploads/') >= 0 ||
+        rec.remotePath.indexOf('/stories/') >= 0
 
     let filteredLinks =  pullLinksFromMenus(wholePage, selector).filter(filterURIs).map(rec => {
         rec.recordtype = 'Document'
         return rec
     })
-    // console.log('filteredLinks:', filteredLinks.length);
+    console.log('pullDocumentLinksFromMenus:', filteredLinks.length);
     return pullLocalCopies(filteredLinks)
 }
 //=======================================================
@@ -643,11 +352,11 @@ function cloneDocuments(paths) {
     }))
 }
 //=======================================================
-function migrateMenuLinkPaths(paths) {
-    return Promise.all(paths.map(record => {
-        return migrateMenuLinks(record)
-    }))
-}
+// function migrateMenuLinkPaths(paths) {
+//     return Promise.all(paths.map(record => {
+//         return migrateMenuLinks(record)
+//     }))
+// }
 //=======================================================
 function migrateMenuLinks(wholePage, conf) {
     const notEB2Gov = (rec) =>  rec.uri.toUpperCase().indexOf('EB2GOV') === -1
@@ -682,7 +391,6 @@ function parseVTSFileArchivePage(wholePage, selector) {
     // console.log('parseVTSFileArchivePage',selector);
     var $ = cheerio.load(wholePage);
 
-    // let selector = 'body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody'
     return  $(selector).children().map( (i, tableRow)  => {
         const uri = $(tableRow).find($("a[target='_top']")).attr('href')
         return {uri:uri.trim(),
@@ -807,13 +515,211 @@ function migrateVTSArchive(recordType, group, uri, conf) {
         })
 }
 //========================================
+function parseAgendaMeetingTable(wholePage, selector) {
+    // console.log('parseAgendaMeetingTable(wholePage, selector)', selector);
+    var $ = cheerio.load(wholePage);
+
+    return  $(selector).children().map( (i, tableRow)  => {
+        const cells = $(tableRow).children()
+        const meetingDate = $(cells[0]).text()
+        const agendaUris = $(cells[1]).children().map( (index, element) =>{
+            if ($(element).find('a').length > 0) {
+                return { uri: $(element).find('a').attr('href'), desc: $(element).text().trim() }
+            } else {
+                return { uri: $(element).attr('href'), desc: $(element).text().trim() }
+            }
+        }).get()
+        const minutesUris = $(cells[2]).children().map( (index, element) =>{
+            if ($(element).find('a').length > 0) {
+                return { uri: $(element).find('a').attr('href'), desc: $(element).text().trim() }
+            } else {
+                return { uri: $(element).attr('href'), desc: $(element).text().trim() }
+            }
+            // return { uri: $(element).find('a').attr('href'), desc: $(element).text().trim() }
+        }).get()
+        // const videoUris = cells.length > 3? $(cells[3]).html().replace(/&#xA0;/g,' ').replace(/target="_blank"/, '').trim() : ''
+        const videoUris = (cells.length > 3) ?
+        $(cells[3]).children().map( (index, element) =>
+            ({ uri: $(element).find('a').attr('href'), desc: $(element).text().trim() })
+        ).get()
+        :
+        []
+
+        return {
+            meetingDateStr: meetingDate,
+            meetingDate: new Date(meetingDate),
+            fullHTML: $(tableRow).html().replace(/\t/g,'').replace(/\n/g,''),
+            uris: [
+                {type:'Minutes', uris: minutesUris},
+                {type:'Agenda', uris: agendaUris},
+                {type:'Video', uris: videoUris},
+            ]
+        };
+    }).get()
+}
+//========================================
+function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
+
+    const invalidMeetingDate = (rec) => isNaN( rec.meetingDate.getTime() )
+    const hasValidMeetingDate = (rec) => !invalidMeetingDate(rec)
+    const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
+
+    // console.log('migrateTableOfAgendaMinutesAndVideos', group, uri,conf);
+    return cachingFetchURL(uri)
+    .then(urlData => {
+        const wholePage = urlData.data
+        return parseAgendaMeetingTable(wholePage, conf.selector).reduce( (acc, val) => {
+            val.uris.map(uris => {
+                let missingURI=false
+                acc.push( uris.uris.map(docLink =>{
+                    if (!docLink.uri) {
+                        missingURI=true
+                    }
+                    return Object.assign({
+                        meetingDateStr:val.meetingDateStr,
+                        meetingDate:val.meetingDate,
+                        group:group, recordType:uris.type
+                    },
+                    docLink)
+                }))
+                // if (missingURI) {
+                //     console.error('docLink',require('util').inspect(val, { depth: null }));
+                // }
+            })
+            return acc
+        }, [])
+        .reduce( (acc, val) => { val.map( elem => acc.push(elem)); return acc },[])
+        .map( (tableRowData, i) => {
+            if (tableRowData.uri && ! tableRowData.uri.startsWith('http') ) {
+                let origURI = tableRowData.uri
+                // remotePath = uri.replace(/^\//, '')
+                tableRowData.uri = 'http://' + getSourceServerHost() + ((!tableRowData.uri.startsWith('/'))?'/':'') + tableRowData.uri
+            // } else {
+            //     console.log('tableRowData.uri', tableRowData.uri);
+            }
+            return tableRowData
+        })
+    })
+    .then(mergedRecords => {
+        // console.log('mergedRecords',mergedRecords);
+        return Promise.all(
+            mergedRecords
+            .filter(rec => rec.uri && rec.uri.length > 0)
+            .filter(rec => rec.recordType !== 'Video')
+            .map(rec => {
+            // console.log('Fetch', rec.uri);
+            return cachingFetchURL(rec.uri)
+            .then(writtenMetaData => {
+                rec.localFile = writtenMetaData.location
+                return rec
+            })
+            .catch(err => {
+                console.log(err , rec);
+            })
+        })
+        )
+        .then(pulledRecords => mergedRecords)
+    })
+    .then(pulledFiles => {
+        // console.log('pulledFiles',pulledFiles);
+        let dateYMD = (date) => (isNaN( date.getTime() ))? "InvalidDate": date.getUTCFullYear() + '_' + (date.getUTCMonth() + 1) +  '_' + date.getUTCDate()
+        let dateYMDPath = (date) => (isNaN( date.getTime() ))? "InvalidDate": date.getUTCFullYear() + '/' + dateYMD(date)
+        let targetFileURL = (rec) => rec.recordType + '/' + rec.group + '/' + dateYMDPath(rec.meetingDate) +  '_' + onlyFileName(rec.localFile)
+
+        const invalidDataRecord = (rec) => invalidMeetingDate(rec) // || typeof rec.localFile === 'undefined'
+        const validData = (rec) => !invalidDataRecord(rec)
+
+        // let invalidDataRecs = pulledFiles.filter(rec => typeof rec.localFile === 'undefined').concat(pulledFiles.filter(invalidMeetingDate))
+        let invalidDataRecs = pulledFiles.filter(invalidDataRecord)
+        if (invalidDataRecs.length > 0) {
+            // console.log('invalidDataRecs',invalidDataRecs);
+            // invalidDataRecs[0].group
+            console.error( '** Invalid Dates -',
+                invalidDataRecs[0].group,
+                invalidDataRecs.filter(invalidMeetingDate).map(rec => rec.meetingDateStr + ' -- ' + rec.desc) );
+        }
+
+        return pulledFiles
+        .filter(validData)
+        // .filter(rec => typeof rec.uri !== 'undefined')
+        // .filter(hasValidMeetingDate)
+        .map(rec => {
+            if (rec.recordType !== 'Video') {
+                if (!rec.localFile) {
+                    console.error('**No File for', rec.group, dateYMD(rec.meetingDate), rec.recordType, rec.uri);
+                } else {
+                    rec.relativeDest = targetFileURL(rec)
+                }
+
+                delete rec.uri
+            }
+            if (rec.desc === rec.recordType) { delete rec.desc}
+            return rec
+        })
+    })
+    .then(localizedPaths => {
+        let pulledFilePaths = localizedPaths
+            .filter(rec => rec.recordType !== 'Video' && rec.relativeDest)
+            .map(rec =>  pathWithoutFilename(rec.relativeDest) )
+            .filter((v, i, a) => a.indexOf(v) === i);
+
+        return makeServerDirs(getServerFilePath(), pulledFilePaths )
+        .then( createdDirs =>{
+            return pullNewServerDirs(getServerFilePath(), pulledFilePaths )
+        })
+        .then( serverDirs => {
+            let allPaths= mergeArrays(serverDirs)
+            // console.log(getServerFilePath(), ['Agenda','Minutes'] ,'\nallPaths',allPaths);
+            // console.log('pulledFilePaths', pulledFilePaths);
+            let notOnServer = (rec) => !allPaths.includes(rec.relativeDest)
+            let hasLocalFile = (rec) => rec.localFile
+
+            return Promise.all(
+                localizedPaths.filter(notOnServer).filter(hasLocalFile).map(rec =>{
+                    console.log('pushFileToServer', rec.localFile, getServerFilePath() + rec.relativeDest );
+                    return pushFileToServer(rec.localFile, getServerFilePath() + rec.relativeDest)
+                    .then( (pushReq)=> {
+                        return rec
+                    })
+                    .catch(err => console.log(err, rec))
+                })
+            )
+            .then( donePush => {
+                return localizedPaths
+            })
+        })
+        .then(afterPushedFiles => {
+            const validFileLink = (rec) => rec.uri || rec.relativeDest
+            return Promise.all(
+                afterPushedFiles.filter(validFileLink).map(rec => {
+
+                    let dbEntry = {pageLink:rec.group, recordtype:rec.recordType ,recorddesc: rec.desc||'', date:rec.meetingDate, fileLink:rec.uri || rec.relativeDest}
+                    // console.log('lnk', dbEntry);
+                    // return Promise.resolve(dbEntry)
+                    return enterIntoDB(dbEntry)
+                })
+            )
+            // console.log('reworked',reworked);
+            // return reworked
+        })
+    })
+
+    // .then(tmpResult => {
+    //     console.log('tmpResult',tmpResult);
+    // })
+}
+//========================================
 function migrateAgendas(conf, confP) {
     const recordType = 'Agenda'
     return Promise.all(conf.serverURIs.map(uri => {
+        // console.log('migrateAgendas:uri', uri);
         if (uri.indexOf('archive.vt-s.net') != -1 || uri.indexOf('home/dcarpus') != -1) {
             return migrateVTSArchive(recordType,confP.group, uri, conf)
         }
-        throw new Error('Unknown uri type' + uri)
+        if (uri.indexOf('miltonnh-us.com') != -1) {
+            return migrateTableOfAgendaMinutesAndVideos(confP.group, uri, conf)
+        }
+        throw new Error('** Unknown uri type - ' + uri)
     }))
 }
 //========================================
@@ -823,7 +729,7 @@ function migrateMinutes(conf, confP) {
         if (uri.indexOf('archive.vt-s.net') != -1 || uri.indexOf('home/dcarpus') != -1) {
             return migrateVTSArchive(recordType,confP.group, uri, conf)
         }
-        throw new Error('Unknown uri type' + uri)
+        throw new Error('** Unknown uri type -' + uri)
     }))
 }
 //========================================
@@ -835,11 +741,11 @@ function migratePage(uri, conf) {
     .then(groupDesc => migrateMenuLinks(wholePage, conf) )
     .then(menuLinks => migrateDocuments(wholePage, conf) )
     // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
-    .then(documents => migrateAgendas(conf.agendaURI, conf) )
-    .then(agendas => migrateMinutes(conf.minutesURI, conf))
+    .then( documents => migrateMinutes(conf.minutesURI, conf))
+    .then(minutes => migrateAgendas(conf.agendaURI, conf) )
     .then(done => {
-        // console.log('Done migratePage', conf.group);
-        return Promise.resolve('Done migratePage '+ conf.group)
+        // console.log('Done migratePage', done);
+        return Promise.resolve('Done migratePage '+ conf.group + done.length)
     })
 }
 //========================================
@@ -913,7 +819,6 @@ if (require.main === module) {
         return label
     }
 
-
     // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', pageConf.agendaURI.textReplacements)
     // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', [['BOS',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],[/  /g,' '],[/Meeting/i,' ']])
 
@@ -943,7 +848,10 @@ if (require.main === module) {
 
     .then(done => {
         console.log('done', done);
-        // setTimeout(() => process.exit(), 5000);
+        process.exit()
+    })
+    .catch(err => {
+        console.log('Error', err);
         process.exit()
     })
 
