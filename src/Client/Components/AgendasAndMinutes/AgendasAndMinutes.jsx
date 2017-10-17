@@ -80,7 +80,6 @@ export class AgendasAndMinutes extends React.Component {
          .map( _date  => {
              return {date:_date, values:  this.props.meetings[_date]}
          })
-// console.log('currentMeetings:',currentMeetings);
      return (
          <div id='AgendasAndMinutes'>
              <a id="AgendasAndMinutes-bookmark">AgendasAndMinutes Start</a>
