@@ -1,9 +1,13 @@
 import { connect } from 'react-redux'
 import DepartmentsUI from './DepartmentsUI'
+
+import {documentsByYear} from '../../libs/AgendasAndMinutes'
+
 import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
 import { fetchPageAsides } from '../../actions/PageAsides'
 import {fetchGroupNotices} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
+import {fetchMeetingDocs} from '../../actions/PublicDocuments'
 
 const mapStateToProps = (state, ownProps) => {
     var groupName=  ownProps.match.params.department;
@@ -31,21 +35,27 @@ const mapStateToProps = (state, ownProps) => {
 
             // new group and old group both in 'Departments', fetch from here (otherwise do in componentWillMount )
             if ( newGroup.length > 0 && oldGroup.length >  0) {
-                // console.log('DepartmentsUI:fetchOrganizationalUnitData:', groupName);
+                console.log('DepartmentsUI:fetchOrganizationalUnitData:', groupName);
                 // console.log( 'DepartmentsUI: | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
 
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
                 ownProps.store.dispatch(fetchPageAsides(groupName));
                 ownProps.store.dispatch(fetchGroupNotices(groupName));
                 ownProps.store.dispatch(fetchGroupDoc(groupName));
+                ownProps.store.dispatch(fetchMeetingDocs(groupName));
+
                 loading= true;
             }
         }
     }
 
+
     return {
         groupName:  groupName,
         groupData:  recordState.groupData,
+        groupDocuments: state.GroupDocuments,
+        // agendasAndMinutes: Object.assign(state.agendasAndMinutes, documents: state.agendasAndMinutes.documents.),
+        agendasAndMinutes: documentsByYear(state.agendasAndMinutes.documents),
         loading: loading,
         store: ownProps.store
     };
@@ -58,6 +68,7 @@ const mapDispatchToProps = (dispatch) => {
           dispatch(fetchPageAsides(groupName));
           dispatch(fetchGroupNotices(groupName));
           dispatch(fetchGroupDoc(groupName));
+          dispatch(fetchMeetingDocs(groupName));
        }
   }
 }

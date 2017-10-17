@@ -1,0 +1,6 @@
+{
+  "name": "DefaultDepartment",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./DefaultDepartment.jsx"
+}
