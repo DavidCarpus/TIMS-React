@@ -3,7 +3,6 @@
         "group":"Selectmen",
         "uri":"http://miltonnh-us.com/bos.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > table > tbody",
             "serverURIs":[
@@ -23,7 +22,6 @@
         "group": "ConservationCommittee",
         "uri":"http://miltonnh-us.com/conscomm.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > table:nth-child(7) > tbody",
             "serverURIs":[
@@ -42,7 +40,6 @@
         "group": "BudgetCommittee",
         "uri":"http://miltonnh-us.com/budget.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > table:nth-child(5) > tbody",
             "serverURIs":[
@@ -62,7 +59,6 @@
         "group": "CemeteryTrustees",
         "uri":"http://miltonnh-us.com/cemetery.php",
         "menuLinkSelector":"body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(3) > td > table:nth-child(3) > tbody",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(3) > td > table:nth-child(7) > tbody",
             "serverURIs":[
@@ -82,7 +78,6 @@
         "group": "EconomicDevelopment",
         "uri":"http://miltonnh-us.com/economic.php",
         "menuLinkSelector":"body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td:nth-child(1) > div > table:nth-child(6) > tbody",
             "serverURIs":[
@@ -102,7 +97,6 @@
         "group": "LibraryTrustees",
         "uri":"http://miltonnh-us.com/milton-free-public-library-board-of-trustees.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(18) > table > tbody",
             "serverURIs":[
@@ -123,7 +117,6 @@
         "uri":"http://miltonnh-us.com/planning_board.php",
         "menuLinkSelector":
             "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > table:nth-child(10) > tbody",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div > table > tbody",
             "serverURIs":[
@@ -143,7 +136,6 @@
         "group":"Recreation",
         "uri":"http://miltonnh-us.com/recreation.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(5) > td > table > tbody",
             "serverURIs":[
@@ -163,7 +155,6 @@
         "group":"SewerCommission",
         "uri":"http://miltonnh-us.com/sewer_comm.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > table > tbody",
             "serverURIs":[
@@ -183,7 +174,6 @@
         "group":"ChecklistSupervisors",
         "uri":"http://miltonnh-us.com/checklist.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div > div > div > div > div > table > tbody",
             "serverURIs":[
@@ -203,7 +193,6 @@
         "group":"TownForest",
         "uri":"http://miltonnh-us.com/town-forest-committee.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > table > tbody",
             "serverURIs":[
@@ -224,7 +213,6 @@
         "uri":"http://miltonnh-us.com/town_house.php",
         "menuLinkSelector":
             "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div:nth-child(8) > table:nth-child(1) > tbody",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div:nth-child(8) > table:nth-child(3) > tbody",
             "serverURIs":[
@@ -244,7 +232,6 @@
         "group":"TrustFunds",
         "uri":"http://miltonnh-us.com/trust_funds.php",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div > table > tbody",
             "serverURIs":[
@@ -265,7 +252,6 @@
         "uri":"http://miltonnh-us.com/zba.php",
         "menuLinkSelector":
             "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div > table:nth-child(5) > tbody",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
         "agendaURI": {
             "selector": "body > table > tbody > tr:nth-child(5) > td:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div > table:nth-child(1) > tbody",
             "serverURIs":[

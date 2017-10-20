@@ -167,65 +167,6 @@ function addOrUpdateDBTable(tableName, record, checkRecord={}){
 function enterIntoDB(record) {
     return enterOnlyIntoDBTable('PublicRecords', record, record)
 }
-//========================================
-//  Rewrite the fileLinks in the PublicRecords table to change the old
-// sites URI to the relative path in the 'serverDirs'
-//========================================
-function migratePublicRecordURIs() {
-    // Fetch PublicRecords that startsWith the sourceHostURI
-    // console.log('sql ', knex('PublicRecords').select('*').where('fileLink', 'like', '%' + getSourceServerHost() + '%').toString());
-    return knex('PublicRecords').select('*').where('fileLink', 'like', '%' + getSourceServerHost() + '%')
-    .then(dbSelectResults => {
-            let publicRecordsToMigrate = dbSelectResults.map(rec =>
-                Object.assign(rec, {uri: rec.fileLink.replace('www.'+getSourceServerHost(), getSourceServerHost())}))
-                .filter(rec => !rec.uri.toLowerCase().endsWith('.php'))
-            // console.log('publicRecordsToMigrate:', publicRecordsToMigrate);
-            return pullLocalCopies(publicRecordsToMigrate)
-            .then(pulledFiles => {
-                // console.log('pulledFiles:', pulledFiles);
-                let localFileURL = (rec) => 'Documents/' + rec.remotePath.replace(/uploads\//, '').replace(/.*\//,'')
-
-                return pullNewServerDirs(getServerFilePath(), ['Documents'] )
-                .then( serverDirs => {
-                    let allPaths= mergeArrays(serverDirs)
-                    publicRecordsToMigrate = publicRecordsToMigrate.map(rec => {
-                        rec.remotePath = rec.uri.replace(/^\//, '')
-                        rec.targetPath = getServerFilePath()+ localFileURL(rec)
-                        return rec
-                    })
-                    let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
-
-                    return Promise.all(
-                        publicRecordsToMigrate.filter(notOnServer)
-                        .map(rec => {
-                            rec.remotePath = remotePathFromExpandedURI(expandURI(rec.uri))
-                            return pushFileToServer(rec.local, rec.targetPath)
-                            .then( (pushReq)=> {
-                                return rec
-                            }).catch(err => console.error(err, rec))
-                        })
-                    )
-                    .then(copiedFilesNeeded => publicRecordsToMigrate )
-                })
-                .then(pushedFiles => {
-                    let toDB = publicRecordsToMigrate.map(rec => {
-                        rec.targetPath = getServerFilePath()+ localFileURL(rec)
-                        rec.fileLink = localFileURL(rec)
-                        return {id: rec.id, pageLink:rec.pageLink, fileLink: rec.fileLink}
-                    })
-                    return toDB
-                })
-            })
-            .then(toLogToDB => {
-                return Promise.all(
-                toLogToDB
-                .map(dbEntry => {
-                    return updateFileDBFileLink(dbEntry)
-                })
-                )
-            })
-    })
-}
 //=======================================================
 function pullLinksFromMenus(wholePage, selector) {
     // console.log('pullLinksFromMenus:', wholePage.length, selector);
@@ -321,59 +262,6 @@ function migrateDocuments(wholePage, conf) {
     })
 }
 
-//=======================================================
-function cloneDocuments(paths) {
-    return Promise.all(paths.map(record => {
-        console.log('Documents -', record.group);
-        return pullDocumentLinksFromMenus(record)
-        .then(mergedTableLinks => {
-            // console.log('mergedTableLinks:',mergedTableLinks);
-            let localFileURL = (rec) => 'Documents/' + rec.local.replace(/uploads\//, '').replace(/.*\//,'')
-
-            return pullNewServerDirs(getServerFilePath(), ['Documents'] )
-            .then( serverDirs => {
-                let allPaths= mergeArrays(serverDirs)
-                mergedTableLinks = mergedTableLinks.map(rec => {
-                    rec.targetPath = targetPath = getServerFilePath()+ localFileURL(rec)
-                    return rec
-                })
-
-                let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
-
-                return Promise.all(
-                    mergedTableLinks.filter(onlyLocalDoc).filter(notOnServer).map(rec => {
-                        return pushFileToServer(rec.local, rec.targetPath)
-                        .then( (pushReq)=> {
-                            return rec
-                        }).catch(err => console.log(err, rec))
-                    })
-                )
-                .then(copiedFilesNeeded => mergedTableLinks )
-            })
-            .then (toLogToDB => {
-                // console.log('toLogToDB:', toLogToDB);
-                let notEB2Gov = (rec) =>  rec.remotePath.toUpperCase().indexOf('EB2GOV') === -1
-                let notnhtaxkiosk = (rec) =>  rec.remotePath.toUpperCase().indexOf('NHTAXKIOSK') === -1
-                let localFileURL = (rec) => rec.local.indexOf('http') !== -1 ?
-                rec.local:
-                'Documents/' + rec.local
-                .replace(new RegExp('/.*/'),"")
-
-                return Promise.all(
-                toLogToDB.filter(ignoreMailToLink).filter(notEB2Gov).filter(notnhtaxkiosk)
-                .map(rec => {
-                    rec.date = setDefault(rec.date, addDays(new Date(), -21))
-
-                    let dbEntry = {pageLink:record.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
-                    // console.log('lnk', dbEntry);
-                    return enterIntoDB(dbEntry)
-                })
-                )
-            })
-
-        })
-    }))
-}
 //=======================================================
 function migrateMenuLinks(wholePage, conf) {
     const notEB2Gov = (rec) =>  rec.uri.toUpperCase().indexOf('EB2GOV') === -1
@@ -877,23 +765,6 @@ if (require.main === module) {
         console.log('Error', err);
         process.exit()
     })
-
-    /*
-    cloneMeetings(meetingPaths)
-    .then(meetingsDone => {
-    return cloneDocuments(documentPaths)
-})
-.then(migrateMenuLinkPaths(linkTable))
-.then(migrated => {
-console.log('migrated',migrated);
-return migrated
-})
-.then(migratePublicRecordURIs())
-.then(done => {
-// setTimeout(() => process.exit(), 5000);
-process.exit()
-})
-*/
 }
 // TODO: Do Cemetery documents via old way (json file in private/json)
 // {"group":"Cemetery", "url":"http://miltonnh-us.com/cemetery.php", "query":"table[border='1'][style='width: 500px;']"},
