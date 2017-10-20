@@ -88,14 +88,26 @@ router.get('/Links', function(req, res) {
             })
         })
         .then(rows => {
-            // console.log(require('util').inspect(links, {colors:true, depth: null }));
-            // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
-            // res.json(JSON.stringify(links, null, 2) );
-            links.sort((a,b) => {
+            return links.sort((a,b) => {
+                return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
+            })
+        })
+        .then(rows => {
+            let query = "Select recorddesc as description, pageLink, fileLink as link from PublicRecords where recordtype='HelpfulInformation'";
+            return simpleDBQuery(query)
+            .then(rows => {
+                rows.map(row => {
+                    links.push({desc: row.description, link:row.link});
+                })
+                return links
+            })
+        })
+        .then(allLinks => {
+            let sorted = allLinks.sort((a,b) => {
                 return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
             })
             // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
-            res.json(links);
+            res.json(sorted);
         })
     })
 
