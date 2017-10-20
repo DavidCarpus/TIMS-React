@@ -115,14 +115,15 @@ function updateFileDBFileLink(record) {
 }
 //========================================
 function enterOnlyIntoDBTable(tableName, record, checkRecord={}){
-    Object.assign(checkRecord, record)
-    delete checkRecord.date
-    return knex(tableName).select('*').where(checkRecord)
+    let chk={}
+    Object.assign(chk, record, checkRecord)
+    delete chk.date
+    return knex(tableName).select('*').where(chk)
     .then(results => {
         if (results.length === 0) {
             return knex(tableName).insert(record)
-        } else {
-            logErrors && console.log("Record already exists:" , checkRecord);
+        // } else {
+        //     logErrors && console.log("Record already exists:" , chk);
         }
         return null
     })
