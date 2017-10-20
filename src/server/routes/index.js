@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
 var startOfMonth = require('date-fns/start_of_month')
+var addMonths = require('date-fns/add_months')
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -74,7 +75,7 @@ router.get('/Links', function(req, res) {
         })
     })
     .then(rows => {
-        console.log('Add Menus from DB');
+        // console.log('Add Menus from DB');
         let query = "Select description, pageLink, fullLink as link from Menus";
         simpleDBQuery(query)
         .then(rows => {
@@ -167,19 +168,23 @@ router.get('/Asides/:groupName', function(req, res) {
              res.json(rows);
          });
         //  res.json([]);
-});// ==========================================================
+});
+// ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
     // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
-    const now = startOfMonth(new Date())
-    const nowStr = now.getUTCFullYear() + '-' + now.getUTCMonth() + '-' + now.getDate()
+    const now = new Date()
+    // const now = addMonths(new Date(), -1)
+    const monthStart = startOfMonth(now)
+    const monthStartStr = monthStart.getUTCFullYear() + '-' + monthStart.getUTCMonth() + '-' + monthStart.getDate()
     // var query = "Select * from CalendarEvents where endDate >= NOW() or endDate is null order by startDate limit 20 ";
-    var query = "Select * from CalendarEvents where endDate >= '" + nowStr + "' or endDate is null order by startDate limit 20 ";
+    var query = "Select * from CalendarEvents where endDate >= '" + monthStartStr + "' or endDate is null order by startDate limit 20 ";
     console.log('/CalendarEvents', query);
 
     simpleDBQuery(query)
     .then(rows => {
         // res.json(rows);
-        let startDate  = new Date();
+        // let startDate  = new Date();
+        let startDate  = now
         calendarData = getCalendarDataForMonth(rows, startDate)
         if (calendarData.length === 0 ) {
             calendarData = getCalendarDataForMonth(recordState.CalendarData, addWeeks(startDate,1))
