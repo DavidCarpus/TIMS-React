@@ -1,4 +1,6 @@
 var fs = require('fs');
+var toMarkdown = require('to-markdown');
+
 const cheerio = require('cheerio')
 var Config = require('../../config'),
 configuration = new Config();
@@ -388,14 +390,42 @@ function migrateMenuLinks(wholePage, conf) {
     })
 }
 //========================================
-function migrateGroupDesc(wholePage, conf) {
-    // console.log('migrateGroupDesc:wholePage:',wholePage);
+function extractSimpleGroupPageData(wholePage, conf) {
     var $ = cheerio.load(wholePage);
-    const query = conf.descriptionSelector
-    const result = $(query).html()
-    // console.log(conf.group, 'migrateGroupDesc', result.length);
-    // console.log(result);
-    return result;
+    let group = {
+        contact: {
+            pageLink:  conf.group,
+            groupName:  conf.group,
+        },
+        groupName: conf.group,
+    }
+    if (conf.addressSelector) {
+        group.contact.street = $(conf.addressSelector).find('.street-address').html().trim()
+        group.contact.city = $(conf.addressSelector).find('.locality').html().trim()
+        group.contact.postalCode = $(conf.addressSelector).find('.postal-code').html().trim()
+    }
+    if (conf.phoneSelector) {
+        group.contact.phone = $(conf.phoneSelector).html().replace(/\t/g,'').replace(/  /g, ' ')
+    }
+    if (conf.descriptionSelector) {
+        group.descriptionHTML = $(conf.descriptionSelector).html().trim()
+        group.description = toMarkdown($(conf.descriptionSelector).html().trim(), { gfm: true })
+    }
+    return group
+}
+//========================================
+function migrateGroupContact(wholePage, conf) {
+    const groupData = extractSimpleGroupPageData(wholePage, conf)
+
+    return addOrUpdateDBTable('Groups', groupData.contact, {pageLink: groupData.groupName})
+    .then(contactResult => {
+        if (!groupData.description) {
+            return Promise.resolve('No description data for group' + groupData.groupName)
+        }
+        const groupDescription = {markdown:groupData.description, html: groupData.descriptionHTML}
+        const indexFieldData = {pageLink: groupData.groupName, sectionName:'desc' }
+        return addOrUpdateDBTable('PageText', groupDescription, indexFieldData)
+    })
 }
 //========================================
 function parseVTSFileArchivePage(wholePage, selector) {
@@ -728,12 +758,12 @@ function migratePage(uri, conf) {
     let wholePage=''
     return cachingFetchURL(uri)
     .then(fetchedData => wholePage = fetchedData.data)
-    .then(wholePage => migrateGroupDesc(wholePage, conf) )
-    .then(groupDesc => migrateMenuLinks(wholePage, conf) )
-    .then(menuLinks => migrateDocuments(wholePage, conf) )
+    .then(migrateResults => migrateGroupContact(wholePage, conf) )
+    // .then(migrateResults => migrateDocuments(wholePage, conf) )
     // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
-    .then( documents => migrateMinutes(conf.minutesURI, conf))
-    .then(minutes => migrateAgendas(conf.agendaURI, conf) )
+    // .then( documents => migrateMinutes(conf.minutesURI, conf))
+    // .then(migrateResults => migrateMenuLinks(wholePage, conf) )
+    .then(migrateResults => migrateAgendas(conf.agendaURI, conf) )
     .then(done => {
         // console.log('Done migratePage', done);
         return Promise.resolve('Done migratePage '+ conf.group + done.length)
