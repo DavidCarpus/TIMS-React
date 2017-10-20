@@ -84,4 +84,29 @@
             "textReplacements":[["BC",""],["/Minutes/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
         }
     }
+    ,
+    {
+        "group": "CoppleCrownVillage",
+        "uri":"https://www.newdurhamnh.us/copple-crown-village-district",
+        "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
+        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
+        "addressSelector": "#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section > div > div > div > div > div > div.field.views--address",
+        "phoneSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section > div > div > div > div > div > div.field.field-name-field-dept-emergency-phone > div",
+        "agendaURI": {
+            "selector":
+            "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
+            "serverURIs":[
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownAgendas/"
+            ],
+            "textReplacements":[["BCAgenda",""],["BC",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
+        },
+        "minutesURI": {
+            "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
+            "serverURIs":[
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownMin/?Lower=1-20&Upper=1-200",
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownMin/?Lower=21-40&Upper=1-200"
+            ],
+            "textReplacements":[["BC",""],["/Minutes/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
+        }
+    }
 ]
