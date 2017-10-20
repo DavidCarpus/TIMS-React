@@ -36,14 +36,7 @@ function isVideoLink(line) {
 }
 //=======================================
 function hasURL(line) {
-    var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-    // var expression = HTTPS?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
-
-    var regex = new RegExp(expression);
-    if (line.match(regex)) {
-        // console.log('Found URL in:', line);
-        return true;
-    }
+    return line.match(new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi))
 }
 
 
