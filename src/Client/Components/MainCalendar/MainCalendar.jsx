@@ -8,19 +8,12 @@ import SmartLink from '../SmartLink'
 var Config = require('../../config'),
 configuration = new Config();
 
-var monthNames = [
-  "January", "February", "March",
-  "April", "May", "June", "July",
-  "August", "September", "October",
-  "November", "December"
-];
-
-
-function currentMonthBlock(calDataByWeek) {
+function currentMonthBlock(calDataByWeek, monthName) {
     const calDateStyle = (dayData) => (dayData.events.length > 0? 'eventDay':'calDay') +
         (getSundayOfWeekNumber(1).getMonth() !== dayData.date.getMonth() ?   ' outsideMonth' : '')
     const getSundayOfWeekNumber = (week) => calDataByWeek[Object.keys(calDataByWeek)[week]][0].date
-    const getMonthName= () => monthNames[getSundayOfWeekNumber(1).getMonth()]
+    // const getMonthName= () => monthNames[getSundayOfWeekNumber(1).getMonth()]
+    const getMonthName= () => monthName
 
     return (
         <div id='currentMonthBlock'>
@@ -77,7 +70,7 @@ export default class MainCalendar extends React.Component {
                 <h2>Upcoming Events</h2>
                     <Row>
                         <Col  md='5'  xs={{size:12}} id='calBlock'>
-                            {currentMonthBlock(this.props.calDataByWeek)}
+                            {currentMonthBlock(this.props.calDataByWeek, this.props.monthName)}
                         </Col>
                         <Col  md='7'  xs={{size:12}} id='listBlock'>
                             {eventList(this.props.eventList)}

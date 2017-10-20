@@ -10,12 +10,12 @@ import addDays from 'date-fns/add_days'
 import getISOWeek from 'date-fns/get_iso_week'
 import isSameDay from 'date-fns/is_same_day'
 
-// var monthNames = [
-//   "January", "February", "March",
-//   "April", "May", "June", "July",
-//   "August", "September", "October",
-//   "November", "December"
-// ];
+var monthNames = [
+  "January", "February", "March",
+  "April", "May", "June", "July",
+  "August", "September", "October",
+  "November", "December"
+];
 
 var monthAbbreviations = [
   "Jan", "Feb", "Mar",
@@ -75,10 +75,13 @@ const mapStateToProps = (state, ownProps) => {
             }
             // console.log('evt', evtObj);
         })
+        let monthName = calendarData.length <=0 ? '': monthNames[calendarData
+            .sort( (a,b)=> a.startDate - b.startDate)[0].startDate.getMonth()]
 
     return {
         calDataByWeek:calDataByWeek,
         eventList:eventList,
+        monthName:  monthName,
         group: ownProps.group,
     };
 }
