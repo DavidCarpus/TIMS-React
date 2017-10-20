@@ -112,19 +112,15 @@ function updateFileDBFileLink(record) {
 
 }
 //========================================
-function enterIntoDB(record) {
-    // Check DB for record and add if not there
-    let checkRecord={}
+function enterOnlyIntoDBTable(tableName, record, checkRecord={}){
     Object.assign(checkRecord, record)
     delete checkRecord.date
-    // console.log('sql ', knex('PublicRecords').select('*').where(checkRecord).toString());
-    return knex('PublicRecords').select('*').where(checkRecord)
+    return knex(tableName).select('*').where(checkRecord)
     .then(results => {
         if (results.length === 0) {
-            return knex('PublicRecords').insert(record)
-            // .then(results => {
-            //     logErrors && console.log("Log to DB:" , record.recordtype, record.pageLink, record.recorddesc);
-            // })
+            return knex(tableName).insert(record)
+        } else {
+            logErrors && console.log("Record already exists:" , checkRecord);
         }
         return null
     })
@@ -138,6 +134,35 @@ function enterIntoDB(record) {
         console.error("DBError:", dberr);
         return Promise.reject(dberr);
     })
+}
+//========================================
+function addOrUpdateDBTable(tableName, record, checkRecord={}){
+
+    return knex(tableName).select('*').where(checkRecord)
+    .then(results => {
+        if (results.length === 0) {
+            Object.assign(record, checkRecord)
+            console.log('ADD record',checkRecord);
+            return knex(tableName).insert(record)
+            .then(results => {
+                if (results && results.length > 0) {
+                    record.id = results[0];
+                }
+                return Promise.resolve([record]);
+            })
+        } else{
+            console.log('UPDATE record',checkRecord);
+            return knex(tableName).where(checkRecord).update(record)
+        }
+    })
+    .catch(dberr => {
+        console.error("DBError:", dberr);
+        return Promise.reject(dberr);
+    })
+}
+//========================================
+function enterIntoDB(record) {
+    return enterOnlyIntoDBTable('PublicRecords', record, record)
 }
 //========================================
 //  Rewrite the fileLinks in the PublicRecords table to change the old
