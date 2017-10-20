@@ -30,6 +30,11 @@ export default function SmartLink({id=0, link='', linkText}){
         lnkStyle='excel_link'
         reduxLink = false
     }
+    if (link.toUpperCase().endsWith('.ODT')) {
+        lnkStyle='odt_link'
+        reduxLink = false
+    }
+
 
     if (link.toUpperCase().includes('YOUTUBE.COM')) {
         lnkStyle='youtube_link'

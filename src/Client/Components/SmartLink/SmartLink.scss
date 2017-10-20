@@ -87,3 +87,15 @@ $iconsize: 20px;
     /*float: left;*/
     margin: 0px 5px 0 5px;
 }
+.odt_link::before {
+    content: "";
+    display: inline-block;
+    background: url('../icons/OpenOfficeWriter_256.png') no-repeat;
+    background-size: 100% 100%;
+    /*background-color: red;*/
+    color: white;
+    width: $iconsize;
+    height: $iconsize;
+    /*float: left;*/
+    margin: 0px 5px 0 5px;
+}
