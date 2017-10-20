@@ -51,6 +51,7 @@ const mapStateToProps = (state, ownProps) => {
         groupPageText: recordState.groupData.pagetext ? recordState.groupData.pagetext[0]: '',
         loading: state.OrganizationalUnits.loading,
         documents: state.GroupDocuments.documents || [],
+        groupMembers: (recordState.groupData && recordState.groupData.members) ? recordState.groupData.members : [],
         agendas: Object.keys(agendas),
         notices: state.PublicNotices.documents || [],
     };

@@ -35,9 +35,6 @@ const mapStateToProps = (state, ownProps) => {
 
             // new group and old group both in 'Departments', fetch from here (otherwise do in componentWillMount )
             if ( newGroup.length > 0 && oldGroup.length >  0) {
-                console.log('DepartmentsUI:fetchOrganizationalUnitData:', groupName);
-                // console.log( 'DepartmentsUI: | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
-
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
                 ownProps.store.dispatch(fetchPageAsides(groupName));
                 ownProps.store.dispatch(fetchGroupNotices(groupName));
@@ -54,7 +51,8 @@ const mapStateToProps = (state, ownProps) => {
         groupName:  groupName,
         groupData:  recordState.groupData,
         groupDocuments: state.GroupDocuments,
-        // agendasAndMinutes: Object.assign(state.agendasAndMinutes, documents: state.agendasAndMinutes.documents.),
+        groupNotices: state.PublicNotices.documents,
+        groupMembers: (recordState.groupData && recordState.groupData.members) ? recordState.groupData.members : [],
         agendasAndMinutes: documentsByYear(state.agendasAndMinutes.documents),
         loading: loading,
         store: ownProps.store
