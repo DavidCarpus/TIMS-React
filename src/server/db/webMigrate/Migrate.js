@@ -268,9 +268,8 @@ function migrateDocuments(wholePage, conf) {
             return Promise.all(
                 documentLinks.filter(onlyLocalDoc).filter(notOnServer).map(rec => {
                     return pushFileToServer(rec.local, rec.targetPath)
-                    .then( (pushReq)=> {
-                        return rec
-                    }).catch(err => console.log(err, rec))
+                    .then( (pushReq)=> rec)
+                    .catch(err => console.log(err, rec))
                 })
             )
             .then(copiedFilesNeeded => documentLinks )
@@ -280,18 +279,14 @@ function migrateDocuments(wholePage, conf) {
             let notEB2Gov = (rec) =>  rec.remotePath.toUpperCase().indexOf('EB2GOV') === -1
             let notnhtaxkiosk = (rec) =>  rec.remotePath.toUpperCase().indexOf('NHTAXKIOSK') === -1
             let localFileURL = (rec) => rec.local.indexOf('http') !== -1 ?
-            rec.local:
-            'Documents/' + rec.local
-            .replace(new RegExp('/.*/'),"")
+                rec.local: 'Documents/' + rec.local.replace(new RegExp('/.*/'),"")
 
             return Promise.all(
             toLogToDB.filter(ignoreMailToLink).filter(notEB2Gov).filter(notnhtaxkiosk)
             .map(rec => {
-                rec.date = setDefault(rec.date, addDays(new Date(), -21))
-
-                let dbEntry = {pageLink:conf.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:rec.date, fileLink:localFileURL(rec)}
-                // console.log('lnk', dbEntry);
-                return enterIntoDB(dbEntry)
+                return enterIntoDB({
+                    pageLink:conf.group, recordtype: rec.recordtype ,recorddesc: rec.desc, date:setDefault(rec.date, addDays(new Date(), -21)), fileLink:localFileURL(rec)
+                })
             })
             )
         })
@@ -352,25 +347,16 @@ function cloneDocuments(paths) {
     }))
 }
 //=======================================================
-// function migrateMenuLinkPaths(paths) {
-//     return Promise.all(paths.map(record => {
-//         return migrateMenuLinks(record)
-//     }))
-// }
-//=======================================================
 function migrateMenuLinks(wholePage, conf) {
     const notEB2Gov = (rec) =>  rec.uri.toUpperCase().indexOf('EB2GOV') === -1
     const notnhtaxkiosk = (rec) =>  rec.uri.toUpperCase().indexOf('NHTAXKIOSK') === -1
 
-    // console.log('MenuLinks -', conf.group);
     return Promise.all( pullRedirectLinksFromMenus(wholePage, conf.menuLinkSelector).map(getRedirectLocation ) )
     .then(retrievedURIs => {
-        // console.log('migrateMenuLinks:retrievedURIs', retrievedURIs);
         return Promise.all(retrievedURIs.filter(ignoreMailToLink).filter(notEB2Gov).filter(notnhtaxkiosk)
             .map(rec => {
                 rec.date = setDefault(rec.date, addDays(new Date(), -21))
                 let dbEntry = {pageLink:conf.group, recordtype: 'HelpfulInformation' ,recorddesc: rec.desc, date:rec.date, fileLink:rec.uri}
-                // console.log('lnk', dbEntry);
                 return enterIntoDB(dbEntry)
             })
         )
@@ -582,20 +568,13 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
                     },
                     docLink)
                 }))
-                // if (missingURI) {
-                //     console.error('docLink',require('util').inspect(val, { depth: null }));
-                // }
             })
             return acc
         }, [])
         .reduce( (acc, val) => { val.map( elem => acc.push(elem)); return acc },[])
         .map( (tableRowData, i) => {
             if (tableRowData.uri && ! tableRowData.uri.startsWith('http') ) {
-                let origURI = tableRowData.uri
-                // remotePath = uri.replace(/^\//, '')
                 tableRowData.uri = 'http://' + getSourceServerHost() + ((!tableRowData.uri.startsWith('/'))?'/':'') + tableRowData.uri
-            // } else {
-            //     console.log('tableRowData.uri', tableRowData.uri);
             }
             return tableRowData
         })
@@ -606,17 +585,15 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
             mergedRecords
             .filter(rec => rec.uri && rec.uri.length > 0)
             .filter(rec => rec.recordType !== 'Video')
-            .map(rec => {
-            // console.log('Fetch', rec.uri);
-            return cachingFetchURL(rec.uri)
-            .then(writtenMetaData => {
-                rec.localFile = writtenMetaData.location
-                return rec
-            })
-            .catch(err => {
-                console.log(err , rec);
-            })
-        })
+            .map(rec => cachingFetchURL(rec.uri)
+                .then(writtenMetaData => {
+                    rec.localFile = writtenMetaData.location
+                    return rec
+                })
+                .catch(err => {
+                    console.error(err , rec);
+                })
+            )
         )
         .then(pulledRecords => mergedRecords)
     })
@@ -629,11 +606,8 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
         const invalidDataRecord = (rec) => invalidMeetingDate(rec) // || typeof rec.localFile === 'undefined'
         const validData = (rec) => !invalidDataRecord(rec)
 
-        // let invalidDataRecs = pulledFiles.filter(rec => typeof rec.localFile === 'undefined').concat(pulledFiles.filter(invalidMeetingDate))
         let invalidDataRecs = pulledFiles.filter(invalidDataRecord)
         if (invalidDataRecs.length > 0) {
-            // console.log('invalidDataRecs',invalidDataRecs);
-            // invalidDataRecs[0].group
             console.error( '** Invalid Dates -',
                 invalidDataRecs[0].group,
                 invalidDataRecs.filter(invalidMeetingDate).map(rec => rec.meetingDateStr + ' -- ' + rec.desc) );
@@ -650,7 +624,6 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
                 } else {
                     rec.relativeDest = targetFileURL(rec)
                 }
-
                 delete rec.uri
             }
             if (rec.desc === rec.recordType) { delete rec.desc}
@@ -692,21 +665,14 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
             const validFileLink = (rec) => rec.uri || rec.relativeDest
             return Promise.all(
                 afterPushedFiles.filter(validFileLink).map(rec => {
-
                     let dbEntry = {pageLink:rec.group, recordtype:rec.recordType ,recorddesc: rec.desc||'', date:rec.meetingDate, fileLink:rec.uri || rec.relativeDest}
                     // console.log('lnk', dbEntry);
                     // return Promise.resolve(dbEntry)
                     return enterIntoDB(dbEntry)
                 })
             )
-            // console.log('reworked',reworked);
-            // return reworked
         })
     })
-
-    // .then(tmpResult => {
-    //     console.log('tmpResult',tmpResult);
-    // })
 }
 //========================================
 function migrateAgendas(conf, confP) {
@@ -761,10 +727,6 @@ if (require.main === module) {
         /^(\d\d)(\d\d)(\d\d)[ .]*/ ,
     ]
     const replaceTextBlocks = (origStr, replacements) => {
-        // if (!replacements) {
-        //     console.log('replaceTextBlocks -', origStr, replacements);
-        // }
-
         replacements=replacements.map(replacement => {
             // console.log('type:', typeof replacement[0],replacement[0]);
             if (typeof replacement[0] === 'string') { //convert to RegExp
