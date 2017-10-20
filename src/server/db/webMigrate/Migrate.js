@@ -813,19 +813,24 @@ if (require.main === module) {
         // console.log('rec', rec.group);
         const pageConf = rec
 
-        pageConf.agendaURI.extractRecordLabel =  (rec) => {
-            return labelFromURIText(rec.uri, pageConf.agendaURI.textReplacements, 'Agenda')
+        if (pageConf.agendaURI) {
+            pageConf.agendaURI.extractRecordLabel =  (rec) => {
+                return labelFromURIText(rec.uri, pageConf.agendaURI.textReplacements, 'Agenda')
+            }
+            pageConf.agendaURI.getMeetingDate =  (rec) => {
+                const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.agendaURI.textReplacements), 'Agenda')
+                return (retrievedDate !== null) ? retrievedDate: rec.fileDate
+            }
         }
-        pageConf.agendaURI.getMeetingDate =  (rec) => {
-            const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.agendaURI.textReplacements), 'Agenda')
-            return (retrievedDate !== null) ? retrievedDate: rec.fileDate
-        }
-        pageConf.minutesURI.extractRecordLabel =  (rec) => {
-            return labelFromURIText(rec.uri, pageConf.minutesURI.textReplacements, 'Minutes')
-        }
-        pageConf.minutesURI.getMeetingDate =  (rec) => {
-            const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.minutesURI.textReplacements), 'Minutes')
-            return (retrievedDate !== null) ? retrievedDate: rec.fileDate
+
+        if (pageConf.minutesURI) {
+            pageConf.minutesURI.extractRecordLabel =  (rec) => {
+                return labelFromURIText(rec.uri, pageConf.minutesURI.textReplacements, 'Minutes')
+            }
+            pageConf.minutesURI.getMeetingDate =  (rec) => {
+                const retrievedDate = dateFromURIText(replaceTextBlocks(rec.uri, pageConf.minutesURI.textReplacements), 'Minutes')
+                return (retrievedDate !== null) ? retrievedDate: rec.fileDate
+            }
         }
         return migratePage(pageConf.uri, pageConf)
     })
