@@ -413,8 +413,8 @@ function parseVTSFileArchivePage(wholePage, selector) {
 }
 //========================================
 function migrateVTSArchive(recordType, group, uri, conf) {
-    // console.log('migrateVTSArchive', recordType, group, uri);
-    const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC']
+    console.log('migrateVTSArchive', recordType, group, uri);
+    const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT']
 
     return cachingFetchURL(uri)
     .then(urlData => {
