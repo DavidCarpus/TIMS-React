@@ -1,3 +1,8 @@
+Post date for notices.
+Only 4-5 notices
+
+
+
 ************************************************
 ~/bin/startWedDev.sh ALL
 ************************************************
@@ -16,6 +21,8 @@ npm run knex:seed:run json
 NODE_ENV=test node_modules/.bin/knex seed:run json
 NODE_ENV=test npm run start
 
+mysql -C --host carpusco.wwwss29.a2hosted.com -u carpusco_dcarpus -p
+
 https://stackoverflow.com/questions/4672903/sending-mails-with-attachment-via-nodejs
 https://stackoverflow.com/questions/35206589/how-to-download-fetch-response-in-react-as-file
 https://stackoverflow.com/questions/305035/how-to-use-ssh-to-run-a-shell-script-on-a-remote-machine
@@ -27,6 +34,9 @@ ssh A2 "pkill -f 'app.js production' && nohup /home/carpusco/miltonnh.us/server/
 ssh A2 "nohup /home/carpusco/test.miltonnh.us/server/server.sh > ~/logs/miltonustest.txt 2>~/logs/miltonustest.err < /dev/null &"
 ssh A2 "pkill -f 'app.js test' && nohup /home/carpusco/test.miltonnh.us/server/server.sh > ~/logs/miltonustest.txt 2>~/logs/miltonustest.err < /dev/null &"
 
+ kill `ps ax|grep $PWD|grep node|cut -c1-7`
+find ../private/$REACT_APP_MUNICIPALITY/Attachments/ -type f -exec rm {} \;
+
 grep "Jul 05 2017" ../logDev1.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq
 grep "`date '+%b %d %Y'`" ./logDev.txt | cut -d ' ' -f 2,6-7 | cut -d ':' -f 1-2 | sort | uniq
 
@@ -35,3 +45,13 @@ node db/ProcessesHTMLTable.js > ~/Desktop/ImportOut.txt 2>~/Desktop/ImportErrors
 https://numverify.com/documentation
 
 https://vladimirponomarev.com/blog/authentication-in-react-apps-jwt
+
+find src/private/MiltonNH/Attachments/ -type f -exec rm {} \;
+
+https://codeforgeek.com/2015/01/nodejs-mysql-tutorial/
+apt-get install siege
+
+http://www.madhur.co.in/blog/2016/09/05/nodejs-connection-pooling.html
+
+https://stackoverflow.com/questions/18496540/node-js-mysql-connection-pooling
+https://blog.risingstack.com/node-js-mysql-example-handling-hundred-gigabytes-of-data/
