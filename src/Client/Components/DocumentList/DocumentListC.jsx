@@ -22,9 +22,6 @@ const mapStateToProps = (state, ownProps) => {
     documents = documents.filter(recentPost).slice(0,restrictDisplayCount)
     documents = documents.concat(byViewCount.slice(0,restrictDisplayCount-documents.length))
 
-    // console.log("documents:",documents);
-    // console.log("Recent documents:",documents.filter(recentPost));
-
     return {
         group: ownProps.group,
         documents: documents,

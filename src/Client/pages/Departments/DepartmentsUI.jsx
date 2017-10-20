@@ -6,8 +6,6 @@ import PublicWorks from './PublicWorks'
 import TownClerk from './TownClerk'
 import Welfare from './Welfare'
 import DefaultDepartment from './DefaultDepartment'
-
-
 import TransferStationRules from '../../Components/TransferStationRules'
 
 import  './Departments.css'
@@ -43,10 +41,6 @@ export default class DepartmentsUI extends React.Component {
             return (
                 <TownClerk group={this.props.groupData} {...this.props}></TownClerk>
             );
-        // case 'Sewer':
-        //     return (
-        //         <Sewer group={this.props.groupData} {...this.props}></Sewer>
-        //     );
         case 'Welfare':
             return (
                 <Welfare group={this.props.groupData} {...this.props}></Welfare>

@@ -9,18 +9,13 @@ function formatDate(date) {
     "August", "September", "October",
     "November", "December"
   ];
-
-  var day = date.getDate();
-  var monthIndex = date.getMonth();
   // var year = date.getFullYear();
-
-  return monthNames[monthIndex] + ' ' + day ;
+  return monthNames[date.getMonth()] + ' ' + date.getDate() ;
 }
 
 const MeetingBlock = ({meetingElements, meetingDate}) => {
     return (
         <div className="meetingBlock" >
-
             <div className="date" >
                 {formatDate(meetingDate)}
             </div>
@@ -55,9 +50,7 @@ export class AgendasAndMinutes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {expandedYears: []};
-    // this.state.expandedYears.push((new Date()).getFullYear().toString())
     this.toggleYear = this.toggleYear.bind(this);
-
   }
 
   toggleYear(yearToToggle){
