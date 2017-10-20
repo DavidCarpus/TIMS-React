@@ -76,16 +76,12 @@ export class AgendasAndMinutes extends React.Component {
      if (this.props.meetings.length === 0) {        return(null);    }
      if (Object.keys(this.props.meetings).length === 0) { return null }
 
-     var currentMeetings = Object.keys(this.props.meetings)
-         .map( _date  => {
-             return {date:_date, values:  this.props.meetings[_date]}
-         })
      return (
          <div id='AgendasAndMinutes'>
              <a id="AgendasAndMinutes-bookmark">AgendasAndMinutes Start</a>
 
               <h2>{this.props.title}</h2>
-              {currentMeetings
+              {this.props.meetings
                   .sort((a,b) => { return b.date -a.date; })
                   .map( year => {
                     return (

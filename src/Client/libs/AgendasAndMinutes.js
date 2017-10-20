@@ -5,7 +5,7 @@ module.exports = {
 function documentsByYear(documents) {
     if (!documents || typeof documents === 'undefined')  return {}
 
-    return Object.keys(documents)
+    const byYear = Object.keys(documents)
     .sort((a,b) => new Date(b) - new Date(a))
     .map( (val) => [val, documents[val] ] )
     .reduce( (acc, curr, i) => {
@@ -14,4 +14,11 @@ function documentsByYear(documents) {
         acc[year].push(curr)
         return acc;
     }, {})
+    const results = Object.keys(byYear)
+        .map( _date  => {
+            return {date:_date, values:  byYear[_date]}
+        })
+
+    return results
+
 }
