@@ -13,8 +13,8 @@ exports.up = function(knex, Promise) {
       table.text('summary');
       table.text('description');
       table.text('location');
-  })  .then( created => {
-        return calendar.importCalendarEvents(knex)
+  // })  .then( created => {
+  //       return calendar.importCalendarEvents(knex)
     })
 };
 
