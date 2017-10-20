@@ -15,16 +15,14 @@ import {PageNavbar, addMenu} from '../../Components/PageNavbar'
 
 export default class Committees extends React.Component {
     componentWillMount() {
-        // console.log('DepartmentsUI:componentWillMount: ' ,this.props);
         this.props.fetchOUData(this.props.groupName);
     }
 
     render() {
-        let pageNavMenus=[
-            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
-            {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
-        ]
-        // console.log('agendas:', this.props.agendas);
+        let pageNavMenus=[ {text:'^^^', target:'primary-content-top', hoverText:'Top'}]
+        if (this.props.groupMembers.length > 0 ) {
+            pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
+        }
         if (this.props.agendas.length > 0 ) {
             pageNavMenus = addMenu(pageNavMenus, {text:'Agendas', target:'AgendasAndMinutes-bookmark', fontAwsomeIcon:'fa-clock-o'});
         }
@@ -34,8 +32,6 @@ export default class Committees extends React.Component {
         if (this.props.documents.length > 0 ) {
             pageNavMenus = addMenu(pageNavMenus, {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'});
         }
-        // pageNavMenus = addMenu(pageNavMenus, {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'});
-        // pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
 
         return (
                 <Row id='Committees'>
@@ -47,12 +43,12 @@ export default class Committees extends React.Component {
 
                                 <RawText groupPageText={this.props.groupPageText} block='description' />
                                 <RawText groupPageText={this.props.groupPageText} block='text1' />
-                                <GroupMembers group={this.props.group}  title={' Members'} />
+                                {(this.props.groupMembers.length > 0 ) && <GroupMembers group={this.props.group}  title={' Members'} />}
                             </div>
 
-                            <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>
-                            <NoticesList group={this.props.group} store={this.props.store} />
-                            <DocumentList groupName={this.props.groupName} group={this.props.group} store={this.props.store} />
+                            {(this.props.agendas.length > 0 ) && <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>}
+                            {(this.props.notices.length  > 0) &&<NoticesList group={this.props.group} store={this.props.store} />}
+                            {(this.props.documents.length  > 0) &&<DocumentList groupName={this.props.groupName} group={this.props.group} store={this.props.store} />}
                             <HelpfulInformation informationArray={this.props.group.helpfulinformation || []} />
 
                     </Col>

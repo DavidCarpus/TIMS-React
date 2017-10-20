@@ -5,24 +5,29 @@ import  './Assessing.css'
 import DocumentList  from '../../../Components/DocumentList'
 import RawText from '../../../Components/RawText'
 import TaxMapForm  from '../../../Components/TaxMapForm'
-import {PageNavbar} from '../../../Components/PageNavbar'
+import {PageNavbar, addMenu} from '../../../Components/PageNavbar'
 import GroupMembers from '../../../Components/GroupMembers'
 
-function pageNav() {
-    return (
-    <PageNavbar menus={[
-            {text:'^^^', target:'primary-content-top', hoverText:'Top'},
-            {text:'Doc', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'},
-            {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'}
-        ]}/>
-    )
-}
+export default function Assessing({group, store, loading, id, groupMembers, agendasAndMinutes, groupDocuments, groupNotices, title='Assessing Department'}){
+    let pageNavMenus=[
+        {text:'^^^', target:'primary-content-top'},
+    ]
+    if (groupMembers.length > 0 ) {
+        pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
+    }
+    if (agendasAndMinutes.length > 0 ) {
+        pageNavMenus = addMenu(pageNavMenus, {text:'Agendas', target:'AgendasAndMinutes-bookmark', fontAwsomeIcon:'fa-clock-o'});
+    }
+    if ( groupDocuments.documents.length > 0 ) {
+        pageNavMenus = addMenu(pageNavMenus, {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'});
+    }
+    if (groupNotices.length > 0 ) {
+        pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
+    }
 
-export default function Assessing({group, store, loading, id, title='Assessing Department'}){
-    // {pageNav()}
     return (
         <Row id='Assessing'>
-            {pageNav()}
+            <PageNavbar menus={pageNavMenus}/>
 
             <Col  md={{size:10, push:1}} >
                 <div className="blockSection">
@@ -40,9 +45,10 @@ export default function Assessing({group, store, loading, id, title='Assessing D
                 </div>
 
                 <DocumentList group={group} groupName={group.link} store={store} title='Milton Assessors Documentation' />
-                <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail/>
+                {(groupMembers.length > 0 ) && <GroupMembers group={group}  title={' Contacts'}  showTerm={false} showEmail/>}
 
             </Col>
         </Row>
     );
 }
+// {(this.props.groupMembers.length > 0 ) && <GroupMembers group={this.props.group}  title={' Contacts'} showTerm={false} showEmail/>}
