@@ -71,8 +71,10 @@ let localFileMissing = (fullPath) => !localFileExists(fullPath)
 
 let hasSourceTownURI = (uri) => matchHost(configuration.sourceTownURI, uri)
 const remoteTownURI = (uri)  => matchHost(configuration.sourceTownURI, uri) || matchHost(configuration.sourceTownArchiveDomain, uri)
-let isPathToFile = (uri) => uri.match(/.*\.[a-zA-Z]{3,}$/) !== null
-let getExtension = (path)=> (path && path.match(/\.[0-9a-z]+$/i, '') && path.match(/\.[0-9a-z]+$/i, '').length > 0) ? path.match(/\.[0-9a-z]+$/i, '')[0] : path
+let getExtension = (path)=> (path && path.match(/\.[0-9a-z]+$/i, '') && path.match(/\.[0-9a-z]+$/i, '').length > 0) ? path.match(/\.[0-9a-z]+$/i, '')[0] : ''
+const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
+const filenameFromPath = (path) => (path && path.lastIndexOf('/') !== path.length) ? path.substr(path.lastIndexOf('/')): ''
+
 
 let baseURI = (host, uri) =>  uri.replace(new RegExp('https?://w{0,3}.?' + host + '/?'), '')
 let baseURIpath = (host, uri) =>
@@ -197,7 +199,7 @@ function pullLocalCopies(records) {
         missingFiles.map(rec => {
             const uriHost = matchHost(configuration.sourceTownURI, rec.uri) ? configuration.sourceTownURI : configuration.sourceTownArchiveDomain
             let dest =localPathFromURI(localFileBaseURL(), uriHost, rec.uri).trim()
-            if (!localFileMissing(dest) ) {
+            if (!localFileMissing(dest)  && getExtension(filenameFromPath(dest)).length > 0) {
                 return Promise.resolve(Object.assign(rec, {local:dest}))
             } else if (!localFileMissing(dest + '.pdf') ) {
                 return Promise.resolve(Object.assign(rec, {local: dest + '.pdf'}))
