@@ -54,6 +54,7 @@
     "wgetjs": "^0.3.6"
   },
   "devDependencies": {
+    "crc": "^3.5.0",
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
     "to-markdown": "^3.1.0"

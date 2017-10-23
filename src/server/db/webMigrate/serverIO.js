@@ -236,6 +236,7 @@ function getRedirectLocation(record) {
 //========================================
 function makeServerDirs(baseServerPath, pathsToDir) {
     if (configuration.mode !== 'development') {
+        initSFTP()
         return Promise.all(
             pathsToDir.map( pathToDir => {
                let fullPath = baseServerPath + pathToDir
@@ -301,6 +302,7 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
         // Pull directories 'LOCAL' with fs library
         return Promise.all( pathsToDir.map( pathToDir => {
             return new Promise(function(resolve, reject) {
+                // console.log('pullNewServerDirs: ',baseServerPath + pathToDir);
                 fs.readdir(baseServerPath + pathToDir, function(err, items) {
                     if(err)  reject('Missing path ' + baseServerPath + pathToDir)
                     else {

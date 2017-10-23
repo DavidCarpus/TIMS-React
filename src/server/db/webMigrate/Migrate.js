@@ -1,5 +1,7 @@
 var fs = require('fs');
 var toMarkdown = require('to-markdown');
+const crc = require('crc');
+
 
 const cheerio = require('cheerio')
 var Config = require('../../config'),
@@ -59,6 +61,7 @@ const remotePathFromExpandedURI = (uri) => uri.replace(new RegExp('https?://'+ge
 
 const setDefault = (value, defaultValue)  => (! value || typeof value === 'undefined' ) ? defaultValue: value
 const onlyFileName = (fullPath) => fullPath.replace(/.*\//, '')
+const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 
 //========================================
 function translateRecordType(recordtype) {
@@ -332,7 +335,7 @@ function parseVTSFileArchivePage(wholePage, selector) {
 }
 //========================================
 function migrateVTSArchive(recordType, group, uri, conf) {
-    console.log('migrateVTSArchive', recordType, group, uri);
+    // console.log('migrateVTSArchive', recordType, group, uri);
     const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT']
 
     return cachingFetchURL(uri)
@@ -378,71 +381,57 @@ function migrateVTSArchive(recordType, group, uri, conf) {
         })
     )
     .then(pulledLocal => {
-        // console.log('pulledLocal',pulledLocal);
-        // const validExtensions = ['.pdf', '.html']
         const hasLocalFile = (rec) => rec.local
-        return pulledLocal.filter(hasLocalFile).map(rec => {
-            // if (!rec.local) { throw new Error('Missing rec.local:' + require('util').inspect(rec, { depth: null })) }
+        return pulledLocal.filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
 
-            if (isPhysicalFile(rec)) {
-                rec.newFilename = recordType + '/' + rec.date.getUTCFullYear() + '/'
-                const extension = getExtension(rec.local)
-                if (rec.label.length > 0) {
-                    if (! validExtensions.includes(extension.toUpperCase())) {
-                        const errMsg = 'UNK extension:' + extension + ' for\n  ' + require('util').inspect(rec, { depth: null })
-                        console.log(errMsg);
-                        throw new Error(errMsg)
-                    }
-                    rec.newFilename += rec.label.replace(/ /g, '_').replace(/,/g, '_').replace(/__/g, '_') + extension
-                } else {
-                    rec.newFilename += rec.local.replace(/.*\//, '')
-                }
-            }
-            return rec
-        })
     })
-    .then(withNewFilenames => {
-        // console.log('withNewFilenames',withNewFilenames);
-        let localFileURL = (rec) => rec.remotePath.replace(/uploads\//, '')
-        // .replace(/.*\//,'')
-        return pullNewServerDirs(getServerFilePath(), [recordType] )
-        .then( serverDirs => {
-            let allPaths= mergeArrays(serverDirs)
-            let notOnServer = (rec) => !allPaths.includes(localFileURL(rec))
-            let withRequiredPaths = withNewFilenames.map(rec => {
-                rec.remotePath = rec.newFilename
-                rec.targetPath = getServerFilePath()+ localFileURL(rec)
-                return rec
-            })
-            // console.log('withRequiredPaths',withRequiredPaths);
-            return Promise.all(
-                withRequiredPaths.filter(notOnServer).filter(onlyLocalDoc).map(rec => {
-                    // console.log('Push', rec.local, rec.targetPath);
-                    return pushFileToServer(rec.local, rec.targetPath)
-                    .then( (pushReq)=> {
-                        return rec
-                    })
-                    .catch(err => console.log(err, rec))
-                }))
-                .then(pushedFiles => {
-                    return Promise.all(
-                        withNewFilenames.map(rec => {
-                            if (!rec.remotePath) { throw new Error('Remote path not set'+ rec)}
-                            rec.date = setDefault(rec.date, addDays(new Date(), -21))
+    return pushFiles(withNewFilenames)
+    .then(pushedFiles => {
+        return Promise.all(
+            withNewFilenames.map(rec => {
+                if (!rec.remotePath) { throw new Error('Remote path not set'+ rec)}
+                rec.date = setDefault(rec.date, addDays(new Date(), -21))
 
-                            let dbEntry = {pageLink:rec.groupName, recordtype:recordType ,recorddesc: rec.label, date:rec.date, fileLink:localFileURL(rec)}
-                            // console.log('lnk', dbEntry);
-                            return enterIntoDB(dbEntry)
-                        })
-                    )
-
-                    return withNewFilenames
-                })
+                let dbEntry = {pageLink:rec.groupName, recordtype:recordType ,recorddesc: rec.label, date:rec.date, fileLink:localFileURL(rec)}
+                // console.log('lnk', dbEntry);
+                return enterIntoDB(dbEntry)
             })
-        })
-        .catch(err => {
-            console.log('Error on file push:', err);
-        })
+        )
+    })
+    .catch(err => {
+        console.log('Error on file push:', err);
+    })
+}
+//========================================
+function setNewFileName(validExtensions, rec) {
+    if (!rec.date || typeof rec.date !== 'object') {
+        console.error('Date not set for',rec);
+        throw new Error(('Date not set for'+rec))
+    }
+    if (isPhysicalFile(rec)) {
+        const extension = getExtension(rec.local)
+        if (! validExtensions.includes(extension.toUpperCase())) {
+            const errMsg = 'UNK extension:' + extension + ' for\n  ' + require('util').inspect(rec, { depth: null })
+            console.log(errMsg);
+            throw new Error(errMsg)
+        }
+
+        switch (rec.recordtype) {
+            case 'Agenda':
+                rec.newFilename = rec.recordtype + '/' + rec.date.getUTCFullYear() + '/'
+                rec.newFilename += rec.groupName + '_' + getY_M_D(rec.date)  + '_' + crc.crc32( rec.local).toString(16) + extension
+                break;
+            case 'Minutes':
+                rec.newFilename = rec.recordtype + '/' + rec.date.getUTCFullYear() + '/'
+                rec.newFilename += rec.groupName + '_' + getY_M_D(rec.date)  + '_' + crc.crc32( rec.local).toString(16) + extension
+                break;
+            default:
+                throw new Error('UNK recordtype:' + rec.recordtype + ' for\n  ' + require('util').inspect(rec, { depth: null }))
+        }
+        rec.newFilename = rec.newFilename.replace(/ /g, '_').replace(/,/g, '_').replace(/__/g, '_')
+    }
+    // console.log('rec.newFilename',rec.newFilename, rec.local);
+    return rec
 }
 //========================================
 function parseAgendaMeetingTable(wholePage, selector) {
@@ -489,10 +478,13 @@ function parseAgendaMeetingTable(wholePage, selector) {
 }
 //========================================
 function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
+    // const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT']
+    const validExtensions = ['.PDF', '.DOC', '.DOCX', '.TIF']
 
     const invalidMeetingDate = (rec) => isNaN( rec.meetingDate.getTime() )
     const hasValidMeetingDate = (rec) => !invalidMeetingDate(rec)
-    const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
+    const noVideos= rec=> rec.recordtype !== 'Video'
+    // const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 
     // console.log('migrateTableOfAgendaMinutesAndVideos', group, uri,conf);
     return cachingFetchURL(uri)
@@ -508,7 +500,9 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
                     return Object.assign({
                         meetingDateStr:val.meetingDateStr,
                         meetingDate:val.meetingDate,
-                        group:group, recordType:uris.type
+                        date:val.meetingDate,
+                        groupName:group,
+                        recordtype:uris.type
                     },
                     docLink)
                 }))
@@ -528,10 +522,10 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
         return Promise.all(
             mergedRecords
             .filter(rec => rec.uri && rec.uri.length > 0)
-            .filter(rec => rec.recordType !== 'Video')
+            .filter(rec => rec.recordtype !== 'Video')
             .map(rec => cachingFetchURL(rec.uri)
                 .then(writtenMetaData => {
-                    rec.localFile = writtenMetaData.location
+                    rec.local = writtenMetaData.location
                     return rec
                 })
                 .catch(err => {
@@ -543,76 +537,192 @@ function migrateTableOfAgendaMinutesAndVideos( group, uri, conf) {
     })
     .then(pulledFiles => {
         // console.log('pulledFiles',pulledFiles);
-        let dateYMD = (date) => (isNaN( date.getTime() ))? "InvalidDate": date.getUTCFullYear() + '_' + (date.getUTCMonth() + 1) +  '_' + date.getUTCDate()
-        let dateYMDPath = (date) => (isNaN( date.getTime() ))? "InvalidDate": date.getUTCFullYear() + '/' + dateYMD(date)
-        let targetFileURL = (rec) => rec.recordType + '/' + rec.group + '/' + dateYMDPath(rec.meetingDate) +  '_' + onlyFileName(rec.localFile)
-
-        const invalidDataRecord = (rec) => invalidMeetingDate(rec) // || typeof rec.localFile === 'undefined'
+        const invalidDataRecord = (rec) => invalidMeetingDate(rec) // || typeof rec.local === 'undefined'
         const validData = (rec) => !invalidDataRecord(rec)
 
-        let invalidDataRecs = pulledFiles.filter(invalidDataRecord)
-        if (invalidDataRecs.length > 0) {
-            console.error( '** Invalid Dates -',
-                invalidDataRecs[0].group,
-                invalidDataRecs.filter(invalidMeetingDate).map(rec => rec.meetingDateStr + ' -- ' + rec.desc) );
-        }
-
-        return pulledFiles
+        const configuredFields = pulledFiles
         .filter(validData)
-        // .filter(rec => typeof rec.uri !== 'undefined')
-        // .filter(hasValidMeetingDate)
         .map(rec => {
-            if (rec.recordType !== 'Video') {
-                if (!rec.localFile) {
-                    console.error('**No File for', rec.group, dateYMD(rec.meetingDate), rec.recordType, rec.uri);
-                } else {
-                    rec.relativeDest = targetFileURL(rec)
+            if (rec.recordtype !== 'Video') {
+                if (rec.local) {
+                    rec = setNewFileName(validExtensions, rec)
                 }
                 delete rec.uri
             }
-            if (rec.desc === rec.recordType) { delete rec.desc}
+            if (rec.desc === rec.recordtype) { delete rec.desc}
             return rec
         })
+
+        let invalidDataRecs = pulledFiles.filter(invalidDataRecord)
+        if (invalidDataRecs.length > 0) {
+            console.error( '** Invalid Dates -', invalidDataRecs[0].groupName,
+            invalidDataRecs.filter(invalidMeetingDate).map(rec => rec.meetingDateStr + ' -- ' + rec.desc) );
+        }
+        const missingFiles = configuredFields.filter(noVideos).filter(rec => !rec.newFilename)
+        if (missingFiles.length > 0) {
+            console.error(missingFiles[0].groupName+ ' items missing files but should not be:\n'+
+            missingFiles.map(rec => '\t'+rec.meetingDateStr+ '--'+ rec.recordtype+ '--'+ rec.desc+'\n' ));
+        }
+
+        return configuredFields
     })
-    .then(localizedPaths => {
-        let pulledFilePaths = localizedPaths
-            .filter(rec => rec.recordType !== 'Video' && rec.relativeDest)
-            .map(rec =>  pathWithoutFilename(rec.relativeDest) )
-            .filter((v, i, a) => a.indexOf(v) === i);
-
-        return makeServerDirs(getServerFilePath(), pulledFilePaths )
-        .then( createdDirs =>{
-            return pullNewServerDirs(getServerFilePath(), pulledFilePaths )
-        })
-        .then( serverDirs => {
-            let allPaths= mergeArrays(serverDirs)
-            // console.log(getServerFilePath(), ['Agenda','Minutes'] ,'\nallPaths',allPaths);
-            // console.log('pulledFilePaths', pulledFilePaths);
-            let notOnServer = (rec) => !allPaths.includes(rec.relativeDest)
-            let hasLocalFile = (rec) => rec.localFile
-
-            return Promise.all(
-                localizedPaths.filter(notOnServer).filter(hasLocalFile).map(rec =>{
-                    console.log('pushFileToServer', rec.localFile, getServerFilePath() + rec.relativeDest );
-                    return pushFileToServer(rec.localFile, getServerFilePath() + rec.relativeDest)
-                    .then( (pushReq)=> {
-                        return rec
-                    })
-                    .catch(err => console.log(err, rec))
-                })
-            )
-            .then( donePush => {
-                return localizedPaths
-            })
-        })
+    .then(withNewFilenames => {
+        // throw new Error("Stop")
+        return pushFiles(withNewFilenames.filter(noVideos).filter(rec => rec.newFilename))
         .then(afterPushedFiles => {
             const validFileLink = (rec) => rec.uri || rec.relativeDest
             return Promise.all(
                 afterPushedFiles.filter(validFileLink).map(rec => {
-                    let dbEntry = {pageLink:rec.group, recordtype:rec.recordType ,recorddesc: rec.desc||'', date:rec.meetingDate, fileLink:rec.uri || rec.relativeDest}
+                    let dbEntry = {pageLink:rec.groupName, recordtype:rec.recordtype ,recorddesc: rec.desc||'', date:rec.meetingDate, fileLink:rec.uri || rec.relativeDest}
                     // console.log('lnk', dbEntry);
                     // return Promise.resolve(dbEntry)
                     return enterIntoDB(dbEntry)
+                })
+            )
+        })
+    })
+}
+//========================================
+function parseCurrentAgendas(wholePage, selector) {
+    var $ = cheerio.load(wholePage);
+    return $(selector).children().map( (i, row)  => {
+        const uri = $(row).find($("a")).attr('href')
+        const label = $(row).find($("a")).text()
+        const dateData = $(row).find($("span")).attr('content')
+
+        return {uri:uri, label:label, date:new Date(dateData) }
+    }).get()
+}
+//========================================
+function fetchFileFromPage(url, baseRecordData, currentCnt, maxCnt) {
+    // console.log('fetchFileFromPage',url);
+    if (currentCnt === maxCnt) {
+        return Promise.reject('Exceded maxCnt '+maxCnt+' fetching file from ' + url)
+    }
+    return cachingFetchURL(url)
+    .then(urlData => {
+        // console.log('** urlData',urlData.contentType, currentCnt, maxCnt);
+        if (urlData.contentType === 'text/html') {
+            var $ = cheerio.load(urlData.data);
+            const fileSelector = "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > div.field.field-name-field-agenda-file.field-type-file.field-label-above > div.field-item > span"
+            const link = $(fileSelector).find($("a")).attr('href')
+            const dateSelector ="#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > div.field.field-name-field-agenda-date.field-type-datetime.field-label-inline.inline > div.field-item > span"
+            const date = $(dateSelector).attr('content')
+            const recurseBaseRecordData =  Object.assign(baseRecordData,{date:new Date(date)})
+            // console.log('fetchFileFromPage:recurse',currentCnt, recurseBaseRecordData.date);
+            return fetchFileFromPage(link, recurseBaseRecordData, ++currentCnt, maxCnt)
+        }
+        else {
+            const resultData =  Object.assign(baseRecordData,{uri: url, local:urlData.location})
+            // if (resultData.date === 'UNK') {
+            //     console.log('fetchFileFromPage',currentCnt, urlData.contentType,resultData.uri);
+            // }
+            resultData.local = urlData.location
+            return resultData
+        }
+    })
+
+}
+//========================================
+function pushFiles(fileRecords) {
+
+    const localPaths = fileRecords.filter(rec => rec.date !== 'UNK')
+    .map(rec=> pathWithoutFilename(rec.newFilename))
+    .filter((v, i, a) => a.indexOf(v) === i);
+    // return Promise.reject('TODO')
+    return makeServerDirs(getServerFilePath(), localPaths )
+    .then(dirsMade => {
+        return pullNewServerDirs(getServerFilePath(), localPaths )
+    })
+    .then( serverDirs => {
+        let allPaths= mergeArrays(serverDirs)
+        // console.log('allPaths',allPaths);
+        let notOnServer = (rec) => !allPaths.includes(rec.newFilename)
+        let withRequiredPaths = fileRecords.map(rec => {
+            rec.remotePath = rec.newFilename
+            rec.targetPath = getServerFilePath()+ rec.newFilename
+            return rec
+        })
+        // console.log('withRequiredPaths',withRequiredPaths.length);
+        return Promise.all(
+            withRequiredPaths.filter(notOnServer).map(rec => { //.filter(onlyLocalDoc)
+                console.log('Push', rec.local, rec.targetPath);
+                return pushFileToServer(rec.local, rec.targetPath)
+                .then( (pushReq)=> {
+                    return rec
+                })
+                .catch(err => console.log(err, rec))
+        }))
+        .then(pushedFiles => {
+            console.log('pushedFiles',pushedFiles.length);
+            return withRequiredPaths
+        })
+    })
+}
+//========================================
+function migrateCurrentAgendas(recordType, group, uri, conf){
+    const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT']
+
+    // console.log('migrateCurrentAgendas', recordType, group, uri, conf.currentSelector)
+    return cachingFetchURL(uri)
+    .then(urlData => {
+        return parseCurrentAgendas(urlData.data,conf.currentSelector)
+        .map(agenda => {
+            if (!agenda.uri.startsWith('http') ) {
+                if(!agenda.uri.startsWith('/') ) {
+                    agenda.uri = uri + agenda.uri
+                } else {
+                    agenda.uri = 'http://' + getSourceServerHost() + agenda.uri
+                }
+            }
+            return agenda
+        })
+    })
+    .then(parsedAgendas => {
+        return Promise.all( parsedAgendas.map(parsedRecord => {
+            const label= conf.extractRecordLabel ? conf.extractRecordLabel(parsedRecord): parsedRecord.uri
+            const fullURI = parsedRecord.uri.trim();
+            let date = parsedRecord.date
+            if (! date && conf.getMeetingDate) { date = conf.getMeetingDate(parsedRecord); console.log('Parse date from record');}
+            if ( ! date && parsedRecord.fileDate) { date = parsedRecord.fileDate; console.log('Using fileDate'); }
+            if ( ! date ) { date = 'UNK'}
+            if (!date || typeof date !== 'object') {
+                console.error('Date not set for',parsedRecord);
+                throw new Error(('Date not set for'+parsedRecord))
+            }
+
+            let baseRecordData = Object.assign({}, parsedRecord,
+                {
+                    date: date,
+                    groupName:group,
+                    recordtype: recordType,
+                    label:parsedRecord.label? parsedRecord.label: label
+                })
+              if (! validExtensions.includes(getExtension(fullURI).toUpperCase())) {
+                return fetchFileFromPage(fullURI, baseRecordData, 0, 2)
+              }
+              else {
+                  return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI}))
+              }
+          })
+        )
+    })
+    .then(validFiles => {
+        const hasLocalFile = (rec) => rec.local
+        return validFiles.filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
+    })
+    .then(withNewFilenames => {
+        return pushFiles(withNewFilenames)
+        .then(pushedFiles => {
+            return Promise.all(
+                withNewFilenames.map(rec => {
+                    if (!rec.remotePath) { throw new Error('Remote path not set'+ rec)}
+                    rec.date = setDefault(rec.date, addDays(new Date(), -21))
+
+                    let dbEntry = {pageLink:rec.groupName, recordtype:recordType ,recorddesc: rec.label, date:rec.date, fileLink:rec.newFilename}
+                    // console.log('lnk', dbEntry);
+                    return enterIntoDB(dbEntry)
+                    // return Promise.resolve(dbEntry)
                 })
             )
         })
@@ -629,6 +739,10 @@ function migrateAgendas(conf, confP) {
         if (uri.indexOf('miltonnh-us.com') != -1) {
             return migrateTableOfAgendaMinutesAndVideos(confP.group, uri, conf)
         }
+        if (uri.indexOf('www.newdurhamnh.us') != -1) {
+            return migrateCurrentAgendas(recordType,confP.group, uri, conf)
+        }
+
         throw new Error('** Unknown uri type - ' + uri)
     }))
 }
