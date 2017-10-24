@@ -359,6 +359,10 @@ function migrateVTSArchive(recordType, group, uri, conf) {
                             label:label
                         })
                 })
+                .catch(err=> {
+                    console.error('***Err cachingFetchURL', fullURI, err);
+                    return Promise.resolve(null);
+                })
             } else {
                 return Promise.resolve(Object.assign({}, parsedRecord,
                     {
@@ -621,6 +625,10 @@ function fetchFileFromPage(url, baseRecordData, currentCnt, maxCnt) {
             return resultData
         }
     })
+    .catch(err=> {
+        console.error("Error fetchFileFromPage",url, baseRecordData);
+        return baseRecordData
+    })
 
 }
 //========================================
@@ -643,7 +651,6 @@ function pushFiles(fileRecords) {
             rec.targetPath = getServerFilePath()+ rec.newFilename
             return rec
         })
-        // console.log('withRequiredPaths',withRequiredPaths.length);
         return Promise.all(
             withRequiredPaths.filter(notOnServer).map(rec => { //.filter(onlyLocalDoc)
                 console.log('Push', rec.local, rec.targetPath);
@@ -654,7 +661,6 @@ function pushFiles(fileRecords) {
                 .catch(err => console.log(err, rec))
         }))
         .then(pushedFiles => {
-            console.log('pushedFiles',pushedFiles.length);
             return withRequiredPaths
         })
     })

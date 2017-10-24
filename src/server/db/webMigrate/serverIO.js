@@ -119,8 +119,8 @@ function cachedURIExists(uri) {
 //========================================
 function pullLocalCopy(remoteURI, localPath) {
     // console.log('pullLocalCopy(remoteURI, localPath)',  '\n  ', remoteURI, '\n  ', localPath);
-    console.log('pullLocalCopy\n  ', remoteURI.replace(/.*_archive/, '*archive*')
-        );
+    // console.log('pullLocalCopy\n  ', remoteURI.replace(/.*_archive/, '*archive*') );
+
     return axios({
         method:'get',
         url:remoteURI,
@@ -210,13 +210,21 @@ function pullLocalCopies(records) {
                 .then(writtenPath => {
                     return Promise.resolve(Object.assign(rec, {local:writtenPath, pulled: writtenPath}))
                 })
+                .catch(err=> {
+                    console.error('Err pulling local Copy in pullLocalCopies'+ err);
+                    return rec
+                })
             }
         })
     )
     .then(done => {
-        // console.log('pulledLocalCopies', done.length, done);
+        // console.log('pulledLocalCopies', done.length);
         return done
     } )
+    .catch(err => {
+        console.error('Err pulling processing missing files array'+ err);
+        return records
+    })
 }
 //========================================
 function getRedirectLocation(record) {
