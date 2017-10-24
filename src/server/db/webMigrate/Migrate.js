@@ -378,29 +378,32 @@ function migrateVTSArchive(recordType, group, uri, conf) {
         )
     })
     .then(parsedRecs =>
-        pullLocalCopies(parsedRecs)
-        .then(pulled => {
-            // console.log('migrateVTSArchivePulled', pulled);
-            return pulled
+        pullLocalCopies(parsedRecs.filter(rec=> rec !== null))
+        .then(pulled => parsedRecs )
+        .catch(err=> {
+            console.error('***Err pullLocalCopies', err);
         })
     )
     .then(pulledLocal => {
-        const hasLocalFile = (rec) => rec.local
-        return pulledLocal.filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
-
+        const hasLocalFile = (rec) => rec && rec.local
+        pulledLocal  = pulledLocal.filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
+        return pulledLocal
     })
-    return pushFiles(withNewFilenames)
-    .then(pushedFiles => {
-        return Promise.all(
-            withNewFilenames.map(rec => {
-                if (!rec.remotePath) { throw new Error('Remote path not set'+ rec)}
-                rec.date = setDefault(rec.date, addDays(new Date(), -21))
+    .then(withNewFilenames => {
+        return pushFiles(withNewFilenames)
+        .then(pushedFiles => {
+            // console.log('pushedFiles', pushedFiles.length);
+            return Promise.all(
+                withNewFilenames.map(rec => {
+                    if (!rec.remotePath) { throw new Error('Remote path not set'+ rec)}
+                    rec.date = setDefault(rec.date, addDays(new Date(), -21))
 
-                let dbEntry = {pageLink:rec.groupName, recordtype:recordType ,recorddesc: rec.label, date:rec.date, fileLink:localFileURL(rec)}
-                // console.log('lnk', dbEntry);
-                return enterIntoDB(dbEntry)
-            })
-        )
+                    let dbEntry = {pageLink:rec.groupName, recordtype:recordType ,recorddesc: rec.label, date:rec.date, fileLink:rec.newFilename}
+                    // console.log('lnk', dbEntry);
+                    return enterIntoDB(dbEntry)
+                })
+            )
+        })
     })
     .catch(err => {
         console.log('Error on file push:', err);
@@ -767,9 +770,9 @@ function migratePage(uri, conf) {
     let wholePage=''
     return cachingFetchURL(uri)
     .then(fetchedData => wholePage = fetchedData.data)
-    .then(migrateResults => migrateGroupContact(wholePage, conf) )
+    // .then(migrateResults => migrateGroupContact(wholePage, conf) )
     // .then(migrateResults => migrateDocuments(wholePage, conf) )
-    // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
+    // // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
     // .then( documents => migrateMinutes(conf.minutesURI, conf))
     // .then(migrateResults => migrateMenuLinks(wholePage, conf) )
     .then(migrateResults => migrateAgendas(conf.agendaURI, conf) )
