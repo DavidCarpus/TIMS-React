@@ -11,18 +11,18 @@ var addDays = require('date-fns/add_days')
 var knexConfig = require('../../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-var pullLocalCopies = require('./serverIO').pullLocalCopies;
-var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
-var pushFileToServer = require('./serverIO').pushFileToServer;
-var fetchURL = require('./serverIO').fetchURL;
-var getServerFilePath = require('./serverIO').getServerFilePath;
-var getSourceServerHost = require('./serverIO').getSourceServerHost;
-var localFileBaseURL = require('./serverIO').localFileBaseURL;
-var getRedirectLocation = require('./serverIO').getRedirectLocation;
-var getURLCacheLocation = require('./serverIO').getURLCacheLocation;
-var cachedURIExists = require('./serverIO').cachedURIExists;
 var cachingFetchURL = require('./serverIO').cachingFetchURL;
+var pullLocalCopies = require('./serverIO').pullLocalCopies;
 var makeServerDirs = require('./serverIO').makeServerDirs;
+var getServerFilePath = require('./serverIO').getServerFilePath;
+var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
+var getSourceServerHost = require('./serverIO').getSourceServerHost;
+var pushFileToServer = require('./serverIO').pushFileToServer;
+var getRedirectLocation = require('./serverIO').getRedirectLocation;
+// var fetchURL = require('./serverIO').fetchURL;
+// var localFileBaseURL = require('./serverIO').localFileBaseURL;
+// var getURLCacheLocation = require('./serverIO').getURLCacheLocation;
+// var cachedURIExists = require('./serverIO').cachedURIExists;
 
 let mergeArrays = (arrays) => [].concat.apply([], arrays)
 
@@ -63,36 +63,6 @@ const setDefault = (value, defaultValue)  => (! value || typeof value === 'undef
 const onlyFileName = (fullPath) => fullPath.replace(/.*\//, '')
 const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 
-//========================================
-function translateRecordType(recordtype) {
-    let translated = [
-        {orig:'AGENDA', valid:'Agenda'},
-        {orig:'MINUTES', valid:'Minutes'},
-        {orig:'Mnutes', valid:'Minutes'},
-        {orig:'Mintues', valid:'Minutes'},
-        {orig:'MInutes', valid:'Minutes'},
-        {orig:'VIDEO', valid:'Video'},
-        {orig:'video', valid:'Video'},
-    ].filter(opt => opt.orig===recordtype)
-    if (translated && translated.length > 0 && typeof translated !== 'undefined') {
-        return translated[0].valid
-    // } else {
-    //     console.log('Unable to translate document:' , recordtype);
-    }
-    // if (typeof recordtype === 'undefined') { return ''}
-    return recordtype
-}
-//========================================
-//========================================
-function newFilenameFromRecord(rec) {
-    let oldKey = ''
-    let parseOldFN = rec.uri.replace(/.*\//, '').match(/.*_(\d*)_.*/)
-    if (parseOldFN && parseOldFN.length > 1) {
-        oldKey = parseOldFN[1]
-    }
-     let extension = rec.uri.match(/\.[0-9a-z]+$/i, '')[0]
-    return  rec.groupName + '_' + getY_M_D(rec.date) + '_' + rec.label.replace(/ /g, '') +'_'+oldKey + extension
-}
 //========================================
 let onlyUnique = (value, index, self) => self.indexOf(value) === index;
 let getY_M_D = (date) =>  date.getUTCFullYear() + "_" + (date.getUTCMonth()<9?'0':'') + (date.getUTCMonth()+1) +  "_" + (date.getUTCDate()<10?'0':'') + (date.getUTCDate());
@@ -157,7 +127,7 @@ function addOrUpdateDBTable(tableName, record, checkRecord={}){
                 return Promise.resolve([record]);
             })
         } else{
-            console.log('UPDATE record',checkRecord);
+            // console.log('UPDATE record',checkRecord);
             return knex(tableName).where(checkRecord).update(record)
         }
     })
@@ -217,7 +187,7 @@ function pullDocumentLinksFromMenus(wholePage, selector) {
         rec.recordtype = 'Document'
         return rec
     })
-    console.log('pullDocumentLinksFromMenus:', filteredLinks.length);
+    // console.log('pullDocumentLinksFromMenus:', filteredLinks.length);
     return pullLocalCopies(filteredLinks)
 }
 //=======================================================
@@ -360,7 +330,7 @@ function migrateVTSArchive(recordType, group, uri, conf) {
                         })
                 })
                 .catch(err=> {
-                    console.error('***Err cachingFetchURL', fullURI, err);
+                    console.error('***Err cachingFetchURL', fullURI);
                     return Promise.resolve(null);
                 })
             } else {
@@ -386,7 +356,13 @@ function migrateVTSArchive(recordType, group, uri, conf) {
     )
     .then(pulledLocal => {
         const hasLocalFile = (rec) => rec && rec.local
-        pulledLocal  = pulledLocal.filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
+        const validExtension = (rec) => rec && validExtensions.includes(getExtension(rec.local).toUpperCase())
+        const inValidExtension = (rec) => !validExtension(rec)
+        const invalid = pulledLocal.filter(hasLocalFile).filter(inValidExtension)
+        if (invalid.length > 0) {
+            console.error('invalid extensions', invalid.map(rec=> rec.uri));
+        }
+        pulledLocal  = pulledLocal.filter(hasLocalFile).filter(validExtension).map((rec)=> setNewFileName(validExtensions, rec))
         return pulledLocal
     })
     .then(withNewFilenames => {
@@ -417,9 +393,9 @@ function setNewFileName(validExtensions, rec) {
     }
     if (isPhysicalFile(rec)) {
         const extension = getExtension(rec.local)
-        if (! validExtensions.includes(extension.toUpperCase())) {
-            const errMsg = 'UNK extension:' + extension + ' for\n  ' + require('util').inspect(rec, { depth: null })
-            console.log(errMsg);
+        if (extension.length > 6 || !validExtensions.includes(extension.toUpperCase())) {
+            const errMsg = 'UNK extension: "' + extension + '" for\n  ' + require('util').inspect(rec, { depth: null })
+            // console.log(errMsg);
             throw new Error(errMsg)
         }
 
@@ -770,15 +746,14 @@ function migratePage(uri, conf) {
     let wholePage=''
     return cachingFetchURL(uri)
     .then(fetchedData => wholePage = fetchedData.data)
-    // .then(migrateResults => migrateGroupContact(wholePage, conf) )
-    // .then(migrateResults => migrateDocuments(wholePage, conf) )
-    // // return migrateMenuLinks({url:uri, query:conf.menuLinkSelector, group: conf.group})
-    // .then( documents => migrateMinutes(conf.minutesURI, conf))
-    // .then(migrateResults => migrateMenuLinks(wholePage, conf) )
+    .then(migrateResults => migrateGroupContact(wholePage, conf) )
+    .then(migrateResults => migrateDocuments(wholePage, conf) )
+    .then(migrateResults => migrateMinutes(conf.minutesURI, conf))
+    .then(migrateResults => migrateMenuLinks(wholePage, conf) )
     .then(migrateResults => migrateAgendas(conf.agendaURI, conf) )
     .then(done => {
         // console.log('Done migratePage', done);
-        return Promise.resolve('Done migratePage '+ conf.group + done.length)
+        return Promise.resolve('Done migratePage '+ conf.group)
     })
 }
 //========================================
@@ -841,15 +816,8 @@ if (require.main === module) {
         if (label.length === 6 && !isNaN(label)) {
             label = ''
         }
-        // if (label.length > 0) {
-        //     console.log(recType, '  ', label.trim());
-        // }
-
         return label
     }
-
-    // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', pageConf.agendaURI.textReplacements)
-    // replaceTextBlocks('https://www.newdurhamnh.us/board-selectmen', [['BOS',''],[/Agenda/i,''],[/\.pdf/i,''],[/\.doc/i,''],[/  /g,' '],[/Meeting/i,' ']])
 
     Promise.all(pageData.map(rec => {
         // console.log('rec', rec.group);
@@ -878,8 +846,6 @@ if (require.main === module) {
     })
 )
 
-    // Promise.resolve('test')
-
     .then(done => {
         console.log('done', done);
         process.exit()
@@ -889,5 +855,3 @@ if (require.main === module) {
         process.exit()
     })
 }
-// TODO: Do Cemetery documents via old way (json file in private/json)
-// {"group":"Cemetery", "url":"http://miltonnh-us.com/cemetery.php", "query":"table[border='1'][style='width: 500px;']"},

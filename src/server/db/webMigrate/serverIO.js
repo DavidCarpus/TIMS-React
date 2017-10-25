@@ -127,9 +127,9 @@ function pullLocalCopy(remoteURI, localPath) {
         responseType:'stream'
     })
     .then( (response) => {
-        console.log('Got response 1');
+        // console.log('Got response 1');
         if (response.status === 200) {
-            console.log('response.data.responseUrl',response.data.responseUrl);
+            // console.log('response.data.responseUrl',response.data.responseUrl);
             return response
         }
 
@@ -161,18 +161,20 @@ function pullLocalCopy(remoteURI, localPath) {
         responseUrl =finalResponse.data.responseUrl.replace(/\/?$/,'')
         let responseFilename=responseUrl.replace(/.*\//,'').trim()
         let extension=getExtension(responseFilename).trim()
-        console.log('finalResponse', finalResponse.headers['content-type'], '  fn:',responseFilename, '  xtn:',extension);
+        // console.log('finalResponse', finalResponse.headers['content-type'], '  fn:',responseFilename, '  xtn:',extension);
 // localPath
         if(finalResponse.headers['content-type'].startsWith( 'text/html') ){ //&& responseFilename === extension  ){
             console.log('***Add index.html to localPath ', localPath);
             localPath = localPath + '/__index.html'
-        }
-        if(finalResponse.headers['content-type'].startsWith( 'application/pdf') && ! localPath.endsWith('.pdf')){
+        } else if(finalResponse.headers['content-type'].startsWith( 'application/pdf') && ! localPath.endsWith('.pdf')){
             console.log('***Add pdf extension to localPath ', localPath);
             localPath = localPath + '.pdf'
+        } else {
+            console.error('pullLocalCopy - UNK response', finalResponse.headers['content-type'],
+                '\n  fn:',responseFilename, '\n  xtn:',extension , '\n  remoteURI:',remoteURI);
         }
         if (!localFileMissing(localPath) ) {
-            console.log('localFile NOT Missing 3:', localPath);
+            // console.log('localFile NOT Missing 3:', localPath);
             return Promise.resolve(localPath)
         }
         return pipeResponse(finalResponse, localPath )
@@ -183,7 +185,7 @@ function pullLocalCopy(remoteURI, localPath) {
     })
     .catch(err => {
         // console.error("Error pulling ",remoteURI, err);
-        console.error("Error pulling ",remoteURI);
+        // console.error("Error pulling ",remoteURI);
         throw("Error pulling ",remoteURI);
         // return null;
     })
