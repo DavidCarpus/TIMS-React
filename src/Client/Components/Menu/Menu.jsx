@@ -86,7 +86,7 @@ class SubMenus extends React.Component {
 //https://codepen.io/dustlilac/pen/Qwpxbp
         const cols=Math.ceil(subMenus.length/5)
         const dropdownWidthEm=cols*12 + 'em';
-        const leftShift=((cols-1)*-6) + 'em';
+        const leftShift=((cols-1)*-5) + 'em';
 
         return (
             <NavDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}
