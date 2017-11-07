@@ -52,6 +52,15 @@ module.exports = {
     makeServerDirs: makeServerDirs
 }
 
+const contentTypeExtensions = [
+   {cType: 'application/pdf', ext:'.pdf'},
+   {cType: 'application/vnd.openxmlformats-officedocument.wordprocessing', ext:'.docx'},
+   {cType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', ext:'.docx'},
+   {cType: 'application/msword', ext:'.doc'},
+   {cType: 'application/octet-stream', ext:'.zip'},
+   {cType: 'text/html', ext:'.html'},
+]
+
 function initSFTP() {    if (sftpPromise==null)     sftpPromise = sftp.connect(connSettings)  }
 
 function getSourceServerHost() {  return configuration.sourceTownDomain }
@@ -161,18 +170,32 @@ function pullLocalCopy(remoteURI, localPath) {
         responseUrl =finalResponse.data.responseUrl.replace(/\/?$/,'')
         let responseFilename=responseUrl.replace(/.*\//,'').trim()
         let extension=getExtension(responseFilename).trim()
+        const contentType = finalResponse.headers['content-type']
         // console.log('finalResponse', finalResponse.headers['content-type'], '  fn:',responseFilename, '  xtn:',extension);
-// localPath
-        if(finalResponse.headers['content-type'].startsWith( 'text/html') ){ //&& responseFilename === extension  ){
-            console.log('***Add index.html to localPath ', localPath);
+
+        if(contentType.startsWith( 'text/html') ){
+            // console.log('***Add index.html to localPath ', localPath);
             localPath = localPath + '/__index.html'
-        } else if(finalResponse.headers['content-type'].startsWith( 'application/pdf') && ! localPath.endsWith('.pdf')){
-            console.log('***Add pdf extension to localPath ', localPath);
-            localPath = localPath + '.pdf'
         } else {
-            console.error('pullLocalCopy - UNK response', finalResponse.headers['content-type'],
+            // const match =  [
+            //     {cType: 'application/pdf', ext:'.pdf'},
+            //     {cType: 'application/vnd.openxmlformats-officedocument.wordprocessing', ext:'.docx'},
+            //     {cType: 'application/msword', ext:'.doc'},
+            // ]
+            const match = contentTypeExtensions
+            .filter(option=> option.cType === contentType)
+            if (match.length === 1) {
+                // console.log('pullLocalCopy:contentType', contentType);
+                if (! localPath.endsWith(match[0].ext)) {
+                    console.log('***Add extension to localPath ', match[0].ext, localPath);
+                    localPath = localPath + match[0].ext
+                }
+            } else {
+                console.error('pullLocalCopy - UNK response', contentType,
                 '\n  fn:',responseFilename, '\n  xtn:',extension , '\n  remoteURI:',remoteURI);
+            }
         }
+
         if (!localFileMissing(localPath) ) {
             // console.log('localFile NOT Missing 3:', localPath);
             return Promise.resolve(localPath)
@@ -186,7 +209,7 @@ function pullLocalCopy(remoteURI, localPath) {
     .catch(err => {
         // console.error("Error pulling ",remoteURI, err);
         // console.error("Error pulling ",remoteURI);
-        throw("Error pulling ",remoteURI);
+        throw("Error pulling " + remoteURI + 'err:',err);
         // return null;
     })
 }
@@ -291,6 +314,7 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
         return Promise.all(
              pathsToDir.map( pathToDir => {
                 let fullPath = baseServerPath + pathToDir
+                // console.log('ls',fullPath);
                 return sftpPromise.then(() => {
                     return sftp.list(fullPath);
                 })
@@ -370,10 +394,12 @@ function fetchFileURL(url) {
     return new Promise(function(resolve, reject) {
         fs.readFile(url, 'utf8', function(err, data) {
             if (err) reject(err);
-            // console.log('OK: ' + url);
-            const contentType = url.endsWith('html') ? 'text/html': 'application/pdf'
-            // resolve(data)
-            resolve({data: data, contentType:contentType, location:url})
+            const match = contentTypeExtensions.filter(rec => url.endsWith(rec.ext))
+            if (match.length >= 1) {
+                resolve({data: data, contentType:match[0].cType, location:url})
+            } else {
+                reject('fetchFileURL:Unknown extension/contentType for ' + url)
+            }
         })
     })
 }
@@ -443,6 +469,9 @@ function cachingFetchURL(uri) {
     if (cachedURIExists(uri+'.doc')) {
          activeURI = cacheURILocation+'.doc'
     }
+    if (cachedURIExists(uri+'.docx')) {
+         activeURI = cacheURILocation+'.docx'
+    }
     if (cachedURIExists(uri+'/__index.html')) {
          activeURI = cacheURILocation+'/__index.html'
     }
@@ -468,9 +497,7 @@ function cachingFetchURL(uri) {
             })
         })
         .catch(err => {
-            // console.error('Err pulling cached file', uri);
-            // throw(new Error('Err pulling cached file', uri))
-            throw('Err pulling cached file:'+ uri)
+            return Promise.reject('Err pulling cached file:'+ uri + ' (err):' + err)
         })
     } else {
         // console.log('**++ cachedURIExists', activeURI);
