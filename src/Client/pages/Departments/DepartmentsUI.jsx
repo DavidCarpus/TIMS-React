@@ -50,20 +50,11 @@ export default class DepartmentsUI extends React.Component {
                 <TransferStationRules group={this.props.groupData} {...this.props}></TransferStationRules>
             );
 
-        case 'CodeEnforcement':
-        case 'CoppleCrownVillage':
-        case 'EmergencyManagement':
-        case 'FireDepartment':
-        case 'ForestFireWarden':
-        case 'Sewer':
-            return (
-                <DefaultDepartment group={this.props.groupData} title={this.props.groupData.groupDescription} {...this.props}></DefaultDepartment>
-            );
-
         default:
+        // <div>Unknown department UI: {this.props.groupName}</div>
         // <DefaultDepartment group={this.props.groupData} title={this.props.groupData.groupDescription} {...this.props}></DefaultDepartment>
             return (
-                <div>Unknown department UI: {this.props.groupName}</div>
+                <DefaultDepartment group={this.props.groupData} title={this.props.groupData.groupDescription} {...this.props}></DefaultDepartment>
             );
     }
   }
