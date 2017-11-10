@@ -3,7 +3,8 @@
         "group":"Selectmen",
         "uri":"https://www.newdurhamnh.us/board-selectmen",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
+        "descriptionSelector":
+        "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div",
         "agendaURI": {
             "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
             "serverURIs":[
@@ -17,9 +18,12 @@
 
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=1-20&Upper=1-200",
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=21-40&Upper=1-200",
-                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200"
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200",
+
+                "https://www.newdurhamnh.us/node/36/agenda/2017"
             ],
-            "textReplacements":[["BOS",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["/  /g"," "],["/Meeting/i"," "]]
+            "textReplacements":[["BOS",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["/  /g"," "],["/Meeting/i"," "]],
+            "currentSelector":"#block-system-main > div > div > div"
         },
         "minutesURI": {
             "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
@@ -43,7 +47,7 @@
         "group": "ConservationCommission",
         "uri":"https://www.newdurhamnh.us/conservation-commission",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
+        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div",
         "agendaURI": {
             "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
             "serverURIs":[
@@ -65,7 +69,7 @@
         "group": "BudgetCommittee",
         "uri":"https://www.newdurhamnh.us/budget-committee",
         "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
-        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.field.field-name-field-description.field-type-text-with-summary.field-label-hidden",
+        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div",
         "agendaURI": {
             "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table:nth-child(8) > tbody",
             "serverURIs":[
@@ -80,6 +84,31 @@
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2016/",
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2015/",
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BudgetMin/2014/"
+            ],
+            "textReplacements":[["BC",""],["/Minutes/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
+        }
+    }
+    ,
+    {
+        "group": "CoppleCrownVillage",
+        "uri":"https://www.newdurhamnh.us/copple-crown-village-district",
+        "menuLinkSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
+        "descriptionSelector": "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div",
+        "addressSelector": "#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section > div > div > div > div > div > div.field.views--address",
+        "phoneSelector":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section > div > div > div > div > div > div.field.field-name-field-dept-emergency-phone > div",
+        "agendaURI": {
+            "selector":
+            "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
+            "serverURIs":[
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownAgendas/"
+            ],
+            "textReplacements":[["BCAgenda",""],["BC",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
+        },
+        "minutesURI": {
+            "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
+            "serverURIs":[
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownMin/?Lower=1-20&Upper=1-200",
+                "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_CoppleCrownMin/?Lower=21-40&Upper=1-200"
             ],
             "textReplacements":[["BC",""],["/Minutes/i",""],["/.pdf/i",""],["/.doc/i",""],["  "," "],["/Budget Committee/i"," "]]
         }

@@ -18,8 +18,10 @@
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=1-20&Upper=1-200",
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=21-40&Upper=1-200",
                 "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSAgendas/2017%20BOS%20Meeting%20Agendas/?Lower=41-60&Upper=1-200"
+                "https://www.newdurhamnh.us/node/36/agenda/2017"
             ],
-            "textReplacements":[["BOS",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["/  /g"," "],["/Meeting/i"," "]]
+            "textReplacements":[["BOS",""],["/Agenda/i",""],["/.pdf/i",""],["/.doc/i",""],["/  /g"," "],["/Meeting/i"," "]],
+            "currentSelector":"#block-system-main > div > div > div"
         },
         "minutesURI": {
             "selector": "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",

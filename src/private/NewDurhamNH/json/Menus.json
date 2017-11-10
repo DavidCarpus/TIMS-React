@@ -1,24 +1,8 @@
 [
     {"id": 2, "desc":"About", "link": "/about"},
     {"id": 3, "desc":"Town Calendar", "link": "/calendar"},
-    {"id": 4, "desc":"Departments", "link": "/Departments",
-        "menus": [
-            {"id": 1, "desc": "Assessing", "link":"/Assessing"},
-            {"id": 2, "desc": "Code Enforcement",        "link":"/CodeEnforcement"},
-            {"link":"/CoppleCrownVillage"    , "desc":"Copple Crown Village District"},
-            {"link":"/EmergencyManagement"    , "desc":"Emergency Management"},
-            {"link":"/FireDepartment"    , "desc":"Fire Department"},
-            {"link":"/ForestFireWarden"    , "desc":"Forest Fire Warden"}
-
-        ]
-    },
-    {"id": 5, "desc":"Boards And Committees", "link": "/BoardsAndCommittees",
-        "menus": [
-            {"id": 1, "desc":"Budget Committee", "link": "/BudgetCommittee"},
-            {"id": 3, "desc":"Conservation Commission", "link": "/ConservationCommission"},
-            {"id": 14, "desc":"Board of Selectmen", "link": "/Selectmen"}
-        ]
-    },
+    {"id": 4, "desc":"Departments", "link": "/Departments"},
+    {"id": 5, "desc":"Boards And Committees", "link": "/BoardsAndCommittees"},
     {"id": 6, "desc":"Public Records", "link": "/PublicRecords",
     "menus": [
         {"desc":"Documents", "link": "/Documents"},

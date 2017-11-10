@@ -265,6 +265,11 @@ function getRedirectLocation(record) {
         record.redirectType =  hasSourceTownURI(record.uri) ? 'internal': 'external'
         return record
     })
+    .catch(err => {
+        console.log('getRedirectLocation:err', err.Error);
+        record.redirectType = 'ERROR'
+        return record
+    })
 }
 //========================================
 function makeServerDirs(baseServerPath, pathsToDir) {
@@ -492,7 +497,6 @@ function cachingFetchURL(uri) {
             }
             return fetchURL(writtenPath)
             .then(urlData =>{
-                console.log('fetchURL(pulledFile)', urlData.location);
                 return Promise.resolve(urlData)
             })
         })
