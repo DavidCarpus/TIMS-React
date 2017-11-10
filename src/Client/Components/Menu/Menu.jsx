@@ -37,7 +37,8 @@ const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
         <NavLink href={lnk} className='externalMenu' title='External Website'> {desc}</NavLink>
     const InternalLnk = () =>
         <NavLink tag={RRNavLink} to={lnk} className='internalMenu'>{desc} </NavLink>
-    const colSize =(12/cols)
+    const colSize =Math.floor(12/cols)
+
     // <ChkLnk></ChkLnk>
     return (
         <Col  md={{size:colSize}}  xs={{size:12}} style={{padding:'0em'}} >
