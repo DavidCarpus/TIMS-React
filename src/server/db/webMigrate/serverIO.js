@@ -2,6 +2,9 @@ var fs = require('fs');
 var axios = require("axios");
 var Config = require('../../config'),
 configuration = new Config();
+var mmm = require('mmmagic'),
+    Magic = mmm.Magic;
+
 // var wget = require('node-wget');
 // var wget = require('./wget');
 // var wget = require('node-wget-promise');
@@ -49,7 +52,10 @@ module.exports = {
     getURLCacheLocation:getURLCacheLocation,
     cachedURIExists:cachedURIExists,
     cachingFetchURL:cachingFetchURL,
-    makeServerDirs: makeServerDirs
+    makeServerDirs: makeServerDirs,
+    mimeType:mimeType,
+    extensionFromContentType: extFromContentType
+
 }
 
 const contentTypeExtensions = [
@@ -59,9 +65,18 @@ const contentTypeExtensions = [
    {cType: 'application/msword', ext:'.doc'},
    {cType: 'application/octet-stream', ext:'.zip'},
    {cType: 'text/html', ext:'.html'},
+   {cType: 'text/rtf', ext:'.rtf'},
 ]
+const extensionToContentType = (ext) => contentTypeExtensions.filter(rec=>rec.ext === ext)[0].cType
 
 function initSFTP() {    if (sftpPromise==null)     sftpPromise = sftp.connect(connSettings)  }
+
+function extFromContentType(mimeType) {
+    const rec = contentTypeExtensions.filter(option=> option.cType === mimeType)
+    if (rec.length < 1)  throw new Error('Unknown mimeType:' + mimeType)
+
+    return rec[0].ext
+}
 
 function getSourceServerHost() {  return configuration.sourceTownDomain }
 function getServerFilePath() {    return serverPath }
@@ -80,9 +95,13 @@ let localFileMissing = (fullPath) => !localFileExists(fullPath)
 
 let hasSourceTownURI = (uri) => matchHost(configuration.sourceTownURI, uri)
 const remoteTownURI = (uri)  => matchHost(configuration.sourceTownURI, uri) || matchHost(configuration.sourceTownArchiveDomain, uri)
-let getExtension = (path)=> (path && path.match(/\.[0-9a-z]+$/i, '') && path.match(/\.[0-9a-z]+$/i, '').length > 0) ? path.match(/\.[0-9a-z]+$/i, '')[0] : ''
+let getExtension = (path)=> (path &&
+    path.match(/\.[0-9a-z]+$/i, '') && path.match(/\.[0-9a-z]+$/i, '').length > 0) ?
+    path.match(/\.[0-9a-z]+$/i, '')[0] : ''
 const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 const filenameFromPath = (path) => (path && path.lastIndexOf('/') !== path.length) ? path.substr(path.lastIndexOf('/')): ''
+const isFileURI = (uri) => uri && uri.startsWith('file://')
+const fileURIPath = (uri) => uri.replace('file://', '')
 
 
 let baseURI = (host, uri) =>  uri.replace(new RegExp('https?://w{0,3}.?' + host + '/?'), '')
@@ -91,7 +110,6 @@ let baseURIpath = (host, uri) =>
     uri.replace(new RegExp('https?://' + host + '/?'), '').match(/(.*)\//)[1]+'/':
     '/'
 let localPathFromURI = (localBasePath, host, uri) =>localBasePath + '/' + baseURI(host, uri)
-
 
 const pipeResponse = (response, dest) => {
     return mkdirp(dest.replace(/\/([^\/]+)$/,''))
@@ -122,7 +140,10 @@ const pipeResponse = (response, dest) => {
 
 }
 function cachedURIExists(uri) {
-    // console.log('cachedURIExists?',uri, '\n',getURLCacheLocation(uri));
+    if(isFileURI(uri)) return localFileExists(fileURIPath(uri))
+    // console.log('**cachedURIExists?',uri, '\n')
+    // console.log(getURLCacheLocation(uri));
+
     return localFileExists(uri) || localFileExists(getURLCacheLocation(uri))
 }
 //========================================
@@ -207,10 +228,7 @@ function pullLocalCopy(remoteURI, localPath) {
         })
     })
     .catch(err => {
-        // console.error("Error pulling ",remoteURI, err);
-        // console.error("Error pulling ",remoteURI);
         throw("Error pulling " + remoteURI + 'err:',err);
-        // return null;
     })
 }
 
@@ -315,6 +333,7 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
     let serverDirs = {}
     // Pull directories from a server using SFTP
     if (configuration.mode !== 'development') {
+        console.log('pullNewServerDirs (non-dev)', baseServerPath, pathsToDir);
         initSFTP()
         return Promise.all(
              pathsToDir.map( pathToDir => {
@@ -345,13 +364,14 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
                 fs.readdir(baseServerPath + pathToDir, function(err, items) {
                     if(err)  reject('Missing path ' + baseServerPath + pathToDir)
                     else {
-                        // console.log('Read pathToDir', baseServerPath + pathToDir);
+                        // console.log('Read pathToDir', items.length, baseServerPath + pathToDir);
                         resolve (items.map(item => pathToDir+'/' + item) )
                     }
                 });
             })
         }))
         .then(allPathItems => {
+            // console.log('allPathItems',allPathItems);
             return allPathItems
         })
     } // else
@@ -395,17 +415,24 @@ function pushFileToServer( fullPathLocalFile, serverDest ) {
 }
 //========================================
 function fetchFileURL(url) {
-    // console.log('fetchFileURL', url);
+    const urlToFetch = url.replace('file://', '')
+    // console.log('fetchFileURL', urlToFetch);
     return new Promise(function(resolve, reject) {
-        fs.readFile(url, 'utf8', function(err, data) {
+        fs.readFile(urlToFetch, 'utf8', function(err, data) {
             if (err) reject(err);
-            const match = contentTypeExtensions.filter(rec => url.endsWith(rec.ext))
-            if (match.length >= 1) {
-                resolve({data: data, contentType:match[0].cType, location:url})
-            } else {
-                reject('fetchFileURL:Unknown extension/contentType for ' + url)
-            }
+            resolve(data)
         })
+    })
+    .then(readData => {
+        const match = contentTypeExtensions.filter(rec => urlToFetch.endsWith(rec.ext))
+        if (match.length >= 1) {
+            return Promise.resolve({data: readData, contentType:match[0].cType, location:urlToFetch})
+        } else {
+            return mimeType(urlToFetch)
+            .then(cType=> (
+                {data: readData, contentType:cType, location:urlToFetch}
+            ))
+        }
     })
 }
 //========================================
@@ -444,6 +471,7 @@ function writeFileWithPathCreate(fullFilePath, data) {
 function getURLCacheLocation(uri) {
     // let isPathToHTMLFile = (uri) => uri.match(/.*\.html$/) !== null
     // let isPathToPDFFile = (uri) => uri.match(/.*\.pdf$/) !== null
+    if (uri.startsWith('file:')) {  return uri.trim()  }
 
     const isArchiveDomain = (uri) => matchHost(configuration.sourceTownArchiveDomain, uri)
     const uriHost =isArchiveDomain(uri) ? configuration.sourceTownArchiveDomain: configuration.sourceTownURI
@@ -462,34 +490,49 @@ function getURLCacheLocation(uri) {
     // return (isPathToHTMLFile(cachURI) || isPathToPDFFile(cachURI))? cachURI: cachURI+'/__index.html'
 }
 //========================================
-function cachingFetchURL(uri) {
+function translateURI(uri) {
     let cacheURILocation = getURLCacheLocation(uri)
-    let activeURI = uri
-    if (cachedURIExists(uri)) {
-         activeURI = cacheURILocation
-    }
-    if (cachedURIExists(uri+'.pdf')) {
-         activeURI = cacheURILocation+'.pdf'
-    }
-    if (cachedURIExists(uri+'.doc')) {
-         activeURI = cacheURILocation+'.doc'
-    }
-    if (cachedURIExists(uri+'.docx')) {
-         activeURI = cacheURILocation+'.docx'
-    }
-    if (cachedURIExists(uri+'/__index.html')) {
-         activeURI = cacheURILocation+'/__index.html'
-    }
-    // console.log('cachingFetchURL:', activeURI);
-    // return Promise.resolve(activeURI)
-    // const activeURI = (cachedURIExists(uri)) ? cacheURILocation: uri
-    // console.log('\n***cachingFetchURL', '\n  -',activeURI,  '\n  -',cacheURILocation, '\n  -', uri,'\n');
-    // if (activeURI !== uri) {
-    //     return pullLocalCopy(uri, cacheURILocation)
-    // }
+    // console.log('**cachingFetchURL', '\n', uri, '\n',cacheURILocation);
 
-    if (!cachedURIExists(activeURI)) {
-        // console.log('**++ pulling ', activeURI);
+    let chkuri = cacheURILocation
+    if (isFileURI(chkuri)) chkuri = chkuri.replace(/%20/g, ' ').replace(/%3F/g, '?')
+
+    if (cachedURIExists(chkuri)) { return chkuri }
+
+    const validPostfix = ['.pdf','.doc', '.docx', '__index.html', 'index.html', '/__index.html', '.html']
+    const activeURI = validPostfix.reduce( (acc, ext) => {
+        if (!acc ){
+            if( cachedURIExists(chkuri+ext)) {
+                acc= chkuri+ext
+            }
+        }
+        return acc
+    }, null)
+    if (activeURI === null) {
+        debugger
+    }
+    console.log('cacheURILocation', activeURI);
+    return activeURI
+}
+//========================================
+function mimeType(uri) {
+    var magic = new Magic(mmm.MAGIC_MIME_TYPE);
+    return new Promise(function(resolve, reject) {
+        magic.detectFile(uri, function(err, result) {
+            if (err) reject(err);
+            // console.log('mimeType', result);
+            resolve(result)
+        });
+    });
+}
+//========================================
+function cachingFetchURL(uri, forcePull=false) {
+    let activeURI =translateURI(uri)
+    let cacheURILocation = getURLCacheLocation(uri)
+    // console.log('cachingFetchURL',uri, activeURI);
+
+    if (!cachedURIExists(activeURI) || forcePull) {
+        console.log('++ pulling ', cachedURIExists(activeURI), activeURI);
         return pullLocalCopy(uri, cacheURILocation)
         .then(writtenPath => {
             if (writtenPath === null) { //Server error or 404
@@ -504,11 +547,11 @@ function cachingFetchURL(uri) {
             return Promise.reject('Err pulling cached file:'+ uri + ' (err):' + err)
         })
     } else {
-        // console.log('**++ cachedURIExists', activeURI);
+        // console.log('++ cachedURIExists', activeURI);
         return fetchURL(activeURI)
         .then(urlData =>{
-            const wholePage = urlData.data
-            // console.log('wholePage',wholePage);
+            // const result = {...urlData,  contentType:urlData.contentType || mimeType(activeURI)}
+            // console.log('result', Object.keys(urlData));
             return Promise.resolve(urlData)
         })
     }
