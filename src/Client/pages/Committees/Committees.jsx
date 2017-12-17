@@ -43,14 +43,13 @@ export default class Committees extends React.Component {
 
                                 <RawText groupPageText={this.props.groupPageText} block='description' />
                                 <RawText groupPageText={this.props.groupPageText} block='text1' />
-                                {(this.props.groupMembers.length > 0 ) && <GroupMembers group={this.props.group}  title={' Members'} />}
                             </div>
 
                             {(this.props.agendas.length > 0 ) && <AgendasAndMinutes  group={this.props.group} store={this.props.store}/>}
                             {(this.props.notices.length  > 0) &&<NoticesList group={this.props.group} store={this.props.store} />}
+                            {(this.props.groupMembers.length  > 0) &&<GroupMembers  group={this.props.group} title={' Members'}  showTerm={true} />}
                             {(this.props.documents.length  > 0) &&<DocumentList groupName={this.props.groupName} group={this.props.group} store={this.props.store} />}
                             <HelpfulInformation informationArray={this.props.group.helpfulinformation || []} />
-
                     </Col>
             </Row>
         );

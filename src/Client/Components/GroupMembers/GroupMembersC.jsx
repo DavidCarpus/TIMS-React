@@ -4,7 +4,8 @@ import GroupMembersUI from './GroupMembers'
 
 const mapStateToProps = (state, ownProps) => {
     const  members = ownProps.group.members || []
-    const showTerm= typeof ownProps.showTerm === 'undefined' && true
+    const showTerm= typeof ownProps.showTerm !== 'undefined' ? ownProps.showTerm :false
+    // console.log('showTerm',ownProps);
     // console.log('GroupMembersUI:group:', ownProps.group);
     // console.log('GroupMembersUI:', ownProps);
   return {
