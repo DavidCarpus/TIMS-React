@@ -1,0 +1,16 @@
+@import "breakpoints.scss";
+@import "colors.scss";
+@import "SectionStyling.scss";
+
+#NewsList {
+    @include blockSection;
+
+
+
+    a#NewsList-bookmark {
+        display: block;
+        position: relative;
+        top: $bookmarkOffset;
+        visibility: hidden;
+    }
+}

@@ -17,6 +17,8 @@ var addDays = require('date-fns/add_days')
 
 var Config = require('../config');
 configuration = new Config();
+const privateDir = configuration.mode === 'development' ? '../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../private/'
+
 // var connection;
 var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
@@ -237,6 +239,35 @@ router.get('/CalendarEvents/', function(req, res) {
 
 });
 // ==========================================================
+router.get('/NewsAttachment/:fileID', function(req, res) {
+    var query = "Select id, fileLink as link from FileAttachments where id = '" + req.params.fileID +"' ";
+    let cnt=0
+    const fullAttachmentPath = __dirname+'/'+privateDir+ "/Attachments/"
+
+    console.log('NewsAttachment',query);
+     simpleDBQuery(query)
+     .then(rows => {
+         let fullPath = rows[0].link;
+         if (!fullPath.startsWith('http')) {
+             fullPath = fullAttachmentPath + fullPath
+         }
+         let filename =  fullPath.replace(/^.*[\\\/]/, '')
+         console.log('fetchFile:' + filename+ ' from ' + fullPath );
+         var mimetype = mime.lookup(fullPath);
+         console.log('mimetype:' + mimetype);
+
+         // this is only if you want to 'force' a 'download' and NOT let browser open the file
+        //  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+
+        res.setHeader('Content-type', mimetype);
+        // res.sendFile(fullPath)
+        console.log('download...',fullPath, filename);
+        res.download(fullPath, filename)
+        //  res.json(rows);
+     });
+
+})
+// ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {
         var query = "Select id, fileLink as link from PublicRecords where id = '" + req.params.fileID +"' ";
          simpleDBQuery(query)
@@ -321,6 +352,45 @@ router.get('/FAQ/:groupName', function(req, res) {
              res.status(404).json(err);
          });
 });
+// ==========================================================
+router.get('/Records/NewsDetails/:id', function(req, res) {
+    query   = "Select News.id, News.summary, News.html, News.markdown, "
+    query   += "News.datePosted, News.dateExpires, News.pageLink "
+    query   += "from News "
+    query   += "left join FileAttachments on News.id=FileAttachments.id "
+    query   += "where (FileAttachments.recordtype = 'news' or isnull(FileAttachments.recordtype))"
+    query += " and News.id='" + req.params.id +"'";
+
+    // console.log(query);
+     simpleDBQuery(query)
+     .then( newsData =>{
+         query   =  "Select id, fileLink, datePosted as filePostedDate "
+         query   += "from FileAttachments "
+         query   += "where parentID ='" + req.params.id +"'";
+         return simpleDBQuery(query)
+         .then(attachments =>  Object.assign({}, newsData, {attachments:attachments}) )
+     })
+     .then(withAttachments => {
+         // console.log('NewsDetails:' + JSON.stringify(withAttachments));
+         res.json(withAttachments);
+     });
+})
+// ==========================================================
+router.get('/Records/News/:groupName', function(req, res) {
+    query   = "Select id, summary, datePosted, dateExpires, pageLink from News "
+    if (  req.params.groupName == 'Home') {
+        query += " where mainpage=1 ";
+    } else {
+        query += " where pageLink='" + req.params.groupName +"'";
+    }
+    query += "  and (dateExpires <=0 or date(dateExpires) > date(now()) ) ";
+    // console.log(query);
+     simpleDBQuery(query)
+     .then(rows => {
+         // console.log('Notices:' + JSON.stringify(rows));
+         res.json(rows);
+     });
+})
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {
         query   = "Select id, recorddesc as description, fileLink as link, recordtype, date, expiredate, pageLink from PublicRecords "

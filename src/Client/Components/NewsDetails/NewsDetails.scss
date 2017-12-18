@@ -1,0 +1,17 @@
+@import "breakpoints.scss";
+@import "colors.scss";
+@import "SectionStyling.scss";
+
+#contentArea{
+    border-radius: 1em;
+}
+#NewsDetails {
+    @include blockSection;
+
+    a#NewsDetails-bookmark {
+        display: block;
+        position: relative;
+        top: $bookmarkOffset;
+        visibility: hidden;
+    }
+}

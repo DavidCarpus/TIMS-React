@@ -1,0 +1,6 @@
+{
+  "name": "NewsListing",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./NewsListingC.jsx"
+}

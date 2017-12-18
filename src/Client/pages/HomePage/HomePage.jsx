@@ -7,6 +7,7 @@ import NoticesList from '../../Components/NoticesList'
 
 import MainCalendar from '../../Components/MainCalendar'
 import ContactUs from '../../Components/ContactUs'
+import NewsList from '../../Components/NewsListing'
 
 // import {  Col } from 'react-bootstrap';
 import { Col, Row } from 'reactstrap';
@@ -38,6 +39,7 @@ export default class HomePage extends React.Component {
                               group={this.props.group}
                               store={this.props.store}
                               groupName='Home'/>
+                          <NewsList group={this.props.group} limit={5} />
                           <MainCalendar />
                           <ContactUs/>
                   </Col>

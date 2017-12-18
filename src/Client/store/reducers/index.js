@@ -15,6 +15,7 @@ import PublicRecordsReducer from './PublicRecords';
 import AlertRequestsReducer from './AlertRequests';
 import AuthenticationReducer from './Authentication';
 import ChangeRequestsReducer from './ChangeRequests';
+import NewsDataReducer from './NewsData';
 import { reducer as formReducer } from 'redux-form'
 
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     PublicRecords: PublicRecordsReducer,
     Authentication: AuthenticationReducer,
     ChangeRequests: ChangeRequestsReducer,
+    NewsData: NewsDataReducer,
 
     routing,
     form: formReducer

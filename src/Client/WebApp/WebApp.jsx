@@ -7,6 +7,7 @@ import TransferStationRules from '../Components/TransferStationRules'
 import Departments from '../pages/Departments';
 import Committees from '../pages/Committees'
 import Employment from '../pages/Employment';
+import News from '../pages/News';
 import Notice from '../pages/NoticePage';
 import HomePage from '../pages/HomePage';
 import About from '../pages/About';
@@ -95,6 +96,11 @@ class WebApp extends Component {
             <Route path="/Notice/:noticeID" render={(newProps)=>(
                 <MainLayout {...childProps}>
                 <Notice store={this.props.store} {...newProps}  {...childProps}/>
+                </MainLayout>
+            )} />
+        <Route path="/News/:newsID" render={(newProps)=>(
+                <MainLayout {...childProps}>
+                <News store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
             <Route path="/Employment" render={(newProps)=>(

@@ -76,6 +76,15 @@ const SubmitChangeConstants = {
     PUSH_DATA_FAILURE: 'SUBMIT_CHANGE_REQUEST_DATA_FAILURE',
 }
 
+const NewsRequestsConstants = {
+    FETCH_LIST_DATA: 'FETCH_NEWS_LIST_DATA',
+    FETCH_LIST_DATA_SUCCESS: 'FETCH_NEWS_LIST_DATA_SUCCESS',
+    FETCH_LIST_DATA_FAILURE: 'FETCH_NEWS_LIST_DATA_FAILURE',
+    FETCH_DATA_DETAILS: 'FETCH_NEWS_DETAILS_DATA',
+    FETCH_DATA_DETAILS_SUCCESS: 'FETCH_NEWS_DETAILS_DATA_SUCCESS',
+    FETCH_DATA_DETAILS_FAILURE: 'FETCH_NEWS_DETAILS_DATA_FAILURE',
+}
+
 
 
 module.exports = {
@@ -90,5 +99,6 @@ module.exports = {
     SingleNoticeDataConstants,
     AlertRequestsDataConstants,
     AuthenticationConstants,
-    SubmitChangeConstants
+    SubmitChangeConstants,
+    NewsRequestsConstants,
 }
