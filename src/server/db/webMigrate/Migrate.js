@@ -14,6 +14,7 @@ var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 var cachingFetchURL = require('./serverIO').cachingFetchURL;
 var pullLocalCopies = require('./serverIO').pullLocalCopies;
+var pullLocalCopy = require('./serverIO').pullLocalCopy;
 var makeServerDirs = require('./serverIO').makeServerDirs;
 var getServerFilePath = require('./serverIO').getServerFilePath;
 var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
@@ -25,10 +26,16 @@ var mimeType = require('./serverIO').mimeType;
 
 var crawler = require('./Crawler').Crawler;
 
+const logFileDateErrors = false
 
 let mergeArrays = (arrays) => [].concat.apply([], arrays)
 
 let defaultConf =     {
+    addressSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section > div > div > div > div > div",
+    phoneSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > section.panel-pane.pane-views-panes.pane-group-contact-info-contact-info-full.with-heading > div > div > div > div > div > div.field.views--phone > div",
+    membersSelector:    "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.inner-node-region > div.view-id-group_board_members > div > table > tbody",
+    // "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section.inner-node-region > div > div > table > tbody",
+    // "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div > section:nth-child(4) > div"
     menuLinkSelector:"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul",
     descriptionSelector: "#block-system-main > div > div > div > div > div > div.panel-pane.pane-node-content > div > div > article > div",
     archiveSelector: "body > div > table > tbody > tr:nth-child(2) > td.innerCent > table > tbody",
@@ -82,13 +89,15 @@ let MIN_VALID_YEAR = 2007
 const dateRegExps = [
     // / +(\d?\d)[\. -](\d?\d)[\. -](\d\d\d?\d?)[ .]*/,
     /.*?(PB\D*|pb\D*)-?(\d\d)(\d\d)(\d\d\d?\d?)[ .]*/ ,
-    /(\w{2,3})(\d\d)(\d\d)(\d\d)/,
+    /(\w{2,3})\.?(\d\d)(\d\d)(\d\d)/,
     /(\d?\d)[\. -]{1,2}(\d?\d)[\. -]{1,2}(\d\d\d?\d?)[. ]*/,
     / (\d\d)(\d\d)(\d\d\d\d)[ .]*/ ,
     / +(\d\d)(\d\d)(\d\d)[ .]*/ ,
     /^(\d\d)(\d\d)(\d\d)[ .]*/ ,
     /[ \w]+(\d\d)(\d\d)(\d\d\d\d)[ .]*/ ,
+    /(\w{3,}) (\d?\d)[, -]{1,2}(\d\d\d?\d?)[, -]{1,3}(\d?\d):(\d?\d)([ap]+m)/, //With timestamp
     /(\w{3,}) (\d?\d)[, -]{1,2}(\d\d\d?\d?)/,
+    /(\w{2,4})[. ]*(\d\d?)[, ]*(\d\d\d?\d?)/,
     /.*?(\d\d)(\d\d)(\d\d)OKmin[ .]*/ ,
     /.*?(\d\d)(\d\d)(\d\d)Dmin[ .]*/ ,
     // /.*?(\d\d)(\d\d)(\d\d)\w*min[ .]*/ ,
@@ -135,6 +144,9 @@ const makeObjArrayUniq = (objArr, uniqFun) => objArr.reduce( (acc, val) =>{
         return acc;
     },[])
 
+const cleanURI = (uri) => { // Merge references to parent directories
+    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
+}
 //========================================
 const fullURIFromHref = (uri, href) => {
     if (uri.indexOf('index.htm') !== -1 && href.indexOf('index.htm') !== -1) {
@@ -251,8 +263,15 @@ const dateFromURIText = (uri, recType='UNK') => {
                 const month = monthNumFromStr(dateSeq[1])
                 if(month !== null){
                     year =Number(dateSeq[3]) < 100? Number(dateSeq[3])+2000: Number(dateSeq[3])
-                    // console.log('****monthNumFromStr', year, dateSeq[1], month, month-1, dateSeq[2]);
-                    dateRes = new Date(year, month-1, dateSeq[2])
+                    if (dateSeq.length > 5) {
+                        let hour=Number(dateSeq[4]) + (dateSeq[6]==='pm'?12:0)
+                        let minute=dateSeq[5]
+                        // console.log('****monthNumFromStr', dateSeq);
+                        dateRes = new Date(year, month-1, dateSeq[2], hour, minute)
+                    } else {
+                        // console.log('****monthNumFromStr', year, dateSeq[1], month, month-1, dateSeq[2]);
+                        dateRes = new Date(year, month-1, dateSeq[2])
+                    }
                 } else if (dateSeq[1].toUpperCase().startsWith('PB') || dateSeq[1].length === 3 || dateSeq[1].length === 2) {
                     // year month day
                     let year=0
@@ -302,7 +321,7 @@ const dateFromURIText = (uri, recType='UNK') => {
     }
     // console.log('------------');
     // console.log('**getMeetingDate:' , uri  );
-    console.log('**getMeetingDate:' , onlyFileName(uri)  );
+    // console.log('**getMeetingDate:' , onlyFileName(uri)  );
 
     return null
 }
@@ -354,20 +373,33 @@ function enterOnlyIntoDBTable(tableName, record, checkRecord={}){
     Object.assign(chk, record, checkRecord)
     delete chk.date
     return knex(tableName).select('*').where(chk)
-    .then(results => {
-        if (results.length === 0) {
+    .then(selectResults => {
+        if (selectResults.length === 0) {
             return knex(tableName).insert(record)
+            .then(entered=> {
+                return Promise.resolve(
+                    Object.assign({}, record, {id:entered[0]})
+                )
+            })
         } else {
-            return null
+            return Promise.resolve(selectResults[0])
         }
     })
-    .then(results => {
-        if (results && results.length > 0) {
-            record.id = results[0];
-        }
-        return Promise.resolve([record]);
-    })
+    // .then(results => {
+    //     if (results && results.length > 0) {
+    //     }
+    //     return Promise.resolve([record]);
+    // })
     .catch(dberr => logAndRejectDBErr(dberr))
+}
+//========================================
+const promiseSerial = (funcs) => funcs.reduce((promise, func) =>
+    promise.then(result => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
+
+//========================================
+function sequentiallyAddOrUpdateDBTable(tableName, records){
+    const requests = records.map(record=> () => addOrUpdateDBTable(tableName, record.record,record.checkRecord))
+    return promiseSerial(requests)
 }
 //========================================
 function addOrUpdateDBTable(tableName, record, checkRecord={}){
@@ -375,18 +407,26 @@ function addOrUpdateDBTable(tableName, record, checkRecord={}){
     .then(results => {
         if (results.length === 0) {
             let insertRecord=Object.assign(record, checkRecord)
+            // console.log('addOrUpdateDBTable:insertRecord:', knex(tableName).insert(insertRecord).toString());
             return knex(tableName).insert(insertRecord)
             .then(results => {
                 if (results && results.length > 0) {
                     insertRecord.id = results[0];
                 }
+                // console.log('addOrUpdateDBTable:insertRecord:', insertRecord);
                 return Promise.resolve([insertRecord]);
             })
         } else{
+            // console.log('addOrUpdateDBTable:update:', knex(tableName).where(checkRecord).update(record).toString());
             return knex(tableName).where(checkRecord).update(record)
+            .then(update=> {
+                // console.log("addOrUpdateDBTable:update", results);
+                if(Array.isArray(results)) return Promise.resolve(results);
+                return Promise.resolve([results]);
+            })
         }
     })
-    .catch(dberr => logAndRejectDBErr(dberr.errorno))
+    .catch(dberr => logAndRejectDBErr(dberr))
 }
 //========================================
 const enterIntoDB = (record) => enterOnlyIntoDBTable('PublicRecords', record, record)
@@ -413,22 +453,25 @@ function pullLinksFromMenus(pageURI, wholePage, selector) {
 
 }
 //=======================================================
-function pullRedirectLinksFromMenus(pageURI, wholePage, selector) {
-    const filterURIs = (rec) => rec.remotePath.indexOf('/links/') >= 0 ||
-        rec.remotePath.indexOf('/pages/') >= 0 ||
-        (rec.remotePath.startsWith('http') && rec.remotePath.indexOf( getSourceServerHost()) === -1) // Redirects to existing server
+const isDocumentURI = (rec) => rec.remotePath.indexOf('/files/') >= 0 ||
+rec.remotePath.indexOf('/uploads/') >= 0 ||
+rec.remotePath.indexOf('/stories/') >= 0
+//=======================================================
+const isRedirectURI = (rec) =>
+    !isDocumentURI(rec)
+    // rec.remotePath.indexOf('/links/') >= 0 ||
+    // rec.remotePath.indexOf('/pages/') >= 0 ||
+    // (rec.remotePath.startsWith('http') && rec.remotePath.indexOf( getSourceServerHost()) === -1) // Redirects to existing server
 
-    return pullLinksFromMenus(pageURI, wholePage, selector).filter(filterURIs).map(
+//=======================================================
+function pullRedirectLinksFromMenus(pageURI, wholePage, selector) {
+    return pullLinksFromMenus(pageURI, wholePage, selector).filter(isRedirectURI).map(
         rec => Object.assign({}, rec, {recordtype: 'Redirect'})
     )
 }
 //=======================================================
 function pullDocumentLinksFromMenus(pageURI, wholePage, selector) {
-    const filterURIs = (rec) => rec.remotePath.indexOf('/files/') >= 0 ||
-        rec.remotePath.indexOf('/uploads/') >= 0 ||
-        rec.remotePath.indexOf('/stories/') >= 0
-
-    return pullLocalCopies(pullLinksFromMenus(pageURI, wholePage, selector).filter(filterURIs).map(
+    return pullLocalCopies(pullLinksFromMenus(pageURI, wholePage, selector).filter(isDocumentURI).map(
         rec => Object.assign({}, rec, {recordtype: 'Document'})
     ))
 }
@@ -438,7 +481,7 @@ function migrateDocuments(pageURI, wholePage, conf) {
 
     return pullDocumentLinksFromMenus(pageURI, wholePage, conf.menuLinkSelector)
     .then(documentLinks => {
-        // console.log('**migrateDocuments:documentLinks', conf.group, wholePage.length, documentLinks.map(rec=>rec.uri));
+        // console.log('**migrateDocuments:documentLinks', conf.group, wholePage.length, documentLinks.map(rec=>({uri:rec.uri, local:rec.local})));
         return pullNewServerDirs(getServerFilePath(), ['Documents'] )
         .then( serverDirs => {
             let allPaths= mergeArrays(serverDirs)
@@ -490,15 +533,20 @@ function migrateMenuLinks(pageURI, wholePage, conf) {
 
     const links = pullRedirectLinksFromMenus(pageURI, wholePage, conf.menuLinkSelector).filter(link=> badLinks.indexOf(link.uri) === -1)
 
-    console.log('migrateMenuLinks',links);
+    // console.log('migrateMenuLinks',links);
 
-    return Promise.all( links.map(getRedirectLocation ) )
+    return Promise.all( links.map(linkRec=> Object.assign({}, linkRec,  {uri: linkRec.uri.startsWith('file:')?
+        linkRec.uri.replace('file:///home/dcarpus/code/currentSites/', 'http://').replace(/\.html$/,''):
+        linkRec.uri})
+        )
+        .map(getRedirectLocation )
+    )
     .then(retrievedURIs => {
         return Promise.all(retrievedURIs.filter(ignoreMailToLink).filter(notEB2Gov).filter(notnhtaxkiosk)
             .map(rec =>  enterIntoDB({
-                pageLink:conf.group, recordtype: 'HelpfulInformation' ,recorddesc: rec.desc,
-                date:setDefault(rec.date, addDays(new Date(), -21)), fileLink:rec.uri
-            }))
+                        pageLink:conf.group, recordtype: 'HelpfulInformation' ,recorddesc: rec.desc,
+                        date:setDefault(rec.date, addDays(new Date(), -21)), fileLink:rec.uri
+                    }))
         )
     })
 }
@@ -514,34 +562,72 @@ function extractSimpleGroupPageData(wholePage, conf) {
         groupName: conf.group,
     }
     if (conf.addressSelector) {
-        group.contact.street = $(conf.addressSelector).find('.street-address').html().trim()
-        group.contact.city = $(conf.addressSelector).find('.locality').html().trim()
-        group.contact.postalCode = $(conf.addressSelector).find('.postal-code').html().trim()
+        group.contact.street = $(conf.addressSelector).find('.fn').text().trim() + $(conf.addressSelector).find('.street-address').text().trim()
+        group.contact.city = $(conf.addressSelector).find('.locality').text() !== null ? $(conf.addressSelector).find('.locality').text().trim(): ""
+        group.contact.postalCode = $(conf.addressSelector).find('.postal-code').text() !== null ? $(conf.addressSelector).find('.postal-code').text().trim(): ""
     }
-    if (conf.phoneSelector) {
+    if (conf.phoneSelector && $(conf.phoneSelector).html() !== null) {
         group.contact.phone = $(conf.phoneSelector).html().replace(/\t/g,'').replace(/  /g, ' ')
     }
-    if (conf.descriptionSelector) {
-        group.descriptionHTML = $(conf.descriptionSelector).html().trim()
-        group.description = toMarkdown($(conf.descriptionSelector).html().trim(), { gfm: true })
+    if (conf.membersSelector) {
+        group.members = $(conf.membersSelector).children().map( (i, row)  => {
+            const name = $(row).find('.views-field-title').text().replace(/\n/g,'').trim()
+            let title = $(row).find('.views-field-field-job-title').text().replace(/\n/g,'').trim()
+            const term = title.match(/\((\d*)\)/) ? title.match(/\((\d*)\)/)[1]:""
+            title  = title.match(/\((\d*)\)/) ? title.replace(/\((\d*)\)/, "").trim(): title.trim()
+            return {name: name, title:title, term:term}
+        }).get()
+
     }
+
+    if (conf.descriptionSelector) {
+        const memberHTML= conf.membersSelector? $(conf.membersSelector.match(/^(.+)(>[^>]+){3}$/)[1]).html(): ""
+        let descHTML = $(conf.descriptionSelector).html().replace(memberHTML, "").replace(/<h2.*>.*Members.*?<\/h2>/g, '').replace(/<h2.*>\n.*Members.*?<\/h2>/g, '').trim()
+        group.descriptionHTML = descHTML
+        group.description = toMarkdown(descHTML, { gfm: true })
+    }
+
     return group
 }
 //========================================
-function migrateGroupContact(wholePage, conf) {
+function migrateGroupPageData(wholePage, conf) {
+    const firstLastFromFull = (fullName) => ({firstName:fullName.split(' ')[0].trim(), lastName:fullName.split(' ')[1].trim()})
     const groupData = extractSimpleGroupPageData(wholePage, conf)
-    // console.log('migrateGroupContact', groupData.groupName);
 
     return addOrUpdateDBTable('Groups', groupData.contact, {pageLink: groupData.groupName})
-    .then(contactResult => {
+    .then(groupData_DB => {
+        // console.log('groupData_DB',groupData_DB[0][0]);
         if (!groupData.description) {
             return Promise.resolve('No description data for group' + groupData.groupName)
         }
-        const groupDescription = {markdown:groupData.description, html: groupData.descriptionHTML}
-        const indexFieldData = {pageLink: groupData.groupName, sectionName:'desc' }
-        return addOrUpdateDBTable('PageText', groupDescription, indexFieldData)
+        return addOrUpdateDBTable('PageText',
+            {markdown:groupData.description, html: groupData.descriptionHTML},
+            {pageLink: groupData.groupName, sectionName:'desc' }
+        )
+        .then( pageTextEntered => {
+            return sequentiallyAddOrUpdateDBTable('Users', groupData.members.map(member => {
+                const user = firstLastFromFull(member.name)
+                return {record:user, checkRecord:user}
+            }))
+            .then(records => {
+                return sequentiallyAddOrUpdateDBTable('GroupMembers', groupData.members.map(member => {
+                    // console.log('records',records);
+                        const user = firstLastFromFull(member.name)
+                        const userRec = records.filter(record =>
+                             user.firstName === record.firstName && user.lastName===record.lastName
+                        )[0]
+                        const groupMember = Object.assign({},
+                            {userID:userRec.id, groupID:groupData_DB[0].id, office:member.title, term:member.term}
+                        )
+                        return {record:groupMember, checkRecord:{groupID:groupMember.groupID, userID:groupMember.userID}}
+                }))
+                return records
+            })
+        })
+
     })
 }
+//========================================
 async function getMimeType(uri){
     const result = await mimeType(uri)
     return result
@@ -586,16 +672,20 @@ function setNewFileName(validExtensions, rec) {
                 rec.newFilename = rec.recordtype + '/' + rec.date.getUTCFullYear() + '/'
                 rec.newFilename += rec.groupName + '_' + getY_M_D(rec.date)  + '_' + crc.crc32( rec.local).toString(16) + extension
             break;
+            case 'Attachment':
+                rec.newFilename = rec.recordtype + '/' + rec.date.getUTCFullYear() + '/'
+                rec.newFilename +=  getY_M_D(rec.date)  + '_' + crc.crc32( rec.local).toString(16) + extension
+            break;
             default:
-                reject('UNK recordtype:' + rec.recordtype + ' for\n  ' + require('util').inspect(rec, { depth: null }))
+                return Promise.reject('***UNK recordtype:' + rec.recordtype + ' for\n  ' + require('util').inspect(rec, { depth: null }))
         }
         rec.newFilename = rec.newFilename.replace(/ /g, '_').replace(/,/g, '_').replace(/__/g, '_')
         return Promise.resolve(rec)
     })
-    .catch(err=> {
-        console.log(err + rec.uri);
-        // throw err
-    })
+    // .catch(err=> {
+    //     console.log(err + rec.uri);
+    //     // throw err
+    // })
 }
 //========================================
 function parseCurrentMeetingDoc(wholePage, selector) {
@@ -610,7 +700,6 @@ function parseCurrentMeetingDoc(wholePage, selector) {
 }
 //========================================
 function fetchFilesFromPage(linkData, baseRecordData, currentCnt, maxCnt) {
-    // console.log('fetchFilesFromPage', linkData);
     if (currentCnt === maxCnt) {
         return Promise.reject('Exceded maxCnt '+maxCnt+' fetching file from ' + linkData)
     }
@@ -690,23 +779,20 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
 
     if (!uri.startsWith('http') ) {
         if(!uri.startsWith('/') ) {
-            uri = uri + uri
+            if (!uri.startsWith('file:')) {
+                uri = uri + uri
+            }
         } else {
             uri = 'http://' + getSourceServerHost() + uri
         }
     }
-    // console.log('migrateCurrentMeetingDocs', recordType, group, uri, conf.currentSelector)
+    if(uri === null) throw new Error('NULL URI')
+    // console.log('migrateCurrMeetingDocs', recordType, group, uri, conf.currentSelector)
     return cachingFetchURL(uri)
     .then(urlData => {
         return parseCurrentMeetingDoc(urlData.data,conf.currentSelector)
         .map(meetingDoc => {
-            if (!meetingDoc.uri.startsWith('http') ) {
-                if(!meetingDoc.uri.startsWith('/') ) {
-                    meetingDoc.uri = uri + meetingDoc.uri
-                } else {
-                    meetingDoc.uri = 'http://' + getSourceServerHost() + meetingDoc.uri
-                }
-            }
+            meetingDoc.uri=fullURIFromHref(uri, meetingDoc.uri )
             return meetingDoc
         })
     })
@@ -741,8 +827,9 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
           }))
     })
     .then(validFiles => {
+        // console.log('validFiles',validFiles);
         const hasLocalFile = (rec) => rec && rec.local
-        return validFiles.reduce( (acc, val) => {
+        return Promise.all(validFiles.reduce( (acc, val) => {
             if (Array.isArray(val[0])) {
                 return val[0].reduce( (accElem, valElem) => {
                     return  accElem.concat(valElem)
@@ -752,6 +839,7 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
             }
         },[])
         .filter(hasLocalFile).map((rec)=> setNewFileName(validExtensions, rec))
+        )
     })
     .then(withNewFilenames => {
         // console.log('withNewFilenames', withNewFilenames);
@@ -770,10 +858,14 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
             )
         })
     })
+    .catch(err=>{
+        console.log('migrateCurrentMeetingDocs Error', err, uri)
+        // throw err
+    })
 }
 //========================================
 //========================================
-function getGroupArchivePage(groupName, groupLabel, recordType) {
+function getGroupArchivesURI(groupName, groupLabel, recordType) {
     // const baseURI = "http://newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/"
     // const indexPageURI = baseURI +"index"
     const baseURI =
@@ -802,75 +894,6 @@ function getGroupArchivePage(groupName, groupLabel, recordType) {
     .then(rws =>  (rws.length === 0)? null: baseURI + rws[0] )
 }
 //========================================
-function pullPageLinksFromURI(maxDepth, acc, currDepth, uri) {
-    // console.log('** pullPageLinksFromURI', uri);
-    if (uri.indexOf('file:')>=0 && uri.indexOf('http://') >=0) debugger
-
-    return cachingFetchURL(uri)
-    .then(fetchedData => {
-        if (fetchedData.contentType === 'text/html') {
-            if (maxDepth <= currDepth) { console.log('Exceeded maxDepth', maxDepth); return Promise.resolve(acc) }
-
-            var $ = cheerio.load(fetchedData.data);
-            const allAnchors = $(fetchedData.data).find('.innerCent').find('a').filter( (i,el) => $(el).attr('href'))
-            const pageLinks = $(allAnchors).filter( (i,el) => ! $(el).attr('target')  && ! $(el).text().startsWith('Printer-Friendly') )
-
-            if (pageLinks && pageLinks.length > 0) {
-                const missingPages =pageLinks.map( (linkIndex, link) => {
-                    let href = $(link).attr('href')
-                    const fullURI=fullURIFromHref(uri, href)
-                    return fullURI
-                }).get()
-                .filter(lnk=> lnk && lnk !== uri &&  ! uri.endsWith(lnk))
-                .filter(lnk=> ! (lnk.indexOf('file:')>=0 && lnk.indexOf('http://') >=0) )
-                .filter(subPageLink => acc.indexOf(subPageLink) === -1 )
-
-                if (missingPages.length > 0) {
-                    return Promise.all(missingPages.map(subPageLink =>
-                         pullPageLinksFromURI(maxDepth, acc.slice().concat(missingPages),  currDepth+1, subPageLink)
-                    ))
-                    .then(allPulled => Promise.resolve(mergeArrays(acc.concat(allPulled))
-                        .filter(elem => typeof elem !== 'undefined')
-                        .filter(onlyUnique))
-                    )
-                }
-            } else { // No pageLinks
-                return Promise.resolve([uri])
-            }
-        } else {
-            return Promise.reject('Unknown contentType')
-        }
-    })
-    .catch(err=> {
-        console.log('pullPageLinksFromURI err', err);
-    })
-}
-//========================================
-// function pullFileRecordsFromURI( uri) {
-//     return cachingFetchURL(uri)
-//     .then(fetchedData => {
-//         const fileURL = (href) => uri.replace(/\?.*/,'') + href
-//         if (fetchedData.contentType === 'text/html') {
-//             var $ = cheerio.load(fetchedData.data);
-//             return $(fetchedData.data).find('.folderRow').map( (rowIndex, row) => {
-//                 const uri=fileURL( $(row).find('a').attr('href') )
-//                 if(!$(row).find('a').attr('target')) return null
-//
-//                 let fileDate = new Date($(row).find('td').filter( (i,el) => $(el).attr('title')==='Item Details').text())
-//                 // if (uri.indexOf('S02D4E04B') > 0) {                }
-//
-//                 return {
-//                     uri:uri,
-//                     label: $(row).find('a').text(),
-//                     date: fileDate,
-//                     uriCRC:crc.crc32( uri ).toString(16)
-//                 }
-//             }).get().filter(rec => rec !== null)
-//         }
-//     })
-//     .catch(err => console.log('** Err:pullFileRecordsFromURI', uri, err))
-// }
-//========================================
 function fetchLocalFile(archiveRecord , silent404=false) {
     return cachingFetchURL(archiveRecord.uri)
     .then(urlData =>  Object.assign({},archiveRecord, {local: urlData.location, contentType:urlData.contentType}) )
@@ -887,6 +910,7 @@ function migrateGroupArchiveDocument(serverDirs, archiveRecord) {
 
     return cachingFetchURL(archiveRecord.uri)
     .then(urlData => {
+        // console.log('Check ', archiveRecord);
         if(notOnServer(archiveRecord)){
             return pushFileToServer(urlData.location, getServerFilePath()+ archiveRecord.newFilename)
             .then(pushDestination =>  Promise.resolve(true))
@@ -902,6 +926,7 @@ function migrateGroupArchiveDocument(serverDirs, archiveRecord) {
         ]
         let label = badLabels.indexOf(archiveRecord.label) >= 0 ? '':archiveRecord.label
         let dbEntry = {pageLink:archiveRecord.groupName, recordtype:archiveRecord.recordtype ,recorddesc: label, date:archiveRecord.date, fileLink:archiveRecord.newFilename}
+        // console.log('migrateGroupArchiveDocument:dbEntry', dbEntry);
         return enterIntoDB(dbEntry)
     })
 }
@@ -915,54 +940,15 @@ async function pullFiles(fileLinksToPull, silent404 = false) {
     return results
 }
 //========================================
-// async function pullRecordsFromPageLinks(pageLinks) {
-//     if (pageLinks && pageLinks.length > 0) {
-//         return pageLinks.map(pageLink => pullFileRecordsFromURI(pageLink) ).reduce( (prevReq, fetchReq) => {
-//             return prevReq.then( (pr)=> {
-//                 return fetchReq.then(frResult => pr.concat(frResult))
-//             })
-//         }, Promise.resolve([]))
-//     } else {
-//         console.log('No pageLinks');
-//         return Promise.resolve([])
-//     }
-// }
-//========================================
-function getNewFilenamesForMigration(fileRecords, validExtensions) {
-    if (fileRecords && fileRecords.length > 0) {
-        return fileRecords
-        .filter(rec=> rec.contentType !== 'text/html' && typeof rec.local !== 'undefined') // local is undefined if we got a 404
-        .map( rec=> setNewFileName(validExtensions, rec))
-    } else {
-        console.log('No fileRecords for getNewFilenamesForMigration');
-        return Promise.resolve([])
-    }
-}
-//========================================
 function migrateGroupArchiveDocuments(fileRecordsToMigrate) {
     const serverPaths = fileRecordsToMigrate.reduce( (acc,val) => { return acc.concat(pathWithoutFilename(val.newFilename))}, []).filter(onlyUnique);
+
     return makeServerDirs(getServerFilePath(), serverPaths )
     .then(dirsMade => pullNewServerDirs(getServerFilePath(), serverPaths ))
     .then( serverDirs => {
         const mergedServerDirs = mergeArrays(serverDirs)
         return Promise.all(fileRecordsToMigrate.map( (rec)=> migrateGroupArchiveDocument(mergedServerDirs,rec)))
     })
-}
-//========================================
-function linksFromPage(pageURI, pageData) {
-    var $ = cheerio.load(pageData);
-    const allAnchors = $(pageData).find('.innerCent').find('a').filter( (i,el) => $(el).attr('href'))
-    return $(allAnchors)
-    .filter( (i,el) => ! $(el).text().startsWith('Printer-Friendly') )
-    // .filter( (i,el) => $(el).attr('href').indexOf('Lower=21') === -1 )
-    // .filter( (i,el) => $(el).attr('href').indexOf('Upper=') === -1 )
-    .map((linkIndex, link) => {
-        let href = $(link).attr('href')
-        const uri=pathWithoutFilename(pageURI) + '/'
-        if (uri.startsWith('file') && href.indexOf('http') >= 0) { return null}
-        return uri + href
-    }).toArray()
-    .filter(lnk=> lnk !== null)
 }
 //========================================
 function pullArchiveFiles(groupData, year, pageURI) {
@@ -991,24 +977,23 @@ function getDateFromFilenameOrFileDate(rec, getMeetingDate) {
 //========================================
 function migrateGroupArchivePages(groupName, groupLabel, conf) {
     // console.log('migrateGrpArchivePages', groupLabel, groupLabel.match(/\b(\w)/g).join(''));
-    const startYear = 2015
-    const years =Array.apply(null, Array((new Date(Date.now())).getUTCFullYear() - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
-    // const years =[2008]
+    // const startYear = 2007; const endYear=2010;     const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
+    const startYear = 2007; const endYear=(new Date()).getUTCFullYear();     const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
 
     const validExtensions = ['.PDF', '.DOC', '.DOCX', '.TIF', '.ZIP', '.RTF']
     const validDateRec = (rec) => rec.date !== null && rec.date < addDays(new Date(),60) && rec.date.getUTCFullYear() >= years[0] && rec.date.getUTCFullYear() <= years[years.length-1]
     const invalidDateRec = (rec) => !validDateRec(rec)
     const logInvalidRecs = (recs, chk) => {
         const invalidDates = recs.filter(chk)
-        invalidDates.length > 0? console.log('***invalidDates for ',groupName,': ', invalidDates.length,
-            invalidDates.slice(0,10).map(rec=> [rec.uri.substr(rec.uri.indexOf("_archive")), rec.date])):""
+        const msg = (rec)=> logFileDateErrors?'Unable to determine dates from '+ groupName+': ' + rec.uriCRC + '-' + rec.uri.substr(rec.uri.indexOf("_archive")) : ""
+        // invalidDates.length > 0 ? console.error( invalidDates.slice(0,10).map(rec=> baseMsg + rec.uri.substr(rec.uri.indexOf("_archive")))) :""
+        invalidDates.length > 0 ? console.error( invalidDates.slice(0,10).map(msg)) :""
         return recs
     }
 
-
     return Promise.all( years.map(year => {
-        console.log('migrate ', groupName, year);
-        return getGroupArchivePage(groupName, groupLabel, 'Minutes')
+        // console.log('migrate ', groupName, year);
+        return getGroupArchivesURI(groupName, groupLabel, 'Minutes')
         .then(minutesPageURI =>  pullArchiveFiles({groupName:groupName, groupLabel:groupLabel, docType:'Minutes'}, year, minutesPageURI)    )
         .then( uniqFileRecords =>  uniqFileRecords.map( rec => Object.assign({},rec,
             {recordtype: 'Minutes', groupName:groupName, groupLabel:groupLabel, groupAcronym:groupLabel.match(/\b(\w)/g).join('')}
@@ -1018,59 +1003,152 @@ function migrateGroupArchivePages(groupName, groupLabel, conf) {
             getDateFromFilenameOrFileDate(rec, conf.minutesURI.getMeetingDate )
             .then(date => Object.assign({},rec,{date:date}) )
         )))
-        .then(logInvalid => logInvalidRecs(logInvalid,invalidDateRec))
-        // .then(tmp=> {
-        //     console.log('max year', years[years.length-1]);
-        //     return tmp
-        // })
-
+        .then(logInvalid => logFileDateErrors?logInvalidRecs(logInvalid,invalidDateRec): logInvalid)
         .then(addLabels => Promise.all(addLabels.filter(validDateRec).map(rec=>
             Object.assign({},rec,{label:conf.minutesURI.extractRecordLabel(rec)})
         )))
         .then(addedLabels =>  Promise.all(addedLabels.map((rec)=> setNewFileName(validExtensions, rec))) )
-        .then(withFileDates => Promise.all(withFileDates.map(rec => {
-            if(!rec) return Promise.resolve('Null record')
-            let dbEntry = {pageLink:rec.groupName, recordtype:rec.recordtype ,recorddesc: rec.label,fileLink:rec.newFilename, date:setDefault(rec.date, addDays(new Date(), -21)) }
-            // if(rec.uriCRC === 'c445dbbc')        console.log('lnk', dbEntry);
-            // console.log('lnk', dbEntry);
-            return enterIntoDB(dbEntry)
-        })))
+        .then(readyToMigrate => {return migrateGroupArchiveDocuments(readyToMigrate)} )
     }))
-    // .then(enteredRecords=> ({groupName:groupName ,cnt:enteredRecords.length}) )
-    // .then( withLocalFileFetched => withLocalFileFetched.slice(0,5) )
-    // .then( withLocalFileFetched =>  getNewFilenamesForMigration(withLocalFileFetched, validExtensions) )
-
+    .then(enteredRecords=> ({groupName:groupName ,cnt:enteredRecords.length}) )
 }
 //========================================
-function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
-    const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT', '.RTF']
+function logNewsPageData(newsData) {
+    const html = newsData.pageText?newsData.pageText.trim() : ""
+    let newsEntry = {
+        mainpage: true,
+        html: html,
+        markdown: toMarkdown(html, { gfm: true }),
+        pageLink: newsData.pageLink || "",
+        summary: newsData.recorddesc,
+        datePosted:newsData.date,
+        // dateExpires: null
+    }
+    return enterOnlyIntoDBTable('News', newsEntry, {datePosted: newsEntry.datePosted})
+    .then(enteredNewsEntry => {
+        return Promise.all(newsData.attachments.map(attachment=>{
+            let FileAttachmentsEntry = {
+                recordtype: 'news' ,
+                parentId:enteredNewsEntry.id,
+                fileLink:attachment.newFilename,
+                datePosted:newsData.date,
+            }
+            return enterOnlyIntoDBTable('FileAttachments', FileAttachmentsEntry,
+                {datePosted: FileAttachmentsEntry.datePosted, parentId:FileAttachmentsEntry.parentId,}
+            )
+        }))
+    })
+    .then((enteredAttachmests)=>{
+        // console.log('enteredAttachmests', enteredAttachmests);
+        return Promise.resolve(Object.assign({}, newsData, {attachments:enteredAttachmests}))
+    })
+}
+//========================================
+function migrateNewsPage(linkRecord) {
+    const validExtensions = ['.PDF','.DOCX', '.PNG']
+    const postedToDate = (postedStr) => dateFromURIText(postedStr.replace(/.*?:/,'').trim())
 
+    return cachingFetchURL(linkRecord.uri, true && linkRecord.uri.startsWith('http'))
+    .then(fetchedData => cheerio.load(fetchedData.data) )
+    .then($ =>  {
+        const contentDiv = $('#block-system-main > div > div > div > div > div')
+        return {recorddesc:$(contentDiv).find(".page-title").text().trim(),
+            pageText:$(contentDiv).find(".field-type-text-with-summary").html(),
+            date: postedToDate($(contentDiv).find(".submitted").text()),
+            attachments: $(contentDiv).find(".field-name-field-file-attachment").length ===0?
+                []:
+                $(contentDiv).find(".field-name-field-file-attachment").map( (i,row) =>
+                    cleanURI(fullURIFromHref(linkRecord.uri,$(row).find('a').attr('href') ))
+                ).get()
+        }
+    })
+    .then(parsedData => {
+        if (parsedData.attachments.length === 0)  return Promise.resolve(parsedData)
+
+        if (parsedData.attachments.length>0) {
+            return Promise.all(parsedData.attachments.map(attachmentHref =>
+                cachingFetchURL(attachmentHref)
+                .then(fetchedURIData=> Object.assign({}, {
+                    local:fetchedURIData.location, recordtype: 'Attachment',
+                    date: parsedData.date
+                } ) )
+                .then(withLocal => setNewFileName(validExtensions, withLocal) )
+                .then(withNewFilenames =>
+                    makeServerDirs(getServerFilePath(), [pathWithoutFilename(withNewFilenames.newFilename)] )
+                    .then( madeServerDirs =>  pullNewServerDirs(getServerFilePath(), [pathWithoutFilename(withNewFilenames.newFilename)] ))
+                    .then(serverDirs =>{
+                        // console.log('withNewFilenames',withNewFilenames);
+                        if (!mergeArrays(serverDirs).includes( withNewFilenames.newFilename)) {
+                            return pushFileToServer(withNewFilenames.local, getServerFilePath()+withNewFilenames.newFilename)
+                            .then(()=>Promise.resolve(withNewFilenames))
+                        } else {
+                            return Promise.resolve(withNewFilenames)
+                        }
+                    })
+                )
+            ))
+            .then(pulledFiles => {
+                return Promise.resolve( Object.assign({}, parsedData, {attachments:pulledFiles} ))
+            })
+        }
+    })
+    .then(forDB => logNewsPageData(forDB) )
+}
+//========================================
+function migrateNews() {
+    const pageURI = "file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.html"
+    const selector = "#block-system-main > div > div > div.view-content"
+
+    return cachingFetchURL(pageURI, true && pageURI.startsWith('http'))
+    .then(fetchedData => cheerio.load(fetchedData.data) )
+    .then($ =>  $(selector).children().map( (i, row)  => ({
+                label:$(row).find('a').text(),
+                uri:fullURIFromHref(pageURI,$(row).find('a').attr('href')),
+            })) .get()
+    )
+    .then(recs => {
+        return Promise.all(recs.map(migrateNewsPage))
+    })
+    .then(migratedPages => {
+        // console.log('migratedPages', require('util').inspect(migratedPages, { depth: null }));
+        // console.log('migratedPages',require('util').inspect(migratedPages, { depth: null }));
+        return Promise.resolve(migratedPages.length)
+        // throw new Error('migratedPages')
+    })
+}
+
+//========================================
+function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
     var $ = cheerio.load(wholePage);
+    const validExtensions = ['.PDF', '.HTML', '.DOCX', '.DOC', '.ODT', '.RTF']
     const viewAllMinutes = $("#block-system-main > div > div > div > aside > div.region.region-page-sidebar-second.sidebar > div > section.panel-pane.pane-views-panes.pane-group-minutes-panel-pane-1.with-heading > div > div > div > div.more-link")
     const viewAllAgenda  = $("#block-system-main > div > div > div > aside > div.region.region-page-sidebar-second.sidebar > div > section.panel-pane.pane-views-panes.pane-group-agenda-panel-pane-1.with-heading > div > div > div > div.more-link")
     const activeMinutesSelector = "#block-system-main > div > div > div > aside > div > div > section.panel-pane.pane-views-panes.pane-group-minutes-panel-pane-1.with-heading > div > div > div > div > div > ul"
     const activeAgendasSelector = "#block-system-main > div > div > div > aside > div.region.region-page-sidebar-second.sidebar > div > section.panel-pane.pane-views-panes.pane-group-agenda-panel-pane-1.with-heading > div > div > div > div > div > ul"
 
-    let baseLinkToMinutes=null
-    let baseLinkToAgendas=null
-    if ($(viewAllMinutes).find('a').html()) {
-        baseLinkToMinutes = $(viewAllMinutes).find('a').attr('href')
-    }
-    if ($(viewAllAgenda).find('a').html()) {
-        baseLinkToAgendas = $(viewAllAgenda).find('a').attr('href')
-    }
-
+    const trimHTMLFromFileURI = (uri) => (uri.startsWith('file') && uri.endsWith('.html')) ? uri.slice(0, -5): uri
+    const addHTMLToFileURI = (uri) => (uri.startsWith('file') && !uri.endsWith('.html')) ? uri+'.html': uri
+    const yearURIFromBaseLink = (link, year) => {return link.startsWith('file') ? addHTMLToFileURI(link+'/'+year ) : link+'/'+year +'/'}
     const fetchDataFromRow = (row, recordtype) => ({
-        // uri:expandURI($(row).find($("a")).attr('href')),
         uri:fullURIFromHref(pageURI,$(row).find($("a")).attr('href')),
         label:$(row).find($("a")).text(),
         date:new Date($(row).find($(".date-display-single")).attr('content')) ,
         groupName: groupName,
         recordtype: recordtype
     })
-    const activeMeetingDocs = $(activeMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')  ).get()
-    .concat($(activeAgendasSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
-    // console.log('***activeMeetingDocs:',activeMeetingDocs);
+
+    let baseLinkToMinutes=null
+    let baseLinkToAgendas=null
+    if ($(viewAllMinutes).find('a').html()) {
+        baseLinkToMinutes = trimHTMLFromFileURI(fullURIFromHref(pageURI, $(viewAllMinutes).find('a').attr('href') ))
+    }
+    if ($(viewAllAgenda).find('a').html()) {
+        baseLinkToAgendas = trimHTMLFromFileURI(fullURIFromHref(pageURI, $(viewAllAgenda).find('a').attr('href') ))
+    }
+    // const activeMeetingDocs = $(activeMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')  ).get()
+    // .concat($(activeAgendasSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
+    const activeMeetingDocs = (baseLinkToMinutes?[]:$(activeMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')  ).get())
+    .concat(baseLinkToAgendas?[]:$(activeAgendasSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
 
     return Promise.all(activeMeetingDocs.map(documentRecord => {
         if (! validExtensions.includes(getExtension(documentRecord.uri).toUpperCase())) {
@@ -1094,27 +1172,32 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
         )
     })
     .then(withNewFilenames => {
-        // console.log('withNewFilenames',withNewFilenames);
         return pushFiles(withNewFilenames)
         .then(pushedFiles => {
-            // console.log('pushedFiles',pushedFiles);
             return Promise.all(
                 withNewFilenames.map(rec => {
-                    rec.date = setDefault(rec.date, addDays(new Date(), -21))
-                    let dbEntry = {pageLink:rec.groupName, recordtype:rec.recordtype ,recorddesc: rec.label, date:rec.date, fileLink:rec.newFilename}
-                        // console.log('lnk', dbEntry);
+                    let dbEntry = {pageLink:rec.groupName, recordtype:rec.recordtype ,recorddesc: rec.label,
+                        date:setDefault(rec.date, addDays(new Date(), -21)), fileLink:rec.newFilename}
                     return enterIntoDB(dbEntry)
                 })
             )
         })
     })
 
-//    return (baseLinkToMinutes? migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, baseLinkToMinutes+'/2017/', defaultConf.agendaURI): Promise.resolve('NA'))
-    // .then(meetingMigrateResults => (baseLinkToMinutes? migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, baseLinkToMinutes+'/2017/', defaultConf.minutesURI): Promise.resolve('NA')))
-    // .then(meetingMigrateResults => (baseLinkToMinutes? migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, baseLinkToMinutes+'/2016/', defaultConf.minutesURI): Promise.resolve('NA')))
-    // .then(meetingMigrateResults => (baseLinkToAgendas? migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, baseLinkToAgendas+'/2017/', defaultConf.agendaURI): Promise.resolve('NA')))
-    // .then(meetingMigrateResults => (baseLinkToAgendas? migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, baseLinkToAgendas+'/2016/', defaultConf.agendaURI): Promise.resolve('NA')))
-    .then(meetingMigrateResults => migrateGroupArchivePages(groupName, groupLabel, conf))
+    .then(meetingMigrateResults => (baseLinkToMinutes?
+        migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, yearURIFromBaseLink(baseLinkToMinutes, '2017'), defaultConf.minutesURI)
+        : Promise.resolve('NA')))
+    .then(meetingMigrateResults => (baseLinkToMinutes?
+        migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, yearURIFromBaseLink(baseLinkToMinutes, '2016'), defaultConf.minutesURI)
+        : Promise.resolve('NA')))
+    .then(meetingMigrateResults => (baseLinkToAgendas?
+        migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, yearURIFromBaseLink(baseLinkToAgendas, '2017'), defaultConf.minutesURI)
+        : Promise.resolve('NA')))
+    .then(meetingMigrateResults => (baseLinkToAgendas?
+        migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, yearURIFromBaseLink(baseLinkToAgendas, '2016'), defaultConf.minutesURI)
+        : Promise.resolve('NA')))
+
+    // .then(meetingMigrateResults => migrateGroupArchivePages(groupName, groupLabel, conf))
 
     .catch(err => {
         console.log('Error fetching '+groupName+' Agendas', err);
@@ -1132,14 +1215,14 @@ function migrateNewDurhamDepartment(departmentData) {
     })
     .then(migrateResults => {
         const groupName = departmentData.label.replace(/ /g,'').replace(/\//g,'_')
-        console.log('migrateNewDurhamDepartment', groupName);
+        // console.log('migrateNewDurhamDepartment', groupName);
         return enterOnlyIntoDBTable('Menus', {pageLink:'/'+groupName, fullLink:'/Departments/'+groupName, description:departmentData.label}, {pageLink:'/'+groupName})
         .then(menuEntryResult =>
             enterOnlyIntoDBTable('Groups', {pageLink:groupName, groupName:groupName, groupDescription:departmentData.label}, {pageLink:groupName})
         )
     })
     // .then(migrateResults => migrateMenuLinks(departmentData.uri, wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
-    .then(migrateResults => migrateGroupContact(wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
+    .then(migrateResults => migrateGroupPageData(wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
 }
 //========================================
 function migrateNewDurhamBoard_Committee(groupData) {
@@ -1156,9 +1239,9 @@ function migrateNewDurhamBoard_Committee(groupData) {
             enterOnlyIntoDBTable('Groups', {pageLink:groupName, groupName:groupName, groupDescription:groupData.label}, {pageLink:groupName})
         )
     })
-    // .then(migrateResults => migrateMenuLinks(groupData.uri, wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
-    .then(migrateResults => migrateGroupContact(wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
-    // .then(migrateResults => migrateDocuments(groupData.uri, wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
+    .then(migrateResults => migrateMenuLinks(groupData.uri, wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
+    .then(migrateResults => migrateGroupPageData(wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
+    .then(migrateResults => migrateDocuments(groupData.uri, wholePage, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
     .then(migrateResults => migrateMeetingDocs(groupData.uri, wholePage, groupData.label.replace(/ /g,''), groupData.label, Object.assign({},defaultConf, {group:groupData.label.replace(/ /g,'')})) )
 }
 //========================================
@@ -1177,13 +1260,13 @@ function migrateNewDurham() {
 
     return cachingFetchURL('https://www.newdurhamnh.us/boards')
     .then(fetchedData => {
-        console.log('migrateNewDurham', Object.keys(fetchedData));
+        // console.log('migrateNewDurham', Object.keys(fetchedData));
         var $ = cheerio.load(fetchedData.data);
         return $("#block-system-main > div > div > div > table > tbody").children().map( (i, el)  => {
             // console.log('***',fetchedData.location);
             return dataFromElement(fetchedData.location, $(el))
         }).get()
-        .splice(13,2)
+        // .splice(0,7)
     })
     .then(allGroupData =>  {
         // console.log('allGroupData',allGroupData);
@@ -1198,30 +1281,31 @@ function migrateNewDurham() {
             // console.log('el', $(el).html());
             return dataFromElement(fetchedData.location, $(el))
         }).get()
-        .splice(1,1)
+        // .splice(1,1)
     })
     .then(departmentData => Promise.all(departmentData.map( migrateNewDurhamDepartment ))    ) //.splice(12,1)
     .then(departmentsMigrated => Promise.resolve(departmentsMigrated.length + ' Departments migrated'))
+    .then( ()=>migrateNews())
 }
 
-//========================================
-const spider = (pageToVisit) => {
-    return new Promise(function(resolve, reject) {
-        request(pageToVisit, function(error, response, body) {
-        if(error) {
-         reject("Error: " + error);
-        }
-        // Check status code (200 is HTTP OK)
-        console.log("Status code: " + response.statusCode);
-        if(response.statusCode === 200) {
-         // Parse the document body
-         var $ = cheerio.load(body);
-         console.log("Page title:  " + $('title').text());
-         resolve("Page title:  " + $('title').text());
-        }
-        });
-    });
-}
+// //========================================
+// const spider = (pageToVisit) => {
+//     return new Promise(function(resolve, reject) {
+//         request(pageToVisit, function(error, response, body) {
+//         if(error) {
+//          reject("Error: " + error);
+//         }
+//         // Check status code (200 is HTTP OK)
+//         console.log("Status code: " + response.statusCode);
+//         if(response.statusCode === 200) {
+//          // Parse the document body
+//          var $ = cheerio.load(body);
+//          console.log("Page title:  " + $('title').text());
+//          resolve("Page title:  " + $('title').text());
+//         }
+//         });
+//     });
+// }
 //========================================
 if (require.main === module) {
     process.on('warning', e => console.warn(e.stack));
@@ -1232,6 +1316,7 @@ if (require.main === module) {
     // const uri = "file:///home/dcarpus/code/currentSites/newdurhamnharchive.vt-s.net/Pages/NewDurhamNH_Archive/NewDurhamNH_BOSMin/2007%20BOS%20MINUTES/index.html"
     const uri = "file:///home/dcarpus/code/currentSites/newdurhamnharchive.vt-s.net/pages/newdurhamnh_archive/NewDurhamNH_BOSMin/2007%20BOS%20MINUTES/index.html"
     migrateNewDurham()
+    // migrateNews()
     // crawler(uri)
     .then(done => {
         // console.log('done', Object.keys(done).length, require('util').inspect(done, { depth: null }));

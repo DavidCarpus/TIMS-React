@@ -43,6 +43,7 @@ module.exports = {
     pullLocalCopies : pullLocalCopies,
     pullNewServerDirs : pullNewServerDirs,
     pushFileToServer: pushFileToServer,
+    pullLocalCopy:pullLocalCopy,
     fetchURL:fetchURL,
     getServerFilePath:getServerFilePath,
     // initSFTP:initSFTP,
@@ -63,6 +64,7 @@ const contentTypeExtensions = [
    {cType: 'application/vnd.openxmlformats-officedocument.wordprocessing', ext:'.docx'},
    {cType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', ext:'.docx'},
    {cType: 'application/msword', ext:'.doc'},
+   {cType: 'image/png', ext:'.png'},
    {cType: 'application/octet-stream', ext:'.zip'},
    {cType: 'text/html', ext:'.html'},
    {cType: 'text/rtf', ext:'.rtf'},
@@ -100,16 +102,28 @@ let getExtension = (path)=> (path &&
     path.match(/\.[0-9a-z]+$/i, '')[0] : ''
 const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 const filenameFromPath = (path) => (path && path.lastIndexOf('/') !== path.length) ? path.substr(path.lastIndexOf('/')): ''
-const isFileURI = (uri) => uri && uri.startsWith('file://')
+const isFileURI = (uri) => uri && (uri.startsWith('file://') || uri.startsWith('/'))
 const fileURIPath = (uri) => uri.replace('file://', '')
+const wgetRoot = '/home/dcarpus/code/currentSites/'+ configuration.sourceTownDomain
 
 
-let baseURI = (host, uri) =>  uri.replace(new RegExp('https?://w{0,3}.?' + host + '/?'), '')
+let baseURI = (host, uri) =>{
+    if(uri.startsWith('http')) return uri.replace(new RegExp('https?://w{0,3}.?' + host + '/?'), '')
+    if(isFileURI(uri)) return fileURIPath(uri).replace(new RegExp(wgetRoot+ '/?'), '')
+    // file:///home/dcarpus/code/currentSites/www.newdurhamnh.us
+}
+
 let baseURIpath = (host, uri) =>
     uri.replace(new RegExp('https?://' + host + '/?'), '').match(/(.*)\//) ?
     uri.replace(new RegExp('https?://' + host + '/?'), '').match(/(.*)\//)[1]+'/':
     '/'
-let localPathFromURI = (localBasePath, host, uri) =>localBasePath + '/' + baseURI(host, uri)
+
+
+let localPathFromURI = (localBasePath, host, uri) => {
+    // console.log('localPathFromURI', localBasePath, baseURI(host, uri));
+    // return uri.startsWith('file://') ? uri.replace('file://',''):
+    return localBasePath + '/' + baseURI(host, uri)
+}
 
 const pipeResponse = (response, dest) => {
     return mkdirp(dest.replace(/\/([^\/]+)$/,''))
@@ -122,13 +136,8 @@ const pipeResponse = (response, dest) => {
             console.log('Writing response to', dest);
             let ws = fs.createWriteStream(dest)
             ws.on('finish', () => {
-                // console.log('Finished write');
                 resolve(dest)
             })
-            // ws.on('close', () => {
-            //     console.log('Closed write?');
-            //     resolve(dest)
-            // })
             ws.on('error', (err)=> {
                 console.log('writeStream error', err);
                 reject(err)
@@ -137,6 +146,18 @@ const pipeResponse = (response, dest) => {
         });
     })
     .catch(err => console.log(err))
+
+}
+function localFileCopy(src, dest) {
+    return new Promise(function(resolve, reject) {
+        var rd = fs.createReadStream(src);
+        rd.on("error", function(err) { reject(err); });
+        var wr = fs.createWriteStream(dest);
+        wr.on("error", function(err) { reject(err); });
+        wr.on("close", function(ex) { resolve(dest); });
+        rd.pipe(wr);
+    // fs.createReadStream(src).pipe(fs.createWriteStream(dest));
+    })
 
 }
 function cachedURIExists(uri) {
@@ -150,7 +171,12 @@ function cachedURIExists(uri) {
 function pullLocalCopy(remoteURI, localPath) {
     // console.log('pullLocalCopy(remoteURI, localPath)',  '\n  ', remoteURI, '\n  ', localPath);
     // console.log('pullLocalCopy\n  ', remoteURI.replace(/.*_archive/, '*archive*') );
-
+    if(isFileURI(remoteURI)){
+        const src = remoteURI.replace('file://', '')
+        const dest = localPath
+        if(!localFileExists(dest)) return localFileCopy(src, dest)
+        else return Promise.resolve(dest)
+    }
     return axios({
         method:'get',
         url:remoteURI,
@@ -163,7 +189,7 @@ function pullLocalCopy(remoteURI, localPath) {
             return response
         }
 
-        console.log('*** (',response.status,') pullLocalCopies: remoteURI', remoteURI, localPath);
+        console.log('*** (',response.status,') pullLocalCopy: remoteURI', remoteURI, localPath);
 
         let responseUrl =response.data.responseUrl.replace(/\/?$/,'')
         remoteURI = remoteURI.replace(/\/?$/,'')
@@ -243,12 +269,34 @@ function pullLocalCopies(records) {
             const uriHost = matchHost(configuration.sourceTownURI, rec.uri) ? configuration.sourceTownURI : configuration.sourceTownArchiveDomain
             let dest =localPathFromURI(localFileBaseURL(), uriHost, rec.uri).trim()
             if (!localFileMissing(dest)  && getExtension(filenameFromPath(dest)).length > 0) {
+                // console.log('*11 *pullLocalCopies 1:',rec.uri, dest);
                 return Promise.resolve(Object.assign(rec, {local:dest}))
             } else if (!localFileMissing(dest + '.pdf') ) {
+                // console.log('* 22 *pullLocalCopies 2:',rec.uri, dest);
                 return Promise.resolve(Object.assign(rec, {local: dest + '.pdf'}))
             } else if (!localFileMissing(dest + '/__index.html') ) {
+                // console.log('* 33 *pullLocalCopies 3:',rec.uri, dest);
                 return Promise.resolve(Object.assign(rec, {local: dest + '/__index.html'}))
+            } else if (!localFileMissing(dest) && getExtension(filenameFromPath(dest)).length === 0 ) {
+                // TODO: If dest exists and destination does not have an extension,
+                // Determine fileMimeType, copy dest to 'new' dest with added extension
+                return mimeType(dest)
+                .then(cType=>{
+                    const ext = extFromContentType(cType)
+                    const newDest = dest + ext
+                    // console.log('cType',cType, newDest);
+                    return pullLocalCopy(rec.uri, newDest)
+                    .then(writtenPath => {
+                        // console.log('pulled',writtenPath);
+                        return Promise.resolve(Object.assign(rec, {local:writtenPath, pulled: writtenPath}))
+                    })
+                })
+                .catch(err=> {
+                    console.error('Err pulling local Copy missing extension in pullLocalCopies'+ err);
+                    return rec
+                })
             } else {
+                console.log('*****pullLocalCopies:\n',rec.uri, '\n', dest);
                 return pullLocalCopy(rec.uri, dest)
                 .then(writtenPath => {
                     return Promise.resolve(Object.assign(rec, {local:writtenPath, pulled: writtenPath}))
@@ -271,26 +319,29 @@ function pullLocalCopies(records) {
 }
 //========================================
 function getRedirectLocation(record) {
-    if (!hasSourceTownURI(record.uri)) { return Promise.resolve( Object.assign(record, {redirectType: 'external'} ) ) } // URI already remote
+    let uri=record.uri
+    if (!hasSourceTownURI(uri)) { return Promise.resolve( Object.assign(record, {redirectType: 'external'} ) ) } // URI already remote
+
+    uri = uri.replace(/\/links\/..\//, '/').replace(/\/node\/\.\./, '').replace(/\/planning\/\.\./, '')
 
     return axios({
         method:'get',
-        url:record.uri,
-        // responseType:'stream'
+        url:uri,
     })
     .then( (response) => {
         record.uri = response.request.res.responseUrl
-        record.redirectType =  hasSourceTownURI(record.uri) ? 'internal': 'external'
+        record.redirectType =  hasSourceTownURI(uri) ? 'internal': 'external'
         return record
     })
     .catch(err => {
-        console.log('getRedirectLocation:err', err.Error);
+        console.log('getRedirectLocation:err', uri, err.response.status, Object.keys(err.response)); //err.Error
         record.redirectType = 'ERROR'
         return record
     })
 }
 //========================================
 function makeServerDirs(baseServerPath, pathsToDir) {
+    // console.log('makeServerDirs', baseServerPath, pathsToDir);
     if (configuration.mode !== 'development') {
         initSFTP()
         return Promise.all(
@@ -333,7 +384,7 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
     let serverDirs = {}
     // Pull directories from a server using SFTP
     if (configuration.mode !== 'development') {
-        console.log('pullNewServerDirs (non-dev)', baseServerPath, pathsToDir);
+        // console.log('pullNewServerDirs (non-dev)', baseServerPath, pathsToDir);
         initSFTP()
         return Promise.all(
              pathsToDir.map( pathToDir => {
@@ -398,7 +449,7 @@ function pushFileToServer( fullPathLocalFile, serverDest ) {
         })
     } else {
         return new Promise(function(resolve, reject) {
-            // console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
+            console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
             if (!serverDest || serverDest.length === 0 || !fullPathLocalFile || fullPathLocalFile.length === 0) {
                 // console.log('**** Invalid "Server" location .. ', serverDest);
                 reject('**** Invalid "Server" paths .. ' + fullPathLocalFile + ' -- ' + serverDest)
@@ -437,6 +488,9 @@ function fetchFileURL(url) {
 }
 //========================================
 function fetchURL(url) {
+    // if(url === null) return Promise.reject({data: "", contentType:"", location:url})
+    if(url === null) return Promise.reject("Bad link")
+
     if (url.indexOf('http') === -1) {
         return fetchFileURL(url);
     }
@@ -511,7 +565,7 @@ function translateURI(uri) {
     if (activeURI === null) {
         debugger
     }
-    console.log('cacheURILocation', activeURI);
+    // console.log('cacheURILocation', activeURI);
     return activeURI
 }
 //========================================
@@ -530,8 +584,9 @@ function cachingFetchURL(uri, forcePull=false) {
     let activeURI =translateURI(uri)
     let cacheURILocation = getURLCacheLocation(uri)
     // console.log('cachingFetchURL',uri, activeURI);
+    // if(activeURI === null) throw new Error('NULL URI:' + uri)
 
-    if (!cachedURIExists(activeURI) || forcePull) {
+    if (activeURI && (!cachedURIExists(activeURI) || forcePull)) {
         console.log('++ pulling ', cachedURIExists(activeURI), activeURI);
         return pullLocalCopy(uri, cacheURILocation)
         .then(writtenPath => {
