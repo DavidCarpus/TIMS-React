@@ -48,6 +48,14 @@ export default function SmartLink({id=0, link='', linkText}){
     if (!link.startsWith('/')) {
         reduxLink = false
     }
+
+    if (! link.toUpperCase().includes(configuration.sourceTownURI.toUpperCase())
+        && link.startsWith('http')
+    ) {
+        lnkStyle='external_link'
+        reduxLink = false
+    }
+
     if (link.length === 0 ){
         return (<i
             className={lnkStyle}
@@ -78,7 +86,7 @@ export default function SmartLink({id=0, link='', linkText}){
         else {
             link = configuration.ui.ROOT_URL + 'fetchfile/' + id;
             return (<Link to={link} target="_blank" onClick={(event) => {
-                event.preventDefault(); window.open(this.makeHref(link));
+                event.preventDefault(); this ? window.open(this.makeHref(link)): alert(this+link);
             }} >{linkText}</Link>)
         }
     }
