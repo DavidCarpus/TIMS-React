@@ -18,10 +18,10 @@ function pageNav() {
     )
 }
 
-export default function TownClerk({group, store, loading, id, title='Town Clerk'}){
+export default function TownClerk_TaxCollector({group, store, loading, id, title='Town Clerk & Tax Collector'}){
     if ( loading) {         return (<div>Loading</div>)     }
     return (
-        <Row id='TownClerk'>
+        <Row id='TownClerk_TaxCollector'>
             {pageNav()}
 
             <Col  md={{size:10, push:1}}>

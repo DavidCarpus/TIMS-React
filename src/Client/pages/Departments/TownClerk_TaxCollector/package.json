@@ -1,0 +1,6 @@
+{
+  "name": "TownClerk_TaxCollector",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./TownClerk_TaxCollector.jsx"
+}
