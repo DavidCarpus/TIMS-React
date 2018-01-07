@@ -760,7 +760,7 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
     .then(urlData => {
         return parseCurrentMeetingDoc(urlData.data,conf.currentSelector)
         .map(meetingDoc => {
-            meetingDoc.uri=fullURIFromHref(uri, meetingDoc.uri )
+            meetingDoc.uri=cleanURI(fullURIFromHref(uri, meetingDoc.uri ))
             return meetingDoc
         })
     })
@@ -784,14 +784,36 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
                     groupName:group,
                     recordtype: recordType,
                     label: label
-                })
-              if (! validExtensions.includes(getExtension(fullURI).toUpperCase())) {
-                  return fetchFilesFromPage([{uri:fullURI}], baseRecordData, 0, 2)
-              }
-              else {
-                  return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI}))
-              }
-          }))
+                }
+            )
+            if(validExtensions.includes(getExtension(fullURI).toUpperCase())){
+                if(getExtension(fullURI).toUpperCase() !== '.HTML' ){
+                    const localPath = fullURI.startsWith('file:///')?fullURI.replace('file://', ''):""
+                    return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI, local:localPath}))
+                } else {
+                    // console.log('fetching FilesFrom HTML Page', fullURI);
+                    let ff=null
+                    return fetchFilesFromPage([{uri:fullURI}], baseRecordData, 0, 2)
+                    .then(fetchedFiles=> {
+                        ff = fetchedFiles
+                        if( fetchedFiles[0].length === 0){
+                            console.log('***migrateCurrentMeetingDocs: No attachments on page?',fullURI );
+                            return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI}))
+                        }
+                        const fetchedFileURI = fetchedFiles[0][0].uri // Currently only deals with a single file attachment
+                        const localPath = fetchedFileURI.startsWith('file:///')?fetchedFileURI.replace('file://', ''):""
+                        return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI, local:localPath}))
+                    })
+                    .catch(err=> {
+                        console.log('***fetchedFiles err',fullURI, err, ff);
+                        return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI}))
+                    })
+                }
+            } else {
+                const localPath = fullURI.startsWith('file:///')?fullURI.replace('file://', ''):""
+                return Promise.resolve(Object.assign({}, baseRecordData, { uri: fullURI, local:localPath}))
+            }
+        }))
     })
     .then(validFiles => {
         const hasLocalFile = (rec) => rec && rec.local
