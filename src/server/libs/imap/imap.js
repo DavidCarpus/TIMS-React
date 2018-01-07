@@ -8,14 +8,24 @@ var imapValidator = require('../imapValidator');
 var Config = require('../../config'),
 configuration = new Config();
 
+const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
+// console.log('__dirname',__dirname);
+
+const mergeParents = (path) => { // Merge references to parent directories
+    return path.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
+}
+
+const downloadPathsToPrivate = (paths) =>
+Object.keys(paths).map(key=> ({[key]:mergeParents(__dirname+'/'+privateDir+'/'+paths[key])}))[0]
+
 //===============================================
 class IMapProcessor {
     constructor(imapConf){
         this.config = imapConf.imapcredentials;
         this.downloadPaths = imapConf.downloadPath;
     }
-    process() {
-        return processSimpleEmail(imaps, {imap: this.config}, this.downloadPaths)
+    process(config=this.config, paths=this.downloadPaths) {
+        return processSimpleEmail(imaps, {imap: this.config}, downloadPathsToPrivate(paths))
     }
     archiveMessage(uid, destFolder='Processed'){ //destFolder element of {Processed','Errors'}
         return imaps.connect({imap: this.config})
@@ -40,7 +50,7 @@ module.exports.IMapProcessor = IMapProcessor;
 //===============================================
 //===============================================
 function processSimpleEmail(imapLib, credentials, paths) {
-    // console.log('paths:',paths);
+    // console.log('processSimpleEmail:',paths,credentials);
     return imapLib.connect(credentials)
     .then( sconnection => {
 
@@ -135,8 +145,8 @@ function processSimpleEmail(imapLib, credentials, paths) {
             if (done.length == 0) {
                 sconnection.end();
             }
-            return Promise.resolve(done);
             // console.log('Done:', done);
+            return Promise.resolve(done);
         })
         .catch(Err => {
             console.log('messages Err:', Err);
@@ -161,7 +171,6 @@ function retrieveAttachmentData(msgWithBody, paths) {
                 return writeAttachment(attach, paths)
                 .then(writtenAttachment => {
                     msgWithBody.attachmentLocations = msgWithBody.attachmentLocations.concat(writtenAttachment.filename);
-                    console.log('Wrote: ', msgWithBody.attachmentLocations);
                     return Promise.resolve(msgWithBody);
                 })
             }))
@@ -206,8 +215,10 @@ function writeAttachment(attachment, path) {
 if (require.main === module) {
     console.log('called directly');
     let imapConf = configuration.imapProcess;
-    processSimpleEmail(imaps, {imap: imapConf.imapcredentials}, imapConf.downloadPath )
+    console.log('imapConf.downloadPath',imapConf.downloadPath, downloadPathsToPrivate(imapConf.downloadPath));
+    processSimpleEmail(imaps, {imap: imapConf.imapcredentials}, downloadPathsToPrivate(imapConf.downloadPath) )
     .then(emails => {
+        console.log('emails',emails);
         emails.map(email => {
             console.log('======================');
             console.log('Processed simple email:' + require('util').inspect(email, { depth: null }));
