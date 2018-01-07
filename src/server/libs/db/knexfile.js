@@ -2,7 +2,7 @@ let mode=process.env.INIT_MODE || process.env.NODE_ENV||'development'
 const privateDir = mode === 'development'  || process.env.DEV_MACHINE ? '../../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../../private/'
 const credentialsDir = mode === 'development' || process.env.DEV_MACHINE ? '../../../../credentials/'+process.env.REACT_APP_MUNICIPALITY: '../../../credentials/'
 
-console.log('process.env.INIT_MODE:', process.env.INIT_MODE);
+// console.log('process.env.INIT_MODE:', process.env.INIT_MODE);
 
 var dev_credentials = require(credentialsDir +'/configuration_dev.json');
 var prod_credentials = require(credentialsDir +'/configuration_prod.json');

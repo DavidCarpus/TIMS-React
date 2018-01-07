@@ -26,7 +26,7 @@ const mapStateToProps = (state, ownProps) => {
         newsData = newsData.slice(0,ownProps.limit)
     }
 
-    console.log('NewsListingC:', newsData);
+    // console.log('NewsListingC:', newsData);
 
     return {
         newsData: newsData,
