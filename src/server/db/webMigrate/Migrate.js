@@ -1165,21 +1165,25 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
         })
     })
 
-    .then(meetingMigrateResults => (baseLinkToMinutes?
-        migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, yearURIFromBaseLink(baseLinkToMinutes, '2017'), defaultConf.minutesURI)
-        : Promise.resolve('NA')))
-    .then(meetingMigrateResults => (baseLinkToMinutes?
-        migrateCurrentMeetingDocs('Minutes',groupName, groupLabel, yearURIFromBaseLink(baseLinkToMinutes, '2016'), defaultConf.minutesURI)
-        : Promise.resolve('NA')))
-    .then(meetingMigrateResults => (baseLinkToAgendas?
-        migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, yearURIFromBaseLink(baseLinkToAgendas, '2017'), defaultConf.minutesURI)
-        : Promise.resolve('NA')))
-    .then(meetingMigrateResults => (baseLinkToAgendas?
-        migrateCurrentMeetingDocs('Agenda',groupName, groupLabel, yearURIFromBaseLink(baseLinkToAgendas, '2016'), defaultConf.minutesURI)
-        : Promise.resolve('NA')))
 
-    // .then(meetingMigrateResults => migrateGroupArchivePages(groupName, groupLabel, conf))
-
+    .then(meetingMigrateResults => {
+        const pullRecents = (docType, baseLink) => {
+            if(!baseLink) return Promise.resolve('NA')
+            // console.log('pull' + docType + ':',baseLink);
+            return cachingFetchURL(baseLink)
+            .then(fetchedData => {
+                $ =cheerio.load(fetchedData.data)
+                return Promise.resolve( $("#block-system-main > div > div > div > div > ul").children()
+                .map( (i, el)  =>  fullURIFromHref(baseLink , $(el).find('a').attr('href'))).get())
+            })
+            .then(links => Promise.all(links.map(pageLink=>
+                migrateCurrentMeetingDocs(docType,groupName, groupLabel, pageLink, defaultConf.minutesURI)
+            )))
+        }
+        return pullRecents('Minutes', baseLinkToMinutes)
+        .then(meetingMigrateResults =>  pullRecents('Agenda', baseLinkToAgendas))
+        .then(meetingMigrateResults => migrateGroupArchivePages(groupName, groupLabel, conf))
+    })
     .catch(err => {
         console.log('Error fetching '+groupName+' Agendas', err);
     })
@@ -1264,8 +1268,13 @@ function migrateNewDurham() {
         // .splice(1,1)
     })
     .then(departmentData => Promise.all(departmentData.map( migrateNewDurhamDepartment ))    ) //.splice(12,1)
-    .then(departmentsMigrated => Promise.resolve(departmentsMigrated.length + ' Departments migrated'))
+    .then(departmentsMigrated => {
+        console.log(departmentsMigrated.length + ' Departments migrated')
+    })
     .then( ()=>migrateNews())
+    .then( (newsItems)=>{
+        console.log('newsItems migrated', newsItems.length);
+    })
 }
 //========================================
 if (require.main === module) {
