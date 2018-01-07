@@ -976,25 +976,26 @@ function migrateGroupArchivePages(groupName, groupLabel, conf) {
         invalidDates.length > 0 ? console.error( invalidDates.slice(0,10).map(msg)) :""
         return recs
     }
-
     return Promise.all( years.map(year => {
-        // console.log('migrate ', groupName, year);
-        return getGroupArchivesURI(groupName, groupLabel, 'Minutes')
-        .then(minutesPageURI =>  pullArchiveFiles({groupName:groupName, groupLabel:groupLabel, docType:'Minutes'}, year, minutesPageURI)    )
-        .then( uniqFileRecords =>  uniqFileRecords.map( rec => Object.assign({},rec,
-            {recordtype: 'Minutes', groupName:groupName, groupLabel:groupLabel, groupAcronym:groupLabel.match(/\b(\w)/g).join('')}
-        ) ) )
-        .then( addedTypeInfo =>  pullFiles(addedTypeInfo, false) )
-        .then(addDate => Promise.all(addDate.map(rec=>
-            getDateFromFilenameOrFileDate(rec, conf.minutesURI.getMeetingDate )
-            .then(date => Object.assign({},rec,{date:date}) )
-        )))
-        .then(logInvalid => logFileDateErrors?logInvalidRecs(logInvalid,invalidDateRec): logInvalid)
-        .then(addLabels => Promise.all(addLabels.filter(validDateRec).map(rec=>
-            Object.assign({},rec,{label:conf.minutesURI.extractRecordLabel(rec)})
-        )))
-        .then(addedLabels =>  Promise.all(addedLabels.map((rec)=> setNewFileName(validExtensions, rec))) )
-        .then(readyToMigrate => {return migrateGroupArchiveDocuments(readyToMigrate)} )
+        return Promise.all(['Minutes', 'Agenda'].map( docType => {
+            return getGroupArchivesURI(groupName, groupLabel, docType)
+            .then(pageURI =>   pullArchiveFiles({groupName:groupName, groupLabel:groupLabel, docType:docType}, year, pageURI) )
+            .then( uniqFileRecords =>  uniqFileRecords.map( rec => Object.assign({},rec,
+                {recordtype: docType, groupName:groupName, groupLabel:groupLabel, groupAcronym:groupLabel.match(/\b(\w)/g).join('')}
+            ) ) )
+            .then( addedTypeInfo =>  pullFiles(addedTypeInfo, false) )
+            .then(addDate => Promise.all(addDate.map(rec=>
+                getDateFromFilenameOrFileDate(rec, conf.minutesURI.getMeetingDate )
+                .then(date => Object.assign({},rec,{date:date}) )
+            )))
+            .then(logInvalid => logFileDateErrors?logInvalidRecs(logInvalid,invalidDateRec): logInvalid)
+            .then(addLabels => Promise.all(addLabels.filter(validDateRec).map(rec=>
+                Object.assign({},rec,{label:conf.minutesURI.extractRecordLabel(rec)})
+            )))
+            .then(addedLabels =>  Promise.all(addedLabels.map((rec)=> setNewFileName(validExtensions, rec))) )
+            .then(readyToMigrate => migrateGroupArchiveDocuments(readyToMigrate) )
+        }))
+
     }))
     .then(enteredRecords=> ({groupName:groupName ,cnt:enteredRecords.length}) )
 }
