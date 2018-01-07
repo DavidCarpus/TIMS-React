@@ -6,6 +6,20 @@ var mailer = require('nodemailer-promise');
 var knexConfig = require('../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+
+let credentials = configuration.imapProcess.imapcredentials
+var transporter = nodemailer.createTransport(smtpTransport ({
+  host: credentials.sendhost || credentials.host,
+  // secureConnection: true,
+  port: 465,
+  auth: {
+        user: credentials.senduser || credentials.user,
+        pass: credentials.sendpassword || credentials.password,
+  }
+}));
+
 //===========================================
 module.exports =
 {
@@ -61,10 +75,6 @@ function simpleAdd(tablename, entry, emailUID) {
     .then(results => {
         entry.id = results[0];
         entry.uid = emailUID; // We need to return this so IMAP subsystem can move/delete it.
-        if(! Array.isArray(entry)){
-            // console.log('simpleAdd: convert to array.', entry);
-            entry = [entry];
-        }
         return Promise.resolve(entry);
     })
     .catch(err => {
@@ -110,39 +120,41 @@ function dbDateFormat(date, dateOnly=false) {
            ].join('').trim();
 }
 //===========================================
-function sendAutomationEmail(emailAddresses, emailContent) {
-    // tls: {
-    //     rejectUnauthorized: false
-    // },
-    // port: 465,
-    // port: 25,
-    let credentials = configuration.imapProcess.imapcredentials
-    let mailCredentials = {
-        email: credentials.senduser || credentials.user,
-        password: credentials.sendpassword || credentials.password,
-        server: credentials.sendhost || credentials.host,
-        port: 465,
-    }
-    var sendEmail = mailer.config(mailCredentials);
-    var options = {
-        subject: emailContent.subject,
-        senderName: 'Website automation',
-        receiver: emailAddresses,
-        text: emailContent.text
+function _sendEmail(
+    emailAddresses, emailContent,
+    from='Website automation' + '<' + (credentials.senduser || credentials.user) + '>'
+) {
+    var mailOptions = {
+    from:from,
+    to: emailAddresses,
+    subject: emailContent.subject,
+        text: emailContent.text,
     };
-    // return Promise.resolve(options)
-    console.log('Sending email to ', emailAddresses , ' via ' ,  mailCredentials.server);
-    return sendEmail(options)
+
+    return new Promise(function(resolve, reject) {
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                reject(error);
+            }else{
+                // console.log('info',info);
+                resolve('Message sent: ' + emailAddresses);
+            }
+        });
+    })
     .then(info => {
-        console.log('Emailed :' , emailAddresses , emailContent.subject )
-        return Promise.resolve([info]);
+        console.log('Emailed :' , emailAddresses , '-', emailContent.subject )
+        return Promise.resolve(emailContent);
     })   // if successful
     .catch(err => {
         console.log('sendAutomationEmail error');
-        console.log('mailCredentials:', mailCredentials);
+        console.log('mailCredentials:', mailOptions);
         console.log(err)
         return Promise.reject(err);
     });   // if an error occurs
+}
+//===========================================
+function sendAutomationEmail(emailAddresses, emailContent) {
+    return _sendEmail(emailAddresses, emailContent)
 }
 //===========================================
 function sendRequestedPageText(request, requestedData) {
