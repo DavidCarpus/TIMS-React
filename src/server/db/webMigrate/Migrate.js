@@ -664,8 +664,14 @@ function fetchFilesFromPage(linkData, baseRecordData, currentCnt, maxCnt) {
         return Promise.reject('Exceded maxCnt '+maxCnt+' fetching file from ' + linkData)
     }
     return Promise.all(linkData.map(uri => {
-        // console.log('fetch:',uri.uri);
-        return cachingFetchURL(uri.uri)
+        const translatedURI = uri.uri.startsWith('../')?
+            cleanURI(pathWithoutFilename(baseRecordData.uri)+'/'+uri.uri) //.replace('../', '/')
+            :uri.uri
+        // cleanURI()
+        // host = pathWithoutFilename(uri)
+
+        // console.log('fetch:',translatedURI);
+        return cachingFetchURL(translatedURI)
         .then(urlData => {
             // console.log('** urlData',urlData.contentType, currentCnt, maxCnt);
             if (urlData.contentType === 'text/html') {
@@ -680,18 +686,21 @@ function fetchFilesFromPage(linkData, baseRecordData, currentCnt, maxCnt) {
 
                 let date = $(contentSelector + "> div.field.field-name-field-meeting-date.field-type-datetime.field-label-inline.inline > div.field-items > div > span").attr('content')
                 if (typeof date === 'undefined') {date = $(contentSelector + "> div.field.field-name-field-agenda-date.field-type-datetime.field-label-inline.inline > div.field-item > span").attr('content')}
-                if (typeof date === 'undefined') { console.error('Unable to determine date for ',uri.uri);}
+                if (typeof date === 'undefined') { console.error('Unable to determine date for ',translatedURI);}
 
                 const recurseBaseRecordData =  Object.assign({},baseRecordData,{date:new Date(date)})
                 return fetchFilesFromPage(links, recurseBaseRecordData, ++currentCnt, maxCnt)
             }
             else {
-                // console.log('** urlData',urlData.contentType, currentCnt, uri.uri, urlData.location);
-                return Promise.resolve(Object.assign({},baseRecordData,{uri: uri.uri, local:urlData.location }))
+                // console.log('** urlData',urlData.contentType, currentCnt, translatedURI, urlData.location);
+                return Promise.resolve(Object.assign({},baseRecordData,{uri: translatedURI, local:urlData.location }))
             }
         })
     .catch(err=> {
-        console.error("Error ",uri.uri, baseRecordData, err);
+        console.error("Error\n","======");
+        console.error(translatedURI);
+        console.error("======");
+        console.error(linkData, baseRecordData, err);
         return baseRecordData
     })
 }))
