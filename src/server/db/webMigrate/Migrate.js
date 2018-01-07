@@ -756,7 +756,6 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
         }
     }
     if(uri === null) throw new Error('NULL URI')
-    // console.log('migrateCurrMeetingDocs', recordType, group, uri, conf.currentSelector)
     return cachingFetchURL(uri)
     .then(urlData => {
         return parseCurrentMeetingDoc(urlData.data,conf.currentSelector)
@@ -767,7 +766,6 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
     })
     .then(parsedAgendas => {
         return Promise.all( parsedAgendas.map(parsedRecord => {
-            // console.log(parsedRecord.uri);
             parsedRecord.groupLabel = groupLabel
             const label= conf.extractRecordLabel ? conf.extractRecordLabel(parsedRecord): parsedRecord.uri
             const fullURI = parsedRecord.uri.trim();
@@ -796,7 +794,6 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
           }))
     })
     .then(validFiles => {
-        // console.log('validFiles',validFiles);
         const hasLocalFile = (rec) => rec && rec.local
         return Promise.all(validFiles.reduce( (acc, val) => {
             if (Array.isArray(val[0])) {
@@ -811,7 +808,6 @@ function migrateCurrentMeetingDocs(recordType, group, groupLabel, uri, conf){
         )
     })
     .then(withNewFilenames => {
-        // console.log('withNewFilenames', withNewFilenames);
         return pushFiles(withNewFilenames)
         .then(pushedFiles => {
             return Promise.all(
@@ -946,7 +942,6 @@ function getDateFromFilenameOrFileDate(rec, getMeetingDate) {
 //========================================
 function migrateGroupArchivePages(groupName, groupLabel, conf) {
     // console.log('migrateGrpArchivePages', groupLabel, groupLabel.match(/\b(\w)/g).join(''));
-    // const startYear = 2007; const endYear=2010;     const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
     const startYear = 2007; const endYear=(new Date()).getUTCFullYear();     const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
 
     const validExtensions = ['.PDF', '.DOC', '.DOCX', '.TIF', '.ZIP', '.RTF']
@@ -1078,12 +1073,6 @@ function migrateNews() {
     .then(recs => {
         return Promise.all(recs.map(migrateNewsPage))
     })
-    .then(migratedPages => {
-        // console.log('migratedPages', require('util').inspect(migratedPages, { depth: null }));
-        // console.log('migratedPages',require('util').inspect(migratedPages, { depth: null }));
-        return Promise.resolve(migratedPages.length)
-        // throw new Error('migratedPages')
-    })
 }
 
 //========================================
@@ -1171,7 +1160,6 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
     .catch(err => {
         console.log('Error fetching '+groupName+' Agendas', err);
     })
-    // return groupName
 }
 //========================================
 function migrateNewDurhamDepartment(departmentData) {
@@ -1256,25 +1244,6 @@ function migrateNewDurham() {
     .then(departmentsMigrated => Promise.resolve(departmentsMigrated.length + ' Departments migrated'))
     .then( ()=>migrateNews())
 }
-
-// //========================================
-// const spider = (pageToVisit) => {
-//     return new Promise(function(resolve, reject) {
-//         request(pageToVisit, function(error, response, body) {
-//         if(error) {
-//          reject("Error: " + error);
-//         }
-//         // Check status code (200 is HTTP OK)
-//         console.log("Status code: " + response.statusCode);
-//         if(response.statusCode === 200) {
-//          // Parse the document body
-//          var $ = cheerio.load(body);
-//          console.log("Page title:  " + $('title').text());
-//          resolve("Page title:  " + $('title').text());
-//         }
-//         });
-//     });
-// }
 //========================================
 if (require.main === module) {
     process.on('warning', e => console.warn(e.stack));
