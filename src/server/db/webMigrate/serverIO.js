@@ -334,7 +334,11 @@ function getRedirectLocation(record) {
         return record
     })
     .catch(err => {
-        console.log('getRedirectLocation:err', uri, err.response.status, Object.keys(err.response)); //err.Error
+        if(err.response && typeof err.response === 'Object'){
+            console.log('getRedirectLocation:err', uri, err.response, Object.keys(err.response)); //err.Error
+        }else {
+            console.log('getRedirectLocation:err', uri, {config:err.config, code:err.code}); //err.Error
+        }
         record.redirectType = 'ERROR'
         return record
     })
