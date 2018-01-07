@@ -24,6 +24,10 @@ var getRedirectLocation = require('./serverIO').getRedirectLocation;
 var extensionFromContentType = require('./serverIO').extensionFromContentType;
 var mimeType = require('./serverIO').mimeType;
 
+
+var enterOnlyIntoTable = require('../../libs/db/common').enterOnlyIntoTable;
+var addOrUpdateTable = require('../../libs/db/common').addOrUpdateTable;
+
 var crawler = require('./Crawler').Crawler;
 
 const logFileDateErrors = false
@@ -369,28 +373,7 @@ function updateFileDBFileLink(record) {
 }
 //========================================
 function enterOnlyIntoDBTable(tableName, record, checkRecord={}){
-    let chk={}
-    Object.assign(chk, record, checkRecord)
-    delete chk.date
-    return knex(tableName).select('*').where(chk)
-    .then(selectResults => {
-        if (selectResults.length === 0) {
-            return knex(tableName).insert(record)
-            .then(entered=> {
-                return Promise.resolve(
-                    Object.assign({}, record, {id:entered[0]})
-                )
-            })
-        } else {
-            return Promise.resolve(selectResults[0])
-        }
-    })
-    // .then(results => {
-    //     if (results && results.length > 0) {
-    //     }
-    //     return Promise.resolve([record]);
-    // })
-    .catch(dberr => logAndRejectDBErr(dberr))
+    return enterOnlyIntoTable(knex,tableName, record, checkRecord)
 }
 //========================================
 const promiseSerial = (funcs) => funcs.reduce((promise, func) =>
@@ -403,30 +386,7 @@ function sequentiallyAddOrUpdateDBTable(tableName, records){
 }
 //========================================
 function addOrUpdateDBTable(tableName, record, checkRecord={}){
-    return knex(tableName).select('*').where(checkRecord)
-    .then(results => {
-        if (results.length === 0) {
-            let insertRecord=Object.assign(record, checkRecord)
-            // console.log('addOrUpdateDBTable:insertRecord:', knex(tableName).insert(insertRecord).toString());
-            return knex(tableName).insert(insertRecord)
-            .then(results => {
-                if (results && results.length > 0) {
-                    insertRecord.id = results[0];
-                }
-                // console.log('addOrUpdateDBTable:insertRecord:', insertRecord);
-                return Promise.resolve([insertRecord]);
-            })
-        } else{
-            // console.log('addOrUpdateDBTable:update:', knex(tableName).where(checkRecord).update(record).toString());
-            return knex(tableName).where(checkRecord).update(record)
-            .then(update=> {
-                // console.log("addOrUpdateDBTable:update", results);
-                if(Array.isArray(results)) return Promise.resolve(results);
-                return Promise.resolve([results]);
-            })
-        }
-    })
-    .catch(dberr => logAndRejectDBErr(dberr))
+    return addOrUpdateTable(knex, tableName, record, checkRecord)
 }
 //========================================
 const enterIntoDB = (record) => enterOnlyIntoDBTable('PublicRecords', record, record)
