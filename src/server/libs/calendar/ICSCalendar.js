@@ -1,215 +1,97 @@
+/*
+Processing of RFC 5455 based data
+*/
 var Config = require('../../config'),
 configuration = new Config();
 
-var addDays = require('date-fns/add_days');
-var rp = require('request-promise-native');
+var fetchURL = require('../../db/webMigrate/serverIO').fetchURL;
+var addOrUpdateTable = require('../db/common').addOrUpdateTable;
+
 var icalendar = require('icalendar');
 
 var startOfMonth = require('date-fns/start_of_month');
 var endOfMonth = require('date-fns/end_of_month');
 var startOfWeek = require('date-fns/start_of_week');
 var endOfWeek = require('date-fns/end_of_week');
+var isWithinRange = require('date-fns/is_within_range')
 
-var differenceInDays = require('date-fns/difference_in_days');
-var compareAsc = require('date-fns/compare_asc');
-var compareDesc = require('date-fns/compare_desc');
-var addWeeks = require('date-fns/add_weeks');
-var addMonths = require('date-fns/add_months');
-//
-// // import eachDay from 'date-fns/each_day'
-// import addDays from 'date-fns/add_days'
-
-
+const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 
 var knexConfig = require('../db/knexfile.js')
 var knexConnection = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-// const isRecurringEvent = (evt) =>typeof evt.rrule !== 'undefined' || typeof evt.rruleType !== 'undefined'
-const isRecurringEvent = (evt) =>(typeof evt.rrule !== 'undefined' && evt.rrule !== null) ||
-        (typeof evt.rruleType !== 'undefined' && evt.rruleType !== null)
-const isNotRecurringEvent = (evt) => !isRecurringEvent(evt)
-const dateBetween = (start, end, chkDate) => compareDesc(start, chkDate) >=0 && compareAsc(end, chkDate) >=0
-let mergeArrays = (arrays) => [].concat.apply([], arrays)
-//===============================================
-//===============================================
-//===============================================
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}//===============================================
-function calendarProcess(delay, infinite, count=2) {
-    const logMsg=0
-    return pullEventsFromICS('https://calendar.google.com/calendar/ical/' + configuration.calendarId + '/public/basic.ics')
-    .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
-        logMsg && console.log('Pulled', events.length, 'events.');
-        return events.map( translateEventFromICal)
-    })
-    .then(translatedEvents => {
-        logMsg && console.log('Translated', translatedEvents.length, 'events.');
-        const insertEvent = (translatedEvent)=>insertEventIntoDatabase(knexConnection, translatedEvent)
-        return Promise.all(translatedEvents.map(insertEvent))
-    })
-    .then(results => {
-        // console.log(results);
-        return Promise.resolve('Done')
-    })
-    .then(done => {
-        logMsg && console.log('Sleeping');
-        return sleep(delay).then(out =>{
-            if (count > 0) {
-                --count;
-                if (infinite) {
-                    logMsg && console.log('infinite', infinite, count);
-                    ++count;
-                }
-                return calendarProcess(delay, infinite, count)
-            } else {
-                process.exit();
-            }
-        })
-    } )
-    .catch(err => {
-        console.log('importCalendarEvents Error:', err);
-        process.exit();
-    })
+//========================================
+const dateAbbreviations = [{abbr:'SU', num:0},
+    {abbr:'MO', num:1},        {abbr:'TU', num:2},         {abbr:'WE', num:3},
+    {abbr:'TH', num:4},        {abbr:'FR', num:5},          {abbr:'SA', num:6},
+]
+const dateNum = (dateAbbr) => dateAbbreviations.filter(rec=>rec.abbr === dateAbbr)[0].num
+const dateAbbr = (dateNum) => dateAbbreviations.filter(rec=>rec.num === dateNum)[0].abbr
+const dateFromICSDateStr = (datestr) => datestr? new Date(datestr.substring(0,4)+ '-' + datestr.substring(4,6) + '-' + datestr.substring(6,8) +
+ 'T' + datestr.substring(9,11) + ':' + datestr.substring(11,13)  + ':' + datestr.substring(13,15) + "Z")
+ :null
+//========================================
+const getDayOfMonth = (baseDate, day , week) => {
+    let firstOfMonth = new Date(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), 1)
+    let firstSunOfMonth = addDays(firstOfMonth, 7-firstOfMonth.getDay())
+    const chk = (week - 1)*7 + firstSunOfMonth.getDate() + day - (day>= firstOfMonth.getDay()?7:0)
 
-}
-//======================================
-function insertEventIntoDatabase(knex, eventToinsert) {
-    let tableName = 'CalendarEvents'
-    return (knex(tableName).select().where(
-        {
-            googleId: eventToinsert.googleId,
-            recurrenceID: eventToinsert.recurrenceID || null,
-            startDate: new Date(eventToinsert.startDate)
-        }
-    )
-    .then(results => {
-        // console.log("insertEventIntoDatabase?", results);
-        if (results.length >= 1) {
-            return Promise.resolve('Record ' + eventToinsert.googleId + ' already exists.' + results.length);
-        } else {
-            console.log("Insert:", eventToinsert);
-            return knex(tableName).insert(eventToinsert)
-            .then(result => {
-                eventToinsert.id = result[0];
-                return Promise.resolve(eventToinsert);
-            })
-            .catch(err => {console.log(tableName + ' import error:', err);})
-        }
-    })
-    )
-}
-
-
-//===============================================
-//===============================================
-//===============================================
-const nextMonthlyEventDate = (evt) =>  {
-    const dte = new Date(evt.startDate)
-    // console.log('nextMonthlyEventDate:', dateDisp(dte), evt.rruleData);
-    const frequency=parseInt(evt.rruleData,10)
-    let nextMonth = addWeeks(dte, 4)
-    if (nextMonth.getUTCMonth() === dte.getUTCMonth()) {
-        nextMonth = addWeeks(nextMonth, 1)
-    }
-    var quotient = Math.floor(nextMonth.getDate()/ 7);
-    var remainder = nextMonth.getDate() % 7;
-    let minD = 7*(frequency-1)
-    if ( quotient !== frequency && (nextMonth.getDate() <  minD || (quotient < 3 && remainder === 0))) {
-        nextMonth = addWeeks(nextMonth, 1)
-        quotient = Math.floor(nextMonth.getDate()/ 7);
-        remainder = nextMonth.getDate() % 7;
-    }
-    return nextMonth
-}
-
-//-----------------------------------------------------------------------------
-const expandRecurranceEvent = (evt, start, end, acc) => {
-    if (compareDesc(end, evt.startDate) >= 0 ) {
-        return acc
-    }
-    if ( dateBetween(start, end, evt.startDate)) {
-        acc.push(Object.assign({}, evt, {startDate:new Date(evt.startDate)}))
-    }
-    switch (evt.freq) {
-        case 'WEEKLY':
-            // console.log('Expand WEEKLY event:', evt);
-            const newWeeklyEvent = Object.assign({}, evt, {startDate:addWeeks(evt.startDate, 1)})
-            return expandRecurranceEvent(newWeeklyEvent, start, end, acc)
-        case 'MONTHLY':
-            // console.log('Expand MONTHLY event:', evt);
-            const nextByDay = nextMonthlyEventDate(evt)
-            const newMonthlyEvent = Object.assign({}, evt, {startDate:new Date(nextByDay)})
-            return expandRecurranceEvent(newMonthlyEvent, start, end, acc)
-        default:
-            console.log('**** UNK frequency to expand event:', evt);
-    }
+    return new Date(baseDate.getFullYear(), baseDate.getMonth(),chk,
+        baseDate.getHours(), baseDate.getMinutes())
 }
 //===========================================
-const getCalendarDataForMonth = (icalData, currDate) =>{
-    if (icalData.length === 0) return [];
-
-    const inLastWeekOfTheMonth = (date) => differenceInDays(endOfMonth(date), date ) < 7
-
-    let startDate = startOfWeek(startOfMonth(currDate) );
-    //remaining days of current month will still be displayed
-    if (inLastWeekOfTheMonth(currDate) && endOfWeek(currDate).getMonth() !== currDate.getMonth()) {
-        console.log('getCalendarDataForMonth:addMonth', endOfWeek(currDate), endOfWeek(currDate).getMonth() , currDate.getMonth());
-        currDate  = addMonths(currDate,1)
-        startDate = startOfWeek(startOfMonth(currDate) );
-    }
-    const endDate = endOfWeek(endOfMonth(currDate) );
-
-    let calendarData=[]
-    // console.log("icalData:", icalData);
-    const recurringEvents = icalData.filter(isRecurringEvent)
-
-    if (recurringEvents.length > 0) {
-        // console.log("Init icalData:", icalData)
-        const dateInRange = (chkDate) => dateBetween(startDate, endDate, chkDate)
-        const eventInRange = (evt) => dateInRange(evt.startDate) || dateInRange(evt.endDate)
-        const expandEvent = (evt) => expandRecurranceEvent(evt, startDate, addDays(endDate, -1), [])
-
-        // console.log("Expanded Evts:", icalData.filter(isRecurringEvent).map(expandEvent))
-        calendarData = mergeArrays(icalData.filter(isRecurringEvent).map(expandEvent))
-        .concat(icalData.filter(isNotRecurringEvent).filter(eventInRange))
-
-        calendarData = calendarData.map((evt, index)=>{
-            evt.id = index;
-            evt.startDate = new Date(evt.startDate)
-            // evt.startDate = new Date(evt.recurrenceID || evt.startDate)
-            return evt;
-        })
-        const movedEvents = calendarData.filter(evt => evt.recurrenceID !== null )
-
-        // filter out the calendarData events that are the original copies of events that were movedEvents
-        calendarData = calendarData.filter((evt) => {
-            const chk=movedEvents.filter(moved => moved.googleId === evt.googleId).length
-            return !chk || evt.recurrenceID !== null
-        })
-        calendarData = calendarData.filter((evt) => evt.startDate - addWeeks(currDate, -1)  > 0)
-    }
-    // console.log('calendarData:', calendarData);
-    return calendarData
+const mergeArrays = (arrays) => [].concat.apply([], arrays)
+const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+//===========================================
+function insertEventIntoDatabase(knex, eventToinsert) {
+    return addOrUpdateTable(knex, 'CalendarEvents',
+    eventToinsert,{ uid: eventToinsert.uid, startDate: eventToinsert.startDate})
 }
 // =================================================
 function translateEventFromICal(evt) {
-    const untilDate = (datestr) => new Date(datestr.substring(0,4)+ '-' + datestr.substring(4,6) + '-' + datestr.substring(6,8) +
-     'T' + datestr.substring(9,11) + ':' + datestr.substring(11,13)  + ':' + datestr.substring(13,15) + "Z")
+    const origEvt = Object.assign({},evt)
      let endDate = evt.endDate
      if (evt.rrule ) {
-         const origRRULE=Object.assign({},evt.rrule)
-         endDate =  evt.rrule.UNTIL ? untilDate(evt.rrule.UNTIL): null
+         endDate =  evt.rrule.UNTIL
          evt.freq = evt.rrule.FREQ
          evt.interval = evt.rrule.INTERVAL
+         if (evt.rrule.BYMONTHDAY) {
+             evt.freqType = "BYMONTHDAY"
+             evt.freqData = evt.rrule.BYMONTHDAY
+             evt.byMonthDay = evt.rrule.BYMONTHDAY
+             evt.complex = true
+         }
+         if (evt.rrule.BYMONTH) {
+             evt.complex = true
+             evt.freqType = "BYMONTH"
+             evt.freqData = evt.rrule.BYMONTH
+             evt.months = evt.rrule.BYMONTH.split(',').map(month=>parseInt(month))
+             evt.count = parseInt(evt.rrule.COUNT)
+         }
+         if (evt.rrule.BYDAY) {
+             evt.complex = true
+             evt.freqType = "BYDAY"
+             evt.freqData = evt.rrule.BYDAY
+             evt.byDay = evt.rrule.BYDAY.replace('+','')
+         }
+         delete evt.rrule.BYMONTHDAY
+         delete evt.rrule.BYMONTH
+         delete evt.rrule.BYDAY
+         delete evt.rrule.COUNT
          delete evt.rrule.UNTIL
          delete evt.rrule.FREQ
          delete evt.rrule.INTERVAL
+
          if (Object.keys(evt.rrule).length > 1) {
-             throw("Unable to process complex RRULE",origRRULE)
+             console.log('complex RRULE', '\n---\n', Object.keys(evt.rrule),
+                '\n---origEvt\n',origEvt, '\n---evt\n',evt);
+             throw("Unable to process complex RRULE",origEvt)
          }
-         evt.rruleType = Object.keys(evt.rrule)[0]
-         evt.rruleData = evt.rrule[evt.rruleType]
+         if (Object.keys(evt.rrule)[0] === 'WKST') {
+             evt.weekStart = evt.rrule['WKST']
+         } else {
+             throw("Unknown rule type",evt.rruleType)
+         }
      }
      delete evt.rrule
      if (evt.location.length === 0) { delete evt.location }
@@ -217,48 +99,238 @@ function translateEventFromICal(evt) {
      if (!evt.recurrenceID || evt.recurrenceID.length === 0) { delete evt.recurrenceID }
 
      evt.endDate = endDate
-     evt.elapsed = evt.elapsed / (1000*60)
 
     return evt
 }
+// =================================================
+function pullEventsFromDB( startDate, endDate ){
+    return knexConnection("CalendarEvents").select('*').where('endDate', '>', startDate).orWhereNull('endDate')
+    .then(results => results.map(dbRecordToICSEvent))
+}
 
 // =================================================
+function pullTranslatedEventsFromICS( icsURL ){
+    return pullEventsFromICS( icsURL )
+    .then(events=> Promise.resolve(events.map( translateEventFromICal)) )
+}
+// =================================================
 function pullEventsFromICS( icsURL ){
-    return rp(icsURL)
-    .then(htmlStr => {
-        // return ical.parseICS(htmlStr)
-        var ical = icalendar.parse_calendar(htmlStr);
+    let mergeArrays = (arrays) => [].concat.apply([], arrays)
+    const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+
+    return fetchURL(icsURL)
+    .then( (data) => {
+        var ical = icalendar.parse_calendar(data.data);
         return ical.events()
     }).then(icalEvents => {
         return icalEvents.map(evt =>{
             const props = evt.properties
-            // return props
-            const icalObj = {startDate:props.DTSTART[0].value, endDate: props.DTEND[0].value,
-                googleId: props.UID[0].value,
-                // STATUS:props.STATUS[0].value,
+            // console.log('props',props);
+            const location = props.LOCATION ?
+            props.LOCATION[0].value.split('\n').map(locLine=>locLine.trim()).join('\n')
+            .replace('See map: Google Maps','')
+            .replace('United States','')
+            .replace('New Durham ,               NH','New Durham, NH')
+                .trim()
+                : ''
+            const icalObj = {
+                uid: props.UID[0].value,
+                startDate:props.DTSTART[0].value, endDate: props.DTEND[0].value,
+                status: props.STATUS ? props.STATUS[0].value:"",
                 summary: props.SUMMARY[0].value,
-                rrule: props.RRULE && props.RRULE[0].value,
-                location: props.LOCATION && props.LOCATION[0].value,
-                sequence: props.SEQUENCE && props.SEQUENCE[0].value,
-                recurrenceID: props['RECURRENCE-ID'] && props['RECURRENCE-ID'][0].value,
-                description: props.DESCRIPTION[0].value,
-                elapsed:  props.DTEND[0].value -  props.DTSTART[0].value
+                description: props.DESCRIPTION ? props.DESCRIPTION[0].value : "",
+                location: location,
+                created: props.CREATED[0].value,
+                modifiedDate: props['LAST-MODIFIED'][0].value,
+                elapsed:  (props.DTEND[0].value -  props.DTSTART[0].value),
             }
-            // if (icalObj.googleId === 'f7qvrqn30crct84qfsul16ibsc@google.com') {
-            //     // console.log('********' + require('util').inspect(evt.properties, { depth: 3 }));
-            //     console.log('********', icalObj);
-            // }
+            if(props.RRULE) icalObj.rrule = props.RRULE[0].value
+            if(props.SEQUENCE) icalObj.sequence = props.SEQUENCE[0].value
+            if(props['RECURRENCE-ID']) icalObj.recurrenceID = props['RECURRENCE-ID'][0].value
 
+            if(icalObj.rrule && icalObj.rrule.UNTIL) icalObj.rrule.UNTIL = dateFromICSDateStr(icalObj.rrule.UNTIL)
+
+            if (props.RRULE && props.RRULE.length > 1) {
+                throw new Error('Multiple RRules for event.')
+            }
             return icalObj;
         })
     })
 }
 // =================================================
-if (require.main === module) {
-    // calendarProcess(2000, false, 0)
+function extractICSWeeklyDates(startDate, endDate, icsRecord) {
+    if(!isWithinRange(icsRecord.startDate, startDate, endDate) &&
+    !isWithinRange(icsRecord.endDate, startDate, endDate)){
+        return []
+    }
+    switch (icsRecord.freqType) {
+        case 'BYDAY':
+        const weekCnt = differenceInCalendarWeeks(icsRecord.endDate,  icsRecord.startDate)+1
+        return Array.apply(null, Array(weekCnt))
+            .map(function (x, y) { return addWeeks(icsRecord.startDate, y)})
+            .filter(date=> isWithinRange(date, startDate, endDate))
+        break;
+        default:
+            throw new Error('extractICSWeeklyDates:unprocessed freqType:'+ icsRecord.freqType );
+    }
+    return []
+}
+// =================================================
+function extractICSMonthlyDates(startDate, endDate, icsRecord) {
+    switch (icsRecord.freqType) {
+        case 'BYMONTHDAY':
+            if(!isWithinRange(icsRecord.startDate, startDate, endDate) &&
+            !isWithinRange(icsRecord.endDate, startDate, endDate)){
+                return null
+            }
+            if (icsRecord.freqData === '1' && icsRecord.interval === '1' ) {
+                if(!isWithinRange(icsRecord.startDate, startDate, endDate)) return []
+                return [icsRecord.startDate]
+            }
+            break;
+        case 'BYMONTH':
+            const monthCnt = differenceInCalendarMonths(endDate,  icsRecord.startDate)+1
+            if (!icsRecord.byDay ) {
+                console.error(icsRecord);
+                throw new Error("Missing icsRecord.byDay" )
+            }
+            if ( icsRecord.byDay.length < 3) {
+                throw new Error("icsRecord.byDay.length < 3:"+icsRecord.byDay.length )
+            }
+            const targetWeek = parseInt(icsRecord.byDay.substring(0,1))
+            const targetDay  = dateNum(icsRecord.byDay.substring(1))
+            const months = differenceInCalendarMonths(endDate,  icsRecord.startDate)
 
+            return ((months>=0)? Array.apply(null, Array(months)):[])
+                .map(function (x, y) { return addMonths(icsRecord.startDate, y)})
+                .map(date=> getDayOfMonth(date, targetDay, targetWeek ))
+                .filter(date=> isWithinRange(date, startDate, endDate))
+            break;
+        case 'BYDAY':
+            const pivotMonth = icsRecord.startDate.getMonth()+1
+            return  icsRecord.months.slice(icsRecord.months.indexOf(pivotMonth))
+                .concat(icsRecord.months.slice(0, icsRecord.months.indexOf(pivotMonth)))
+                .map(month=>month<pivotMonth? 12-(pivotMonth-month):month-pivotMonth)
+                .map(month=> addMonths(icsRecord.startDate, month))
+                .map(date=> getDayOfMonth(date, dateNum(icsRecord.byDay.substring(1)), parseInt(icsRecord.byDay.substring(0,1)) ))
+                .filter(date=> icsRecord.months.includes(date.getMonth()+1) )
+                .slice(0,icsRecord.count)
+        default:
+            console.log('extractICSMonthlyDates:unprocessed freqType:', icsRecord.freqType );
+    }
+    return icsRecord
+}
+// =================================================
+function extractICSEventDates(startDate, endDate, icsRecord) {
+    // if(icsRecord.uid.indexOf('.8953.') >0) console.log('icsRecord', icsRecord);
+    if (typeof icsRecord.freq === 'undefined') { // Non recurring
+        return isWithinRange(icsRecord.startDate, startDate, endDate)? [icsRecord.startDate]: []
+    }
+    return isWithinRange(icsRecord.startDate, startDate, endDate)? [icsRecord.startDate]: []
+    // TODO: Currently NOT extracting as only town (New Durham) does not output correct recurrances
+
+    switch (icsRecord.freq) {
+        case 'MONTHLY':
+            return  extractICSMonthlyDates(startDate, endDate, icsRecord)
+            .filter(date=>isWithinRange(date, startDate, endDate))
+            break;
+        case 'WEEKLY':
+            return extractICSWeeklyDates(startDate, endDate, icsRecord)
+            .filter(date=>isWithinRange(date, startDate, endDate))
+            break;
+        default:
+            console.log('extractICSEventDates:', icsRecord);
+            return [icsRecord.startDate]
+    }
+}
+// =================================================
+function getCalendarDataForRange(startDate, endDate) {
+    if (configuration.municipalLongName === 'New Durham') {
+        const icsPath = 'file://' + configuration.ROOT_DIR+'/'+privateDir + '/export.ics'
+        console.log('icsPath',icsPath);
+        return pullTranslatedEventsFromICS(icsPath)
+        .then(evts=> {
+            return evts
+            .filter(evt=>isWithinRange(evt.startDate, startDate, endDate))
+            .map(evt=> ({
+                startDate:evt.startDate,
+                summary:evt.summary,
+                location:evt.location,
+                elapsed:evt.elapsed,
+                uid:evt.uid,
+            }))
+        })
+    } else {
+        return Promise.reject("getCalendarDataForRange:Processing of DB based calendar events TBD.")
+    }
+
+}
+// =================================================
+function getHomeCalendarRange() {
+    const pivot = new Date()
+    return [startOfWeek(startOfMonth(pivot)), endOfWeek(endOfMonth(pivot))]
+}
+// =================================================
+const dbRecordToICSEvent = (rec)=>{
+    let result = Object.assign({}, rec )
+    result.rrule = Object.keys(result).filter(key=>key.startsWith('rrule_'))
+    .reduce( (acc,curr, i) => {
+        acc[curr.replace('rrule_', '')] = rec[curr]
+        delete result[curr]
+        return acc
+    }, {})
+
+    return result
+}
+ // =================================================
+const icsEventToDBRecord = (evt) => Object.assign({},
+    {
+        uid: evt.uid,
+        startDate: evt.startDate,
+        endDate: evt.endDate,
+        summary: evt.summary,
+        description: evt.description,
+        location: evt.location,
+        created: evt.created,
+        modifiedDate: evt.modifiedDate,
+        elapsed: evt.elapsed,
+    }
+    , evt.rrule?
+    {
+        rrule_FREQ: evt.rrule.FREQ,
+        rrule_UNTIL: evt.rrule.UNTIL,
+        rrule_INTERVAL: evt.rrule.INTERVAL,
+        rrule_BYMONTHDAY: evt.rrule.BYMONTHDAY,
+        rrule_WKST: evt.rrule.WKST,
+        rrule_BYDAY: evt.rrule.BYDAY,
+        rrule_COUNT: evt.rrule.COUNT,
+        rrule_BYMONTH: evt.rrule.BYMONTH
+    }
+    :{}
+)
+// =================================================
+if (require.main === module) {
+    const range = getHomeCalendarRange()
+    console.log(range);
+    const now = new Date()
+    // const now = addMonths(new Date(), -1)
+    const monthStart = startOfMonth(now)
+    getCalendarDataForRange(range[0], range[1])
+    .then(events=> {
+        console.log('events', events);
+    })
+
+    .then(()=> {
+        process.exit()
+    })
+    .catch(err=>
+        console.log('X err',err)
+    )
 }
 
 // =================================================
-module.exports.calendarProcess = calendarProcess;
-module.exports.getCalendarDataForMonth = getCalendarDataForMonth;
+// module.exports.calendarProcess = calendarProcess;
+module.exports.getCalendarDataForRange = getCalendarDataForRange;
+module.exports.getHomeCalendarRange = getHomeCalendarRange;
+module.exports.pullEventsFromICS = pullEventsFromICS;
+module.exports.icsEventToDBRecord = icsEventToDBRecord;

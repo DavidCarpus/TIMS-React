@@ -9,7 +9,6 @@ exports.up = function(knex, Promise) {
       table.increments('id');
       table.dateTime('startDate');
       table.dateTime('endDate');
-      table.string('googleId');
       table.text('summary');
       table.text('description');
       table.text('location');
