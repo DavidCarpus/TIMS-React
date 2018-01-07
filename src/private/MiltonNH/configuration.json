@@ -12,7 +12,7 @@
         "tls": true
     },
     "downloadPath": {
-            "notices": "../private/Attachments/"
+            "notices": "Attachments/"
     },
     "delay": 5000,
     "infinite":true,
