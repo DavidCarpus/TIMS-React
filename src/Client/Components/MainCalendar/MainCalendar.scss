@@ -5,55 +5,87 @@
 #MainCalendar {
     @include blockSection;
 
-    #calBlock {
-        min-width: 16em;
+    h3 {
+        font-size: 14px;
+        text-align: center;
     }
+    #calBlock{
+        // background-color: yellow;
+    }
+    #listBlock{
+        // background-color: blue;
+        padding: 0em
 
-    color: black;
-
-      .eventDay {
-          display: inline-block;
-          min-width: 2em;
-          min-height: 2em;
-          background-color: red;
-          text-align: center;
-          border-radius: 2em;
-      }
-      .calDay {
-          display: inline-block;
-          text-align: center;
-          min-width: 2em;
-          min-height: 2em;
-      }
-      .outsideMonth {
-          color: grey;
-      }
-      .MonthTitle {
-          color: $miniCalendarDate;
-          padding-left: 5em;
-      }
-       a{
-          @include lnk('miniCalendar')
-          // color: $asideLinks;
-      }
-      .date {
-          color: $miniCalendarDate;
-          width: 100%;
-      }
-    //   #currentMonthBlock{
-    //       width: 15em;
-    //   }
-      #eventList {
-          column-count: 3;
-          .entry {
-              margin-bottom: 1em;
-              break-inside: avoid;
+    }
+    a{ @include lnk('miniCalendar') }
+    .date {
+      color: $miniCalendarDate;
+      // width: 100%;
+    }
+    #currentMonthBlock {
+        color: black;
+        // background-color: yellow;
+        .outsideMonth {
+            color: grey;
+        }
+        .eventDay {
+            display: inline-block;
+            min-width: 2em;
+            min-height: 2em;
+            background-color: red;
+            text-align: center;
+            border-radius: 2em;
+        }
+        .calDay {
+            display: inline-block;
+            text-align: center;
+            min-width: 2em;
+            min-height: 2em;
+        }
+        .MonthTitle {
+            color: $miniCalendarDate;
+            padding-left: 5em;
+        }
+        width: 14em;
+        padding: 0px;
+        margin: 0px;
+        // float: left;
+        // margin-right: 2em;
+        // margin-left: 50px;
+    }
+    .eventList {
+        column-count: 2;
+        width: 100%;
+        .entry {
+          margin-bottom: 0.5em;
+          // background-color: yellow;
+          .date{
+              display: inline-block;
+              float: left;
+              padding: 0px;
+              margin: 0px;
           }
-          .agendaIcon {
-              width: 1em;
-              height:  1em;
+          .description{
+              color: #f2bd53;
+              padding-left: 1em;
+              display: inline-block;
+              // width: 60%;
           }
-      }
+          ul{
+              padding-left: 0em;
+          }
+        }
+        li{
+            list-style: none;
+        }
+        // .agendaIcon {
+        //   width: 1em;
+        //   height:  1em;
+        // }
+    }
+    #futureEventList{
+        column-count: 3;
+    }
       a#MainCalendar-bookmark {
           display: block;
           position: relative;
@@ -61,7 +93,10 @@
           visibility: hidden;
       }
       @media  iphone5{
-          #eventList {
+          .eventList {
+              column-count: 1;
+          }
+          #futureEventList {
               column-count: 1;
           }
       }

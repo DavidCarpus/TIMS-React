@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
 var startOfMonth = require('date-fns/start_of_month')
+var endOfMonth = require('date-fns/end_of_month');
+var startOfWeek = require('date-fns/start_of_week')
+var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
@@ -23,6 +26,8 @@ const privateDir = configuration.mode === 'development' ? '../../private/'+proce
 var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
 var getCalendarDataForMonth = require('../libs/calendar/ICSCalendar').getCalendarDataForMonth;
+var getCalendarDataForRange = require('../libs/calendar/ICSCalendar').getCalendarDataForRange;
+var getHomeCalendarRange = require('../libs/calendar/ICSCalendar').getHomeCalendarRange;
 
 router.use(cors());
 // ==========================================================
@@ -173,6 +178,19 @@ router.get('/Asides/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
+    const range = getHomeCalendarRange()
+    const now = new Date()
+    // const now = addMonths(new Date(), -1)
+    const monthStart = startOfMonth(now)
+    getCalendarDataForRange(range[0], range[1])
+    .then(events=> {
+        console.log('events', events.length);
+        res.json(events);
+    })
+    .catch(err=> console.log('err', err))
+})
+// ==========================================================
+router.get('/CalendarEvents.1/', function(req, res) {
     // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
     const now = new Date()
     // const now = addMonths(new Date(), -1)
