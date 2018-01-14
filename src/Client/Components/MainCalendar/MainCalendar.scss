@@ -59,6 +59,7 @@
         column-count: 2;
         width: 100%;
         .entry {
+            break-inside: avoid;
           margin-bottom: 0.5em;
           // background-color: yellow;
           .date{
