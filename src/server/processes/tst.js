@@ -1,6 +1,8 @@
 // process.stdin.resume();
 var readline      = require('readline');
 
+// https://medium.freecodecamp.org/node-js-child-processes-everything-you-need-to-know-e69498fe970a
+
 process.on('exit', () => {
     console.log('Exiting  main process');
     if (imapP) {
@@ -19,9 +21,12 @@ let respan=true
 
 function spawnImap() {
     const spawnedEnv= {env: Object.assign({}, process.env, { SPAWNED: 1 } ) }
-    imapP = spawn('node', ['imapServerAccess.js'], spawnedEnv );
+    // imapP = spawn('node', ['imapServerAccess.js'], spawnedEnv );
+    imapP = spawn('node', ['emailProcessing.js'], spawnedEnv );
 
-    imapP.on('exit', (code, signal) =>  console.log('imapP process exited with ' + `code ${code} and signal ${signal}`) );
+    imapP.on('exit', (code, signal) =>
+    console.log('imapP process exited with ' + `code ${code} and signal ${signal}`)
+);
 
     // imapP.stdout.on('data', (data) => {
     //     process.stdout.write(`**** imapP stdout:\n${data}`)
@@ -38,7 +43,8 @@ function spawnImap() {
         try {
             obj = JSON.parse(line.toString());
         } catch (e) {
-            console.log('JSON.parse err:', e);
+            console.log('JSON.parse err:\n', line);
+            console.log(Object.keys(e));
             obj = line
         } finally {
 
