@@ -1,6 +1,6 @@
 {
-  "name": "GoogleCalendar",
+  "name": "ICSCalendar",
   "version": "0.0.0",
   "private": true,
-  "main": "./GoogleCalendar.js"
+  "main": "./ICSCalendar.js"
 }

@@ -13,9 +13,11 @@
         // background-color: yellow;
     }
     #listBlock{
-        // background-color: blue;
         padding: 0em
-
+    }
+    .agendaIcon {
+        background-color: white;
+        height: 1em;
     }
     a{ @include lnk('miniCalendar') }
     .date {

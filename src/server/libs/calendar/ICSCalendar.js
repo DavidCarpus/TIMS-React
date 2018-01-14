@@ -14,6 +14,7 @@ var endOfMonth = require('date-fns/end_of_month');
 var startOfWeek = require('date-fns/start_of_week');
 var endOfWeek = require('date-fns/end_of_week');
 var isWithinRange = require('date-fns/is_within_range')
+var addDays = require('date-fns/add_days')
 
 const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 
@@ -183,6 +184,22 @@ function translateEventFromICal(evt) {
 function pullEventsFromDB( startDate, endDate ){
     return knexConnection("CalendarEvents").select('*').where('endDate', '>', startDate).orWhereNull('endDate')
     .then(results => results.map(dbRecordToICSEvent))
+}
+// =================================================
+function pullAgendaIDFromDB( pageLink, startDate ){
+    const date1 = addDays(startDate, -1)
+    const date2 = addDays(startDate, 1)
+
+    return knexConnection("PublicRecords").select('*').whereBetween('date', [date1, date2])
+    .andWhere("recordtype", 'Agenda' ).andWhere("pageLink", pageLink )
+    .then(results => {
+        if(results.length === 1){
+            // console.log('results',pageLink, startDate, results[0].id);
+            return Promise.resolve(results[0].id)
+        } else {
+            return Promise.resolve(undefined)
+        }
+    })
 }
 
 // =================================================
@@ -417,8 +434,23 @@ if (require.main === module) {
         // console.log('events', events.length);
         // console.log('Non "PublicMeeting" events', events.filter(evt=>evt.eventType !== 'Public Meeting').map(evt=>evt.summary).filter(onlyUnique).sort());
         // console.log('events', events);
+        const addAgendaIDFromDB = (evt) => {
+            return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
+                console.log('got id', id);
+                return Promise.resolve(Object.assign({}, evt, {agendaID:id}))
+            })
+        }
+
+        return Promise.all(events.map(addAgendaIDFromDB))
+        // console.log('"NON-Home" events',
+        // events
+        // .filter(evt=>evt.pageLink !== 'Home' && evt.eventType === 'Public Meeting')
+        // .map(evt=>evt.pageLink +'-'+ evt.eventType +'-'+ evt.summary).filter(onlyUnique).sort());
+
+        // console.log('event pageLinks', events.map(evt=>evt.pageLink).filter(onlyUnique).sort());
     })
     .then(events=> {
+        console.log('events with Agendas:', events.filter(evt=>evt.agendaID));
     })
 
     .then(()=> {
@@ -435,3 +467,4 @@ module.exports.getCalendarDataForRange = getCalendarDataForRange;
 module.exports.getHomeCalendarRange = getHomeCalendarRange;
 module.exports.pullEventsFromICS = pullEventsFromICS;
 module.exports.icsEventToDBRecord = icsEventToDBRecord;
+module.exports.pullAgendaIDFromDB = pullAgendaIDFromDB;

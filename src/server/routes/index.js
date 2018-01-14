@@ -28,6 +28,7 @@ var mysql_pool = require('../libs/db/mysql').mysql_pool;
 var getCalendarDataForMonth = require('../libs/calendar/ICSCalendar').getCalendarDataForMonth;
 var getCalendarDataForRange = require('../libs/calendar/ICSCalendar').getCalendarDataForRange;
 var getHomeCalendarRange = require('../libs/calendar/ICSCalendar').getHomeCalendarRange;
+var pullAgendaIDFromDB = require('../libs/calendar/ICSCalendar').pullAgendaIDFromDB;
 
 router.use(cors());
 // ==========================================================
@@ -179,13 +180,18 @@ router.get('/Asides/:groupName', function(req, res) {
 // ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
     const range = getHomeCalendarRange()
-    const now = new Date()
-    // const now = addMonths(new Date(), -1)
-    const monthStart = startOfMonth(now)
+    const addAgendaIDFromDB = (evt) => {
+        return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
+            return Promise.resolve(Object.assign({}, evt, {agendaID:id}))
+        })
+    }
+
     getCalendarDataForRange(range[0], range[1])
     .then(events=> {
-        console.log('events', events.length);
-        res.json(events);
+        return Promise.all(events.map(addAgendaIDFromDB))
+    })
+    .then(withAddedAgendaID=> {
+        res.json(withAddedAgendaID);
     })
     .catch(err=> console.log('err', err))
 })
