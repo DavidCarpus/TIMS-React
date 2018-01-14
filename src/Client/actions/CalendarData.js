@@ -44,3 +44,14 @@ export function fetchCalendarDataFailure(error) {
     payload: error
   };
 }
+//========================================
+export function editCalendarFilter(newFilter,newValue) {
+    // console.log('editCalendarFilter:',newFilter, newValue);
+    return {
+      type: CalendarDataConstants.FILTER_EDIT,
+      field: newFilter,
+      value: newValue
+      // payload: {newFilter:newFilter,newValue:newValue}
+      // payload: {field:field, event:event, newValue:newValue, previousValue:previousValue}
+    };
+}

@@ -29,6 +29,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
      fetchData: () => {
          dispatch(fetchCalendarData())
+     },
+     modifyFilter: (field, event, newValue, previousValue) => {
+         // dispatch(editCalendarFilter(field, event, newValue, previousValue))
+         dispatch(editCalendarFilter(field, newValue))
      }
   }
 }

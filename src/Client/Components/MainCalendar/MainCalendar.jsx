@@ -3,6 +3,8 @@ import  './MainCalendar.css'
 import {Link} from 'react-router-dom';
 import addDays from 'date-fns/add_days'
 import isWithinRange from 'date-fns/is_within_range'
+// import { connect } from 'react-redux'
+import { Field, reduxForm } from 'redux-form'
 
 import { Col, Row } from 'reactstrap';
 // import SmartLink from '../SmartLink'
@@ -41,7 +43,7 @@ function currentMonthBlock(calDataByWeek, monthName) {
     )
 }
 
-function eventList(evntLst, listID, filterFunc) {
+function eventListBlock(evntLst, listID, filterFunc) {
     return (
     <ul  id={listID} className="eventList">
     {evntLst.filter(filterFunc).map( (entry) =>
@@ -56,51 +58,72 @@ function eventList(evntLst, listID, filterFunc) {
     </ul>
     )
 }
+
+function filterBlock(displayFilters, modifyFilter) {
+    // console.log('filterBlock', displayFilters);
+return (Object.keys(displayFilters).map(fieldName=>
+    <span key={fieldName}>
+        <Field name={fieldName}
+            onChange={(event, newValue, previousValue) => modifyFilter(fieldName, event, newValue, previousValue)}
+            component="input" type="checkbox" />
+        <label htmlFor={fieldName}>{fieldName}</label>
+        &nbsp;&nbsp;
+    </span>
+))}
 // <SmartLink link="/calendar" id="0" linkText=" ... More" />
 
-export default class MainCalendar extends React.Component {
+class MainCalendar extends React.Component {
     componentWillMount() {
         this.props.fetchData(this.props);
     }
 
     render() {
-    if ( this.props.loading) {         return (<div>Loading</div>)     }
-    if (Object.keys(this.props.calDataByWeek).length   === 0 ) { return(null);  }
-    if (Object.keys(this.props.eventList).length   === 0 ) { return(null);  }
+        const {
+            loading, modifyFilter, eventList, getEventList, getCalByWeek,
+            displayFilters
+        } = this.props;
 
-    const day = 9
-    const minDate = addDays(new Date(),-2)
+        if ( loading) {         return (<div>Loading</div>)     }
+        if (Object.keys(eventList).length   === 0 ) { return(null);  }
+
+    const day = 7
+    const minDate = addDays(new Date(),-5)
     const maxDate = addDays(new Date(),day)
     const closeDates = (entry)=>isWithinRange(entry.sdate, minDate, maxDate)
     const futureEvent = (entry)=> (entry.sdate - maxDate) > 0
+    const newFilter = Object.assign({},displayFilters, {"startDateGT":minDate})
+    const filteredEventList = getEventList(eventList, newFilter)
+    const calDataByWeek = getCalByWeek(eventList,newFilter)
 
         return (
             <section id='MainCalendar' className="MainCalendar">
                 <a id="MainCalendar-bookmark">MainCalendar Start</a>
                 <h2>Upcoming Events</h2>
+                    {filterBlock(displayFilters, modifyFilter)}
                 <Row>
                     <Col  md='4'  xs={{size:12}} id='calBlock'>
-                        {currentMonthBlock(this.props.calDataByWeek, this.props.monthName)}
+                        {currentMonthBlock(calDataByWeek, this.props.monthName)}
                     </Col>
                     <Col  md='8'  xs={{size:12}} id='listBlock'>
                         <h3>Next {day} days.</h3>
-                        {eventList(this.props.eventList, "soonEventList", closeDates)}
+                        {eventListBlock(filteredEventList, "soonEventList", closeDates)}
                     </Col>
                 </Row>
                 <hr/>
                 <Row>
                     <Col  md='12'  xs={{size:12}} id='listBlock'>
                         <h3>Later</h3>
-                        {eventList(this.props.eventList, "futureEventList", futureEvent)}
+                        {eventListBlock(filteredEventList, "futureEventList", futureEvent)}
                     </Col>
                 </Row>
         </section>
         );
     }
 }
-/*
+//==================================================
+MainCalendar = reduxForm({
+  form: 'CalendarFilterForm'  // a unique identifier for this form
+})(MainCalendar)
+//==================================================
 
-{currentMonthBlock(this.props.calDataByWeek, this.props.monthName)}
-{eventList(this.props.eventList)}
-
-*/
+export default MainCalendar
