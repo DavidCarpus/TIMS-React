@@ -1126,10 +1126,16 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
     if ($(viewAllAgenda).find('a').html()) {
         baseLinkToAgendas = trimHTMLFromFileURI(fullURIFromHref(pageURI, $(viewAllAgenda).find('a').attr('href') ))
     }
-    // const activeMeetingDocs = $(activeMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')  ).get()
-    // .concat($(activeAgendasSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
+
+    const groupPageMeetingMinutesSelector = "#block-system-main > div > div > div > aside > div.region.region-page-sidebar-second.sidebar > div > section.panel-pane.pane-views-panes.pane-group-minutes-panel-pane-1.with-heading > div > div > div > div.view-content > div > ul"
+    const groupPageMeetingAgendaSelector = "#block-system-main > div > div > div > aside > div.region.region-page-sidebar-second.sidebar > div > section.panel-pane.pane-views-panes.pane-group-agenda-panel-pane-1.with-heading > div > div > div > div.view-content > div > ul"
+
+    const groupPageMeetingDocs = $(groupPageMeetingMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')).get()
+    .concat($(groupPageMeetingAgendaSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
+
     const activeMeetingDocs = (baseLinkToMinutes?[]:$(activeMinutesSelector).children().map( (i, row)  =>  fetchDataFromRow(row,'Minutes')  ).get())
     .concat(baseLinkToAgendas?[]:$(activeAgendasSelector).children().map( (i, row)  =>  fetchDataFromRow(row, 'Agenda')  ).get())
+    .concat(groupPageMeetingDocs)
 
     return Promise.all(activeMeetingDocs.map(documentRecord => {
         if (! validExtensions.includes(getExtension(documentRecord.uri).toUpperCase())) {
@@ -1164,8 +1170,6 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
             )
         })
     })
-
-
     .then(meetingMigrateResults => {
         const pullRecents = (docType, baseLink) => {
             if(!baseLink) return Promise.resolve('NA')
@@ -1244,10 +1248,8 @@ function migrateNewDurham() {
 
     return cachingFetchURL('https://www.newdurhamnh.us/boards')
     .then(fetchedData => {
-        // console.log('migrateNewDurham', Object.keys(fetchedData));
         var $ = cheerio.load(fetchedData.data);
         return $("#block-system-main > div > div > div > table > tbody").children().map( (i, el)  => {
-            // console.log('***',fetchedData.location);
             return dataFromElement(fetchedData.location, $(el))
         }).get()
         // .splice(0,7)
