@@ -9,9 +9,9 @@ var emailValidate = require("email-validator");
 var sendAutomationEmail = require('../emailProcessors/common').sendAutomationEmail;
 
 let cellCarriers = require('./cellCarriers.json')
+
 // Verizon
 // We are currently investigating a technical issue that is preventing Verizon clients from signing up for text alerts.  If you use Verizon, please click here to give us your number.
-
 //===========================================
 const contactTypes = {
     PHONE : 'phone',
@@ -32,145 +32,117 @@ function getContactType( textValue) {
    return contactTypes.UNK;
 }
 //===========================================
-function dbDateFormat(date) {
-    var mm = date.getMonth() + 1; // getMonth() is zero-based
-    var dd = date.getDate();
-    var hh = date.getHours();
-    var MM = date.getMinutes();
-    var SS = date.getSeconds();
-
-    return [date.getFullYear()+ '-',
-            (mm>9 ? '' : '0')  + mm+ '-',
-            (dd>9 ? '' : '0') + dd+ ' ',
-            (hh>9 ? '' : '0') + hh + ':',
-            (MM>9 ? '' : '0')  +  MM + ':',
-            (SS>9 ? '' : '0')  +  SS,
-
-           ].join('');
-}
-//===========================================
-function validateData(submittedData) {
-    let errors=[];
-
-    return errors;
-}
-//===========================================
-function verifyCellNumbers() {
-    // console.log('sql', knex("AlertUsers").where({dateVerified:0}).whereNotNull('carrier').whereRaw("dateVerifiedSent < updated_at").toString() );
-
-    return knex("AlertUsers").where({dateVerified:0}).whereNotNull('carrier').whereRaw("dateVerifiedSent < updated_at")
-    .then(recordsToVerify => {
-        return Promise.all(recordsToVerify.map(recordToVerify => {
-            return sendVerificationText(recordToVerify);
-        }))
+function dbValidationSent(knexConnection, request) {
+    return knexConnection("AlertRequest").where({alertRequestId: request.alertRequestId }).update({dateValidationSent: new Date() })
+    .then(function (response) {
+        console.log( 'dateValidationSent', response );
+        return Promise.resolve(request)
     })
 }
 //===========================================
-function verifyEmailAddresses() {
-    return knex("AlertUsers").where({dateVerified:0}).whereNull('carrier').whereRaw("dateVerifiedSent < updated_at")
-    .then(recordsToVerify => {
-        return Promise.all(recordsToVerify.map(recordToVerify => {
-            return sendVerificationEmail(recordToVerify);
-        }))
-    })
-}
-//===========================================
-function sendVerificationEmail(recordToVerify) {
-    let destEmail = recordToVerify.contact;
-    let subject='Requested alert registration.'
-    let text='Please respond to verify you requested alerts to this email address.'
+const alertRegistrationEmail = (destEmail, text, request) =>{
+    text += Object.keys(request.options).map(option =>  option + ' - '+ request.options[option]).join('\n')
+
+    // return dbValidationSent(knex, request )
+    // .then(dbResult => {
+    //     return Promise.resolve(Object.assign({}, request, {TBD:"***Not currently processing Alert emails.***"}) )
+    // })
+
     return sendAutomationEmail(destEmail,  {
-        subject: subject,
+        subject: 'Requested alert registration. Request#'+request.alertRequestId,
         text: text,
     })
-    .then(emailResult => {
-        console.log('emailResult:', emailResult);
-        return knex("AlertUsers").where({contact: recordToVerify.contact }).update({dateVerifiedSent: new Date() })
-        .then(function (response) {
-            console.log( response );
-            return response
+    .then(emailResult =>
+        dbValidationSent(knex, request )
+        .then(dbResult => {
+            return Promise.resolve(Object.assign({},request, emailResult) )
         })
-    })
+    )
 }
 //===========================================
-function sendVerificationText(recordToVerify) {
-    let carrierData = cellCarriers.filter(carrier => carrier.Carrier == recordToVerify.carrier )
+function verifyPhoneAlertRequest(request) {
+    let carrierData = cellCarriers.filter(carrier => carrier.Carrier == request.carrier )
+    let destEmail = request.contact + '@' + carrierData[0].email;
+    let text='Please reply to this text message to confirm your request to be alerted when the below items are posted:\n\n'
 
-    let destEmail = recordToVerify.contact + '@' + carrierData[0].email;
-    let subject='Requested alert registration.'
-    let text='Please respond to verifyCellNumber.'
-    // return Promise.resolve(destEmail)
-    return sendAutomationEmail(destEmail,  {
-        subject: subject,
-        text: text,
+    return alertRegistrationEmail(destEmail, text, request)
+}
+//===========================================
+function verifyEmailAlertRequest(request) {
+    let text='Please reply to this email to confirm your request to be alerted when the below items are posted:\n\n'
+    return alertRegistrationEmail(request.contact, text, request)
+}
+//===========================================
+function verifyAlertRequests() {
+    return knex("AlertRequest").select('alertRequestId','contact', 'contactType', 'carrier', 'dateRequested')
+    .where('dateValidationSent', 0).orderBy('contact').orderBy('dateRequested', 'desc')
+    .then(requestsToVerify => {
+        const onlyFirstRecordForAContact = (acc, val) =>
+            (acc.filter(elem=> elem.contact === val.contact).length === 0)?
+            acc.concat(val):  acc
+
+        return Promise.all(requestsToVerify.reduce( onlyFirstRecordForAContact, []).map(request=>
+            knex("AlertRequestData").select().where("alertRequestId", request.alertRequestId).orderBy('pageLink')
+            // .then(requestData => Object.assign({},request, {options:requestData}))
+            .then(requestData => {
+                return Promise.resolve( Object.assign({},request, {options: requestData.reduce( (acc, val) =>{
+                acc[val.pageLink] = acc[val.pageLink]? acc[val.pageLink].concat(val.recordType):[val.recordType]
+                return acc
+                }, []) }))
+            })
+        ))
     })
-    .then(emailResult => {
-        console.log('emailResult:', emailResult);
-        return knex("AlertUsers").where({contact: recordToVerify.contact }).update({dateVerifiedSent: new Date() })
-        .then(function (response) {
-            console.log( response );
-            return response
+    .then(requestsWithData => {
+        return Promise.all(requestsWithData.filter(record=>record.contactType === 'email').map(verifyEmailAlertRequest))
+        .then(emailsProcessed => {
+            return Promise.all(requestsWithData.filter(record=>record.contactType === 'phone').map(verifyPhoneAlertRequest))
+            .then(phonesProcessed => phonesProcessed.concat(emailsProcessed))
         })
     })
 }
 //===========================================
 function submitAlertRequestData(submittedData) {
-    let alertUserData = {
-        carrier: submittedData.phoneCarrier,
+    let alertRequest = {
+        dateRequested: new Date(),
+        dateValidated: 0,
+        dateRejected: 0,
         contact: submittedData.contact,
-        dateVerified: 0
-    }
-    if(emailValidate.validate(alertUserData.contact)){
-        delete alertUserData.carrier;
+        carrier: submittedData.phoneCarrier,
+        contactType: emailValidate.validate(submittedData.contact)? 'email': 'phone',
     }
 
-    const optionToObj = (option) => ({noticeType:option.NoticeType, registrationDate:new Date()})
-    let alertRegistrationsDataInserts = submittedData.options.filter(option => option.enabled).map(optionToObj)
-    // let alertRegistrationsDataDeletes = submittedData.options.filter(option => !option.enabled).map(optionToObj)
+    const options = submittedData.options.map(option => ({
+            pageLink: option.option.pageLink,
+            recordType: option.option.recordType
+        }))
 
-    let sql = knex("AlertUsers").insert(alertUserData).toString()
-        sql += " ON DUPLICATE KEY UPDATE updated_at='"  + dbDateFormat(new Date()) + "' , dateVerified=0"
-
-    alertUserID = 0;
-    return knex.raw(sql)
-        .then(function (response) {
-            alertUserID= response[0].insertId
-            submittedData.alertUserID = alertUserID;
-            let rows = alertRegistrationsDataInserts.map(insert => {
-                insert.alertUserID = alertUserID;
-                return insert;
-            })
-            return knex('AlertRegistrations').delete().where({alertUserID:alertUserID})
-            .then(deletedRecordCount => {
-                return knex.batchInsert('AlertRegistrations', rows)
-            })
-            .then(insertedRecords => {
-                return Promise.resolve(JSON.stringify(submittedData))
-            })
-        })
-}
-
-//===========================================
-function sendVerifications(knexConnection){
-    return verifyCellNumbers(knexConnection)
-    .then(verifiedCellNumbers => {
-        (verifiedCellNumbers.length > 0) && console.log('verifiedCellNumbers:' + require('util').inspect(verifiedCellNumbers, { depth: null }));
-        return verifiedCellNumbers;
-    })
-    .then(cellsVerified => {
-        return verifyEmailAddresses(knexConnection)
-        .then(emailsVerified => {
-            (emailsVerified.length > 0) && console.log('emailsVerified:' + require('util').inspect(emailsVerified, { depth: null }));
-            return emailsVerified;
+    return knex('AlertRequest').insert(alertRequest)
+    .then(entered=> {
+        const AlertRequestID = entered[0]
+        return Promise.all(options.map(option => knex('AlertRequestData')
+        .insert(Object.assign({}, option, {alertRequestID:AlertRequestID}) )
+        .then( (AlertRequestDataId) => Object.assign({}, option, {alertRequestID:AlertRequestID, AlertRequestDataId:AlertRequestDataId[0]}) )
+        ))
+        .then(requestData => Object.assign({}, alertRequest, {alertRequestID:AlertRequestID, options:requestData}))
+        .then((data)=> {
+            return Promise.resolve(data)
         })
     })
-
 }
 //===========================================
-function sendNotifications(notificationData) {
-    console.log('sendNotifications(notificationData)', notificationData);
-}
+function validateAlertRequest(knex, responseData) {
+    const alertRequestID = responseData.header.subject[0].replace(/.*#/,'')
+    const from  = responseData.header.from[0].match(/.*<(.*)>/)[1]
+    const validationDate = responseData.header.date || new Date()
 
+    return knex('AlertRequest').update({dateValidated:validationDate})
+    .where({alertRequestID:alertRequestID, contact:from})
+    .then( ()=>
+    Promise.resolve(Object.assign({},responseData,
+        {id:alertRequestID, results:"Request " + alertRequestID + ' from ' + from + ' Validated.'}
+    ))
+    )
+}
 
 //===========================================
 //===========================================
@@ -180,7 +152,7 @@ if (require.main === module) {
     const index=2;
     switch (process.argv[index]) {
         case 'verify':
-            sendVerifications(knexConnection)
+            verifyAlertRequests(knexConnection)
             .then(emailsVerified => {
                 console.log('Verifications sent:', emailsVerified);
             })
@@ -188,17 +160,35 @@ if (require.main === module) {
                 process.exit();
             })
             break;
+        case 'validate':
+            validateAlertRequest(knexConnection,
+                { header:{
+                    from: [ "David Carpus <david.carpus@gmail.com>" ],
+                    subject: [ 'Re: Requested alert registration. Request#5' ],
+                    },
+                    uid: 8,
+                    bodyData: "Confirmed!\r\n\r\nOn Fri, Dec 22, 2017 at 11:16 AM Website automation <\r\nwebsite@newdurham.carpusconsulting.com> wrote:\r\n\r\n> Please reply to this email to confirm your request to be alerted when the\r\n> below items are posted:\r\n>\r\n> BoardofSelectmen - Documents,Minutes,Agenda\r\n> BoodeyFarmsteadCommittee - Notice\r\n> CyanobacteriaMediationSteeringCommittee - Documents\r\n> Home - RFP\r\n>\r\n",
+                }
+            )
+            .then(requestValidated => {
+                console.log('validateAlertRequest sent:', requestValidated);
+            })
+            .then(done => {
+                process.exit();
+            })
+            break;
+
         default:
             console.log('Unknown parameter', process.argv[index]);
             console.log('Need cli parameter:', ['verify']);
             process.exit();
             break;
     }
-
-
 }
 
 //===========================================
 module.exports.contactTypes = contactTypes;
 module.exports.submitAlertRequestData = submitAlertRequestData;
-module.exports.sendVerifications = sendVerifications;
+module.exports.sendVerifications = verifyAlertRequests;
+module.exports.verifyAlertRequests = verifyAlertRequests;
+module.exports.validateAlertRequest = validateAlertRequest;

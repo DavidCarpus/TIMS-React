@@ -83,7 +83,7 @@ function getRequestTypeFromLine(line) {
             ] },
         {requestType: 'UPDATE', searchMatches: ['^UPDATE$'] },
         {requestType: 'REQUEST', searchMatches: ['^REQUEST$'] },
-        {requestType: 'VERIFY', searchMatches: ['^RE: REQUESTED ALERT REGISTRATION'] },
+        {requestType: 'VALIDATE', searchMatches: ['^RE: REQUESTED ALERT REGISTRATION'] },
         ]
 
         ucaseLine = line.toUpperCase().trim();

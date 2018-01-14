@@ -8,12 +8,63 @@ import  "./RequestAlerts.css"
 const SelectOption = (field) =>
     <option key={field.value} value={field.value}>{field.label}</option>
 
-        //==================================================
+//==================================================
+const SelectionList = ({pageLink, desc, recordTypes}) =>
+    <tr>
+        <td>{desc}</td>
+        {recordTypes.map((recordType,index)=>
+            <td className='alertOption' key={index}>
+                 <Field name={"alertOption_"+pageLink+'_'+ recordType.type} id={pageLink+'_'+ recordType.type} component="input" type="checkbox"/>
+            </td>
+        )}
+    </tr>
+
+//==================================================
+const NonGroupOptions = ({options}) =>
+<table>
+    <thead>
+        <tr><th>Town</th><th></th></tr>
+    </thead>
+    <tbody>
+        {options.map((recordType,index)=>
+            <tr key={'nonGroupOption'+index}>
+            <td>{recordType.label}</td>
+            <td className='alertOption' key={'Home'+index}>
+                 <Field name={"alertOption_Home_"+ recordType.type} id={'Home_'+ recordType.type} component="input" type="checkbox"/>
+            </td>
+            </tr>
+        )}
+    </tbody>
+</table>
+
+//==================================================
+const GroupOptions = ({options}) =>
+    <table>
+        <thead>
+            <tr>
+                <th>Board / Committee</th>
+                {(options.length>0?options[0].recordTypes.map(recordType=>recordType.label):[]).map(header=>
+                    <th key={header}>{header}</th>
+                )}
+            </tr>
+        </thead>
+
+        <tbody>
+        {options.map( (option, index) =>
+            <SelectionList
+                key={option.group.pageLink.replace('/', '')}
+                desc={option.group.description}
+                pageLink={option.group.pageLink.replace('/', '')}
+                recordTypes={option.recordTypes} />
+            )}
+        </tbody>
+    </table>
+//==================================================
 class RequestAlertsForm extends Component {
   render() {
+      // alertOptions,
     const {
-        handleSubmit,
-        alertOptions, phoneCarriers,
+        handleSubmit, phoneCarriers, options, nonGroupOptions,
         contactType, validToSubmit, validContact,
         dbSubmit, dbSubmitComplete
     } = this.props;
@@ -41,12 +92,12 @@ class RequestAlertsForm extends Component {
                     </Field>
                 </div>
             }
-            {alertOptions.map( (option, index) =>
-                <div key={index}>
-                    <Field name={"alertOption_"+option.label} id={option.type} component="input" type="checkbox"/>
-                    <span>{option.label}</span>
-                </div>
-            )}
+
+            <br/>
+            <NonGroupOptions options={nonGroupOptions} />
+            <br/>
+            <GroupOptions options={options} />
+
             {validToSubmit &&
                 <div>
                     <button className='button' type="submit" disabled={!validToSubmit || dbSubmit}>Submit</button>

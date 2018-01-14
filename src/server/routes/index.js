@@ -678,8 +678,8 @@ router.post('/AlertRequests/', function(req, res) {
     var data = req.body;
     submitAlertRequestData(data)
     .then(submission => {
-        console.log('submission:', submission);
-        res.json(data);
+        console.log('AlertRequests', require('util').inspect(submission, { depth: null }));
+        res.json(submission);
     })
 });
 
