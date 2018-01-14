@@ -17,6 +17,8 @@ var isWithinRange = require('date-fns/is_within_range')
 
 const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 
+const translations = require(configuration.ROOT_DIR+'/'+privateDir + '/ICSCalendarLookups.json')
+
 var knexConfig = require('../db/knexfile.js')
 var knexConnection = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
@@ -39,6 +41,7 @@ const getDayOfMonth = (baseDate, day , week) => {
     return new Date(baseDate.getFullYear(), baseDate.getMonth(),chk,
         baseDate.getHours(), baseDate.getMinutes())
 }
+// ==========================================================
 //===========================================
 const mergeArrays = (arrays) => [].concat.apply([], arrays)
 const onlyUnique = (value, index, self) => self.indexOf(value) === index;
@@ -46,6 +49,66 @@ const onlyUnique = (value, index, self) => self.indexOf(value) === index;
 function insertEventIntoDatabase(knex, eventToinsert) {
     return addOrUpdateTable(knex, 'CalendarEvents',
     eventToinsert,{ uid: eventToinsert.uid, startDate: eventToinsert.startDate})
+}
+// =================================================
+// =================================================
+const translateSummary = (originalSummary) => {
+    let summaries = translations.summaries
+    const ucaseLine = originalSummary.toUpperCase()
+    let matches = summaries.filter(type => {  //  type.alts
+        return  (type.summary === ucaseLine) || type.alts.reduce(function(sum, value) {
+            return sum || (ucaseLine.search(new RegExp(value, 'i')) >= 0);
+        }, false);
+    })
+    if (matches.length > 0) {
+        return  matches[0].summary
+    }
+    return originalSummary
+}
+// =================================================
+const computeEventType = (summary, pageLink) => {
+    // console.log('Unknown eventType: ', pageLink, summary);
+    if(summary.toLowerCase().endsWith(' training')) return "Event"
+    if(summary.toLowerCase().indexOf(' scout') > -1) return "Community Event"
+    if(summary.toLowerCase().indexOf(' fundraiser') > -1) return "Event"
+    if(summary.toLowerCase().indexOf(' benefit') > -1) return "Event"
+    if(summary.toLowerCase().indexOf(' open house') > -1) return "Event"
+    if(summary.toLowerCase().indexOf(' blood drive') > -1) return "Event"
+    if(summary.toLowerCase().indexOf(' celebration') > -1) return "Event"
+
+    if(summary.toLowerCase().indexOf('public hearing') > -1) return "Public Meeting"
+
+    if (pageLink !== 'Home') {
+        return "Public Meeting"
+    }
+
+    if(summary.toLowerCase().endsWith(' class')) return "Community Event"
+
+    console.log('Unknown eventType: ', summary);
+    return "Community Event"
+    // return "Event"
+    // ["Holiday",     "Public Meeting"    ]
+}
+// =================================================
+const computePageLink = (URI, summary) => {
+    let pageLink = translateURIDept(URI)
+    if(pageLink === 'Home' && summary){
+        const pageLinkFromSummary = translateSummaryDept(summary)
+        if(pageLinkFromSummary) pageLink = pageLinkFromSummary
+    }
+    return pageLink
+}
+
+// =================================================
+const translateURIDept = (URI) => {
+    const pageLink = URI.split('/')[3]
+    let matches = translations.groupFromURI.filter(group => group.URI === pageLink )
+    return (matches.length > 0)? matches[0].group: pageLink
+}
+// =================================================
+const translateSummaryDept = (summary) => {
+    let matches = translations.groupFromSummary.filter(group => group.summary === summary )
+    return (matches.length > 0)? matches[0].group: null
 }
 // =================================================
 function translateEventFromICal(evt) {
@@ -98,6 +161,20 @@ function translateEventFromICal(evt) {
      if (evt.description.length === 0) { delete evt.description }
      if (!evt.recurrenceID || evt.recurrenceID.length === 0) { delete evt.recurrenceID }
 
+     if (evt.location) {
+         // console.log('evt.location',evt.location);
+         evt.location = evt.location.split('\n').map(locLine=>locLine.trim()).join('\n')
+         .replace('See map: Google Maps','')
+         .replace('United States','')
+         .replace('New Durham ,               NH','New Durham, NH')
+             .trim()
+      }
+      if (evt.summary) {
+          evt.summary = translateSummary(evt.summary)
+      }
+      evt.pageLink = computePageLink(evt.URI, evt.summary)
+      evt.eventType = computeEventType(evt.summary, evt.pageLink)
+
      evt.endDate = endDate
 
     return evt
@@ -143,6 +220,7 @@ function pullEventsFromICS( icsURL ){
                 created: props.CREATED[0].value,
                 modifiedDate: props['LAST-MODIFIED'][0].value,
                 elapsed:  (props.DTEND[0].value -  props.DTSTART[0].value),
+                URI:  props.URL ? props.URL[0].value : "",
             }
             if(props.RRULE) icalObj.rrule = props.RRULE[0].value
             if(props.SEQUENCE) icalObj.sequence = props.SEQUENCE[0].value
@@ -258,6 +336,8 @@ function getCalendarDataForRange(startDate, endDate) {
                 location:evt.location,
                 elapsed:evt.elapsed,
                 uid:evt.uid,
+                pageLink:evt.pageLink,
+                eventType:evt.eventType,
             }))
         })
     } else {
@@ -270,6 +350,7 @@ function getHomeCalendarRange() {
     const pivot = new Date()
     return [startOfWeek(startOfMonth(pivot)), endOfWeek(endOfMonth(pivot))]
 }
+
 // =================================================
 const dbRecordToICSEvent = (rec)=>{
     let result = Object.assign({}, rec )
@@ -283,41 +364,61 @@ const dbRecordToICSEvent = (rec)=>{
     return result
 }
  // =================================================
-const icsEventToDBRecord = (evt) => Object.assign({},
-    {
-        uid: evt.uid,
-        startDate: evt.startDate,
-        endDate: evt.endDate,
-        summary: evt.summary,
-        description: evt.description,
-        location: evt.location,
-        created: evt.created,
-        modifiedDate: evt.modifiedDate,
-        elapsed: evt.elapsed,
-    }
-    , evt.rrule?
-    {
-        rrule_FREQ: evt.rrule.FREQ,
-        rrule_UNTIL: evt.rrule.UNTIL,
-        rrule_INTERVAL: evt.rrule.INTERVAL,
-        rrule_BYMONTHDAY: evt.rrule.BYMONTHDAY,
-        rrule_WKST: evt.rrule.WKST,
-        rrule_BYDAY: evt.rrule.BYDAY,
-        rrule_COUNT: evt.rrule.COUNT,
-        rrule_BYMONTH: evt.rrule.BYMONTH
-    }
-    :{}
-)
+const icsEventToDBRecord = (evt) => {
+    let record = Object.assign({},
+        {
+            uid: evt.uid,
+            startDate: evt.startDate,            endDate: evt.endDate,
+            summary: evt.summary,            description: evt.description,
+            location: evt.location,
+            created: evt.created,            modifiedDate: evt.modifiedDate,
+            elapsed: evt.elapsed,
+            URI: evt.URI,
+        }
+        , evt.rrule?
+        {
+            rrule_FREQ: evt.rrule.FREQ,
+            rrule_UNTIL: evt.rrule.UNTIL,
+            rrule_INTERVAL: evt.rrule.INTERVAL,
+            rrule_BYMONTHDAY: evt.rrule.BYMONTHDAY,
+            rrule_WKST: evt.rrule.WKST,
+            rrule_BYDAY: evt.rrule.BYDAY,
+            rrule_COUNT: evt.rrule.COUNT,
+            rrule_BYMONTH: evt.rrule.BYMONTH
+        }
+        :{}
+    )
+    if (record.location) {
+        record.location = record.location.split('\n').map(locLine=>locLine.trim()).join('\n')
+        .replace('See map: Google Maps','').replace('United States','').replace('New Durham ,               NH','New Durham, NH')
+        .trim()
+     }
+     if (record.summary) {
+         record.summary = translateSummary(record.summary)
+     }
+     record.pageLink = computePageLink(record.URI, record.summary)
+     record.eventType = computeEventType(record.summary,record.pageLink)
+
+     return record
+}
 // =================================================
 if (require.main === module) {
+
     const range = getHomeCalendarRange()
     console.log(range);
     const now = new Date()
     // const now = addMonths(new Date(), -1)
     const monthStart = startOfMonth(now)
     getCalendarDataForRange(range[0], range[1])
+    // return pullEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+    // return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
     .then(events=> {
-        console.log('events', events);
+        // console.log('"Home" events', events.filter(evt=>evt.pageLink === 'Home').map(evt=>evt.summary).filter(onlyUnique).sort());
+        // console.log('events', events.length);
+        // console.log('Non "PublicMeeting" events', events.filter(evt=>evt.eventType !== 'Public Meeting').map(evt=>evt.summary).filter(onlyUnique).sort());
+        // console.log('events', events);
+    })
+    .then(events=> {
     })
 
     .then(()=> {
