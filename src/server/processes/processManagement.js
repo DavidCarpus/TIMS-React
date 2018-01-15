@@ -1,5 +1,6 @@
 var readline      = require('readline');
 const { spawn } = require('child_process');
+const baseCmd = 'node'
 
 class ProcessManagement {
     constructor(conf){
@@ -11,7 +12,7 @@ class ProcessManagement {
         // ****** Problem with SSL certificates and email server
         const spawnedEnv= {env: Object.assign({}, process.env, { SPAWNED: 1 } ) }
         // console.log(__dirname+'/'+'emailProcessing.js');
-        this.services['email'] = spawn('node', [__dirname+'/'+'emailProcessing.js'], spawnedEnv );
+        this.services['email'] = spawn(baseCmd, [__dirname+'/'+'emailProcessing.js'], spawnedEnv );
 
         this.services['email'].on('exit', (code, signal) =>
             console.log('email process exited with ' + `code ${code} and signal ${signal}`)
@@ -39,8 +40,8 @@ class ProcessManagement {
          // calendarProcess(configuration.calendarProcess.delay, 50)
 
         const spawnedEnv= {env: Object.assign({}, process.env, { SPAWNED: 1 } ) }
-        // console.log(__dirname+'/'+'calendarProcessing.js');
-        this.services['calendar'] = spawn('node', [__dirname+'/'+'calendarProcessing.js'], spawnedEnv );
+        console.log(__dirname+'/'+'calendarProcessing.js');
+        this.services['calendar'] = spawn(baseCmd, [__dirname+'/'+'calendarProcessing.js'], spawnedEnv );
 
         this.services['calendar'].on('exit', (code, signal) =>
             console.log('calendar process exited with ' + `code ${code} and signal ${signal}`)
