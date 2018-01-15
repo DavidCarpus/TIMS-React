@@ -39,14 +39,12 @@ function dbValidationSent(knexConnection, request) {
         return Promise.resolve(request)
     })
 }
+
+const alertRequestOptionsToText = (options) => Object.keys(options).map(option =>  option + ' - '+ options[option]).join('\n')
+
 //===========================================
 const alertRegistrationEmail = (destEmail, text, request) =>{
-    text += Object.keys(request.options).map(option =>  option + ' - '+ request.options[option]).join('\n')
-
-    // return dbValidationSent(knex, request )
-    // .then(dbResult => {
-    //     return Promise.resolve(Object.assign({}, request, {TBD:"***Not currently processing Alert emails.***"}) )
-    // })
+    text += alertRequestOptionsToText(request.options)
 
     return sendAutomationEmail(destEmail,  {
         subject: 'Requested alert registration. Request#'+request.alertRequestId,
@@ -59,6 +57,8 @@ const alertRegistrationEmail = (destEmail, text, request) =>{
         })
     )
 }
+const phoneAlertRequestHeader ='Please reply to this text message to confirm your request to be alerted when the below items are posted:\n\n'
+const emailAlertRequestHeader ='Please reply to this email to confirm your request to be alerted when the below items are posted:\n\n'
 //===========================================
 function verifyPhoneAlertRequest(request) {
     let carrierData = cellCarriers.filter(carrier => carrier.Carrier == request.carrier )
@@ -69,8 +69,8 @@ function verifyPhoneAlertRequest(request) {
 }
 //===========================================
 function verifyEmailAlertRequest(request) {
-    let text='Please reply to this email to confirm your request to be alerted when the below items are posted:\n\n'
-    return alertRegistrationEmail(request.contact, text, request)
+    // let text='Please reply to this email to confirm your request to be alerted when the below items are posted:\n\n'
+    return alertRegistrationEmail(request.contact, emailAlertRequestHeader, request)
 }
 //===========================================
 function verifyAlertRequests() {
@@ -85,14 +85,18 @@ function verifyAlertRequests() {
             knex("AlertRequestData").select().where("alertRequestId", request.alertRequestId).orderBy('pageLink')
             // .then(requestData => Object.assign({},request, {options:requestData}))
             .then(requestData => {
-                return Promise.resolve( Object.assign({},request, {options: requestData.reduce( (acc, val) =>{
-                acc[val.pageLink] = acc[val.pageLink]? acc[val.pageLink].concat(val.recordType):[val.recordType]
-                return acc
-                }, []) }))
+                const accumulateRequest = (acc, val) =>{
+                    const page = val.pageLink === 'Home'? "Town":val.pageLink
+                    acc[page] = acc[page]? acc[page].concat(val.recordType):[val.recordType]
+                    return acc
+                }
+                return Promise.resolve( Object.assign({},request, {options: requestData.reduce( accumulateRequest , []) }))
             })
         ))
     })
     .then(requestsWithData => {
+        console.log('requestsWithData', require('util').inspect(requestsWithData, { depth: null }));
+        // console.log('requestsWithData', requestsWithData);
         return Promise.all(requestsWithData.filter(record=>record.contactType === 'email').map(verifyEmailAlertRequest))
         .then(emailsProcessed => {
             return Promise.all(requestsWithData.filter(record=>record.contactType === 'phone').map(verifyPhoneAlertRequest))
@@ -130,18 +134,79 @@ function submitAlertRequestData(submittedData) {
     })
 }
 //===========================================
+function authenticateAlertRequestResponse(knex, responseData) {
+    const alertRequestID = responseData.header.subject[0].replace(/.*#/,'')
+    const from  = responseData.header.from[0].match(/.*<(.*)>/)[1]
+    const validationDate = responseData.header.date || new Date()
+
+    const matchLine = (line) => [/^On.*</, /wrote:$/, /^>/].reduce( (acc, val)=> acc || line.match(val), false)
+    const origEmailLines = responseData.bodyData.replace('\r','').split('\r\n').filter(matchLine).map((line)=>line.replace(/^> ?/, ''))
+    const origEmail = {
+        contact: from,
+        header:origEmailLines[2] + ' ' +origEmailLines[3],
+        options:origEmailLines.splice(5).filter(line=>line.length > 0)
+        .map(line=> ({
+            page:line.split('-')[0].trim(),
+            recordTypes:line.split('-')[1].split(',').map(rec=>rec.trim())
+        }))
+    }
+
+    return knex('AlertRequest').select( ['AlertRequest.dateValidationSent','AlertRequest.contact', 'AlertRequestData.*'])
+        .leftJoin('AlertRequestData', 'AlertRequestData.alertRequestID', 'AlertRequest.alertRequestID')
+        .where('AlertRequestData.alertRequestID', alertRequestID)
+    .then(requestDataFromDB=>{
+        if(requestDataFromDB.length === 0) return Promise.reject("No matching ID:"+alertRequestID)
+        if(from.trim() !== requestDataFromDB[0].contact.trim()) return Promise.reject("User mismatch:"+from + '|'+ requestDataFromDB[0].contact)
+
+        return Promise.resolve({
+            contact: requestDataFromDB[0].contact,
+            header:(requestDataFromDB[0].contact.indexOf('@')>=0? emailAlertRequestHeader: phoneAlertRequestHeader).trim(),
+            options:requestDataFromDB.map(rec=> ({pageLink:rec.pageLink, recordType:rec.recordType}))
+            .reduce( (acc, val) => {
+                const page = val.pageLink === 'Home'? 'Town':val.pageLink.trim()
+                acc[page] = acc[page]? acc[page].concat(val.recordType):[val.recordType]
+                return acc
+            }, [])
+        })
+        }
+    )
+    .then(requestEmailFromDB => {
+        if(origEmail.header !== requestEmailFromDB.header){
+            return Promise.reject("Invalid Data:Header mismatch\n"+ origEmail.header + '\n' +requestEmailFromDB.header);
+        }
+        if(origEmail.options.length  !== Object.keys(requestEmailFromDB.options).length ){
+            return Promise.reject("Invalid Data:Page count mismatch\n"+ origEmail.options.length  +'|' + Object.keys(requestEmailFromDB.options).length );
+        }
+
+        // Convert sorted options to string. They 'should' be equal
+        if(origEmail.options.reduce( (acc, emailOption)=>
+        acc || (requestEmailFromDB.options[emailOption.page].sort().toString() !==
+         emailOption.recordTypes.sort().toString())
+        , false))
+            return Promise.reject("Invalid Data");
+
+        return Promise.resolve("Matched")
+    })
+}
+//===========================================
 function validateAlertRequest(knex, responseData) {
     const alertRequestID = responseData.header.subject[0].replace(/.*#/,'')
     const from  = responseData.header.from[0].match(/.*<(.*)>/)[1]
     const validationDate = responseData.header.date || new Date()
 
-    return knex('AlertRequest').update({dateValidated:validationDate})
-    .where({alertRequestID:alertRequestID, contact:from})
-    .then( ()=>
-    Promise.resolve(Object.assign({},responseData,
-        {id:alertRequestID, results:"Request " + alertRequestID + ' from ' + from + ' Validated.'}
-    ))
+    return authenticateAlertRequestResponse(knex, responseData)
+    .then( authenticated =>
+        knex('AlertRequest').update({dateValidated:validationDate})
+        .where({alertRequestID:alertRequestID, contact:from})
     )
+    .then( ()=>
+        Promise.resolve(Object.assign({},responseData,
+            {id:alertRequestID, results:"Request " + alertRequestID + ' from ' + from + ' Validated.'}
+    ))
+    .catch( validationErr => {
+        console.log('validationErr', validationErr);
+    })
+)
 }
 
 //===========================================
@@ -154,7 +219,8 @@ if (require.main === module) {
         case 'verify':
             verifyAlertRequests(knexConnection)
             .then(emailsVerified => {
-                console.log('Verifications sent:', emailsVerified);
+                console.log('Verifications sent:', require('util').inspect(emailsVerified, { depth: null }));
+                // console.log('Verifications sent:', emailsVerified);
             })
             .then(done => {
                 process.exit();
@@ -164,11 +230,14 @@ if (require.main === module) {
             validateAlertRequest(knexConnection,
                 { header:{
                     from: [ "David Carpus <david.carpus@gmail.com>" ],
-                    subject: [ 'Re: Requested alert registration. Request#5' ],
+                    subject: [ 'Re: Requested alert registration. Request#1' ],
                     },
                     uid: 8,
-                    bodyData: "Confirmed!\r\n\r\nOn Fri, Dec 22, 2017 at 11:16 AM Website automation <\r\nwebsite@newdurham.carpusconsulting.com> wrote:\r\n\r\n> Please reply to this email to confirm your request to be alerted when the\r\n> below items are posted:\r\n>\r\n> BoardofSelectmen - Documents,Minutes,Agenda\r\n> BoodeyFarmsteadCommittee - Notice\r\n> CyanobacteriaMediationSteeringCommittee - Documents\r\n> Home - RFP\r\n>\r\n",
+                    // bodyData: `Confirmed!\r\n\r\nOn Fri, Dec 22, 2017 at 11:16 AM Website automation <\r\nwebsite@newdurham.carpusconsulting.com> wrote:\r\n\r\n> Please reply to this email to confirm your request to be alerted when the\r\n> below items are posted:\r\n> \r\n> BoardofSelectmen - Minutes\r\n> Town - RFP\r\n`
+                    bodyData: `Confirmed!\r\n\r\nOn Fri, Dec 22, 2017 at 11:16 AM Website automation <\r\nwebsite@newdurham.carpusconsulting.com> wrote:\r\n\r\n> Please reply to this email to confirm your request to be alerted when the\r\n> below items are posted:\r\n> \r\n> BoardofSelectmen - Minutes,Agenda\r\n> Town - RFP\r\n`
+                    // bodyData: "Confirmed!\r\n\r\nOn Fri, Dec 22, 2017 at 11:16 AM Website automation <\r\nwebsite@newdurham.carpusconsulting.com> wrote:\r\n\r\n> Please reply to this email to confirm your request to be alerted when the\r\n> below items are posted:\r\n>\r\n> BoardofSelectmen - Documents,Minutes,Agenda\r\n> BoodeyFarmsteadCommittee - Notice\r\n> CyanobacteriaMediationSteeringCommittee - Documents\r\n> Home - RFP\r\n>\r\n",
                 }
+
             )
             .then(requestValidated => {
                 console.log('validateAlertRequest sent:', requestValidated);
@@ -176,15 +245,23 @@ if (require.main === module) {
             .then(done => {
                 process.exit();
             })
+            .catch(validationErr => {
+                console.log('Main: validationErr', validationErr);
+                process.exit();
+            })
             break;
 
         default:
             console.log('Unknown parameter', process.argv[index]);
-            console.log('Need cli parameter:', ['verify']);
+            console.log('Need cli parameter:', ['verify', 'validate']);
             process.exit();
             break;
     }
 }
+// { from: 'Website automation<website@newdurham.carpusconsulting.com>',
+//   to: 'david.carpus@gmail.com',
+//   subject: 'Requested alert registration. Request#1',
+//   text: 'Please reply to this email to confirm your request to be alerted when the below items are posted:\n\nBoardofSelectmen - Minutes,Agenda\nTown - RFP' }
 
 //===========================================
 module.exports.contactTypes = contactTypes;
