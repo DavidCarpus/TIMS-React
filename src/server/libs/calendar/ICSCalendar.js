@@ -182,8 +182,9 @@ function translateEventFromICal(evt) {
 }
 // =================================================
 function pullEventsFromDB( startDate, endDate ){
-    return knexConnection("CalendarEvents").select('*').where('endDate', '>', startDate).orWhereNull('endDate')
-    .then(results => results.map(dbRecordToICSEvent))
+    console.log(knexConnection("CalendarEvents").select('*').where('startDate', '>', startDate).orWhereNull('endDate').toString());
+    return knexConnection("CalendarEvents").select('*').where('startDate', '>', startDate).orWhereNull('endDate')
+    .then(results =>results.map(dbRecordToICSEvent) )
 }
 // =================================================
 function pullAgendaIDFromDB( pageLink, startDate ){
@@ -341,9 +342,7 @@ function extractICSEventDates(startDate, endDate, icsRecord) {
 // =================================================
 function getCalendarDataForRange(startDate, endDate) {
     if (configuration.municipalLongName === 'New Durham') {
-        const icsPath = 'file://' + configuration.ROOT_DIR+'/'+privateDir + '/export.ics'
-        console.log('icsPath',icsPath);
-        return pullTranslatedEventsFromICS(icsPath)
+        return pullEventsFromDB(startDate, endDate)
         .then(evts=> {
             return evts
             .filter(evt=>isWithinRange(evt.startDate, startDate, endDate))
@@ -426,17 +425,33 @@ if (require.main === module) {
     const now = new Date()
     // const now = addMonths(new Date(), -1)
     const monthStart = startOfMonth(now)
-    getCalendarDataForRange(range[0], range[1])
+    if(process.argv[2] === 'pull'){
+        return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+        .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
+            return Promise.all(events
+                .map(evnt=> {
+                    delete evnt.complex
+                    const dbRec = icsEventToDBRecord(evnt)
+                    // return Promise.resolve(evnt)
+                    return addOrUpdateTable(knexConnection, 'CalendarEvents',
+                    dbRec,{ uid: dbRec.uid, startDate: dbRec.startDate})
+                })
+            )
+        })
+        .then(()=> {
+            process.exit()
+        })
+    }
+    pullEventsFromDB(range[0], range[1])
+    // getCalendarDataForRange(range[0], range[1])
     // return pullEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
     // return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
     .then(events=> {
         // console.log('"Home" events', events.filter(evt=>evt.pageLink === 'Home').map(evt=>evt.summary).filter(onlyUnique).sort());
         // console.log('events', events.length);
         // console.log('Non "PublicMeeting" events', events.filter(evt=>evt.eventType !== 'Public Meeting').map(evt=>evt.summary).filter(onlyUnique).sort());
-        // console.log('events', events);
         const addAgendaIDFromDB = (evt) => {
             return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
-                console.log('got id', id);
                 return Promise.resolve(Object.assign({}, evt, {agendaID:id}))
             })
         }

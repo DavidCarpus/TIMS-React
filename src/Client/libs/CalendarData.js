@@ -111,7 +111,7 @@ export function  getEventList(rawEvents, filter) {
         (timeStampFromDate(evt.startDate).length > 0 && timeStampFromDate(evt.endDate).length > 0?'-':" ") +
         timeStampFromDate(new Date(evt.endDate)),
         id:evt.uid,
-        agendaID: evt.publicRecords ? evt.publicRecords.id: null,
+        // agendaID: evt.publicRecords ? evt.publicRecords.id: null,
         description:evt.summary,
         sdate: evt.startDate,
         eventType:evt.eventType,

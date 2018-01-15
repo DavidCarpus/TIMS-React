@@ -187,9 +187,7 @@ router.get('/CalendarEvents/', function(req, res) {
     }
 
     getCalendarDataForRange(range[0], range[1])
-    .then(events=> {
-        return Promise.all(events.map(addAgendaIDFromDB))
-    })
+    .then(events=> Promise.all(events.map(addAgendaIDFromDB)) )
     .then(withAddedAgendaID=> {
         res.json(withAddedAgendaID);
     })
