@@ -52,6 +52,13 @@ class ProcessManagement {
             console.log(`this.services['calendar']:${line}`)
         });
 
+        readline.createInterface({
+            input: this.services['calendar'].stderr,
+            terminal: false
+        }).on('line', function(line) {
+            console.log(`this.services['calendar'] Error:${line}`)
+        });
+
         this.services['calendar'].on('close', (data) => {
             process.stdout.write(`this.services['calendar'] close:${data}\n`)
             // respan=true

@@ -85,7 +85,7 @@ const computeEventType = (summary, pageLink) => {
 
     if(summary.toLowerCase().endsWith(' class')) return "Community Event"
 
-    console.log('Unknown eventType: ', summary);
+    console.error('Unknown eventType: ', summary);
     return "Community Event"
     // return "Event"
     // ["Holiday",     "Public Meeting"    ]
