@@ -135,9 +135,12 @@ console.log(ts+ ' Express server listening on port ' + app.get('port'));
 
 console.log(process.env.REACT_APP_MUNICIPALITY);
 console.log(configuration.mode + " mode");
-if (configuration.imapProcess) {
-    // processManagement.initializeEmailService()
-    processManagement.initializeCalendarService()
-}
+
+if(configuration.mode === 'development')   return
+
+// if (configuration.imapProcess) {
+//     processManagement.initializeEmailService()
+// }
+processManagement.initializeCalendarService()
 
 // http://handyjs.org/article/the-kick-ass-guide-to-creating-nodejs-cron-tasks

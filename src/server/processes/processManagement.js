@@ -32,7 +32,6 @@ class ProcessManagement {
         // respan=false
     }
     initializeCalendarService() {
-         if(configuration.mode === 'development')   return
          // var calendarProcess = require('./libs/calendar/ICSCalendar').calendarProcess;
          // console.log('ICSCalender process every', configuration.calendarProcess.delay/1000, 'seconds', (configuration.calendarProcess.infinite)?'inf.':'NOT inf.');
          // calendarProcess(configuration.calendarProcess.delay, configuration.calendarProcess.infinite, 50)
