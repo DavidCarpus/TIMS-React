@@ -1082,8 +1082,8 @@ function migrateNewsPage(linkRecord) {
     .then(forDB => logNewsPageData(forDB) )
 }
 //========================================
-function migrateNews() {
-    const pageURI = "file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.html"
+function migrateNews(pageURI) {
+    // const pageURI = "file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.1.html"
     const selector = "#block-system-main > div > div > div.view-content"
 
     return cachingFetchURL(pageURI, true && pageURI.startsWith('http'))
@@ -1273,7 +1273,7 @@ function migrateNewDurham() {
     .then(departmentsMigrated => {
         console.log(departmentsMigrated.length + ' Departments migrated')
     })
-    .then( ()=>migrateNews())
+    .then( ()=>migrateNews("file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.1.html"))
     .then( (newsItems)=>{
         console.log('newsItems migrated', newsItems.length);
     })
