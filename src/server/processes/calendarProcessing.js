@@ -32,9 +32,8 @@ const calendarProcessPort = configuration.expressPort+2
 var  calendar = require('../libs/calendar');
 
 const debugLog =(...args)=> {
-    process.stdout.write('{"' +args[0] + '": [');
-    process.stdout.write(args.splice(1).map(arg=> require('util').inspect(arg, { depth: null })).join(' '))
-    console.log(']');
+    const output = `{"${args[0]}":[` + args.splice(1).map(arg=> require('util').inspect(arg, { depth: null })).join(' ') + `]}\n`
+    process.stdout.write(output);
 }
 
 //---------------------------------------------
@@ -106,12 +105,13 @@ function calendarProcess(delay, count=2) {
         process.exit();
     })
 }
+debugLog('Starting up calendarProcessing');
+const index=2;
+launchedViaCLI() && debugLog('debug via cli');
+if(!launchedViaCLI()) debugLog('debug via express');
+debugLog("calendarProcessPort", launchedViaCLI()?calendarProcessPort+10:calendarProcessPort);
 //======================================
 if (require.main === module) {
-    debugLog('Starting up calendarProcessing');
-    const index=2;
-    launchedViaCLI() && debugLog('debug via cli');
-    debugLog("calendarProcessPort", launchedViaCLI()?calendarProcessPort+10:calendarProcessPort);
     app.set('port', launchedViaCLI()?calendarProcessPort+10:calendarProcessPort);
     app.listen(app.get('port'), 'localhost');
     calendarProcess(60000,2)
