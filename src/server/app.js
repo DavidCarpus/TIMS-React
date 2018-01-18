@@ -142,5 +142,6 @@ if(configuration.mode === 'development')   return
 //     processManagement.initializeEmailService()
 // }
 processManagement.initializeCalendarService()
+app.set('processManagement', processManagement);
 
 // http://handyjs.org/article/the-kick-ass-guide-to-creating-nodejs-cron-tasks

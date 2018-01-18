@@ -179,7 +179,11 @@ router.get('/Asides/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/CalendarEvents/', function(req, res) {
-    const range = getHomeCalendarRange()
+    // this.services['calendar'].config
+    if(req.app.get('processManagement'))
+        console.log('******:',req.app.get('processManagement').getConfig('calendar'));
+// https://www.thepolyglotdeveloper.com/2015/05/get-remote-html-data-and-parse-it-in-express-for-nodejs/
+    const range = getHomeCalendarDateRange()
     const addAgendaIDFromDB = (evt) => {
         return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
             return Promise.resolve(Object.assign({}, evt, {agendaID:id}))
@@ -193,73 +197,6 @@ router.get('/CalendarEvents/', function(req, res) {
     })
     .catch(err=> console.log('err', err))
 })
-// ==========================================================
-router.get('/CalendarEvents.1/', function(req, res) {
-    // var query = "Select * from CalendarEvents where startDate >= NOW() - INTERVAL 1 DAY order by startDate limit 4 ";
-    const now = new Date()
-    // const now = addMonths(new Date(), -1)
-    const monthStart = startOfMonth(now)
-    const monthStartStr = monthStart.getUTCFullYear() + '-' + monthStart.getUTCMonth() + '-' + monthStart.getDate()
-    // var query = "Select * from CalendarEvents where endDate >= NOW() or endDate is null order by startDate limit 20 ";
-    var query = "Select * from CalendarEvents where endDate >= '" + monthStartStr + "' or endDate is null order by startDate limit 20 ";
-    console.log('/CalendarEvents', query);
-
-    simpleDBQuery(query)
-    .then(rows => {
-        // res.json(rows);
-        // let startDate  = new Date();
-        let startDate  = now
-        calendarData = getCalendarDataForMonth(rows, startDate)
-        if (calendarData.length === 0 ) {
-            calendarData = getCalendarDataForMonth(recordState.CalendarData, addWeeks(startDate,1))
-        }
-        return calendarData
-    })
-    .then( calData => {
-        // console.log('startDate:', calendarData[0].startDate);
-        // console.log('startDate:', addDays(new Date(calendarData[0].startDate), -1));
-        // console.log('endDate:', addDays(new Date(calendarData[calendarData.length-1].startDate), 1));
-        const year = (new Date(calData[0].startDate)).getUTCFullYear();
-        const month = (new Date(calData[0].startDate)).getMonth()+1;
-        query = "Select Groups.groupDescription, PublicRecords.id, PublicRecords.date, recordtype"
-        query += " from PublicRecords"
-        query += " left join Groups on Groups.pageLink= PublicRecords.pageLink"
-        query += " where year(date)='"  + year +"' and month(date)='" + month + "'";
-        query += " and recordtype = 'Agenda' "
-        // query += " and recordtype in ('Agenda', 'Minutes')"
-
-        console.log('query:', query);
-        return simpleDBQuery(query)
-        .then( recordData => {
-            // console.log('recordData:', recordData);
-            calData = calData.map(calendarEntry => {
-                const matchRecord = recordData.filter(docRecord =>
-                    docRecord.date.getMonth() === calendarEntry.startDate.getMonth() &&
-                    docRecord.date.getDate() === calendarEntry.startDate.getDate() &&
-                    calendarEntry.summary.indexOf(docRecord.groupDescription) >= 0
-                )
-                if (matchRecord.length > 0) {
-                    // console.log('matchRecord:',  matchRecord, '\n',calendarEntry.startDate, calendarEntry.summary);
-                    calendarEntry.publicRecords= {recordtype:matchRecord[0].recordtype, id:matchRecord[0].id}
-                }
-
-                return calendarEntry
-            })
-            // return recordData
-            return calData
-        })
-        .then( results => {
-            // res.status(200).send('<pre>' + JSON.stringify(results, null, 2) + '</pre>');
-            res.json(results);
-        })
-    })
-    .catch(err =>{
-        console.error('Error getCalendarDataForMonth(rows, startDate)', err);
-    })
-
-
-
-});
 // ==========================================================
 router.get('/NewsAttachment/:fileID', function(req, res) {
     var query = "Select id, fileLink as link from FileAttachments where id = '" + req.params.fileID +"' ";
