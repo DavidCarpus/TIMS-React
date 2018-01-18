@@ -1,59 +1,25 @@
 /*
 Processing of RFC 5455 based data
 */
-var Config = require('../../config'),
-configuration = new Config();
-
-var fetchURL = require('../../db/webMigrate/serverIO').fetchURL;
-var addOrUpdateTable = require('../db/common').addOrUpdateTable;
-
 var icalendar = require('icalendar');
 
-var startOfMonth = require('date-fns/start_of_month');
-var endOfMonth = require('date-fns/end_of_month');
-var startOfWeek = require('date-fns/start_of_week');
-var endOfWeek = require('date-fns/end_of_week');
 var isWithinRange = require('date-fns/is_within_range')
 var addDays = require('date-fns/add_days')
 
-const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
+var {fetchURL} = require('../../db/webMigrate/serverIO');
+var {addOrUpdateTable, getKnexConnection} = require('../db/common');
+var {dateFromICSDateStr, getDayOfMonth} = require('../date')
 
+var Config = require('../../config'),
+configuration = new Config();
+
+const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 const translations = require(configuration.ROOT_DIR+'/'+privateDir + '/ICSCalendarLookups.json')
 
-var knexConfig = require('../db/knexfile.js')
-var knexConnection = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
-
-//========================================
-const dateAbbreviations = [{abbr:'SU', num:0},
-    {abbr:'MO', num:1},        {abbr:'TU', num:2},         {abbr:'WE', num:3},
-    {abbr:'TH', num:4},        {abbr:'FR', num:5},          {abbr:'SA', num:6},
-]
-const dateNum = (dateAbbr) => dateAbbreviations.filter(rec=>rec.abbr === dateAbbr)[0].num
-const dateAbbr = (dateNum) => dateAbbreviations.filter(rec=>rec.num === dateNum)[0].abbr
-const dateFromICSDateStr = (datestr) => datestr? new Date(datestr.substring(0,4)+ '-' + datestr.substring(4,6) + '-' + datestr.substring(6,8) +
- 'T' + datestr.substring(9,11) + ':' + datestr.substring(11,13)  + ':' + datestr.substring(13,15) + "Z")
- :null
-//========================================
-const getDayOfMonth = (baseDate, day , week) => {
-    let firstOfMonth = new Date(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), 1)
-    let firstSunOfMonth = addDays(firstOfMonth, 7-firstOfMonth.getDay())
-    const chk = (week - 1)*7 + firstSunOfMonth.getDate() + day - (day>= firstOfMonth.getDay()?7:0)
-
-    return new Date(baseDate.getFullYear(), baseDate.getMonth(),chk,
-        baseDate.getHours(), baseDate.getMinutes())
-}
-// ==========================================================
-//===========================================
-const mergeArrays = (arrays) => [].concat.apply([], arrays)
-const onlyUnique = (value, index, self) => self.indexOf(value) === index;
-//===========================================
-function insertEventIntoDatabase(knex, eventToinsert) {
-    return addOrUpdateTable(knex, 'CalendarEvents',
-    eventToinsert,{ uid: eventToinsert.uid, startDate: eventToinsert.startDate})
-}
+var knexConnection = getKnexConnection()
 // =================================================
 // =================================================
-const translateSummary = (originalSummary) => {
+const normalizeSummary = (originalSummary) => {
     let summaries = translations.summaries
     const ucaseLine = originalSummary.toUpperCase()
     let matches = summaries.filter(type => {  //  type.alts
@@ -68,9 +34,10 @@ const translateSummary = (originalSummary) => {
 }
 // =================================================
 const computeEventType = (summary, pageLink) => {
-    // console.log('Unknown eventType: ', pageLink, summary);
     if(summary.toLowerCase().endsWith(' training')) return "Event"
+
     if(summary.toLowerCase().indexOf(' scout') > -1) return "Community Event"
+
     if(summary.toLowerCase().indexOf(' fundraiser') > -1) return "Event"
     if(summary.toLowerCase().indexOf(' benefit') > -1) return "Event"
     if(summary.toLowerCase().indexOf(' open house') > -1) return "Event"
@@ -85,29 +52,28 @@ const computeEventType = (summary, pageLink) => {
 
     if(summary.toLowerCase().endsWith(' class')) return "Community Event"
 
-    console.error('Unknown eventType: ', summary);
+    console.error('Unknown eventType: ', summary, " - Defaulting to 'Community Event'");
     return "Community Event"
-    // return "Event"
-    // ["Holiday",     "Public Meeting"    ]
+    // ["Event", "Holiday",     "Public Meeting"    ]
 }
 // =================================================
-const computePageLink = (URI, summary) => {
-    let pageLink = translateURIDept(URI)
+const computeOrganizationGroupName = (URI, summary) => {
+    let pageLink = getOrganizationGroupFromURI(URI)
     if(pageLink === 'Home' && summary){
-        const pageLinkFromSummary = translateSummaryDept(summary)
+        const pageLinkFromSummary = getOrganizationGroupFromSummary(summary)
         if(pageLinkFromSummary) pageLink = pageLinkFromSummary
     }
     return pageLink
 }
 
 // =================================================
-const translateURIDept = (URI) => {
+const getOrganizationGroupFromURI = (URI) => {
     const pageLink = URI.split('/')[3]
     let matches = translations.groupFromURI.filter(group => group.URI === pageLink )
     return (matches.length > 0)? matches[0].group: pageLink
 }
 // =================================================
-const translateSummaryDept = (summary) => {
+const getOrganizationGroupFromSummary = (summary) => {
     let matches = translations.groupFromSummary.filter(group => group.summary === summary )
     return (matches.length > 0)? matches[0].group: null
 }
@@ -163,7 +129,6 @@ function translateEventFromICal(evt) {
      if (!evt.recurrenceID || evt.recurrenceID.length === 0) { delete evt.recurrenceID }
 
      if (evt.location) {
-         // console.log('evt.location',evt.location);
          evt.location = evt.location.split('\n').map(locLine=>locLine.trim()).join('\n')
          .replace('See map: Google Maps','')
          .replace('United States','')
@@ -171,9 +136,9 @@ function translateEventFromICal(evt) {
              .trim()
       }
       if (evt.summary) {
-          evt.summary = translateSummary(evt.summary)
+          evt.summary = normalizeSummary(evt.summary)
       }
-      evt.pageLink = computePageLink(evt.URI, evt.summary)
+      evt.pageLink = computeOrganizationGroupName(evt.URI, evt.summary)
       evt.eventType = computeEventType(evt.summary, evt.pageLink)
 
      evt.endDate = endDate
@@ -182,27 +147,22 @@ function translateEventFromICal(evt) {
 }
 // =================================================
 function pullEventsFromDB( startDate, endDate ){
-    console.log(knexConnection("CalendarEvents").select('*').where('startDate', '>', startDate).orWhereNull('endDate').toString());
     return knexConnection("CalendarEvents").select('*').where('startDate', '>', startDate).orWhereNull('endDate')
     .then(results =>results.map(dbRecordToICSEvent) )
 }
 // =================================================
 function pullAgendaIDFromDB( pageLink, startDate ){
-    const date1 = addDays(startDate, -1)
-    const date2 = addDays(startDate, 1)
-
-    return knexConnection("PublicRecords").select('*').whereBetween('date', [date1, date2])
+    return knexConnection("PublicRecords").select('*')
+    .whereBetween('date', [addDays(startDate, -1), addDays(startDate, 1)])
     .andWhere("recordtype", 'Agenda' ).andWhere("pageLink", pageLink )
     .then(results => {
         if(results.length === 1){
-            // console.log('results',pageLink, startDate, results[0].id);
             return Promise.resolve(results[0].id)
         } else {
             return Promise.resolve(undefined)
         }
     })
 }
-
 // =================================================
 function pullTranslatedEventsFromICS( icsURL ){
     return pullEventsFromICS( icsURL )
@@ -210,9 +170,6 @@ function pullTranslatedEventsFromICS( icsURL ){
 }
 // =================================================
 function pullEventsFromICS( icsURL ){
-    let mergeArrays = (arrays) => [].concat.apply([], arrays)
-    const onlyUnique = (value, index, self) => self.indexOf(value) === index;
-
     return fetchURL(icsURL)
     .then( (data) => {
         var ical = icalendar.parse_calendar(data.data);
@@ -269,7 +226,6 @@ function extractICSWeeklyDates(startDate, endDate, icsRecord) {
         default:
             throw new Error('extractICSWeeklyDates:unprocessed freqType:'+ icsRecord.freqType );
     }
-    return []
 }
 // =================================================
 function extractICSMonthlyDates(startDate, endDate, icsRecord) {
@@ -322,8 +278,6 @@ function extractICSEventDates(startDate, endDate, icsRecord) {
     if (typeof icsRecord.freq === 'undefined') { // Non recurring
         return isWithinRange(icsRecord.startDate, startDate, endDate)? [icsRecord.startDate]: []
     }
-    return isWithinRange(icsRecord.startDate, startDate, endDate)? [icsRecord.startDate]: []
-    // TODO: Currently NOT extracting as only town (New Durham) does not output correct recurrances
 
     switch (icsRecord.freq) {
         case 'MONTHLY':
@@ -341,32 +295,21 @@ function extractICSEventDates(startDate, endDate, icsRecord) {
 }
 // =================================================
 function getCalendarDataForRange(startDate, endDate) {
-    if (configuration.municipalLongName === 'New Durham') {
-        return pullEventsFromDB(startDate, endDate)
-        .then(evts=> {
-            return evts
-            .filter(evt=>isWithinRange(evt.startDate, startDate, endDate))
-            .map(evt=> ({
-                startDate:evt.startDate,
-                summary:evt.summary,
-                location:evt.location,
-                elapsed:evt.elapsed,
-                uid:evt.uid,
-                pageLink:evt.pageLink,
-                eventType:evt.eventType,
-            }))
-        })
-    } else {
-        return Promise.reject("getCalendarDataForRange:Processing of DB based calendar events TBD.")
-    }
-
+    return pullEventsFromDB(startDate, endDate)
+    .then(evts=> {
+        return evts
+        .filter(evt=>isWithinRange(evt.startDate, startDate, endDate))
+        .map(evt=> ({
+            startDate:evt.startDate,
+            summary:evt.summary,
+            location:evt.location,
+            elapsed:evt.elapsed,
+            uid:evt.uid,
+            pageLink:evt.pageLink,
+            eventType:evt.eventType,
+        }))
+    })
 }
-// =================================================
-function getHomeCalendarRange() {
-    const pivot = new Date()
-    return [startOfWeek(startOfMonth(pivot)), endOfWeek(endOfMonth(pivot))]
-}
-
 // =================================================
 const dbRecordToICSEvent = (rec)=>{
     let result = Object.assign({}, rec )
@@ -410,21 +353,16 @@ const icsEventToDBRecord = (evt) => {
         .trim()
      }
      if (record.summary) {
-         record.summary = translateSummary(record.summary)
+         record.summary = normalizeSummary(record.summary)
      }
-     record.pageLink = computePageLink(record.URI, record.summary)
+     record.pageLink = computeOrganizationGroupName(record.URI, record.summary)
      record.eventType = computeEventType(record.summary,record.pageLink)
 
      return record
 }
 // =================================================
 if (require.main === module) {
-
-    const range = getHomeCalendarRange()
-    console.log(range);
-    const now = new Date()
-    // const now = addMonths(new Date(), -1)
-    const monthStart = startOfMonth(now)
+    const range = getHomeCalendarDateRange()
     if(process.argv[2] === 'pull'){
         return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
         .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
@@ -442,44 +380,13 @@ if (require.main === module) {
             process.exit()
         })
     }
-    pullEventsFromDB(range[0], range[1])
-    // getCalendarDataForRange(range[0], range[1])
-    // return pullEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
-    // return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
-    .then(events=> {
-        // console.log('"Home" events', events.filter(evt=>evt.pageLink === 'Home').map(evt=>evt.summary).filter(onlyUnique).sort());
-        // console.log('events', events.length);
-        // console.log('Non "PublicMeeting" events', events.filter(evt=>evt.eventType !== 'Public Meeting').map(evt=>evt.summary).filter(onlyUnique).sort());
-        const addAgendaIDFromDB = (evt) => {
-            return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
-                return Promise.resolve(Object.assign({}, evt, {agendaID:id}))
-            })
-        }
-
-        return Promise.all(events.map(addAgendaIDFromDB))
-        // console.log('"NON-Home" events',
-        // events
-        // .filter(evt=>evt.pageLink !== 'Home' && evt.eventType === 'Public Meeting')
-        // .map(evt=>evt.pageLink +'-'+ evt.eventType +'-'+ evt.summary).filter(onlyUnique).sort());
-
-        // console.log('event pageLinks', events.map(evt=>evt.pageLink).filter(onlyUnique).sort());
-    })
-    .then(events=> {
-        console.log('events with Agendas:', events.filter(evt=>evt.agendaID));
-    })
-
-    .then(()=> {
-        process.exit()
-    })
-    .catch(err=>
-        console.log('X err',err)
-    )
 }
-
 // =================================================
 // module.exports.calendarProcess = calendarProcess;
 module.exports.getCalendarDataForRange = getCalendarDataForRange;
-module.exports.getHomeCalendarRange = getHomeCalendarRange;
+// module.exports.getHomeCalendarRange = getHomeCalendarRange;
 module.exports.pullEventsFromICS = pullEventsFromICS;
 module.exports.icsEventToDBRecord = icsEventToDBRecord;
 module.exports.pullAgendaIDFromDB = pullAgendaIDFromDB;
+module.exports.pullEventsFromDB = pullEventsFromDB;
+module.exports.pullTranslatedEventsFromICS = pullTranslatedEventsFromICS;

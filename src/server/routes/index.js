@@ -27,8 +27,8 @@ var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
 var getCalendarDataForMonth = require('../libs/calendar/ICSCalendar').getCalendarDataForMonth;
 var getCalendarDataForRange = require('../libs/calendar/ICSCalendar').getCalendarDataForRange;
-var getHomeCalendarRange = require('../libs/calendar/ICSCalendar').getHomeCalendarRange;
 var pullAgendaIDFromDB = require('../libs/calendar/ICSCalendar').pullAgendaIDFromDB;
+var {getHomeCalendarDateRange} = require('../libs/date');
 
 router.use(cors());
 // ==========================================================

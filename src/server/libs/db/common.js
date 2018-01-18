@@ -1,3 +1,7 @@
+var knexConfig = require('../db/knexfile.js')
+var knexConnection = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
+//========================================
+const getKnexConnection = () => knexConnection
 //========================================
 const logAndRejectDBErr = (dberr) => {
     const errMsg = "DBError:"+ dberr.errorno
@@ -61,3 +65,4 @@ function addOrUpdateTable(knexConnection, tableName, record, checkRecord={}){
 //========================================
 module.exports.enterOnlyIntoTable = enterOnlyIntoTable;
 module.exports.addOrUpdateTable = addOrUpdateTable;
+module.exports.getKnexConnection = getKnexConnection;
