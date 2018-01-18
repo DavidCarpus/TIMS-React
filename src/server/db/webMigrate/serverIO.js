@@ -20,7 +20,7 @@ let serverPath = '/home/carpusco/TestSites/'+ process.env.REACT_APP_MUNICIPALITY
 
 const mode = process.env.NODE_ENV||'development'
 
-console.log('serverIO - configuration.mode:', mode);
+// console.log('serverIO - configuration.mode:', mode);
 if (mode === 'development') {
     serverPath = privateDir + '/Attachments/'
 } else if  (mode === 'production') {
