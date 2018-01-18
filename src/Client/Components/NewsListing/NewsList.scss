@@ -4,8 +4,13 @@
 
 #NewsList {
     @include blockSection;
-
-
+    ul{
+        padding-left: 1em;
+    }
+    li {
+        list-style: square;
+        height: 2.2em;
+    }
 
     a#NewsList-bookmark {
         display: block;
