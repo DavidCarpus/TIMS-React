@@ -6,22 +6,19 @@ configuration = new Config();
 const ROOT_URL = configuration.ui.ROOT_URL
 // const actionsName='CalendarData';
 //========================================
-export function fetchCalendarData() {
-    // console.log(actionsName + ' fetchCalendarData');
+export function fetchCalendarData(year=(new Date()).getUTCFullYear(), month=(new Date()).getUTCMonth()) {
     const request = axios({
       method: 'get',
-      url: `${ROOT_URL}CalendarEvents/`,
-    });
-    // console.log(actionsName +' fetchCalendarData'+JSON.stringify(`${ROOT_URL}CalendarEvents/`+ ));
+      url: `${ROOT_URL}CalendarEvents/` + year + '/' + month,
+  });
+  // debugger
 
     return dispatch => {
         dispatch({type: CalendarDataConstants.FETCH_DATA});
         request.then( response => {
-            // console.log(actionsName + ' fetchCalendarData... success: '+JSON.stringify(response.data));
                dispatch(fetchCalendarDataSuccess(response.data));
           })
           .catch( reason => {
-            //   console.log(actionsName + ' fetchCalendarData? : ' + JSON.stringify(reason));
               dispatch(fetchCalendarDataFailure(reason));
           })
 

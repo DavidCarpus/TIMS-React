@@ -178,12 +178,17 @@ router.get('/Asides/:groupName', function(req, res) {
         //  res.json([]);
 });
 // ==========================================================
-router.get('/CalendarEvents/', function(req, res) {
+router.get('/CalendarEvents/:year/:month', function(req, res) {
     // this.services['calendar'].config
     if(req.app.get('processManagement'))
         console.log('******:',req.app.get('processManagement').getConfig('calendar'));
 // https://www.thepolyglotdeveloper.com/2015/05/get-remote-html-data-and-parse-it-in-express-for-nodejs/
-    const range = getHomeCalendarDateRange()
+    let range = getHomeCalendarDateRange()
+    if(req.params.year && req.params.month){
+        range[0] = new Date(req.params.year,  req.params.month, 1)
+        range[1] = addMonths(range[0], 1)
+    }
+
     const addAgendaIDFromDB = (evt) => {
         return pullAgendaIDFromDB(evt.pageLink, evt.startDate).then(id=> {
             return Promise.resolve(Object.assign({}, evt, {agendaID:id}))

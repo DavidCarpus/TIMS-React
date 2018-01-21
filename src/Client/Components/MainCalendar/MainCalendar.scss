@@ -46,7 +46,14 @@
         }
         .MonthTitle {
             color: $miniCalendarDate;
-            padding-left: 5em;
+            text-align: center;
+            a{cursor: pointer;}
+            .title {
+                // background-color: blue;
+                text-align: center;
+                display: inline-block;
+                width: 8em;
+            }
         }
         width: 14em;
         padding: 0px;

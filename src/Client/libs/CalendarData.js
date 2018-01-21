@@ -1,13 +1,10 @@
-import  startOfMonth from 'date-fns/start_of_month';
-import  startOfWeek from 'date-fns/start_of_week';
-import  endOfMonth from 'date-fns/end_of_month';
-import  endOfWeek from 'date-fns/end_of_week';
-import addDays from 'date-fns/add_days';
-import addWeeks from 'date-fns/add_weeks';
-import addMonths from 'date-fns/add_months';
-import getISOWeek from 'date-fns/get_iso_week';
-import isSameDay from 'date-fns/is_same_day';
-import differenceInCalendarMonths from 'date-fns/difference_in_calendar_months';
+var startOfMonth = require('date-fns/start_of_month');
+var  startOfWeek = require( 'date-fns/start_of_week');
+var  endOfMonth = require( 'date-fns/end_of_month');
+var  endOfWeek = require( 'date-fns/end_of_week');
+var addDays = require( 'date-fns/add_days');
+var addHours = require( 'date-fns/add_hours');
+var isSameDay = require( 'date-fns/is_same_day');
 
 var monthNames = [
     "January", "February", "March",
@@ -40,12 +37,17 @@ const timeStampFromDate = (date) => (date.getHours()+date.getMinutes()+date.getS
 (date.getHours() > 12 ? ' PM': ' AM'):
 ""
 //-----------------------------------------------------------------------------
+const weekOfMonth = (date) => {
+    const dayOfWeekForFirstOfMonth = (new Date(date.getUTCFullYear(), date.getUTCMonth(), 1)).getDay()
+    return  Math.floor((date.getDate()+dayOfWeekForFirstOfMonth)/7) + (((date.getDate()+dayOfWeekForFirstOfMonth)%7) > 0 ? 1: 0)
+}
+//-----------------------------------------------------------------------------
 const onlyUnique = (value, index, self) => self.indexOf(value) === index;
 //========================================
 //========================================
-export function getInitialFilter() { return {"Public Meetings":true} }
+function getInitialFilter() { return {"Public Meetings":true} }
 //-----------------------------------------------------------------------------
-export function  getDisplayFiltersFromEvents(events) {
+function  getDisplayFiltersFromEvents(events) {
     return events.map(evt=>evt.eventType+"s").filter(onlyUnique)
     .reduce( (acc, val)=> Object.assign(acc, {[val]:false}) ,{})
 };
@@ -72,37 +74,50 @@ const filterEvents = (filter, evt) => Object.keys(filter).reduce( (acc, val)=> {
 //-----------------------------------------------------------------------------
 const eventMatchesDate = (date, evt) => isSameDay(new Date(evt.startDate), date )
 //-----------------------------------------------------------------------------
-const getEventsMonthNum = (events)=> (events.length <= 0) ? -1:
-addMonths(events[0].startDate,Math.abs(differenceInCalendarMonths(events[0].startDate,events[events.length-1].startDate))/2).getMonth()
+const  getEventsMonthNum = (events) => events.length<= 0? -1:
+    Math.floor( events.reduce( (acc,val) => acc+val.startDate.getUTCMonth() ,0 )/events.length)
+
 //-----------------------------------------------------------------------------
 //========================================
-export function getSortedAndFilteredCalendarData(calendarData, filter) {
+function getSortedAndFilteredCalendarData(calendarData, filter) {
     return (calendarData.length > 0) ? calendarData.sort( (a,b)=> a.startDate - b.startDate)
-    .filter(evt=>filterEvents(filter, evt)).filter(evt=>evt.startDate > addWeeks(new Date(), -1) ): []
+    // .filter(evt=>filterEvents(filter, evt)).filter(evt=>evt.startDate > addWeeks(new Date(), -1) ): []
+    .filter(evt=>filterEvents(filter, evt)): []
 }
 //-----------------------------------------------------------------------------
-export function  getEventsMonth(events) {return monthNames[getEventsMonthNum(events)]}
+function  getEventsMonth(events) {return getMonthFromNum(getEventsMonthNum(events))}
+function  getMonthFromNum(num) {
+    while (num < 0) { num += 12 }
+    return monthNames[num]
+}
 //-----------------------------------------------------------------------------
-export function getCalByWeek(rawEvents, filter){
+function getCalByWeek(rawEvents, filter){
     const events = getSortedAndFilteredCalendarData(rawEvents, filter)
-    if (events.length <= 0) return []
-    // console.log('getCalByWeek', rawEvents.length, events.length);
-    const firstOfMonth = new Date(events[0].startDate.getFullYear(), getEventsMonthNum(events), 1)
+    if (events.length <= 0)  return []
+
+    let monthNum = getEventsMonthNum(events)
+    while (monthNum < 0)  monthNum += 12
+
+    const firstOfMonth = new Date(events[0].startDate.getUTCFullYear(), monthNum, 1)
     return dateArray( startOfWeek(startOfMonth(firstOfMonth) ), endOfWeek(endOfMonth(firstOfMonth)) )
-    .map(date => ({
-        week: getISOWeek(addDays(date,1)),
-        date:date,
-        events: events.filter( event => eventMatchesDate(date, event) )
-    }))
+    .map(date => {
+        const isPrevMonth = (date) => (date-startOfMonth(firstOfMonth) ) < 0
+        const isNextMonth = (date) => (date-endOfMonth(firstOfMonth) ) > 0
+        return {
+            week: isPrevMonth(date)? 1: (isNextMonth(date)?weekOfMonth(addHours(endOfMonth(firstOfMonth), -6)): weekOfMonth(date)),
+            date:date,
+            events: events.filter( event => eventMatchesDate(date, event) )
+        }
+    })
     .reduce( (acc, value) => {
-        const key = value.week < 8 ? value.week+52 :  value.week
+        const key = value.week
         if ((typeof acc[key] === 'undefined')) { acc[key] = [] }
         acc[key].push(value)
         return acc
     }, [])
 }
 //-----------------------------------------------------------------------------
-export function  getEventList(rawEvents, filter) {
+function  getEventList(rawEvents, filter) {
     const events = getSortedAndFilteredCalendarData(rawEvents, filter)
     if (events.length <= 0) return []
     return events.map(evt => ({
@@ -118,3 +133,11 @@ export function  getEventList(rawEvents, filter) {
         agendaID:evt.agendaID,
     }))
 }
+
+module.exports.getInitialFilter = getInitialFilter;
+module.exports.getDisplayFiltersFromEvents = getDisplayFiltersFromEvents;
+module.exports.getSortedAndFilteredCalendarData = getSortedAndFilteredCalendarData;
+module.exports.getEventsMonth = getEventsMonth;
+module.exports.getCalByWeek = getCalByWeek;
+module.exports.getEventList = getEventList;
+module.exports.getMonthFromNum = getMonthFromNum;
