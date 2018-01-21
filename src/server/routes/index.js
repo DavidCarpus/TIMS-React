@@ -7,7 +7,13 @@ var startOfWeek = require('date-fns/start_of_week')
 var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
+var normalizeRecordType = require('../../libs/PublicDocs').normalizeRecordType;
+var fetchPublicDocs = require('../../libs/PublicDocs').fetchPublicDocs;
+
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
+
+var knexConfig = require('../libs/db/knexfile.js')
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 var mysql = require('mysql');
 var fs = require('fs');
@@ -409,58 +415,14 @@ router.get('/Records/Notice/:noticeID', function(req, res) {
          });
 });
 // ==========================================================
-router.get('/Records/PublicDocs/:recordtype', function(req, res) {
-    // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.recordtype +"'";
-    let recordtype = ''
-    switch (req.params.recordtype.toUpperCase()) {
-        case 'NOTICES':
-        case 'NOTICE':
-            recordtype = 'Notice'
-        break;
-        case 'AGENDAS':
-        case 'AGENDA':
-            recordtype = 'Agenda'
-            break;
-        case 'MINUTES':
-            recordtype = 'Minutes'
-            break;
-        case 'DOCUMENTS':
-        case 'DOCUMENT':
-            recordtype = 'Document'
-            break;
-        case 'RFPS':
-        case 'RFP':
-            recordtype = 'RFP'
-            break;
-        case 'VOTING':
-            recordtype = 'Voting'
-            break;
-        default:
-
-    }
-    query = "Select PublicRecords.id, recordtype as type, fileLink as link, date, PublicRecords.pageLink as groupName, Groups.groupDescription, PublicRecords.recorddesc "
-    query += "  from PublicRecords ";
-    query += "  left join Groups on Groups.groupName =  PublicRecords.pageLink ";
-    query += "  where recordtype='" + recordtype +"'";
-    query += "  and fileLink is not null";
-    query += "  ORDER BY date, recordtype ";
-    console.log(query);
-    simpleDBQuery(query)
-    .then(rows => {
-        var toSend = rows.reduce( (newArray, row) => {
-            let key = row.date;
-            // delete row.date;
-            (newArray[key] = newArray[key] || []).push(row);
-            return newArray;
-        }, {})
-
-        toSend = rows
-
-        // console.log('Meetings:' + JSON.stringify(toSend));
-        // res.status(200).send('<pre>' + JSON.stringify(toSend, null, 2) + '</pre>');
-
+router.get('/Records/PublicDocs/filtered', function(req, res) {
+    // console.log('req.query', req.query.recordType);
+    // let recordtype = normalizeRecordType(req.query.recordType)
+    fetchPublicDocs(knex, req.query)
+    .then( toSend => {
+        // console.log('toSend', toSend);
         res.json(toSend);
-    });
+    })
 });// ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";

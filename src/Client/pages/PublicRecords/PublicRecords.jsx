@@ -105,10 +105,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       fetchData: (recordType) => {
-        //   dispatch(fetchOrganizationalUnitData(groupName))
-        //   dispatch(fetchPageAsides(groupName));
-          dispatch(fetchPublicDocs(recordType));
-        //   dispatch(fetchGroupDoc(groupName));
+          dispatch(fetchPublicDocs({recordType:recordType}));
     },
     updateFilter: updateFilter
   }

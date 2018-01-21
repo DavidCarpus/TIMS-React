@@ -9,9 +9,8 @@ function documentsByYear(documents) {
     .sort((a,b) => new Date(b) - new Date(a))
     .map( (val) => [val, documents[val] ] )
     .reduce( (acc, curr, i) => {
-        let year = (new Date(curr[0])).getFullYear();
-        acc[year] = acc[year]? acc[year]: [];
-        acc[year].push(curr)
+        let year = ((new Date(curr[0])).getFullYear());
+        acc[year] = acc[year]? acc[year].concat(curr): curr;
         return acc;
     }, {})
     const results = Object.keys(byYear)
