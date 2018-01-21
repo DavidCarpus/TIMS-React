@@ -22,7 +22,7 @@ export default class NewsList extends React.Component {
                 <h2>News</h2>
                 <ul>
                     {this.props.newsData.map( (news,index) =>
-                    <li>
+                    <li key={news.id}>
                         <SmartLink link={"/News/"+news.id} id={news.id} linkText={news.summary} />
                     </li>
                 )}
