@@ -17,33 +17,32 @@ const SelectionField = ({fieldName, labelText, items, onChange, cn}) =>
 class FilterRecordsForm extends Component {
     render() {
          const {
-             updateFilter,
-             groupSelection,
-             handleSubmit,
-             currentFilter,
-            //  err,
+             changeFilter, handleSubmit, currentFilter, filterFields,
          } = this.props
-
-        //  console.log("FilterRecordsForm props", this.props);
-
 
          return (
              <div id='PublicRecordFilter'>
                  <form onSubmit={values => handleSubmit(values)}>
-                     Filter by - -
-                     <SelectionField
-                         fieldName='groupName'
-                         items={groupSelection}
-                         onChange={(evt, newValue, previousValue) => {
-                             updateFilter(currentFilter, "groupName", newValue)
-                         }}
-                         labelText='Group' >
-                     </SelectionField>
+                     {filterFields.map(field =>
+                     <div key={field.fieldName} className={field.fieldName}>
+                         <SelectionField
+                             fieldName={field.fieldName}
+                             items={field.options}
+                             onChange={(evt, newValue, previousValue) => {
+                                 changeFilter(evt, currentFilter, field.fieldName, previousValue, newValue)
+                             }}
+                             labelText={field.description} >
+                         </SelectionField>
+                         <br />
+                     </div>
+
+                 )}
                  </form>
              </div>
          )
     }
  }
+
  const selector = formValueSelector(' FilterRecordsForm') // <-- same as form name
  FilterRecordsForm = connect(
      state => {

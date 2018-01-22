@@ -122,23 +122,24 @@ export function fetchGroupDocsFailure(groupName, error) {
 //========================================
 //========================================
 //========================================
-export function fetchPublicDocs(filter) {
+export function fetchPublicDocsFromServer(filter) {
     if ( (! filter || typeof filter !== 'object') && process.env.NODE_ENV === 'development') {
         debugger; // eslint-disable-line no-debugger
     }
-    console.log('typeof filter', typeof filter);
     const url = Object.keys(filter).reduce( (acc, val) => {
-            return acc+`${val}=${filter[val]}`
+        if(filter[val] && filter[val].length > 0){
+            return acc+`${val}=${filter[val]}&`
+        }else {
+            return acc
+        }
     }, `${ROOT_URL}Records/PublicDocs/filtered?` )
 
-    console.log('fetchPublicDocs:url', url);
     const request = axios({
       method: 'get',
       url: url,
       // headers: []
     });
 
-    console.log('dispatch');
     return dispatch => {
         dispatch({type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS});
         request.then( response => {
@@ -154,8 +155,6 @@ export function fetchPublicDocs(filter) {
 }
 //========================================
 export function fetchPublicDocsSuccess(filter, meetingDocs) {
-    // console.log(scriptName +'  fetchPublicDocsSuccess?:'+JSON.stringify(recordtype));
-
     const action =   {
     type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS_SUCCESS,
     payload: meetingDocs,

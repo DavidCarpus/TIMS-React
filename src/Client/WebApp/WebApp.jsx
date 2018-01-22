@@ -53,20 +53,7 @@ class WebApp extends Component {
             </MainLayout>
         );
     }
-    PublicRecordsPage = (newProps) => {
-        let  childProps = {Config: (this.props.Config)}
-        // console.log(newProps);
-        return (
-            <MainLayout {...childProps}>
-                <PublicRecords
-                    fetchOUData={this.props.fetchOUData}
-                    groupName={newProps.match.params.department}
-                    store={this.props.store}
-                    {...newProps} {...childProps}
-                    />
-            </MainLayout>
-        );
-    }
+
   render() {
     let  childProps = {Config: (this.props.Config)}
     return (
@@ -126,7 +113,11 @@ class WebApp extends Component {
             )} />
             <Route path="/Departments/:department" render={this.DepartmentsPage} />
             <Route path="/BoardsAndCommittees/:committee" render={this.CommitteesPage} />
-            <Route path="/PublicRecords/:recordtype/" render={this.PublicRecordsPage} />
+            <Route path="/PublicRecords" render={(newProps)=>(
+                <MainLayout {...childProps}>
+                    <PublicRecords store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps}/>
+                </MainLayout>
+            )} />
             <Route exact path="/Admin" render={(newProps)=>(
                 <MainLayout {...childProps}>
                     <Admin store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></Admin>
