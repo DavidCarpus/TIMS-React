@@ -4,77 +4,66 @@ import {  Col, Row } from 'reactstrap';
 import  './PublicRecords.css'
 import FilterRecordsForm from './Filter/Filter'
 
-const publicRecordTypes = [
-    'RFP',
-    'NOTICE',
-    'AGENDA',
-    'DOCUMENTS',
-    'RFPS',
-    'NOTICES',
-    'MINUTES',
-    'AGENDAS',
-    'VOTING',
-]
-
 const dateStr =(date)=> date && (date.getUTCMonth()+1) + '/' + date.getUTCDate()+ '/' + date.getUTCFullYear()
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 export default class PublicRecordsUI extends React.Component {
-    constructor(props){
-        super(props);
-        this.toggleYear = this.toggleYear.bind(this);
-        this.state = {expandedYears: []};
-        // this.state.expandedYears.push((new Date()).getFullYear().toString())
-    }
-
     componentWillMount() {
-        this.props.fetchData(this.props.recordType);
-    }
-
-    toggleYear(yearToToggle){
-        let expandedYears = this.state.expandedYears;
-        let yearIndex = expandedYears.indexOf(yearToToggle);
-        if ( yearIndex >= 0)  {
-            expandedYears.splice(yearIndex, 1);
-        } else {
-            expandedYears.push(yearToToggle)
-        }
-        this.setState({expandedYears:expandedYears})
+        this.props.fetchData(this.props.currentFilter);
     }
 
     render() {
-        var tmpStyle = {backgroundColor: 'white'}
+        const {
+            loading, currentFilter, records,changeFilter, filterFields, meta
+        } = this.props;
+        
+        if ( loading) {         return (<div style={{backgroundColor: 'white'}}>Loading</div>)     }
 
-        if ( this.props.loading) {         return (<div style={tmpStyle}>Loading</div>)     }
-        //   if (this.props.records.length === 0) {        return(null);    }
-        //   if (Object.keys(this.props.records).length === 0) { return null }
-        if (publicRecordTypes.indexOf(this.props.recordType.toUpperCase()) === -1 ) {
-            return (
-                <Col md={10}  mdPush={1}  id="contentArea"  >
-                    <div  id='PublicRecords'>Unknown PublicRecords Type: {this.props.recordType}</div>
-                </Col>
-            )
+        // console.log('currentFilter', currentFilter);
+        // console.log('meta', meta);
+        // console.log('records', records);
+
+        if(meta.dateRange){
+            const startYear = (new Date(meta.dateRange[0])).getUTCFullYear();
+            const endYear = (new Date(meta.dateRange[1])).getUTCFullYear();
+            const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return endYear - y; });
+            const yearFilter = {fieldName:"year", description:"Year",
+                options: [{id:"", description:"Any"}].concat(
+                    years.map(year=> ({id:year, description:""+year}))
+                ),
+            }
+            let addYearFilter = false
+            if(Object.keys(currentFilter).indexOf("year") >= 0)  addYearFilter = true
+            if (meta.recordCount >= meta.limit) addYearFilter = true
+
+            if(addYearFilter && filterFields.filter(field=>field.fieldName === 'year').length === 0) filterFields.push(yearFilter)
         }
-        var currentRecords = this.props.records
+
+        const initialValues = Object.keys(currentFilter).map(field =>
+            ({[field]:filterFields.filter(filterField=>filterField.fieldName===field)[0]
+                .options.filter(option=> (""+option.id) === currentFilter[field] )[0]
+                .id
+            })
+        ).reduce( (acc, val) => Object.assign(acc, val),{})
+
         return (
             <Row id='PublicRecords'>
                 <Col  md={{size:10, push:1}} id='contentArea'>
-                    <h1>{this.props.recordType}</h1>
+                    <h1>Public Records</h1>
                     <FilterRecordsForm
-                        records={currentRecords}
-                        groupSelection={this.props.groupSelection}
-                        initialValues={this.props.currentFilter}
-                        currentFilter={this.props.currentFilter}
-                        updateFilter={this.props.updateFilter}>
-                    </FilterRecordsForm>
-                    {currentRecords.map(record =>
+                        records={records}
+                        initialValues={initialValues}
+                        currentFilter={currentFilter}
+                        changeFilter={changeFilter}
+                        filterFields={filterFields}
+                        />
+                    {records.map(record =>
                         <div key={record.id}  className='documentLink'>
                             <SmartLink link={record.link} id={record.id} linkText={record.recorddesc || record.groupDescription } />
-                            <span className="posted">
-                                (Posted {dateStr(new Date(record.date))})
-                                {record.groupName === 'UNK' ? "" : " - " +record.groupName}
-                            </span>
+                                {!currentFilter.recordType && <span className="recordtype">{record.type}</span> }
+                                {!currentFilter.pageLink && <span className="group"> {record.groupName} </span> }
+                                <span className="posted"> (Posted {dateStr(new Date(record.date))}) </span>
                             <br/>
                         </div>
                     )}
