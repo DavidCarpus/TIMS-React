@@ -7,8 +7,7 @@ var startOfWeek = require('date-fns/start_of_week')
 var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
-var normalizeRecordType = require('../../libs/PublicDocs').normalizeRecordType;
-var fetchPublicDocs = require('../../libs/PublicDocs').fetchPublicDocs;
+var fetchPublicDocsDataFromDB = require('../../libs/PublicDocs').fetchPublicDocsDataFromDB;
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -417,8 +416,7 @@ router.get('/Records/Notice/:noticeID', function(req, res) {
 // ==========================================================
 router.get('/Records/PublicDocs/filtered', function(req, res) {
     // console.log('req.query', req.query.recordType);
-    // let recordtype = normalizeRecordType(req.query.recordType)
-    fetchPublicDocs(knex, req.query)
+    fetchPublicDocsDataFromDB(knex, req.query, 100)
     .then( toSend => {
         // console.log('toSend', toSend);
         res.json(toSend);
