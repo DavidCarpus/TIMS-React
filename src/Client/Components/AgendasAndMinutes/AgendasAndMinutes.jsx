@@ -45,7 +45,6 @@ const YearBlock = ({yearRecords, year, expanded, toggleCollapseState}) => {
     )
 }
 
-// const AgendasAndMinutes = ({meetings, loading, id, title}) => {
 export class AgendasAndMinutes extends React.Component {
   constructor(props) {
     super(props);
@@ -65,16 +64,20 @@ export class AgendasAndMinutes extends React.Component {
   }
 
   render() {
-     if ( this.props.loading) {         return (<div>Loading</div>)     }
-     if (this.props.meetings.length === 0) {        return(null);    }
-     if (Object.keys(this.props.meetings).length === 0) { return null }
+      const {
+          loading, title, meetings
+      } = this.props;
+
+     if ( loading) {         return (<div>Loading</div>)     }
+     if (meetings.length === 0) {        return(null);    }
+     if (Object.keys(meetings).length === 0) { return null }
 
      return (
          <div id='AgendasAndMinutes'>
              <a id="AgendasAndMinutes-bookmark">AgendasAndMinutes Start</a>
 
-              <h2>{this.props.title}</h2>
-              {this.props.meetings
+              <h2>{title}</h2>
+              {meetings
                   .sort((a,b) => { return b.date -a.date; })
                   .map( year => {
                     return (

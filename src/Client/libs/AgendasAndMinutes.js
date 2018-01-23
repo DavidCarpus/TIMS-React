@@ -10,14 +10,17 @@ function documentsByYear(documents) {
     .map( (val) => [val, documents[val] ] )
     .reduce( (acc, curr, i) => {
         let year = ((new Date(curr[0])).getFullYear());
-        acc[year] = acc[year]? acc[year].concat(curr): curr;
+        // acc[year] = acc[year]? acc[year].concat(curr): curr;
+        acc[year] = acc[year]? acc[year]: [];
+        acc[year].push(curr)
+
         return acc;
     }, {})
+
     const results = Object.keys(byYear)
         .map( _date  => {
             return {date:_date, values:  byYear[_date]}
         })
 
     return results
-
 }

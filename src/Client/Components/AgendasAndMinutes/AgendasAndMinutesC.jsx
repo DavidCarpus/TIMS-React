@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
       meetings: sortedDocuments,
-      meetingGroupName: ownProps.group.groupName,
+      // meetingGroupName: ownProps.group.groupName,
       loading: agendaState.loading,
       title: ownProps.title ||  'Agendas And Minutes'
   };
