@@ -49,6 +49,8 @@ const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
 }
 
 //================================================
+let subMenuOpenTimer=null
+const toggleDelay=800
 class SubMenus extends React.Component {
     constructor(props) {
         super(props);
@@ -62,20 +64,14 @@ class SubMenus extends React.Component {
     }
 
     toggle() {
-        this.setState({
-            dropdownOpen: !this.state.dropdownOpen
-        });
+        this.setState({ dropdownOpen: !this.state.dropdownOpen });
     }
     toggleOpen() {
-      this.setState({
-        dropdownOpen: true
-      });
-  }
+        subMenuOpenTimer = setTimeout(function() { this.setState({dropdownOpen: true}); }.bind(this), toggleDelay);
+    }
     toggleClose() {
-        // if(debug)  return
-      this.setState({
-        dropdownOpen: false
-      });
+        if(subMenuOpenTimer) clearTimeout( subMenuOpenTimer)
+        this.setState({ dropdownOpen: false });
     }
 
     render(){
