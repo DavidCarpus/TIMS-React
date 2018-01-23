@@ -3,13 +3,6 @@
     {"id": 3, "desc":"Town Calendar", "link": "/calendar"},
     {"id": 4, "desc":"Departments", "link": "/Departments"},
     {"id": 5, "desc":"Boards And Committees", "link": "/BoardsAndCommittees"},
-    {"id": 6, "desc":"Public Records", "link": "/PublicRecords",
-    "menus": [
-        {"desc":"Documents", "link": "/Documents"},
-        { "desc":"RFPs", "link": "/RFPS"},
-        { "desc":"Notices", "link": "/Notices"},
-        { "desc":"Agendas", "link": "/Agendas"},
-        { "desc":"Town Meeting", "link": "/Voting"}
-        ]
+    {"id": 6, "desc":"Public Records", "link": "/PublicRecords"
     }
 ]
