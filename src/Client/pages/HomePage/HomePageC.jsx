@@ -2,7 +2,6 @@
 import HomePageUI from './HomePage'
  import { connect } from 'react-redux'
  import {fetchGroupNotices} from '../../actions/PublicDocuments'
- import { fetchCalendarData } from '../../actions/CalendarData'
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -16,7 +15,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
      fetchData: () => {
          let groupName='Home'
-         dispatch(fetchCalendarData())
          dispatch(fetchGroupNotices(groupName));
      }
   }
