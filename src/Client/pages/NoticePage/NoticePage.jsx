@@ -2,7 +2,7 @@ import React from 'react';
 import {  Col } from 'react-bootstrap';
 // import SmartLink from '../../Components/SmartLink'
 import RawText  from '../../Components/RawText'
-import  './IndexPage.css'
+import  './NoticePage.css'
 
 export default class NoticePage extends React.Component {
     componentWillMount() {
