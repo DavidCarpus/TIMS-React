@@ -1,14 +1,23 @@
 var fs = require('fs');
 var axios = require("axios");
-var Config = require('../../config'),
+var Config = require('./config'),
 configuration = new Config();
-var mmm = require('mmmagic'),
-    Magic = mmm.Magic;
+// var mmm = require('mmmagic'),
+//     Magic = mmm.Magic;
 
-// var wget = require('node-wget');
-// var wget = require('./wget');
-// var wget = require('node-wget-promise');
-
+let getMimeType = (uri)=> {
+    const ext=getExtension(uri)
+    switch (ext) {
+        case '.ics':
+            return Promise.resolve("text/calendar")
+            break;
+        default:
+        console.log('getMimeType:uri',ext, uri);
+        throw new Error('mimeType routine not "Set"')
+    }
+}
+let setMimeTypeRoutine = (routine) => {getMimeType = routine}
+//========================================
 const mkdirp = require('mkdirp-promise')
 
 const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
@@ -29,35 +38,23 @@ if (mode === 'development') {
 }
 
 let Client = require('ssh2-sftp-client');
-let pk=require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa');
 let sftp = new Client();
-var connSettings = {
-    host: 'carpusco.wwwss29.a2hosted.com',
-    port: '7822',
-    username: 'carpusco',
-    privateKey: pk
-};
-let sftpPromise=null
+var connSettings = {}
+// let privateKey= (mode === 'development')? require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa'):"";
+let privateKey= "";
 
-module.exports = {
-    pullLocalCopies : pullLocalCopies,
-    pullNewServerDirs : pullNewServerDirs,
-    pushFileToServer: pushFileToServer,
-    pullLocalCopy:pullLocalCopy,
-    fetchURL:fetchURL,
-    getServerFilePath:getServerFilePath,
-    // initSFTP:initSFTP,
-    getSourceServerHost:getSourceServerHost,
-    localFileBaseURL:localFileBaseURL,
-    getRedirectLocation:getRedirectLocation,
-    getURLCacheLocation:getURLCacheLocation,
-    cachedURIExists:cachedURIExists,
-    cachingFetchURL:cachingFetchURL,
-    makeServerDirs: makeServerDirs,
-    mimeType:mimeType,
-    extensionFromContentType: extFromContentType
-
+let readSSH_PK = (pk)=> {
+    console.log('readSSH_PK:',pk);  privateKey=pk
+    privateKey= require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa');
+    connSettings = {
+        host: 'carpusco.wwwss29.a2hosted.com',
+        port: '7822',
+        username: 'carpusco',
+        privateKey: privateKey
+    };
 }
+
+let sftpPromise=null
 
 const contentTypeExtensions = [
    {cType: 'application/pdf', ext:'.pdf'},
@@ -280,7 +277,7 @@ function pullLocalCopies(records) {
             } else if (!localFileMissing(dest) && getExtension(filenameFromPath(dest)).length === 0 ) {
                 // TODO: If dest exists and destination does not have an extension,
                 // Determine fileMimeType, copy dest to 'new' dest with added extension
-                return mimeType(dest)
+                return getMimeType(dest)
                 .then(cType=>{
                     const ext = extFromContentType(cType)
                     const newDest = dest + ext
@@ -483,7 +480,7 @@ function fetchFileURL(url) {
         if (match.length >= 1) {
             return Promise.resolve({data: readData, contentType:match[0].cType, location:urlToFetch})
         } else {
-            return mimeType(urlToFetch)
+            return getMimeType(urlToFetch)
             .then(cType=> (
                 {data: readData, contentType:cType, location:urlToFetch}
             ))
@@ -573,17 +570,6 @@ function translateURI(uri) {
     return activeURI
 }
 //========================================
-function mimeType(uri) {
-    var magic = new Magic(mmm.MAGIC_MIME_TYPE);
-    return new Promise(function(resolve, reject) {
-        magic.detectFile(uri, function(err, result) {
-            if (err) reject(err);
-            // console.log('mimeType', result);
-            resolve(result)
-        });
-    });
-}
-//========================================
 function cachingFetchURL(uri, forcePull=false) {
     let activeURI =translateURI(uri)
     let cacheURILocation = getURLCacheLocation(uri)
@@ -614,5 +600,26 @@ function cachingFetchURL(uri, forcePull=false) {
             return Promise.resolve(urlData)
         })
     }
+}
+//========================================
+module.exports = {
+    pullLocalCopies : pullLocalCopies,
+    pullNewServerDirs : pullNewServerDirs,
+    pushFileToServer: pushFileToServer,
+    pullLocalCopy:pullLocalCopy,
+    fetchURL:fetchURL,
+    getServerFilePath:getServerFilePath,
+    // initSFTP:initSFTP,
+    getSourceServerHost:getSourceServerHost,
+    localFileBaseURL:localFileBaseURL,
+    getRedirectLocation:getRedirectLocation,
+    getURLCacheLocation:getURLCacheLocation,
+    cachedURIExists:cachedURIExists,
+    cachingFetchURL:cachingFetchURL,
+    makeServerDirs: makeServerDirs,
+    // mimeType:mimeType,
+    setMimeTypeRoutine:setMimeTypeRoutine,
+    extensionFromContentType: extFromContentType,
+    readSSH_PK:readSSH_PK
 }
 //========================================

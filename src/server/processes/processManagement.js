@@ -58,7 +58,7 @@ class ProcessManagement {
             input: this.services[serviceName].process.stdout,
             terminal: false
         }).on('line', function(line) {
-            // console.log('----------');
+            // console.log('----------\n',line, '\n');
             try {
                 const data = JSON.parse(line);
                 if(data["calendarProcessPort"]){

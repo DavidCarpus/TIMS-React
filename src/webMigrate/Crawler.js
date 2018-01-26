@@ -1,7 +1,7 @@
 const crc = require('crc');
 const cheerio = require('cheerio')
 
-var cachingFetchURL = require('./serverIO').cachingFetchURL;
+var cachingFetchURL = require('../server/serverIO').cachingFetchURL;
 
 const pathWithoutFilename = (path) => path.substr(0, path.lastIndexOf('/'))
 const onlyFileName = (fullPath) => fullPath.replace(/.*\//, '')

@@ -6,15 +6,14 @@ var icalendar = require('icalendar');
 var isWithinRange = require('date-fns/is_within_range')
 var addDays = require('date-fns/add_days')
 
-var {fetchURL} = require('../../db/webMigrate/serverIO');
+var {fetchURL} = require('../../serverIO');
 var {addOrUpdateTable, getKnexConnection} = require('../db/common');
 var {dateFromICSDateStr, getDayOfMonth} = require('../date')
 
 var Config = require('../../config'),
 configuration = new Config();
-
-const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
-const translations = require(configuration.ROOT_DIR+'/'+privateDir + '/ICSCalendarLookups.json')
+const privateDir = configuration.PRIVATE_DIR
+const translations = require(privateDir + '/ICSCalendarLookups.json')
 
 var knexConnection = getKnexConnection()
 // =================================================
