@@ -8,7 +8,8 @@ configuration = new Config();
 var knexConfig = require('../db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
-const privateDir = configuration.mode === 'development' ? '../../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../../private/'
+// const privateDir = configuration.mode === 'development' ? '../../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../../private/'
+const privateDir = configuration.PRIVATE_DIR
 
 const validEmails = require(privateDir+'/ValidEmails.json');
 

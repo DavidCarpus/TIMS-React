@@ -8,7 +8,9 @@ var imapValidator = require('../imapValidator');
 var Config = require('../../config'),
 configuration = new Config();
 
-const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
+// const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
+const privateDir = configuration.PRIVATE_DIR
+
 // console.log('__dirname',__dirname);
 
 const mergeParents = (path) => { // Merge references to parent directories

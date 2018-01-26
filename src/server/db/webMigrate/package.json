@@ -1,6 +1,0 @@
-{
-  "name": "Migrate",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./Migrate.js"
-}

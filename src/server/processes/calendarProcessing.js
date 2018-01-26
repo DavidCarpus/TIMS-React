@@ -32,9 +32,25 @@ const calendarProcessPort = configuration.expressPort+2
 var  calendar = require('../libs/calendar');
 
 const debugLog =(...args)=> {
-    const output = `{"${args[0]}":[` + args.splice(1).map(arg=> require('util').inspect(arg, { depth: null })).join(' ') + `]}\n`
+    // const output = `{"${args[0]}":[` +
+    //     args.splice(1).map(arg=> require('util').inspect(arg, { depth: null })).join(' ') + `]}\n`
+    const output = `{"${args[0]}":[` +
+        args.splice(1).map(arg=> JSON.stringify(arg)).join(' ') + `]}\n`
     process.stdout.write(output);
 }
+
+const privateDir = configuration.PRIVATE_DIR
+// const mode = process.env.NODE_ENV||'development'
+// const privateDir = (mode === 'development')?
+// '../private/'+process.env.REACT_APP_MUNICIPALITY :
+// '../private/'
+
+// const icsFilePath = (mode === 'development')?
+// "file://" + configuration.ROOT_DIR+'/' + privateDir + '/export.ics' :
+// "file://" + privateDir + '/export.ics'
+const icsFilePath = "file://" + privateDir + '/export.ics'
+
+debugLog('icsFilePath', icsFilePath);
 
 //---------------------------------------------
 function sleep(ms) {
@@ -56,7 +72,8 @@ app.use('/api', router);
 // //---------------------------------------------
 function calendarProcess(delay, count=2) {
     // return pullEventsFromICS('http://www.newdurhamnh.us/calendar/ical/export.ics')
-    return pullEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+    // return pullEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+    return pullEventsFromICS(icsFilePath)
     .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
         // debugLog('Pulled events', events.length);
         let addCnt=0

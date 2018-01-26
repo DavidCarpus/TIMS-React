@@ -5,28 +5,37 @@ var request = require('request');
 var URL = require('url-parse');
 
 const cheerio = require('cheerio')
-var Config = require('../../config'),
+var Config = require('../server/config'),
 configuration = new Config();
 var addDays = require('date-fns/add_days')
 
-var knexConfig = require('../../libs/db/knexfile.js')
+var knexConfig = require('../server/libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-var cachingFetchURL = require('./serverIO').cachingFetchURL;
-var pullLocalCopies = require('./serverIO').pullLocalCopies;
-var pullLocalCopy = require('./serverIO').pullLocalCopy;
-var makeServerDirs = require('./serverIO').makeServerDirs;
-var getServerFilePath = require('./serverIO').getServerFilePath;
-var pullNewServerDirs = require('./serverIO').pullNewServerDirs;
-var getSourceServerHost = require('./serverIO').getSourceServerHost;
-var pushFileToServer = require('./serverIO').pushFileToServer;
-var getRedirectLocation = require('./serverIO').getRedirectLocation;
-var extensionFromContentType = require('./serverIO').extensionFromContentType;
-var mimeType = require('./serverIO').mimeType;
+var cachingFetchURL = require('../server/serverIO').cachingFetchURL;
+var pullLocalCopies = require('../server/serverIO').pullLocalCopies;
+var pullLocalCopy = require('../server/serverIO').pullLocalCopy;
+var makeServerDirs = require('../server/serverIO').makeServerDirs;
+var getServerFilePath = require('../server/serverIO').getServerFilePath;
+var pullNewServerDirs = require('../server/serverIO').pullNewServerDirs;
+var getSourceServerHost = require('../server/serverIO').getSourceServerHost;
+var pushFileToServer = require('../server/serverIO').pushFileToServer;
+var getRedirectLocation = require('../server/serverIO').getRedirectLocation;
+var extensionFromContentType = require('../server/serverIO').extensionFromContentType;
+var mimeFileIO = require('./mimeFileIO').getMimeType;
+var setMimeTypeRoutine = require('../server/serverIO').setMimeTypeRoutine;
+
+setMimeTypeRoutine(mimeFileIO)
+var getMimeType = require('./mimeFileIO').getMimeType;
+var readSSH_PK = require('../server/serverIO').readSSH_PK;
+
+// let privateKey = require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa')
+console.log('reading privateKey');
+readSSH_PK('/home/dcarpus/.ssh/id_rsa')
 
 
-var enterOnlyIntoTable = require('../../libs/db/common').enterOnlyIntoTable;
-var addOrUpdateTable = require('../../libs/db/common').addOrUpdateTable;
+var enterOnlyIntoTable = require('../server/libs/db/common').enterOnlyIntoTable;
+var addOrUpdateTable = require('../server/libs/db/common').addOrUpdateTable;
 
 var crawler = require('./Crawler').Crawler;
 
@@ -113,7 +122,7 @@ process.on('uncaughtException', function (err) {
     console.log('Migrate process:' , err);
 })
 
-const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
+const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
 
 const migrateDataDir = privateDir +'/migrate';
 const meetingPaths = require(migrateDataDir+'/TablesToScrape.json');
@@ -589,7 +598,7 @@ function migrateGroupPageData(wholePage, conf) {
 }
 //========================================
 async function getMimeType(uri){
-    const result = await mimeType(uri)
+    const result = await mimeFileIO(uri)
     return result
 }
 //========================================
