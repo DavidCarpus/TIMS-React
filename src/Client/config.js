@@ -1,11 +1,10 @@
 // const MUNICIPALITY='MiltonNH'
 const MUNICIPALITY=process.env.REACT_APP_MUNICIPALITY || 'NewDurhamNH'
 
-// $REACT_APP_MUNICIPALITY
-var dev_configuration = require('../private/' + MUNICIPALITY + '/configuration_dev.json');
-var prod_configuration = require('../private/' + MUNICIPALITY + '/configuration_prod.json');
-var test_configuration = require('../private/' + MUNICIPALITY + '/configuration_test.json');
-var base_configuration = require('../private/' + MUNICIPALITY + '/configuration.json');
+var dev_configuration = require('../../private/' + MUNICIPALITY + '/configuration_dev.json');
+var prod_configuration = require('../../private/' + MUNICIPALITY + '/configuration_prod.json');
+var test_configuration = require('../../private/' + MUNICIPALITY + '/configuration_test.json');
+var base_configuration = require('../../private/' + MUNICIPALITY + '/configuration.json');
 
 if (!String.prototype.startsWith) {
     // eslint-disable-next-line
@@ -62,9 +61,14 @@ if(window.location.hostname.startsWith('test') || window.location.hostname.start
 
 module.exports = function(){
     let mergedConf = mergeDeep({}, base_configuration);
-    mergedConf = mergeDeep(mergedConf,
-        {mode: mode, ATTACHMENT_DIR:__dirname +  mergedConf.attachmentPath }
-    );
+    // const privateDir = 'private/' + MUNICIPALITY
+    // console.log('privateDir',__dirname, privateDir);
+
+    mergedConf = mergeDeep(mergedConf,{
+        mode: mode,
+        ATTACHMENT_DIR:__dirname +  mergedConf.attachmentPath ,
+        // PRIVATE_DIR : __dirname+ privateDir
+    });
 
     switch(mode){
         case 'development':

@@ -4,7 +4,13 @@ import React from 'react';
 import  './ContactUs.css'
 
 const MUNICIPALITY=process.env.REACT_APP_MUNICIPALITY || 'NewDurhamNH'
-var departmentData = require('../../../private/' + MUNICIPALITY + '/departmentContacts.json');
+var departmentData = require('../../../../private/' + MUNICIPALITY + '/departmentContacts.json');
+
+// var Config = require('../../config'),
+// configuration = new Config();
+// console.log('configuration',configuration);
+
+// var departmentData = require(configuration.PRIVATE_DIR+ '/departmentContacts.json');
 var departments = departmentData[0].departmentContacts;
 var addressLines = departmentData[1].addressLines;
 

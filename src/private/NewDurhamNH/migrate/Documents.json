@@ -1,5 +1,0 @@
-[
-    {"group":"Selectmen", "url":"https://www.newdurhamnh.us/board-selectmen", "query":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul"},
-    {"group":"BudgetCommittee", "url":"https://www.newdurhamnh.us/budget-committee", "query":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul"},
-    {"group":"ConservationCommission", "url":"https://www.newdurhamnh.us/conservation-commission", "query":"#block-system-main > div > div > div > aside > div.region.region-page-sidebar-first.sidebar > div > nav > div > ul"}
-]

@@ -3,7 +3,7 @@ var addDays = require('date-fns/add_days');
 // import addDays from 'date-fns/add_days'
 
 
-const DEFAULT_JSON_DIR='../../../private/' + process.env.REACT_APP_MUNICIPALITY + '/json/';
+const DEFAULT_JSON_DIR='../../../../private/' + process.env.REACT_APP_MUNICIPALITY + '/json/';
 const DEFAULT_DB_PATH='/home/dcarpus/code/milton_nh/react_miltonNH/server/db/phpsqlite.db';
 
 var JSON_DIR=DEFAULT_JSON_DIR;

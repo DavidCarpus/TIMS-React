@@ -10,8 +10,8 @@
     },
     "scripts": {
         "eject": "react-scripts eject",
-        "build-css": "node-sass-chokidar src/ -o src/  --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/ ",
-        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --include-path src/private/$REACT_APP_MUNICIPALITY/SASS/  --watch --recursive",
+        "build-css": "node-sass-chokidar src/ -o src/  --include-path private/$REACT_APP_MUNICIPALITY/SASS/ ",
+        "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --include-path private/$REACT_APP_MUNICIPALITY/SASS/  --watch --recursive",
         "start": "react-scripts start -- --include-path ./src",
         "build": "cp src/private/$REACT_APP_MUNICIPALITY/favicon.ico public/ && react-scripts build",
         "pushProd": "echo $REACT_APP_MUNICIPALITY && npm run pushProdClient  && npm run pushProdServer && npm run pushProdPrivate && npm run pushProdCredentials",

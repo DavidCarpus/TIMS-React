@@ -122,7 +122,7 @@ process.on('uncaughtException', function (err) {
     console.log('Migrate process:' , err);
 })
 
-const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
+const privateDir = '../../private/'+process.env.REACT_APP_MUNICIPALITY;
 
 const migrateDataDir = privateDir +'/migrate';
 const meetingPaths = require(migrateDataDir+'/TablesToScrape.json');

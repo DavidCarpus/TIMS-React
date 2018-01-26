@@ -20,7 +20,8 @@ let setMimeTypeRoutine = (routine) => {getMimeType = routine}
 //========================================
 const mkdirp = require('mkdirp-promise')
 
-const privateDir = '../private/'+process.env.REACT_APP_MUNICIPALITY;
+// const privateDir = '../../private/'+process.env.REACT_APP_MUNICIPALITY;
+const privateDir = configuration.PRIVATE_DIR
 
 // const localFileBaseURL = '/home/dcarpus/code/milton_nh/currentMiltonWebsite/miltonnh-us.com'
 const localFileBaseURL = () => '/home/dcarpus/code/currentSites/'+configuration.sourceTownDomain

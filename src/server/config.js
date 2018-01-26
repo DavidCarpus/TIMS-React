@@ -1,6 +1,6 @@
 let mode=process.env.INIT_MODE || process.env.NODE_ENV||'development'
 const privateDir = mode === 'development' || process.env.DEV_MACHINE ?
-__dirname+'/../private/'+process.env.REACT_APP_MUNICIPALITY:
+__dirname+'/../../private/'+process.env.REACT_APP_MUNICIPALITY:
 __dirname+'/../private/'
 
 const credentialsDir = mode === 'development' || process.env.DEV_MACHINE ? '../../credentials/'+process.env.REACT_APP_MUNICIPALITY: '../credentials/'

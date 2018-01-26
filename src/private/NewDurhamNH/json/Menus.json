@@ -1,8 +1,0 @@
-[
-    {"id": 2, "desc":"About", "link": "/about"},
-    {"id": 3, "desc":"Town Calendar", "link": "/calendar"},
-    {"id": 4, "desc":"Departments", "link": "/Departments"},
-    {"id": 5, "desc":"Boards And Committees", "link": "/BoardsAndCommittees"},
-    {"id": 6, "desc":"Public Records", "link": "/PublicRecords"
-    }
-]
