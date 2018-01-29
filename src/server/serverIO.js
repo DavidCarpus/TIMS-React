@@ -429,14 +429,14 @@ function pullNewServerDirs(baseServerPath, pathsToDir) {
     } // else
 }
 //========================================
-function pushFileToServer( fullPathLocalFile, serverDest ) {
+function pushFileToServer( fullPathLocalFile, serverDest, silent=false ) {
     if (configuration.mode !== 'development') {
         return  sftpPromise
         .then( () => {
             // if (configuration.mode !== 'development') {
             //     console.log('Push ', fullPathLocalFile , 'to', serverDest);
             // }
-            console.log('pushFileToServer ', fullPathLocalFile , 'to', serverDest);
+            if(!silent) console.log('pushFileToServer ', fullPathLocalFile , 'to', serverDest);
             return sftp.put(fullPathLocalFile, serverDest, true ) ///Param 3=useCompression
         })
         .then( (data) => {
@@ -450,7 +450,7 @@ function pushFileToServer( fullPathLocalFile, serverDest ) {
         })
     } else {
         return new Promise(function(resolve, reject) {
-            console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
+            if(!silent) console.log('Copy file to "Server" location .. ', fullPathLocalFile, 'as', serverDest);
             if (!serverDest || serverDest.length === 0 || !fullPathLocalFile || fullPathLocalFile.length === 0) {
                 // console.log('**** Invalid "Server" location .. ', serverDest);
                 reject('**** Invalid "Server" paths .. ' + fullPathLocalFile + ' -- ' + serverDest)
