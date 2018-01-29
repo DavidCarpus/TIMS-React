@@ -448,7 +448,7 @@ router.get('/GroupData/:groupName', function(req, res) {
 
         // query = "Select id, datadesc as description from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
         query = "Select *, id, groupDescription as description from Groups where pageLink='" + groupName + "'";
-        console.log(query);
+        // console.log(query);
         var finalResult = simpleDBQuery(query)
         .then( groupData =>{
             groupData[0].link = groupName;
@@ -484,7 +484,7 @@ router.get('/GroupData/:groupName', function(req, res) {
             " left Join Groups on Groups.id = GroupMembers.groupID " +
             " left Join Users on Users.id = GroupMembers.userID " +
             " where Groups.pageLink='" + groupDataWithPageText.link +"' ";
-            console.log(query);
+            // console.log(query);
             return simpleDBQuery(query).
             then(members => {
                 if (members.length > 0) {
