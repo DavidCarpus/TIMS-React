@@ -674,11 +674,8 @@ function fetchFilesFromPage(linkData, baseRecordData, currentCnt, maxCnt) {
     }
     return Promise.all(linkData.map(uri => {
         const translatedURI = uri.uri.startsWith('../')?
-            cleanURI(pathWithoutFilename(baseRecordData.uri)+'/'+uri.uri) //.replace('../', '/')
+            cleanURI(pathWithoutFilename(baseRecordData.uri)+'/'+uri.uri)
             :uri.uri
-        // cleanURI()
-        // host = pathWithoutFilename(uri)
-
         // console.log('fetch:',translatedURI);
         return cachingFetchURL(translatedURI)
         .then(urlData => {
@@ -972,7 +969,6 @@ function getDateFromFilenameOrFileDate(rec, getMeetingDate) {
 }
 //========================================
 function migrateGroupArchivePages(groupName, groupLabel, conf) {
-    // console.log('migrateGrpArchivePages', groupLabel, groupLabel.match(/\b(\w)/g).join(''));
     const startYear = 2007; const endYear=(new Date()).getUTCFullYear();     const years =Array.apply(null, Array(endYear - startYear+1)).map(function (x, y) { return startYear + y; });  // [1, 2, 3]
 
     const validExtensions = ['.PDF', '.DOC', '.DOCX', '.TIF', '.ZIP', '.RTF']
@@ -1035,7 +1031,6 @@ function logNewsPageData(newsData) {
         }))
     })
     .then((enteredAttachmests)=>{
-        // console.log('enteredAttachmests', enteredAttachmests);
         return Promise.resolve(Object.assign({}, newsData, {attachments:enteredAttachmests}))
     })
 }
@@ -1092,9 +1087,6 @@ function migrateNewsPage(linkRecord) {
 }
 //========================================
 function migrateNews(pageURI) {
-    // const pageURI = "file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.1.html"
-    const selector = "#block-system-main > div > div > div.view-content"
-
     return cachingFetchURL(pageURI, true && pageURI.startsWith('http'))
     .then(fetchedData => cheerio.load(fetchedData.data) )
     .then($ =>  $(selector).children().map( (i, row)  => ({

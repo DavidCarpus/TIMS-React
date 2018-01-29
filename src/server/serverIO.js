@@ -2,8 +2,6 @@ var fs = require('fs');
 var axios = require("axios");
 var Config = require('./config'),
 configuration = new Config();
-// var mmm = require('mmmagic'),
-//     Magic = mmm.Magic;
 
 let getMimeType = (uri)=> {
     const ext=getExtension(uri)
