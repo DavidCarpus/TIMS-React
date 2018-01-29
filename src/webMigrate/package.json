@@ -13,5 +13,8 @@
     "crc": "^3.5.0",
     "mmmagic": "^0.4.6",
     "to-markdown": "^3.1.1"
+  },
+  "devDependencies": {
+    "marked": "^0.3.12"
   }
 }
