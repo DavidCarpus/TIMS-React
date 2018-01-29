@@ -48,7 +48,8 @@ let readSSH_PK = (pk)=> {
     console.log('readSSH_PK:',pk);  privateKey=pk
     privateKey= require('fs').readFileSync('/home/dcarpus/.ssh/id_rsa');
     connSettings = {
-        host: 'carpusco.wwwss29.a2hosted.com',
+        // host: 'carpusco.wwwss29.a2hosted.com',
+        host: 'carpusco.wwwss56.a2hosted.com',
         port: '7822',
         username: 'carpusco',
         privateKey: privateKey
