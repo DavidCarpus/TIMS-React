@@ -3,7 +3,7 @@
   "images":[
        {"order":2,
            "img":"0B-QIVhquo5DoVTFOYi10czBlRHM",
-           "flip": 1,
+           "flip": 0,
         "description": "Winter"},
      {"order":3,
        "img":"0B-QIVhquo5DobjQySi0zLTRwdDQ",
