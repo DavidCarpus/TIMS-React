@@ -1,0 +1,36 @@
+@import "colors.scss";
+
+#contentArea{
+    border-radius: 1em;
+    h1{
+        text-align: center;
+    }
+}
+#pageNavigation {
+    margin: auto;
+    width: 50%;
+    .nav{
+        min-width: 2em;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+    }
+}
+
+
+.indexListLinks li {
+    padding-left: -1.5em;
+    margin-left: -15px;
+    color: blue;
+}
+.indexListLinks li a {
+    color: blue;
+}
+
+@media only print{
+    #contentArea{
+        h1{
+            display: none;
+        }
+    }
+}

@@ -93,7 +93,13 @@ const NewsRequestsConstants = {
     FETCH_DATA_DETAILS_FAILURE: 'FETCH_NEWS_DETAILS_DATA_FAILURE',
 }
 
-
+const FileViewConstants = {
+    FETCH: 'FETCH_FILE_DATA',
+    FETCH_SUCCESS: 'FETCH_FILE_DATA_SUCCESS',
+    FETCH_FAILURE: 'FETCH_FILE_DATA_FAILURE',
+    CURRENT_PAGE: 'FILE_VIEW_CURRENT_PAGE',
+    TOTAL_PAGES: 'FILE_VIEW_TOTAL_PAGES',
+}
 
 module.exports = {
     PublicDocumentsConstants,
@@ -110,4 +116,5 @@ module.exports = {
     SubmitChangeConstants,
     NewsRequestsConstants,
     StaticPageConstants,
+    FileViewConstants,
 }

@@ -16,6 +16,8 @@ import AlertRequestsReducer from './AlertRequests';
 import AuthenticationReducer from './Authentication';
 import ChangeRequestsReducer from './ChangeRequests';
 import StaticPageReducer from './StaticPage';
+import FileViewerReducer from './FileViewer';
+
 import NewsDataReducer from './NewsData';
 import { reducer as formReducer } from 'redux-form'
 
@@ -41,6 +43,7 @@ const rootReducer = combineReducers({
     ChangeRequests: ChangeRequestsReducer,
     NewsData: NewsDataReducer,
     StaticPage:StaticPageReducer,
+    FileViewer: FileViewerReducer,
 
     routing,
     form: formReducer

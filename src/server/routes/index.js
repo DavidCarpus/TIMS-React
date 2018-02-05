@@ -239,8 +239,73 @@ router.get('/NewsAttachment/:fileID', function(req, res) {
 
 })
 // ==========================================================
+router.get('/ViewFile/:fileID', function(req, res) {
+    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
+    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
+    query += " where id = '" + req.params.fileID +"' ";
+
+    simpleDBQuery(query)
+    .then(rows => {
+        let fullPath = rows[0].link;
+        if (!fullPath.startsWith('http')) {
+            // console.log('configuration',configuration);
+            let attachmentPath=configuration.PRIVATE_DIR + '/Attachments/';
+            fullPath = attachmentPath+fullPath
+        }
+        fullPath = cleanURI(fullPath)
+        const metaData = {FileType:mime.lookup(fullPath), id:req.params.fileID, path: fullPath,
+            filename:fullPath.replace(/^.*[\\\/]/, ''), Description:rows[0].recorddesc
+        }
+        console.log('ViewFile:' , metaData );
+        // res.json(metaData })
+
+        fs.readFile(fullPath, function(err, contents) {
+            res.json(Object.assign({}, metaData, {FileData:contents?contents.toString('base64'):""}))
+            // if (contents) {
+            // } else {
+            //     res.json(Object.assign({}, metaData, {FileData:""}))
+            // }
+        });
+    });
+})
+const cleanURI = (uri) => { // Merge references to parent directories
+    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
+}
+
+// ==========================================================
+router.get('/SendFile/:fileID', function(req, res) {
+    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
+    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
+    query += " where id = '" + req.params.fileID +"' ";
+
+    simpleDBQuery(query)
+    .then(rows => {
+        let fullPath = rows[0].link;
+        if (!fullPath.startsWith('http')) {
+            // console.log('configuration',configuration);
+            let attachmentPath=configuration.PRIVATE_DIR + '/Attachments/';
+            fullPath = attachmentPath+fullPath
+        }
+        fullPath = cleanURI(fullPath)
+        let filename =  fullPath.replace(/^.*[\\\/]/, '')
+        console.log('ViewFile:' + filename+ ' from ' + fullPath );
+        var mimetype = mime.lookup(fullPath);
+        console.log('mimetype:' + mimetype);
+        res.setHeader('Content-type', mimetype);
+        res.sendFile(fullPath)
+        // fs.readFile(fullPath, function(err, contents) {
+        //     console.log(contents.toString('base64').length);
+        //     res.json({mimetype:mimetype, filename:filename, fileData:contents.toString('base64')});
+        // });
+    });
+})
+//
+// ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {
-        var query = "Select id, fileLink as link from PublicRecords where id = '" + req.params.fileID +"' ";
+    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
+    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
+    query += " where id = '" + req.params.fileID +"' ";
+
          simpleDBQuery(query)
          .then(rows => {
              let fullPath = rows[0].link;

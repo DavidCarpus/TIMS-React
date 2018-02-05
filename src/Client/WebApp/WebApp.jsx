@@ -19,6 +19,7 @@ import RequestAlerts from '../pages/RequestAlerts'
 import Admin from '../pages/Admin'
 import AdminSubmitChange from '../pages/Admin/SubmitChange'
 import StaticPage from '../pages/StaticPage'
+import FileViewer from '../pages/FileViewer'
 
 class WebApp extends Component {
     componentWillMount() {
@@ -95,6 +96,11 @@ class WebApp extends Component {
             <Route path="/Employment" render={(newProps)=>(
                 <MainLayout {...childProps}>
                 <Employment store={this.props.store} {...newProps}  {...childProps}/>
+                </MainLayout>
+            )} />
+        <Route path="/ViewFile/:fileID" render={(newProps)=>(
+                <MainLayout {...childProps}>
+                <FileViewer store={this.props.store} {...newProps}  {...childProps}/>
                 </MainLayout>
             )} />
 
