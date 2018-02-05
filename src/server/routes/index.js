@@ -8,6 +8,8 @@ var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
 var fetchPublicDocsDataFromDB = require('../../libs/PublicDocs').fetchPublicDocsDataFromDB;
+var fetchPublicRecordPage = require('../../libs/PublicDocs').fetchPublicRecordPage;
+
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -414,6 +416,15 @@ router.get('/Records/Notice/:noticeID', function(req, res) {
          });
 });
 // ==========================================================
+router.get('/PublicRecordPage/:pageURL', function(req, res) {
+    // console.log('req.query', req.params);
+    fetchPublicRecordPage(knex, req.params.pageURL)
+    .then( toSend => {
+        // console.log('toSend', toSend);
+        res.json(toSend);
+    })
+});
+// ==========================================================
 router.get('/Records/PublicDocs/filtered', function(req, res) {
     // console.log('req.query', req.query.recordType);
     fetchPublicDocsDataFromDB(knex, req.query, 100)
@@ -421,7 +432,8 @@ router.get('/Records/PublicDocs/filtered', function(req, res) {
         // console.log('toSend', toSend);
         res.json(toSend);
     })
-});// ==========================================================
+});
+// ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
     // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
     query = "Select id, recordtype as type, fileLink as link, date, recorddesc as description from PublicRecords where pageLink='" + req.params.groupName +"'";

@@ -1,0 +1,23 @@
+@import "breakpoints.scss";
+@import "colors.scss";
+@import "SectionStyling.scss";
+
+.indexListLinks li {
+    padding-left: -1.5em;
+    margin-left: -15px;
+    color: $baseFontColor;
+}
+.indexListLinks li a {
+    color: $baseFontColor;
+}
+#IndexPage {
+    @include blockSection;
+    .indexListLinks{
+        column-count: 3;
+    }
+}
+@media iphone5 {
+    #IndexPage .indexListLinks{
+        column-count: 1;
+    }
+}

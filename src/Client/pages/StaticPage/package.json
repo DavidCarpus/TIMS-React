@@ -1,0 +1,6 @@
+{
+  "name": "StaticPage",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./StaticPageC.jsx"
+}

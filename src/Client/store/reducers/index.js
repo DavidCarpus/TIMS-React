@@ -15,6 +15,7 @@ import PublicRecordsReducer from './PublicRecords';
 import AlertRequestsReducer from './AlertRequests';
 import AuthenticationReducer from './Authentication';
 import ChangeRequestsReducer from './ChangeRequests';
+import StaticPageReducer from './StaticPage';
 import NewsDataReducer from './NewsData';
 import { reducer as formReducer } from 'redux-form'
 
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
     Authentication: AuthenticationReducer,
     ChangeRequests: ChangeRequestsReducer,
     NewsData: NewsDataReducer,
+    StaticPage:StaticPageReducer,
 
     routing,
     form: formReducer

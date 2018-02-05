@@ -53,6 +53,28 @@ function fetchPublicDocsDataFromDB(knex, filter, limit=50) {
 
 }
 
+function fetchPublicRecordPage(knex, pageURI) {
+    console.log( knex('PublicRecords')
+        .select( ['PublicRecords.id','date','Groups.groupDescription','PublicRecords.recorddesc', 'PageText.html'])
+        .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
+        .leftJoin('PageText','PageText.id', 'PublicRecords.pageTextID')
+        .where({filelink:"/"+pageURI, recordtype:'page'}).toString());
+
+    return knex('PublicRecords')
+    .select( ['PublicRecords.id','date','Groups.groupDescription','PublicRecords.recorddesc', 'PageText.html'])
+    .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
+    .leftJoin('PageText','PageText.id', 'PublicRecords.pageTextID')
+    .where({filelink:"/"+pageURI, recordtype:'page'})
+    .then( (recordData)=>
+        Object.assign({}, recordData[0],
+            {html:makeHrefsOpenNew(recordData[0].html)}
+        )
+
+    //     Promise.resolve(JSON.stringify(recordData))
+    )
+
+}
+
 function fetchPublicDocsFromDB(knex, filter) {
     if(filter.recordType) filter.recordType= normalizeRecordType(filter.recordType)
     if(filter.pageLink) filter["PublicRecords.pageLink"]= filter.pageLink
@@ -102,18 +124,25 @@ function normalizeRecordType(recordType) {
     }
 
 }
+function addAPIPrefixToFetchFileHref(html) {
+    return html.replace(new RegExp(/href="fetchfile\//,'g'),'href="/api/fetchfile/')
+}
+
+function makeHrefsOpenNew(html) {
+    const links = html.match(new RegExp(/(<a.*>.*<\/a>)/,'g'))
+    if(links === null || links.length === 0) return html
+    return links.reduce( (acc,val) => {
+        return acc.replace(val, val.replace(/ href=/, " target='_blank' href=" ))
+    },html);
+}
 
 if (require.main === module) {
     var knexConfig = require('../server/libs/db/knexfile.js')
     var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-    // const filter = {recordType:'Minute', "pageLink":"BudgetCommittee", "year":2017}
-    const filter = {recordType:'HelpfulInformation', "pageLink":"BoardofSelectmen"}
-    // const filter = {recordType:'Agenda'}
-    // fetchPublicDocsTypes(knex)
-    fetchPublicDocsDataFromDB(knex, filter)
+    fetchPublicRecordPage(knex, 'cemetery-fees')
     .then( (results) => {
-        console.log('Done: fetchPublicDocs', results.groups )
+        console.log(addAPIPrefixToFetchFileHref(makeHrefsOpenNew(results.html)));
     })
     .then( ()=>process.exit() )
 }
@@ -121,3 +150,4 @@ if (require.main === module) {
 // module.exports.normalizeRecordType = normalizeRecordType;
 // module.exports.fetchPublicDocsYearRange = fetchPublicDocsYearRange;
 module.exports.fetchPublicDocsDataFromDB = fetchPublicDocsDataFromDB;
+module.exports.fetchPublicRecordPage = fetchPublicRecordPage;

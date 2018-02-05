@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {    BrowserRouter as Router } from 'react-router-dom';
-import { Route } from 'react-router-dom';
+import { Route,Switch } from 'react-router-dom';
 
 import MainLayout from '../Components/MainLayout/MainLayout'
 import TransferStationRules from '../Components/TransferStationRules'
@@ -18,6 +18,7 @@ import PublicRecords from '../pages/PublicRecords'
 import RequestAlerts from '../pages/RequestAlerts'
 import Admin from '../pages/Admin'
 import AdminSubmitChange from '../pages/Admin/SubmitChange'
+import StaticPage from '../pages/StaticPage'
 
 class WebApp extends Component {
     componentWillMount() {
@@ -59,6 +60,7 @@ class WebApp extends Component {
     return (
         <Router >
             <div>
+                <Switch>
           <Route exact path="/" render={(newProps)=>(
                   <MainLayout {...childProps}>
                    <HomePage store={this.props.store} {...newProps} {...childProps} />
@@ -128,7 +130,12 @@ class WebApp extends Component {
                         <AdminSubmitChange store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></AdminSubmitChange>
                     </MainLayout>
                 )} />
-
+                <Route render={(newProps)=>(
+                        <MainLayout {...childProps}>
+                            <StaticPage store={this.props.store} group={this.props.groupData} {...newProps}  {...childProps} ></StaticPage>
+                        </MainLayout>
+                    )} />
+            </Switch>
           </div>
         </Router>
     );

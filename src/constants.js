@@ -38,6 +38,13 @@ const PageAsidesConstants = {
     FETCH_PAGE_ASIDES_DATA_SUCCESS: 'FETCH_PAGE_ASIDES_DATA_SUCCESS',
     FETCH_PAGE_ASIDES_DATA_FAILURE: 'FETCH_PAGE_ASIDES_DATA_FAILURE',
 }
+const StaticPageConstants = {
+    FETCH_STATIC_PAGE_DATA: 'FETCH_STATIC_PAGE_DATA',
+    FETCH_STATIC_PAGE_DATA_SUCCESS: 'FETCH_STATIC_PAGE_DATA_SUCCESS',
+    FETCH_STATIC_PAGE_DATA_FAILURE: 'FETCH_STATIC_PAGE_DATA_FAILURE',
+}
+
+
 const EB2ServicesConstants = {
     FETCH_DATA: 'FETCH_EB2SERVICES_DATA',
     FETCH_DATA_SUCCESS: 'FETCH_EB2SERVICES_DATA_SUCCESS',
@@ -102,4 +109,5 @@ module.exports = {
     AuthenticationConstants,
     SubmitChangeConstants,
     NewsRequestsConstants,
+    StaticPageConstants,
 }
