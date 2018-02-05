@@ -6,6 +6,7 @@ var icalendar = require('icalendar');
 var isWithinRange = require('date-fns/is_within_range')
 var addDays = require('date-fns/add_days')
 
+var {getHomeCalendarDateRange} = require('../date');
 var {fetchURL} = require('../../serverIO');
 var {addOrUpdateTable, getKnexConnection} = require('../db/common');
 var {dateFromICSDateStr, getDayOfMonth} = require('../date')
@@ -363,8 +364,11 @@ const icsEventToDBRecord = (evt) => {
 if (require.main === module) {
     const range = getHomeCalendarDateRange()
     if(process.argv[2] === 'pull'){
-        return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+        const icsFilePath = "file://" + configuration.PRIVATE_DIR + '/export.ics'
+        // return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
+        return pullTranslatedEventsFromICS(icsFilePath)
         .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
+            
             return Promise.all(events
                 .map(evnt=> {
                     delete evnt.complex
