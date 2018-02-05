@@ -77,6 +77,10 @@ function extFromContentType(mimeType) {
     return rec[0].ext
 }
 
+const cleanURI = (uri) => { // Merge references to parent directories
+    return uri.replace(/\/[\w-]+\/\.\./, '').replace(/\/[\w-]+\/\.\./, '').replace(/\/[\w-]+\/\.\./, '')
+}
+
 function getSourceServerHost() {  return configuration.sourceTownDomain }
 function getServerFilePath() {    return serverPath }
 // let getServerFilePath = () => serverPath
@@ -320,6 +324,7 @@ function getRedirectLocation(record) {
     if (!hasSourceTownURI(uri)) { return Promise.resolve( Object.assign(record, {redirectType: 'external'} ) ) } // URI already remote
 
     uri = uri.replace(/\/links\/..\//, '/').replace(/\/node\/\.\./, '').replace(/\/planning\/\.\./, '')
+    uri = cleanURI(uri)
 
     return axios({
         method:'get',
@@ -334,7 +339,12 @@ function getRedirectLocation(record) {
         if(err.response && typeof err.response === 'Object'){
             console.log('getRedirectLocation:err', uri, err.response, Object.keys(err.response)); //err.Error
         }else {
-            console.log('getRedirectLocation:err', uri, {config:err.config, code:err.code}); //err.Error
+            console.log('getRedirectLocation:err', uri); //err.Error
+            if(typeof err.code === 'undefined'){
+                console.log(err.response.status);
+            } else {
+                console.log({code:err.code}); //err.Error
+            }
         }
         record.redirectType = 'ERROR'
         return record
@@ -565,19 +575,23 @@ function translateURI(uri) {
     }, null)
     if (activeURI === null) {
         debugger
+        return uri
     }
-    // console.log('cacheURILocation', activeURI);
     return activeURI
 }
 //========================================
 function cachingFetchURL(uri, forcePull=false) {
     let activeURI =translateURI(uri)
     let cacheURILocation = getURLCacheLocation(uri)
-    // console.log('cachingFetchURL',uri, activeURI);
-    // if(activeURI === null) throw new Error('NULL URI:' + uri)
 
-    if (activeURI && (!cachedURIExists(activeURI) || forcePull)) {
-        console.log('++ pulling ', cachedURIExists(activeURI), activeURI);
+    const isPullableURI = (uri) => {
+        if(uri.startsWith('file')) return false;
+        if(uri.indexOf(configuration.sourceTownDomain) == -1) return false;
+        return true
+    }
+
+    if (activeURI !== null && (forcePull || !cachedURIExists(activeURI) ) && isPullableURI(uri)) {
+        console.log('++ pulling ', uri, cacheURILocation);
         return pullLocalCopy(uri, cacheURILocation)
         .then(writtenPath => {
             if (writtenPath === null) { //Server error or 404

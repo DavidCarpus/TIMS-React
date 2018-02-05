@@ -158,7 +158,7 @@ const makeObjArrayUniq = (objArr, uniqFun) => objArr.reduce( (acc, val) =>{
     },[])
 
 const cleanURI = (uri) => { // Merge references to parent directories
-    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
+    return uri.replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '')
 }
 //========================================
 const fullURIFromHref = (uri, href) => {
@@ -168,20 +168,33 @@ const fullURIFromHref = (uri, href) => {
     }
 
     let uriType =  'unk'
-    if (uri.indexOf('http:') !== -1) { uriType =  'http'}
+    if (uri.indexOf('http') !== -1) { uriType =  'http'}
     else if (uri.indexOf('file:') !== -1) { uriType =  'file'}
-    else if (uri.startsWith('/:') !== -1) { uriType =  'local'}
+    else if (uri.startsWith('/') ) { uriType =  'local'}
 
     let host ='unk'
     switch (uriType) {
         case 'http':
-            host = uri.match(/http:\/\/.*?\//)[0].slice(0,-1)
-            return uri.replace(/\?.*/, '') + href
+            if(href.startsWith('http')) return href;
+
+            if(href.startsWith('/')){
+                host = uri.match(/https?:\/\/.*?\//)[0].slice(0,-1)
+                return host + href
+            } else {
+                const missingExtension = (path) => getExtension(path) === path
+                const isFolderPath = (path) => path.endsWith('/') || missingExtension(path)
+                host = uri.match(/https?:\/\/.*?\//)[0].slice(0,-1)
+                if(isFolderPath(uri)){
+                    return uri.substr(0, uri.lastIndexOf('/')) + '/' +href
+                } else {
+                    return uri.replace(/\?.*/, '') + (href.startsWith(".")? "/": "") + href
+                }
+            }
             break;
         case 'file':
             // host = pathWithoutFilename(uri.match(/file:\/\/.*?\//)[0].slice(0,-1))
             host = pathWithoutFilename(uri)
-            results = host+'/'+href
+            results = host.trim()+'/'+href.trim()
             // console.log('fullURIFromHref', '\n', uri, '\n', href, '\n', results);
             return results
             break;
@@ -503,11 +516,24 @@ function migrateMenuLinks(pageURI, wholePage, conf) {
     const links = pullRedirectLinksFromMenus(pageURI, wholePage, conf.menuLinkSelector).filter(link=> badLinks.indexOf(link.uri) === -1)
 
     // console.log('migrateMenuLinks',links);
+    const translateMenuURI = (uri ) => {
+        let newURI = uri.startsWith('file:')?
+            uri.replace('file:///home/dcarpus/code/currentSites/', 'http://').replace(/\.html$/,''):
+            uri
+        if(newURI.lastIndexOf("http") > 0){
+            newURI = newURI.substring(newURI.lastIndexOf("http"))
+        }
+        if(newURI.lastIndexOf("http") > 0){
+            newURI = newURI.substring(newURI.lastIndexOf("http"))
+            console.log('***' , uri, newURI);
+            process.exit()
+        }
 
-    return Promise.all( links.map(linkRec=> Object.assign({}, linkRec,  {uri: linkRec.uri.startsWith('file:')?
-        linkRec.uri.replace('file:///home/dcarpus/code/currentSites/', 'http://').replace(/\.html$/,''):
-        linkRec.uri})
-        )
+        return newURI
+    }
+
+    return Promise.all( links
+        .map(linkRec=>Object.assign({}, linkRec,  {uri: translateMenuURI(linkRec.uri) }))
         .map(getRedirectLocation )
     )
     .then(retrievedURIs => {
@@ -961,9 +987,7 @@ function getDateFromFilename(fullPathToFile) {
 }
 //========================================
 function getDateFromFilenameOrFileDate(rec, getMeetingDate) {
-    let date = null
-    // if(date === null) date = dateFromURIText(onlyFileName(rec.local))
-    if(date === null) date = dateFromURIText(rec.local)
+    let date = dateFromURIText(rec.local)
     // if(date === null) date = getDateFromFilename(rec.local)
     return Promise.resolve(date )
 }
@@ -1039,26 +1063,29 @@ function migrateNewsPage(linkRecord) {
     const validExtensions = ['.PDF','.DOCX', '.PNG']
     const postedToDate = (postedStr) => dateFromURIText(postedStr.replace(/.*?:/,'').trim())
 
-    return cachingFetchURL(linkRecord.uri, true && linkRecord.uri.startsWith('http'))
-    .then(fetchedData => cheerio.load(fetchedData.data) )
-    .then($ =>  {
-        const contentDiv = $('#block-system-main > div > div > div > div > div')
+    return cachingFetchURL(linkRecord.uri)
+    .then(fetchedData => {
+        const $ = cheerio.load(fetchedData.data)
+        const contentDiv = '#block-system-main > div > div > div > div > div'
         return {recorddesc:$(contentDiv).find(".page-title").text().trim(),
             pageText:$(contentDiv).find(".field-type-text-with-summary").html(),
             date: postedToDate($(contentDiv).find(".submitted").text()),
             attachments: $(contentDiv).find(".field-name-field-file-attachment").length ===0?
                 []:
-                $(contentDiv).find(".field-name-field-file-attachment").map( (i,row) =>
-                    cleanURI(fullURIFromHref(linkRecord.uri,$(row).find('a').attr('href') ))
-                ).get()
+                $(contentDiv).find(".field-name-field-file-attachment").map( (i,row) =>{
+                    const href = $(row).find('a').attr('href')
+                    const newURI = cleanURI(fullURIFromHref(linkRecord.uri,href ))
+                    // console.log('***attachment:href:', '\n\t',linkRecord.uri, '\n\t', href, '\n\t', newURI);
+                    return newURI
+                }).get()
         }
     })
     .then(parsedData => {
         if (parsedData.attachments.length === 0)  return Promise.resolve(parsedData)
 
         if (parsedData.attachments.length>0) {
-            return Promise.all(parsedData.attachments.map(attachmentHref =>
-                cachingFetchURL(attachmentHref)
+            return Promise.all(parsedData.attachments.map(attachmentHref =>{
+                return cachingFetchURL(attachmentHref)
                 .then(fetchedURIData=> Object.assign({}, {
                     local:fetchedURIData.location, recordtype: 'Attachment',
                     date: parsedData.date
@@ -1077,7 +1104,7 @@ function migrateNewsPage(linkRecord) {
                         }
                     })
                 )
-            ))
+            }))
             .then(pulledFiles => {
                 return Promise.resolve( Object.assign({}, parsedData, {attachments:pulledFiles} ))
             })
@@ -1087,12 +1114,14 @@ function migrateNewsPage(linkRecord) {
 }
 //========================================
 function migrateNews(pageURI) {
-    return cachingFetchURL(pageURI, true && pageURI.startsWith('http'))
+    return cachingFetchURL(pageURI)
     .then(fetchedData => cheerio.load(fetchedData.data) )
-    .then($ =>  $(selector).children().map( (i, row)  => ({
-                label:$(row).find('a').text(),
-                uri:fullURIFromHref(pageURI,$(row).find('a').attr('href')),
-            })) .get()
+    .then($ =>  $("#block-system-main > div > div > div.view-content").children().map( (i, row)  => {
+        return {
+            label:$(row).find('a').text(),
+            uri:fullURIFromHref(pageURI,$(row).find('a').attr('href')),
+        }
+    }) .get()
     )
     .then(recs => {
         return Promise.all(recs.map(migrateNewsPage))
@@ -1110,7 +1139,6 @@ function migrateMeetingDocs(pageURI, wholePage, groupName, groupLabel, conf) {
 
     const trimHTMLFromFileURI = (uri) => (uri.startsWith('file') && uri.endsWith('.html')) ? uri.slice(0, -5): uri
     const addHTMLToFileURI = (uri) => (uri.startsWith('file') && !uri.endsWith('.html')) ? uri+'.html': uri
-    const yearURIFromBaseLink = (link, year) => {return link.startsWith('file') ? addHTMLToFileURI(link+'/'+year ) : link+'/'+year +'/'}
     const fetchDataFromRow = (row, recordtype) => ({
         uri:fullURIFromHref(pageURI,$(row).find($("a")).attr('href')),
         label:$(row).find($("a")).text(),
@@ -1210,7 +1238,7 @@ function migrateNewDurhamDepartment(departmentData) {
             enterOnlyIntoDBTable('Groups', {pageLink:groupName, groupName:groupName, groupDescription:departmentData.label}, {pageLink:groupName})
         )
     })
-    // .then(migrateResults => migrateMenuLinks(departmentData.uri, wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
+    .then(migrateResults => migrateMenuLinks(departmentData.uri, wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
     .then(migrateResults => migrateGroupPageData(wholePage, Object.assign({},defaultConf, {group:departmentData.label.replace(/ /g,'').replace(/\//g,'_')})) )
 }
 //========================================
@@ -1274,7 +1302,7 @@ function migrateNewDurham() {
     .then(departmentsMigrated => {
         console.log(departmentsMigrated.length + ' Departments migrated')
     })
-    .then( ()=>migrateNews("file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news.1.html"))
+    .then( ()=>migrateNews("https://www.newdurhamnh.us/node/1/news"))
     .then( (newsItems)=>{
         console.log('newsItems migrated', newsItems.length);
     })
@@ -1292,11 +1320,7 @@ if (require.main === module) {
     // migrateNews()
     // crawler(uri)
     .then(done => {
-        // console.log('done', Object.keys(done).length, require('util').inspect(done, { depth: null }));
         console.log('done', require('util').inspect(done, { depth: null }));
-        // console.log(done.filter(item=>item.uri.endsWith('pdf')).length);
-        // console.log('done', done.filter(item=>!item.uri.endsWith('pdf')));
-        // console.log('done', Object.keys(done).length, );
         process.exit()
     })
     .catch(err => {
