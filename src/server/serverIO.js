@@ -509,9 +509,6 @@ function fetchURL(url) {
       method: 'get',
       url: url,
   }).then(response => {
-      console.log('response');
-      console.log(Object.keys(response.headers));
-      console.log(response.headers['content-type']);
       return {data: response.data, contentType:response.headers['content-type'], location:url}
   });
 }
