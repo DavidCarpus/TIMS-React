@@ -50,7 +50,7 @@ const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
 
 //================================================
 let subMenuOpenTimer=null
-const toggleDelay=800
+const toggleDelay=600
 class SubMenus extends React.Component {
     constructor(props) {
         super(props);
