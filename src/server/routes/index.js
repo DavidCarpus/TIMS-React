@@ -615,7 +615,8 @@ router.get('/GroupData/:groupName', function(req, res) {
         })
     })
     .then(groupDataWithNewsletters =>{
-        query = "Select id, recorddesc as description,fileLink from PublicRecords where pageLink='"  + groupDataWithNewsletters.link +"' and recordtype='HelpfulInformation'";
+        query = "Select id, recorddesc as description,fileLink from PublicRecords where pageLink='"  +
+            groupDataWithNewsletters.link +"' and (recordtype='HelpfulInformation' or recordtype='Page')";
         return simpleDBQuery(query).
         then(helpfulinformation => {
             if (helpfulinformation.length > 0) {
