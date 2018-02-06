@@ -364,11 +364,10 @@ const icsEventToDBRecord = (evt) => {
 if (require.main === module) {
     const range = getHomeCalendarDateRange()
     if(process.argv[2] === 'pull'){
-        const icsFilePath = "file://" + configuration.PRIVATE_DIR + '/export.ics'
+        const icsFilePath = 'http://www.newdurhamnh.us/calendar/ical/export.ics'
         // return pullTranslatedEventsFromICS('file:///home/dcarpus/Downloads/export.ics')
         return pullTranslatedEventsFromICS(icsFilePath)
         .then(events=> {// addDays(new Date(), -7),addDays(new Date(), 28)
-            
             return Promise.all(events
                 .map(evnt=> {
                     delete evnt.complex

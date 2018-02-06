@@ -40,15 +40,8 @@ const debugLog =(...args)=> {
 }
 
 const privateDir = configuration.PRIVATE_DIR
-// const mode = process.env.NODE_ENV||'development'
-// const privateDir = (mode === 'development')?
-// '../private/'+process.env.REACT_APP_MUNICIPALITY :
-// '../private/'
-
-// const icsFilePath = (mode === 'development')?
-// "file://" + configuration.ROOT_DIR+'/' + privateDir + '/export.ics' :
-// "file://" + privateDir + '/export.ics'
-const icsFilePath = "file://" + privateDir + '/export.ics'
+// const icsFilePath = "file://" + privateDir + '/export.ics'
+const icsFilePath = 'http://www.newdurhamnh.us/calendar/ical/export.ics'
 
 debugLog('icsFilePath', icsFilePath);
 
@@ -131,6 +124,8 @@ debugLog("calendarProcessPort", launchedViaCLI()?calendarProcessPort+10:calendar
 if (require.main === module) {
     app.set('port', launchedViaCLI()?calendarProcessPort+10:calendarProcessPort);
     app.listen(app.get('port'), 'localhost');
-    calendarProcess(60000,2)
+    const delay = process.env.SPAWNED && process.env.SPAWNED==="1"? 24*60*60*1000:60000
+    debugLog("Delay time(ms):", delay)
+    calendarProcess(delay,2)
     .then( ()=> process.exit())
 }
