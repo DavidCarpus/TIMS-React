@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import FAQListUI from './NewsDetails'
+import NewsDetailsUI from './NewsDetails'
 import {fetchNewsList} from '../../actions/News'
 
 const mapStateToProps = (state, ownProps) => {
@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         newsData: newsData,
         title: ownProps.title || 'NewsDetails',
-        loading: state.FAQ.loading,
+        loading: stateData.loading,
         groupName: ownProps.groupName,
     };
 }
@@ -29,4 +29,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FAQListUI);
+export default connect(mapStateToProps, mapDispatchToProps)(NewsDetailsUI);
