@@ -88,7 +88,6 @@ function fetchPublicDocsFromDB(knex, filter) {
     .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
     .where(filter)
     .whereRaw(rawFilter)
-    .whereNotNull('fileLink')
     .orderBy("date","desc")
     .orderBy("recordtype")
 }

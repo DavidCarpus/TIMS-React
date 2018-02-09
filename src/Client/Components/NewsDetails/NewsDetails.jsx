@@ -2,7 +2,6 @@ import React from 'react';
 import  './NewsDetails.css'
 import {Link} from 'react-router-dom';
 
-// function createMarkup(txt) { return {__html: 'First &middot; Second'}; };
 function createMarkup(txt) { return {__html: txt}; };
 const dateToDateStr = (dateStr) => {
     const dateObj =new Date(dateStr)
@@ -10,17 +9,11 @@ const dateToDateStr = (dateStr) => {
 }
 
 const linkToNewsAttachment = (link, linkText) => {
-    // return (<Link to={link} target="_blank" onClick={(event) => {
-    //     event.preventDefault(); this ? window.open(this.makeHref(link)): alert(this+link);
-    // }} >{linkText}</Link>)
     return (<Link to={link} target="_blank" onClick={(event) => {
         event.preventDefault(); window.open(link);
     }} >{linkText}</Link>)
 
-    // <a className={'fileAttachment_link'}
-    //     href={'/NewsAttachment/' + attachment.id}>{"Attachment " + (index+1) }</a>
 }
-
 export default function NewsDetails({newsRec, loading}){
     if ( loading || typeof newsRec[0] === 'undefined') {
         console.log('***NewsDetails loading.', newsRec);
@@ -44,18 +37,10 @@ export default function NewsDetails({newsRec, loading}){
                             </div>
                             <br/>
                         </div>
-
                     )}
                     <br/>
                     Posted: {dateToDateStr(posted)}
-
                 </div>
             </div>
         )
 }
-/*
-&nbsp;&nbsp;
-File date: {dateToDateStr(attachment.filePostedDate)}
-
-
-*/

@@ -17,7 +17,6 @@ export default class PublicRecordsUI extends React.Component {
         const {
             loading, currentFilter, records,changeFilter, filterFields, meta
         } = this.props;
-        
         if ( loading) {         return (<div style={{backgroundColor: 'white'}}>Loading</div>)     }
 
         // console.log('currentFilter', currentFilter);

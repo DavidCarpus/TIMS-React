@@ -7,15 +7,12 @@ import Slideshow from '../Slideshow'
 
 import {
     Navbar,
-    // NavbarBrand,
     Container,
-    // Button,
     Collapse,
     NavLink,
     NavItem,
     DropdownMenu,
     Nav,
-    // DropdownItem,
     NavDropdown,
     DropdownToggle,
     NavbarToggler,
@@ -24,8 +21,6 @@ import {
 } from 'reactstrap';
 import './Menu.css'
 
-
-// const debug = true && (process.env.NODE_ENV === 'development')
 
 const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
     const external = subMenuData.pageLink.startsWith('http')

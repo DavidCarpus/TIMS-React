@@ -4,9 +4,6 @@ import FAQListUI from './NewsListing'
 import {fetchNewsList} from '../../actions/News'
 
 const mapStateToProps = (state, ownProps) => {
-    // if (ownProps.store && !state.FAQ.loading && state.FAQ.groupName !==   groupName) {
-    //     // console.log(state.PageAsides.groupName + '-' +  groupName + '-' + state.PageAsides.loading + '-' + ownProps.store);
-    //     ownProps.store.dispatch(fetchFAQData(groupName))
     // }
     const dateToDateStr = (dateStr) => {
         const dateObj =new Date(dateStr)

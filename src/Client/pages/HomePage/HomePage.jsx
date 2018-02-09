@@ -1,15 +1,9 @@
 import React from 'react';
-// import OnlinePaymentsBlock  from '../OnlinePaymentsBlock'
-
-// import Aside from '../../Components/Aside'
-// import MiniCalendar from '../../Components/MiniCalendar'
 import NoticesList from '../../Components/NoticesList'
-
 import MainCalendar from '../../Components/MainCalendar'
 import ContactUs from '../../Components/ContactUs'
 import NewsList from '../../Components/NewsListing'
 
-// import {  Col } from 'react-bootstrap';
 import { Col, Row } from 'reactstrap';
 
 import './HomePage.css';

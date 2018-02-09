@@ -1,10 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'reactstrap';
-// import SmartLink from '../../Components/SmartLink'
-// import RawText  from '../../Components/RawText'
 import  './News.css'
 import NewsDetails  from '../../Components/NewsDetails'
-// import  './IndexPage.css'
 
 export default class NoticePage extends React.Component {
     componentWillMount() {
@@ -15,7 +12,6 @@ render() {
     // <img  src='/images/MiltonSeal.png'  alt="Town Logo"
     //     width="100" height="100"
     //     />
-
     // className='townSeal'
 
     return (
@@ -37,6 +33,4 @@ render() {
         </Row>
     );
 }
-
 }
-// <RawText groupPageText={this.props.news.html} block='html' />

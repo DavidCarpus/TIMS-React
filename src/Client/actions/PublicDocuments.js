@@ -174,7 +174,6 @@ export function fetchPublicDocsFailure(error) {
 //========================================
 //========================================
 export function fetchGroupNotices(groupName) {
-    // console.log(scriptName +'  fetchGroupNotices'+JSON.stringify(groupName));
     if (! groupName && process.env.NODE_ENV === 'development' ) {
         debugger; // eslint-disable-line no-debugger
     }
@@ -201,12 +200,10 @@ export function fetchGroupNoticesSuccess(groupName, docs) {
     payload: docs,
     groupName: groupName
   };
-  // console.log(scriptName +'  fetchGroupNoticesSuccess:'+JSON.stringify(docs.length));
   return action;
 }
 //========================================
 export function fetchGroupNoticesFailure(error) {
-    // console.log(scriptName +'  fetchGroupNoticesFailure:'+JSON.stringify(error));
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_FAILURE || 'Fail',
     payload: error

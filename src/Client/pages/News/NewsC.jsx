@@ -12,7 +12,6 @@ const mapStateToProps = (state, ownProps) => {
     // console.log('News:params:', ownProps.match.params.newsID);
 
     const titleElements = ['News']
-    console.log(' News: ownProps',  state.NewsData.NewsDetails);
     return {
         news: state.NewsData.NewsDetails,
         id:ownProps.match.params.newsID,
