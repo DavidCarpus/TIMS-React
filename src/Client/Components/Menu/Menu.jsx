@@ -53,6 +53,7 @@ class SubMenus extends React.Component {
         this.toggle = this.toggle.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
         this.toggleClose = this.toggleClose.bind(this);
+        this.closeAll = this.closeAll.bind(this);
         this.state = {
             dropdownOpen: false
         };
@@ -65,10 +66,14 @@ class SubMenus extends React.Component {
         subMenuOpenTimer = setTimeout(function() { this.setState({dropdownOpen: true}); }.bind(this), toggleDelay);
     }
     toggleClose() {
-        if(subMenuOpenTimer) clearTimeout( subMenuOpenTimer)
+        if(subMenuOpenTimer) clearTimeout( subMenuOpenTimer);
         this.setState({ dropdownOpen: false });
-        this.props.topMenuToggle()
     }
+    closeAll() {
+        this.toggleClose();
+        this.props.topMenuToggle();
+    }
+
 
     render(){
         let subMenus = this.props.menu[1].menus
@@ -98,7 +103,7 @@ class SubMenus extends React.Component {
                             subMenuData={submenu}
                             key={index}
                             index={index}
-                            onClick={this.toggleClose}
+                            onClick={this.closeAll}
                             ></SubMenuLink>
                     )}
                     </Row>
