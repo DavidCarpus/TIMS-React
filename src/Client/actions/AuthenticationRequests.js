@@ -14,30 +14,23 @@ export function authenticationRequest(authenticationRequestsData) {
 
     return dispatch => {
         dispatch({type: AuthenticationConstants.PUSH_DATA});
-        request.then( response => {
-               dispatch(authenticationRequestsSuccess(response.data));
-          })
-          .catch( reason => {
-              if (reason.response) {
-                  dispatch(authenticationRequestsFailure(reason.response.data));
-              } else {
-                  dispatch(authenticationRequestsFailure("No response from server."));
-              }
-          })
+        request.then( response => { dispatch(authenticationRequestsSuccess(response.data)); })
+        .catch( reason => {
+            if (reason.response) {
+                dispatch(authenticationRequestsFailure(reason.response.data));
+            } else {
+                dispatch(authenticationRequestsFailure("No response from server."));
+            }
+        })
     }
 }
 //========================================
-export function authenticationRequestsSuccess( authenticationRequestsResultsData) {
-    const action =   {
+const authenticationRequestsSuccess = (authenticationRequestsResultsData)  => ({
     type: AuthenticationConstants.PUSH_DATA_SUCCESS,
     payload: authenticationRequestsResultsData,
-  };
-  return action;
-}
+})
 //========================================
-export function authenticationRequestsFailure(error) {
-  return {
+const authenticationRequestsFailure = (error)  => ({
     type: AuthenticationConstants.PUSH_DATA_FAILURE,
     payload: error
-  };
-}
+})

@@ -13,28 +13,18 @@ export function fetchEB2ServicesData(groupName) {
 
     return dispatch => {
         dispatch({type: EB2ServicesConstants.FETCH_DATA, groupName: groupName});
-        request.then( response => {
-               dispatch(fetchEB2ServicesDataSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchEB2ServicesDataFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchEB2ServicesDataSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchEB2ServicesDataFailure(reason)) )
     }
 }
 //========================================
-export function fetchEB2ServicesDataSuccess(groupName, meetingDocs) {
-    const action =   {
-    type: EB2ServicesConstants.FETCH_DATA_SUCCESS,
-    payload: meetingDocs,
-    groupName: groupName
-  };
-  return action;
-}
+const fetchEB2ServicesDataSuccess = (groupName, meetingDocs)  => ({
+        type: EB2ServicesConstants.FETCH_DATA_SUCCESS,
+        payload: meetingDocs,
+        groupName: groupName
+    })
 //========================================
-export function fetchEB2ServicesDataFailure(error) {
-  return {
+const fetchEB2ServicesDataFailure = (error)  => ({
     type: EB2ServicesConstants.FETCH_DATA_FAILURE,
     payload: error
-  };
-}
+})

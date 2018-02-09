@@ -10,47 +10,36 @@ export function submitChangeRequest(submitChangeRequestsData) {
     Object.keys(submitChangeRequestsData).forEach(( key ) => {
         if (key === 'file') {
             body.append(key, submitChangeRequestsData[ key ][0]);
-        }
-        else {
+        } else {
             body.append(key, submitChangeRequestsData[ key ]);
         }
-
     });
 
-    const req= {
+    const request = axios({
         method: 'post',
         url: `${ROOT_URL}auth/changeRequest/`,
         data: body
-    };
-    const request = axios(req);
+    });
 
     return dispatch => {
         dispatch({type: SubmitChangeConstants.PUSH_DATA});
-        request.then( response => {
-               dispatch(submitChangeRequestsSuccess(response.data));
-          })
-          .catch( reason => {
+        request.then( response => dispatch(submitChangeRequestsSuccess(response.data)) )
+        .catch( reason => {
             if (reason.response) {
                 dispatch(submitChangeRequestsFailure(reason.response.data));
             } else {
                 dispatch(submitChangeRequestsFailure("No response from server."));
             }
-
-          })
+        })
     }
 }
 //========================================
-export function submitChangeRequestsSuccess( submitChangeRequestsResultsData) {
-    const action =   {
+const submitChangeRequestsSuccess = ( submitChangeRequestsResultsData)  => ({
     type: SubmitChangeConstants.PUSH_DATA_SUCCESS,
     payload: submitChangeRequestsResultsData,
-  };
-  return action;
-}
+})
 //========================================
-export function submitChangeRequestsFailure(error) {
-  return {
+const submitChangeRequestsFailure = (error) => ({
     type: SubmitChangeConstants.PUSH_DATA_FAILURE,
     payload: error
-  };
-}
+})

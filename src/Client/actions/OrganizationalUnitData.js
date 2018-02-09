@@ -13,28 +13,18 @@ export function fetchOrganizationalUnitData(groupName) {
 
     return dispatch => {
         dispatch({type: OrganizationalUnitConstants.FETCH_OU_DATA, groupName: groupName});
-        request.then( response => {
-               dispatch(fetchOrganizationalUnitDataSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchOrganizationalUnitDataFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchOrganizationalUnitDataSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchOrganizationalUnitDataFailure(reason)) )
     }
 }
 //========================================
-export function fetchOrganizationalUnitDataSuccess(groupName, meetingDocs) {
-    const action =   {
+const fetchOrganizationalUnitDataSuccess=(groupName, meetingDocs)  => ({
     type: OrganizationalUnitConstants.FETCH_OU_DATA_SUCCESS,
     payload: meetingDocs,
     groupName: groupName
-  };
-  return action;
-}
+})
 //========================================
-export function fetchOrganizationalUnitDataFailure(error) {
-  return {
+const fetchOrganizationalUnitDataFailure = (error) => ({
     type: OrganizationalUnitConstants.FETCH_OU_DATA_FAILURE,
     payload: error
-  };
-}
+})

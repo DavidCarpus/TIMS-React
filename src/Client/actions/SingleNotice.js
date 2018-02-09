@@ -13,27 +13,17 @@ export function fetchSingleNotice(noticeID) {
 
     return dispatch => {
         dispatch({type: SingleNoticeDataConstants.FETCH_DATA});
-        request.then( response => {
-               dispatch(fetchSingleNoticeSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchSingleNoticeFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchSingleNoticeSuccess(response.data)) )
+        .catch( reason =>  dispatch(fetchSingleNoticeFailure(reason)) )
     }
 }
 //========================================
-export function fetchSingleNoticeSuccess( noticeData) {
-    const action =   {
+const fetchSingleNoticeSuccess = (noticeData)  => ({
     type: SingleNoticeDataConstants.FETCH_DATA_SUCCESS,
     payload: noticeData,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchSingleNoticeFailure(error) {
-  return {
+const fetchSingleNoticeFailure = (error) => ({
     type: SingleNoticeDataConstants.FETCH_DATA_FAILURE,
     payload: error
-  };
-}
+})

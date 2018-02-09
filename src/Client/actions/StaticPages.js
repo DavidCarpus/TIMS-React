@@ -13,27 +13,17 @@ export function fetchStaticPage(pageURI) {
 
     return dispatch => {
         dispatch({type: StaticPageConstants.FETCH_STATIC_PAGE_DATA});
-        request.then( response => {
-               dispatch(fetchStaticPageSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchStaticPageFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchStaticPageSuccess(response.data)) )
+        .catch( reason => dispatch(fetchStaticPageFailure(reason)) )
     }
 }
 //========================================
-export function fetchStaticPageSuccess(pageData) {
-    const action =   {
+const fetchStaticPageSuccess = (pageData)  => ({
     type: StaticPageConstants.FETCH_STATIC_PAGE_DATA_SUCCESS,
     payload: pageData,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchStaticPageFailure(error) {
-  return {
+const fetchStaticPageFailure = (error) => ({
     type: StaticPageConstants.FETCH_STATIC_PAGE_DATA_FAILURE,
     payload: error
-  };
-}
+})

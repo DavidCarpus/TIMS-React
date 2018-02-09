@@ -12,26 +12,17 @@ export function fetchMainMenuData() {
     });
 
     return dispatch => {
-        request.then( response => {
-               dispatch(fetchMainMenuDataSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchMainMenuDataFailure(reason));
-          })
+        request.then( response => dispatch(fetchMainMenuDataSuccess(response.data)) )
+        .catch( reason => dispatch(fetchMainMenuDataFailure(reason)) )
     }
 }
 //========================================
-export function fetchMainMenuDataSuccess(menus) {
-    const action =   {
+const fetchMainMenuDataSuccess = (menus)  => ({
     type: MainMenuConstants.FETCH_MAIN_MENU_DATA_SUCCESS,
     payload: menus,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchMainMenuDataFailure(error) {
-  return {
+const fetchMainMenuDataFailure = (error)  => ({
     type: MainMenuConstants.FETCH_MAIN_MENU_DATA_FAILURE,
     payload: error
-  };
-}
+})

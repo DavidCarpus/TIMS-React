@@ -12,13 +12,8 @@ export function fetchMeetingDocs(groupName) {
     });
     return dispatch => {
         dispatch({type: PublicDocumentsConstants.FETCH_MEETING_DOCS});
-        request.then( response => {
-               dispatch(fetchMeetingsSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchMeetingsFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchMeetingsSuccess(groupName, response.data)) )
+        .catch( reason =>  dispatch(fetchMeetingsFailure(reason)) )
     }
 }
 //========================================
@@ -29,31 +24,21 @@ export function fetchDocumentsForMonth({groupName,documentType, year, month}) {
     });
     return dispatch => {
         dispatch({type: PublicDocumentsConstants.FETCH_MEETING_DOCS});
-        request.then( response => {
-               dispatch(fetchPublicDocsSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchPublicDocsFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchPublicDocsSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchPublicDocsFailure(reason)) )
     }
 }
 //========================================
-export function fetchMeetingsSuccess(groupName, meetingDocs) {
-    const action =   {
+const fetchMeetingsSuccess = (groupName, meetingDocs)  => ({
     type: PublicDocumentsConstants.FETCH_MEETING_DOCS_SUCCESS,
     payload: meetingDocs,
     groupName: groupName
-  };
-  return action;
-}
+})
 //========================================
-export function fetchMeetingsFailure(error) {
-  return {
+const fetchMeetingsFailure = (error) => ({
     type: PublicDocumentsConstants.FETCH_MEETING_DOCS_FAILURE,
     payload: error
-  };
-}
+})
 //========================================
 //========================================
 //========================================
@@ -65,32 +50,21 @@ export function fetchGroupDoc(groupName) {
 
     return dispatch => {
         dispatch({type: PublicDocumentsConstants.FETCH_GROUP_DOCS});
-
-        request.then( response => {
-               dispatch(fetchGroupDocsSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchGroupDocsFailure(groupName, reason));
-          })
-
+        request.then( response => dispatch(fetchGroupDocsSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchGroupDocsFailure( reason)) )
     }
 }
 //========================================
-export function fetchGroupDocsSuccess(groupName, docs) {
-    const action =   {
+const fetchGroupDocsSuccess = (groupName, docs)  => ({
     type: PublicDocumentsConstants.FETCH_GROUP_DOCS_SUCCESS,
     payload: docs,
     groupName: groupName
-  };
-  return action;
-}
+})
 //========================================
-export function fetchGroupDocsFailure(groupName, error) {
-  return {
+const fetchGroupDocsFailure = (error) => ({
     type: PublicDocumentsConstants.FETCH_GROUP_DOCS_FAILURE || 'Fail',
     payload: error
-  };
-}
+})
 //========================================
 //========================================
 //========================================
@@ -111,31 +85,21 @@ export function fetchPublicDocsFromServer(filter) {
 
     return dispatch => {
         dispatch({type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS});
-        request.then( response => {
-               dispatch(fetchPublicDocsSuccess(filter, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchPublicDocsFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchPublicDocsSuccess(filter, response.data)) )
+        .catch( reason => dispatch(fetchPublicDocsFailure(reason)) )
     }
 }
 //========================================
-export function fetchPublicDocsSuccess(filter, meetingDocs) {
-    const action =   {
+const fetchPublicDocsSuccess =(filter, meetingDocs)  => ({
     type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS_SUCCESS,
     payload: meetingDocs,
     filter: filter
-  };
-  return action;
-}
+})
 //========================================
-export function fetchPublicDocsFailure(error) {
-  return {
+const fetchPublicDocsFailure = (error) => ({
     type: PublicDocumentsConstants.FETCH_PUBLIC_DOCS_FAILURE,
     payload: error
-  };
-}
+})
 //========================================
 //========================================
 //========================================
@@ -146,29 +110,18 @@ export function fetchGroupNews(groupName) {
     });
     return dispatch => {
         dispatch( {type:PublicDocumentsConstants.FETCH_GROUP_NOTICES});
-        request.then( response => {
-               dispatch(fetchGroupNewsSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchGroupNewsFailure(reason));
-          })
-
+        request.then( response =>  dispatch(fetchGroupNewsSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchGroupNewsFailure(reason)) )
     }
 }
 //========================================
-export function fetchGroupNewsSuccess(groupName, docs) {
-    const action =   {
+const fetchGroupNewsSuccess=(groupName, docs)  => ({
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_SUCCESS,
     payload: docs,
     groupName: groupName
-  };
-  return action;
-}
+})
 //========================================
-export function fetchGroupNewsFailure(error) {
-  return {
+const fetchGroupNewsFailure = (error) => ({
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_FAILURE || 'Fail',
     payload: error
-  };
-}
-//========================================
+})

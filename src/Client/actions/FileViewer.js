@@ -24,12 +24,8 @@ export function fetchFileToView(fileID) {
 
     return dispatch => {
         dispatch({type: FileViewConstants.FETCH});
-        request.then( response => {
-               dispatch(fetchFileToViewSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchFileToViewFailure(reason));
-          })
+        request.then( response => dispatch(fetchFileToViewSuccess(response.data)) )
+        .catch( reason => dispatch(fetchFileToViewFailure(reason)) )
     }
 }
 //========================================
@@ -38,9 +34,7 @@ const fetchFileToViewSuccess= (pageData) => ({
         payload: pageData,
     })
 //========================================
-function fetchFileToViewFailure(error) {
-  return {
+const fetchFileToViewFailure = (error) => ({
     type: FileViewConstants.FETCH_FAILURE,
     payload: error
-  };
-}
+})

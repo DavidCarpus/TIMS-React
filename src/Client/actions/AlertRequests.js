@@ -14,26 +14,17 @@ export function pushAlertRequests(pushAlertData) {
 
     return dispatch => {
         dispatch({type: AlertRequestsDataConstants.PUSH_DATA});
-        request.then( response => {
-               dispatch(pushAlertSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(pushAlertFailure(reason));
-          })
+        request.then( response => { dispatch(pushAlertSuccess(response.data));})
+        .catch( reason => dispatch(pushAlertFailure(reason)) )
     }
 }
 //========================================
-export function pushAlertSuccess( pushAlertResultsData) {
-    const action =   {
+const pushAlertSuccess = ( pushAlertResultsData)   => ({
     type: AlertRequestsDataConstants.PUSH_DATA_SUCCESS,
     payload: pushAlertResultsData,
-  };
-  return action;
-}
+})
 //========================================
-export function pushAlertFailure(error) {
-  return {
+const pushAlertFailure = (error)  => ({
     type: AlertRequestsDataConstants.PUSH_DATA_FAILURE,
     payload: error
-  };
-}
+})

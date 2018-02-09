@@ -13,28 +13,18 @@ export function fetchPageAsides(groupName) {
 
     return dispatch => {
         dispatch({type: PageAsidesConstants.FETCH_PAGE_ASIDES_DATA});
-        request.then( response => {
-               dispatch(fetchPageAsidesSuccess(groupName,response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchPageAsidesFailure(reason));
-          })
-
+        request.then( response =>  dispatch(fetchPageAsidesSuccess(groupName,response.data)) )
+        .catch( reason => dispatch(fetchPageAsidesFailure(reason)) )
     }
 }
 //========================================
-export function fetchPageAsidesSuccess(groupName, asides) {
-    const action =   {
+const fetchPageAsidesSuccess = (groupName, asides) => ({
     type: PageAsidesConstants.FETCH_PAGE_ASIDES_DATA_SUCCESS,
     payload: asides,
     groupName: groupName,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchPageAsidesFailure(error) {
-  return {
+const fetchPageAsidesFailure = (error) => ({
     type: PageAsidesConstants.FETCH_PAGE_ASIDES_DATA_FAILURE,
     payload: error
-  };
-}
+})

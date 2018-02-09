@@ -13,29 +13,20 @@ export function fetchCalendarData(year=(new Date()).getUTCFullYear(), month=(new
 
     return dispatch => {
         dispatch({type: CalendarDataConstants.FETCH_DATA});
-        request.then( response => {
-               dispatch(fetchCalendarDataSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchCalendarDataFailure(reason));
-          })
+        request.then( response =>  dispatch(fetchCalendarDataSuccess(response.data)) )
+        .catch( reason => dispatch(fetchCalendarDataFailure(reason)) )
     }
 }
 //========================================
-export function fetchCalendarDataSuccess( calendarData) {
-    const action =   {
+const fetchCalendarDataSuccess=( calendarData)   => ({
     type: CalendarDataConstants.FETCH_DATA_SUCCESS,
     payload: calendarData,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchCalendarDataFailure(error) {
-  return {
+const fetchCalendarDataFailure = (error)  => ({
     type: CalendarDataConstants.FETCH_DATA_FAILURE,
     payload: error
-  };
-}
+})
 //========================================
 export function editCalendarFilter(newFilter,newValue) {
     return {

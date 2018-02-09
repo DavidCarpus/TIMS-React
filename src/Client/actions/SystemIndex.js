@@ -13,27 +13,17 @@ export function fetchSystemIndex() {
 
     return dispatch => {
         dispatch({type: SystemIndexConstants.FETCH_DATA});
-        request.then( response => {
-               dispatch(fetchSystemIndexSuccess(response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchSystemIndexFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchSystemIndexSuccess(response.data)) )
+        .catch( reason => dispatch(fetchSystemIndexFailure(reason)) )
     }
 }
 //========================================
-export function fetchSystemIndexSuccess( asides) {
-    const action =   {
+const fetchSystemIndexSuccess = ( asides)  => ({
     type: SystemIndexConstants.FETCH_DATA_SUCCESS,
     payload: asides,
-  };
-  return action;
-}
+})
 //========================================
-export function fetchSystemIndexFailure(error) {
-  return {
+const fetchSystemIndexFailure = (error) => ({
     type: SystemIndexConstants.FETCH_DATA_FAILURE,
     payload: error
-  };
-}
+})

@@ -13,28 +13,18 @@ export function fetchFAQData(groupName) {
 
     return dispatch => {
         dispatch({type: FAQConstants.FETCH_FAQ_DATA, groupName: groupName});
-        request.then( response => {
-               dispatch(fetchFAQDataSuccess(groupName, response.data));
-          })
-          .catch( reason => {
-              dispatch(fetchFAQDataFailure(reason));
-          })
-
+        request.then( response => dispatch(fetchFAQDataSuccess(groupName, response.data)) )
+        .catch( reason => dispatch(fetchFAQDataFailure(reason)) )
     }
 }
 //========================================
-export function fetchFAQDataSuccess(groupName, meetingDocs) {
-    const action =   {
-    type: FAQConstants.FETCH_FAQ_DATA_SUCCESS,
-    payload: meetingDocs,
-    groupName: groupName
-  };
-  return action;
-}
+const fetchFAQDataSuccess = (groupName, meetingDocs)  => ({
+        type: FAQConstants.FETCH_FAQ_DATA_SUCCESS,
+        payload: meetingDocs,
+        groupName: groupName
+    })
 //========================================
-export function fetchFAQDataFailure(error) {
-  return {
+const fetchFAQDataFailure = (error)  => ({
     type: FAQConstants.FETCH_FAQ_DATA_FAILURE,
     payload: error
-  };
-}
+})
