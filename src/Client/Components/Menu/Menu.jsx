@@ -22,7 +22,7 @@ import {
 import './Menu.css'
 
 
-const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
+const SubMenuLink = ({menuid, subMenuData, menuData, index, cols,onClick}) => {
     const external = subMenuData.pageLink.startsWith('http')
     // const id = subMenuData.id
     const desc = subMenuData.description
@@ -31,7 +31,7 @@ const SubMenuLink = ({menuid, subMenuData, menuData, index, cols}) => {
     const ExternalLnk = () =>
         <NavLink href={lnk} className='externalMenu' title='External Website'> {desc}</NavLink>
     const InternalLnk = () =>
-        <NavLink tag={RRNavLink} to={lnk} className='internalMenu'>{desc} </NavLink>
+        <NavLink tag={RRNavLink} to={lnk} onClick={onClick} className='internalMenu'>{desc} </NavLink>
     const colSize =Math.floor(12/cols)
 
     // <ChkLnk></ChkLnk>
@@ -67,6 +67,7 @@ class SubMenus extends React.Component {
     toggleClose() {
         if(subMenuOpenTimer) clearTimeout( subMenuOpenTimer)
         this.setState({ dropdownOpen: false });
+        this.props.topMenuToggle()
     }
 
     render(){
@@ -97,6 +98,7 @@ class SubMenus extends React.Component {
                             subMenuData={submenu}
                             key={index}
                             index={index}
+                            onClick={this.toggleClose}
                             ></SubMenuLink>
                     )}
                     </Row>
@@ -111,12 +113,12 @@ class MainMenu extends React.Component {
     render(){
         if (this.props.menu[1].menus && this.props.menu[1].menus.length > 0) {
             return (
-                <SubMenus menu={this.props.menu} index={this.props.index} />
+                <SubMenus menu={this.props.menu} index={this.props.index} topMenuToggle={this.props.topMenuToggle} />
             )
         } else {
             return (
                 <NavLink tag={RRNavLink} to={this.props.menu[0]}>
-                    <NavItem id={this.props.menu[1].id }  >{this.props.menu[1].description}</NavItem>
+                    <NavItem id={this.props.menu[1].id }  onClick={this.props.topMenuToggle} >{this.props.menu[1].description}</NavItem>
                 </NavLink>
             )
         }
@@ -173,14 +175,14 @@ export default class Menu extends React.Component {
                         <div id='Menubar'>
                             <Navbar  light toggleable >
                                 <div id='menuToggle'>
-                                    <NavbarToggler right  onClick={this.toggle}>
+                                    <NavbarToggler left  onClick={this.toggle}>
                                         <div>Menu</div>
                                     </NavbarToggler>
                                 </div>
                                 <Collapse isOpen={this.state.isOpen} navbar>
                                     <Nav className="ml-auto" navbar>
                                         {sortedMenus.map( (menu, index) =>
-                                            <MainMenu  key={index} menu={menu} index={menu.id} />
+                                            <MainMenu  key={index} menu={menu} index={menu.id} topMenuToggle={this.toggle} />
                                         )}
                                     </Nav>
                                 </Collapse>
