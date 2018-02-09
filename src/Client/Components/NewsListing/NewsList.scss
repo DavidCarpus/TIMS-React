@@ -1,16 +1,37 @@
 @import "breakpoints.scss";
 @import "colors.scss";
 @import "SectionStyling.scss";
+$iconsize: 20px;
 
 #NewsList {
     @include blockSection;
     ul{
-        padding-left: 1em;
+        padding-left: 0em;
     }
     li {
-        list-style: square;
-        height: 2.2em;
+        list-style: none;
+        // background: url('../icons/bell-o.svg') no-repeat;
+        min-height: 2.2em;
+        a:hover{
+            font-weight: normal;
+            color: $baseBackgroundSolid;
+            background-color: $baseFontColor;
+        }
     }
+    li ::before {
+        content: "";
+        display: inline-block;
+        // background-color: blue;
+        background: url('../icons/bell-o.svg') no-repeat;
+        background-size: 80% 80%;
+        /*background-color: red;*/
+        color: white;
+        width: $iconsize;
+        height: $iconsize;
+        /*float: left;*/
+        padding: 0px 2px 0px 0px;
+    }
+
 
     a#NewsList-bookmark {
         display: block;
