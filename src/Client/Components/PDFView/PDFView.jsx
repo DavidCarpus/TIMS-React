@@ -1,5 +1,6 @@
 import React from 'react';
-import { Document,Page } from 'react-pdf/build/entry.webpack';
+// import { Document,Page } from 'react-pdf/build/entry.webpack';
+import { Document,Page } from 'react-pdf';
 
 export default function PDFView({fileData, loading, id, onDocumentLoad, currentPage}){
     if(loading) return (<div>Loading</div>)
