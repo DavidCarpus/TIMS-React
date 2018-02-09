@@ -7,9 +7,7 @@ var startOfWeek = require('date-fns/start_of_week')
 var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
-var fetchPublicDocsDataFromDB = require('../../libs/PublicDocs').fetchPublicDocsDataFromDB;
-var fetchPublicRecordPage = require('../../libs/PublicDocs').fetchPublicRecordPage;
-
+var {getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -302,38 +300,14 @@ router.get('/SendFile/:fileID', function(req, res) {
 //
 // ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {
-    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
-    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
-    query += " where id = '" + req.params.fileID +"' ";
-
-         simpleDBQuery(query)
-         .then(rows => {
-             let fullPath = rows[0].link;
-             if (!fullPath.startsWith('http')) {
-                 let attachmentPath=configuration.attachmentPath;
-                 fullPath = fullPath.replace("." + configuration.attachmentPath, '');
-                //  console.log('fetchFile- append ATTACHMENT_DIR?:' + attachmentPath);
-                //  fullPath = configuration.ATTACHMENT_DIR + fullPath
-                 fullPath = __dirname + attachmentPath + fullPath
-
-                //  console.log('fetchFile- appended ATTACHMENT_DIR?:' + fullPath);
-                 fullPath = fullPath.replace('routes','') ;
-                 fullPath = fullPath.replace('//', '/');
-             }
-             let filename =  fullPath.replace(/^.*[\\\/]/, '')
-             console.log('fetchFile:' + filename+ ' from ' + fullPath );
-             var mimetype = mime.lookup(fullPath);
-             console.log('mimetype:' + mimetype);
-
-             // this is only if you want to 'force' a 'download' and NOT let browser open the file
-            //  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-
-            res.setHeader('Content-type', mimetype);
-            // res.sendFile(fullPath)
-            console.log('download...');
-            res.download(fullPath, filename)
-            //  res.json(rows);
-         });
+    getPublicDocData(knex, req.params.fileID)
+    .then(docData => {
+        const fileToSend = docData.fileLink ||  docData.attachments[0].fileLink
+        res.setHeader('Content-type', mime.lookup(fileToSend));
+        res.download(fileToSend, fileToSend.replace(/^.*[\\\/]/, ''))
+        // res.sendFile(fileToSend)
+         // res.json(docData);
+    })
 });
 // ==========================================================
 router.get('/EB2Services/:groupName', function(req, res) {

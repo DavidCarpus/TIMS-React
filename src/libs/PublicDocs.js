@@ -1,6 +1,51 @@
+var Config = require('../server/config');
+configuration = new Config();
+
 // var addHours = require( 'date-fns/add_hours');
 // var isSameDay = require( 'date-fns/is_same_day');
 const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+const cleanURI = (uri) => { // Merge references to parent directories
+    return uri.replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '')
+}
+
+const fullPathFormLink = (link) => {
+    // return "href"+link
+    if(link === null) return link
+    let fullPath = link;
+    if (!fullPath.startsWith('http')) {
+        let attachmentPath= configuration.PRIVATE_DIR + '/Attachments/'
+        fullPath = attachmentPath + fullPath
+        // fullPath = fullPath.replace('routes','') ;
+        // fullPath = fullPath.replace('//', '/');
+    }
+    return cleanURI(fullPath)
+}
+//=================================================
+function getPublicDocData(dbConn, id) {
+    return dbConn('PublicRecords')
+    .leftJoin('FileAttachments','PublicRecords.id', 'FileAttachments.parentId')
+    .select( [
+        'PublicRecords.*',
+    'FileAttachments.fileLink as attachmentLink', 'FileAttachments.id as attachmentID'
+    ])
+    .where({'PublicRecords.id':id})
+    .then(dbRecords => {
+        return dbRecords.reduce( (acc,val)=>
+            val.attachmentID>0?
+            Object.assign(acc,  {attachments:acc.attachments.concat(
+                {fileLink:fullPathFormLink(val.attachmentLink), id:val.attachmentID}
+            )})
+            :acc
+        , {
+            id:dbRecords[0].id,
+            recorddesc:dbRecords[0].recorddesc,
+            recordtype:dbRecords[0].recordtype,
+            fileLink:fullPathFormLink(dbRecords[0].fileLink),
+            datePosted:dbRecords[0].date,
+            attachments:[]
+        })
+    })
+}
 
 function getRecordYearRange(records, keyField) {
     const years = records.map(record=> (new Date(record[keyField])).getUTCFullYear() ).filter(onlyUnique)
@@ -139,9 +184,12 @@ if (require.main === module) {
     var knexConfig = require('../server/libs/db/knexfile.js')
     var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-    fetchPublicRecordPage(knex, 'cemetery-fees')
+    // fetchPublicRecordPage(knex, 'cemetery-fees')
+    // fetchPublicDocsDataFromDB(knex, {recordType:'News'}, 100)
+    getPublicDocData(knex, 3383)
     .then( (results) => {
-        console.log(addAPIPrefixToFetchFileHref(makeHrefsOpenNew(results.html)));
+        console.log('Done: fetchPublicDocs', results )
+        // console.log(addAPIPrefixToFetchFileHref(makeHrefsOpenNew(results.html)));
     })
     .then( ()=>process.exit() )
 }
@@ -150,3 +198,4 @@ if (require.main === module) {
 // module.exports.fetchPublicDocsYearRange = fetchPublicDocsYearRange;
 module.exports.fetchPublicDocsDataFromDB = fetchPublicDocsDataFromDB;
 module.exports.fetchPublicRecordPage = fetchPublicRecordPage;
+module.exports.getPublicDocData = getPublicDocData;
