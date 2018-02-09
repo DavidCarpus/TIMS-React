@@ -136,7 +136,7 @@ console.log(ts+ ' Express server listening on port ' + app.get('port'));
 console.log(process.env.REACT_APP_MUNICIPALITY);
 console.log(configuration.mode + " mode");
 
-// if(configuration.mode === 'development')   return
+if(configuration.mode === 'development')   return
 
 // if (configuration.imapProcess) {
 //     processManagement.initializeEmailService()
