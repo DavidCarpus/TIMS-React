@@ -39,7 +39,6 @@ const fetchFileToViewSuccess= (pageData) => ({
     })
 //========================================
 function fetchFileToViewFailure(error) {
-    console.log('FAILURE:' + JSON.stringify(error));
   return {
     type: FileViewConstants.FETCH_FAILURE,
     payload: error
