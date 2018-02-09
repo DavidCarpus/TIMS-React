@@ -3,19 +3,12 @@ import NewsDetailsUI from './NewsDetails'
 import {fetchNewsList} from '../../actions/News'
 
 const mapStateToProps = (state, ownProps) => {
-    const dateToDateStr = (dateStr) => {
-        const dateObj =new Date(dateStr)
-        return dateObj.getUTCFullYear() + '-' + (dateObj.getUTCMonth() + 1) + '-' + dateObj.getDate()
-    }
-    let newsData=[]
-    if (state.NewsData) {
-        newsData = state.NewsData.NewsData.map( (elem)=> ({id:elem.id, summary:elem.summary, postedDate:dateToDateStr(elem.datePosted)}))
-    }
 
     console.log('NewsDetailsC:', newsData);
+    const stateData = state.NewsData
 
     return {
-        newsData: newsData,
+        newsData: stateData.NewsDetails,
         title: ownProps.title || 'NewsDetails',
         loading: stateData.loading,
         groupName: ownProps.groupName,

@@ -3,8 +3,8 @@ import  './NewsDetails.css'
 import {Link} from 'react-router-dom';
 
 function createMarkup(txt) { return {__html: txt}; };
-const dateToDateStr = (dateStr) => {
-    const dateObj =new Date(dateStr)
+const formatPostedDate = (dateToFormat) => {
+    const dateObj =new Date(dateToFormat)
     return dateObj.getUTCFullYear() + '-' + (dateObj.getUTCMonth() + 1) + '-' + dateObj.getDate()
 }
 
@@ -39,7 +39,7 @@ export default function NewsDetails({newsRec, loading}){
                         </div>
                     )}
                     <br/>
-                    Posted: {dateToDateStr(posted)}
+                    Posted: {formatPostedDate(newsData.datePosted)}
                 </div>
             </div>
         )
