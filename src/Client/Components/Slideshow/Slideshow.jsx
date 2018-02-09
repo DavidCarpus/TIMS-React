@@ -15,7 +15,7 @@ const translateImgToURI = (img) => {
         return 'images/'+img;
     } else {
         // https://confluence.biola.edu/display/itservices/How+to+Embed+Images+from+Google+Drive+in+a+Web+Page
-        return 'http://drive.google.com/uc?export=view&id=' + img;
+        return 'https://drive.google.com/uc?export=view&id=' + img;
     }
 }
 
