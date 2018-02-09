@@ -1032,19 +1032,35 @@ function migrateGroupArchivePages(groupName, groupLabel, conf) {
 function logNewsPageData(newsData) {
     const html = newsData.pageText?newsData.pageText.trim() : ""
     let newsEntry = {
+        sourceUriCRC: newsData.sourceUriCRC,
         mainpage: true,
         html: html,
         markdown: toMarkdown(html, { gfm: true }),
         pageLink: newsData.pageLink || "",
-        summary: newsData.recorddesc,
+        recorddesc: newsData.recorddesc,
         datePosted:newsData.date,
         // dateExpires: null
     }
-    return enterOnlyIntoDBTable('News', newsEntry, {datePosted: newsEntry.datePosted})
+    return addOrUpdateDBTable('PageText',{
+        markdown:toMarkdown(html, { gfm: true }), html: html,
+        pageLink: newsEntry.pageLink, sectionName:'News' ,
+        sourceUriCRC: newsEntry.sourceUriCRC
+    },
+    { sourceUriCRC: newsEntry.sourceUriCRC}
+    )
+    .then( pageTextEntered =>{
+        return enterOnlyIntoDBTable('PublicRecords', {
+            mainpage:newsEntry.mainpage, pageLink:newsEntry.pageLink,
+            recorddesc:newsEntry.recorddesc,  date:newsEntry.datePosted,
+            pageTextID: pageTextEntered[0].id, sourceUriCRC: newsEntry.sourceUriCRC,
+            recordtype: 'News' ,
+        } ,
+        {sourceUriCRC: newsEntry.sourceUriCRC})
+    })
     .then(enteredNewsEntry => {
         return Promise.all(newsData.attachments.map(attachment=>{
             let FileAttachmentsEntry = {
-                recordtype: 'news' ,
+                recordtype: 'News' ,
                 parentId:enteredNewsEntry.id,
                 fileLink:attachment.newFilename,
                 datePosted:newsData.date,
@@ -1070,6 +1086,7 @@ function migrateNewsPage(linkRecord) {
         return {recorddesc:$(contentDiv).find(".page-title").text().trim(),
             pageText:$(contentDiv).find(".field-type-text-with-summary").html(),
             date: postedToDate($(contentDiv).find(".submitted").text()),
+            sourceUriCRC: crc.crc32( linkRecord.uri ).toString(16),
             attachments: $(contentDiv).find(".field-name-field-file-attachment").length ===0?
                 []:
                 $(contentDiv).find(".field-name-field-file-attachment").map( (i,row) =>{
@@ -1302,7 +1319,9 @@ function migrateNewDurham() {
     .then(departmentsMigrated => {
         console.log(departmentsMigrated.length + ' Departments migrated')
     })
+
     .then( ()=>migrateNews("https://www.newdurhamnh.us/node/1/news"))
+    // .then( ()=>migrateNews("file:///home/dcarpus/code/currentSites/www.newdurhamnh.us/node/1/news"))
     .then( (newsItems)=>{
         console.log('newsItems migrated', newsItems.length);
     })
