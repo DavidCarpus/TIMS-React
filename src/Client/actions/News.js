@@ -4,7 +4,6 @@ var Config = require('../config'),
 configuration = new Config();
 
 const ROOT_URL = configuration.ui.ROOT_URL
-// const actionsName='News';
 //========================================
 export function fetchNewsList(groupName) {
     const request = axios({
@@ -17,21 +16,16 @@ export function fetchNewsList(groupName) {
         request.then( response => {
                dispatch(fetchNewsListSuccess(groupName,response.data));
           })
-          .catch( reason => {
-            //   console.log(actionsName + ' fetchNewsList? : ' + JSON.stringify(reason));
-              dispatch(fetchNewsListFailure(reason));
-          })
-
+          .catch( reason => dispatch(fetchNewsListFailure(reason)))
     }
 }
 //========================================
 export function fetchNewsListSuccess(groupName, records) {
-    const action =   {
+  return {
     type: NewsRequestsConstants.FETCH_LIST_DATA_SUCCESS,
     payload: records,
     groupName: groupName,
   };
-  return action;
 }
 //========================================
 export function fetchNewsListFailure(error) {
@@ -54,21 +48,16 @@ export function fetchNewsDetails(id) {
         request.then( response => {
                dispatch(fetchNewsDetailsSuccess(id,response.data));
           })
-          .catch( reason => {
-            //   console.log(actionsName + ' fetchNewsDetails? : ' + JSON.stringify(reason));
-              dispatch(fetchNewsDetailsFailure(reason));
-          })
-
+          .catch( reason => dispatch(fetchNewsDetailsFailure(reason)))
     }
 }
 //========================================
 export function fetchNewsDetailsSuccess(id, records) {
-    const action =   {
+  return {
     type: NewsRequestsConstants.FETCH_DATA_DETAILS_SUCCESS,
     payload: records,
     id: id,
   };
-  return action;
 }
 //========================================
 export function fetchNewsDetailsFailure(error) {
