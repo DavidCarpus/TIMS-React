@@ -13,6 +13,9 @@ import { Col, Row } from 'reactstrap';
 
 export default function DefaultDepartment({group, store, loading, id, agendasAndMinutes, groupDocuments, groupMembers, groupNotices, title='Default'}){
     let pageNavMenus=[ {text:'^^^', target:'primary-content-top', hoverText:'Top'}]
+    if (groupNotices.length > 0 ) {
+        pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
+    }
     if (groupMembers.length > 0 ) {
         pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'groupMembers-bookmark', fontAwsomeIcon:'fa-address-book'});
     }
