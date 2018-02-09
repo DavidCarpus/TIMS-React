@@ -1,12 +1,11 @@
 Post date for notices.
 Only 4-5 notices
 
-
-
 ************************************************
 ~/bin/startWedDev.sh ALL
 ************************************************
 News, Calendar, City Services, Notices, Employment, Contact us, Agenda/Minutes/Video, Road Construction, NIXLE
+Polls (location from IP to add additional captcha if not right zipcode)
 
 ## APPLY ONLINE form
 ## 'Contact Us' form instead of email links
