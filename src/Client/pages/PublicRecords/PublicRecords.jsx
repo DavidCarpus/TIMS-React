@@ -18,9 +18,16 @@ const getFilterOptions = (recordState) => {
 }
 const mapStateToProps = (state, ownProps) => {
     let recordState = state.PublicRecords;
+    const records = state.PublicRecords.publicRecords.records.map(rec=>{
+        if(rec.link === null && rec.type === 'News'){
+            return Object.assign(rec, {link:"/News/"+rec.id})
+        } else {
+            return rec
+        }
+    })
 
     return {
-        records:  state.PublicRecords.publicRecords.records,
+        records:  records,
         meta:  state.PublicRecords.publicRecords.meta,
         groupData:  recordState.groupData,
         currentFilter: recordState.filter,

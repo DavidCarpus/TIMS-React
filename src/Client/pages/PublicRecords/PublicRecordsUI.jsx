@@ -59,7 +59,10 @@ export default class PublicRecordsUI extends React.Component {
                         />
                     {records.map(record =>
                         <div key={record.id}  className='documentLink'>
-                            <SmartLink link={record.link} id={record.id} linkText={record.recorddesc || record.groupDescription } />
+                            <SmartLink link={record.link} id={record.id}
+                                linkText={record.recorddesc || record.groupDescription }
+                                type={record.type}
+                                 />
                                 {!currentFilter.recordType && <span className="recordtype">{record.type}</span> }
                                 {!currentFilter.pageLink && <span className="group"> {record.groupName} </span> }
                                 <span className="posted"> (Posted {dateStr(new Date(record.date))}) </span>
