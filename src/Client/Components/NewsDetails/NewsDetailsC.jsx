@@ -3,8 +3,6 @@ import NewsDetailsUI from './NewsDetails'
 import {fetchNewsList} from '../../actions/News'
 
 const mapStateToProps = (state, ownProps) => {
-
-    console.log('NewsDetailsC:', newsData);
     const stateData = state.NewsData
 
     return {
@@ -12,6 +10,7 @@ const mapStateToProps = (state, ownProps) => {
         title: ownProps.title || 'NewsDetails',
         loading: stateData.loading,
         groupName: ownProps.groupName,
+        attachments: stateData.NewsDetails.attachments,
     };
 }
 const mapDispatchToProps = (dispatch) => {

@@ -2,5 +2,5 @@
   "name": "NewsDetails",
   "version": "0.0.0",
   "private": true,
-  "main": "./NewsDetails.jsx"
+  "main": "./NewsDetailsC.jsx"
 }

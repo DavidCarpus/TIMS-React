@@ -8,34 +8,25 @@ const formatPostedDate = (dateToFormat) => {
     return dateObj.getUTCFullYear() + '-' + (dateObj.getUTCMonth() + 1) + '-' + dateObj.getDate()
 }
 
-const linkToNewsAttachment = (link, linkText) => {
-    return (<Link to={link} target="_blank" onClick={(event) => {
-        event.preventDefault(); window.open(link);
-    }} >{linkText}</Link>)
+const linkToNewsAttachment = (attachment, index) =>(
+    <Link to={'/api/NewsAttachment/' + attachment.id} target="_blank"
+        onClick={(event) => { event.preventDefault(); window.open('/api/NewsAttachment/' + attachment.id);}}
+        >{attachment.desc|| "Attachment " + (index+1)}</Link>
+)
 
-}
-export default function NewsDetails({newsRec, loading}){
-    if ( loading || typeof newsRec[0] === 'undefined') {
-        console.log('***NewsDetails loading.', newsRec);
-        return (<div>Loading{JSON.stringify(newsRec)}</div>)
+export default function NewsDetails({newsData, loading, attachments}){
+    if ( loading || typeof newsData === 'undefined') {
+        return (<div>Loading{JSON.stringify(newsData)}</div>)
     }
-        const news = newsRec[0]
-        const attachments = newsRec['attachments'] || []
-        const posted = news.datePosted
         return (
             <div id='NewsDetails'>
                 <div id='newsElement'>
-                    <h2>{news.summary}</h2>
-                    <div dangerouslySetInnerHTML={createMarkup(news.html)} />
+                    <h2>{newsData.summary}</h2>
+                    <div dangerouslySetInnerHTML={createMarkup(newsData.html)} />
                     <hr/>
                     {attachments.map( (attachment, index)=>
-                        <div>
-                            <div className='fileLink'>
-                                {linkToNewsAttachment('/api/NewsAttachment/' + attachment.id, "Attachment " + (index+1))}
-                                <span className='filePostedDate'>
-                                </span>
-                            </div>
-                            <br/>
+                        <div key={attachment.id} className='fileLink'>
+                            {linkToNewsAttachment(attachment, index)}
                         </div>
                     )}
                     <br/>
