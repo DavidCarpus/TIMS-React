@@ -111,3 +111,16 @@ $iconsize: 20px;
     /*float: left;*/
     margin: 2px 2px 0px 5px;
 }
+
+.news_link::before {
+    content: "";
+    display: inline-block;
+    background: url('../icons/bell-o.svg') no-repeat;
+    background-size: 80% 80%;
+    /*background-color: red;*/
+    color: white;
+    width: $iconsize;
+    height: $iconsize;
+    /*float: left;*/
+    margin: 2px 2px 0px 5px;
+}
