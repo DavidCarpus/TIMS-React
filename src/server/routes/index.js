@@ -8,6 +8,7 @@ var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
 var {getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
+var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News')
 
 var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
 
@@ -364,42 +365,18 @@ router.get('/FAQ/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/NewsDetails/:id', function(req, res) {
-    query   = "Select News.id, News.summary, News.html, News.markdown, "
-    query   += "News.datePosted, News.dateExpires, News.pageLink "
-    query   += "from News "
-    query   += "left join FileAttachments on News.id=FileAttachments.id "
-    query   += "where (FileAttachments.recordtype = 'news' or isnull(FileAttachments.recordtype))"
-    query += " and News.id='" + req.params.id +"'";
-
-    // console.log(query);
-     simpleDBQuery(query)
-     .then( newsData =>{
-         query   =  "Select id, fileLink, datePosted as filePostedDate "
-         query   += "from FileAttachments "
-         query   += "where parentID ='" + req.params.id +"'";
-         return simpleDBQuery(query)
-         .then(attachments =>  Object.assign({}, newsData, {attachments:attachments}) )
-     })
-     .then(withAttachments => {
-         // console.log('NewsDetails:' + JSON.stringify(withAttachments));
-         res.json(withAttachments);
-     });
+    pullNewsDetailsWithAttachmentMeta(knex, req.params.id)
+    .then(withAttachments => {
+        res.json(withAttachments);
+    });
 })
 // ==========================================================
 router.get('/Records/News/:groupName', function(req, res) {
-    query   = "Select id, summary, datePosted, dateExpires, pageLink from News "
-    if (  req.params.groupName == 'Home') {
-        query += " where mainpage=1 ";
-    } else {
-        query += " where pageLink='" + req.params.groupName +"'";
-    }
-    query += "  and (dateExpires <=0 or date(dateExpires) > date(now()) ) ";
-    // console.log(query);
-     simpleDBQuery(query)
-     .then(rows => {
-         // console.log('Notices:' + JSON.stringify(rows));
-         res.json(rows);
-     });
+    console.log('req.params.groupName', req.params.groupName);
+    pullNewsListForGroup(knex, req.params.groupName)
+    .then(records => {
+        res.json(records);
+    });
 })
 // ==========================================================
 router.get('/Records/Notices/:groupName', function(req, res) {

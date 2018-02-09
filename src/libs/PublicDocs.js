@@ -46,6 +46,12 @@ function getPublicDocData(dbConn, id) {
         })
     })
 }
+//=================================================
+function getFileData(dbConn, id) {
+    return dbConn('FileAttachments')
+    .select( ['FileAttachments.id','FileAttachments.fileLink as type','fileLink as link','FileAttachments.recorddesc'])
+    .where({id:id})
+}
 
 function getRecordYearRange(records, keyField) {
     const years = records.map(record=> (new Date(record[keyField])).getUTCFullYear() ).filter(onlyUnique)
@@ -159,6 +165,10 @@ function normalizeRecordType(recordType) {
         case 'RFPS':
         case 'RFP':
             return 'RFP'
+            break;
+        case 'news':
+        case 'News':
+            return 'News'
             break;
         case 'VOTING':
             return 'Voting'
