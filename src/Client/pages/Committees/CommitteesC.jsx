@@ -2,7 +2,7 @@
 import CommitteesUI from './Committees'
 import { connect } from 'react-redux'
 import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
-import {fetchGroupNotices} from '../../actions/PublicDocuments'
+import {fetchGroupNews} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
 import {fetchMeetingDocs} from '../../actions/PublicDocuments'
 
@@ -33,7 +33,7 @@ const mapStateToProps = (state, ownProps) => {
                 // console.log( 'DepartmentsUI: | ' + ownProps.store  +' | ' +  !recordState.loading  +' | ' +  recordState.groupName  +' | ' +    groupName);
 
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
-                ownProps.store.dispatch(fetchGroupNotices(groupName));
+                ownProps.store.dispatch(fetchGroupNews(groupName));
                 ownProps.store.dispatch(fetchGroupDoc(groupName));
                 ownProps.store.dispatch(fetchMeetingDocs(groupName));
                 // loading= true;
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchOUData: (groupName) => {
           dispatch(fetchOrganizationalUnitData(groupName))
           dispatch(fetchOrganizationalUnitData(groupName))
-          dispatch(fetchGroupNotices(groupName))
+          dispatch(fetchGroupNews(groupName))
           dispatch(fetchGroupDoc(groupName))
           dispatch(fetchMeetingDocs(groupName))
       }

@@ -2,15 +2,8 @@ import React from 'react';
 import  './NewsList.css'
 import SmartLink from '../SmartLink'
 
+
 export default class NewsList extends React.Component {
-    componentWillMount() {
-        this.props.fetchNewsList(this.props.group.link);
-    }
-
-    createMarkup(desc){
-        return {__html: desc};
-    }
-
     render() {
         if ( this.props.loading) {
             return (<div>Loading</div>)

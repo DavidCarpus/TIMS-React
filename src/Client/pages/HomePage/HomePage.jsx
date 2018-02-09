@@ -1,10 +1,9 @@
 import React from 'react';
-import NoticesList from '../../Components/NoticesList'
+import { Col, Row } from 'reactstrap';
 import MainCalendar from '../../Components/MainCalendar'
 import ContactUs from '../../Components/ContactUs'
 import NewsList from '../../Components/NewsListing'
 
-import { Col, Row } from 'reactstrap';
 
 import './HomePage.css';
 import {PageNavbar,addMenu} from '../../Components/PageNavbar'
@@ -19,7 +18,7 @@ export default class HomePage extends React.Component {
         let pageNavMenus=[ {text:'^^^', target:'primary-content-top', hoverText:'Top'}]
 
         if (this.props.notices.length > 0 ) {
-            pageNavMenus = addMenu(pageNavMenus, {text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'});
+            pageNavMenus = addMenu(pageNavMenus, {text:'News', target:'NewsList-bookmark', fontAwsomeIcon:'fa-bell'});
         }
         pageNavMenus = addMenu(pageNavMenus, {text:'Calendar', target:'MainCalendar-bookmark', fontAwsomeIcon:'fa-calendar'});
         pageNavMenus = addMenu(pageNavMenus, {text:'Contacts', target:'ContactUs-bookmark', fontAwsomeIcon:'fa-address-book'});
@@ -29,11 +28,10 @@ export default class HomePage extends React.Component {
                 <PageNavbar menus={pageNavMenus}/>
                 <Row >
                   <Col  md={{size:10, push:1}}  xs={{size:12}}>
-                          <NoticesList
-                              group={this.props.group}
-                              store={this.props.store}
+                          <NewsList
+                              news={this.props.notices}
+                              limit={5}
                               groupName='Home'/>
-                          <NewsList group={this.props.group} limit={5} />
                           <MainCalendar />
                           <ContactUs/>
                   </Col>

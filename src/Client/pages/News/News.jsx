@@ -3,7 +3,7 @@ import { Col, Row } from 'reactstrap';
 import  './News.css'
 import NewsDetails  from '../../Components/NewsDetails'
 
-export default class NoticePage extends React.Component {
+export default class NewsPage extends React.Component {
     componentWillMount() {
         this.props.id && this.props.fetchData(this.props.id);
     }

@@ -173,28 +173,28 @@ export function fetchPublicDocsFailure(error) {
 //========================================
 //========================================
 //========================================
-export function fetchGroupNotices(groupName) {
+export function fetchGroupNews(groupName) {
     if (! groupName && process.env.NODE_ENV === 'development' ) {
         debugger; // eslint-disable-line no-debugger
     }
     const request = axios({
       method: 'get',
-      url: `${ROOT_URL}Records/Notices/`+ groupName,
+      url: `${ROOT_URL}Records/News/`+ groupName,
       // headers: []
     });
     return dispatch => {
         dispatch( {type:PublicDocumentsConstants.FETCH_GROUP_NOTICES});
         request.then( response => {
-               dispatch(fetchGroupNoticesSuccess(groupName, response.data));
+               dispatch(fetchGroupNewsSuccess(groupName, response.data));
           })
           .catch( reason => {
-              dispatch(fetchGroupNoticesFailure(reason));
+              dispatch(fetchGroupNewsFailure(reason));
           })
 
     }
 }
 //========================================
-export function fetchGroupNoticesSuccess(groupName, docs) {
+export function fetchGroupNewsSuccess(groupName, docs) {
     const action =   {
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_SUCCESS,
     payload: docs,
@@ -203,7 +203,7 @@ export function fetchGroupNoticesSuccess(groupName, docs) {
   return action;
 }
 //========================================
-export function fetchGroupNoticesFailure(error) {
+export function fetchGroupNewsFailure(error) {
   return {
     type: PublicDocumentsConstants.FETCH_GROUP_NOTICES_FAILURE || 'Fail',
     payload: error

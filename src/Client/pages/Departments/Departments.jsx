@@ -5,7 +5,7 @@ import {documentsByYear} from '../../libs/AgendasAndMinutes'
 
 import { fetchOrganizationalUnitData } from '../../actions/OrganizationalUnitData'
 import { fetchPageAsides } from '../../actions/PageAsides'
-import {fetchGroupNotices} from '../../actions/PublicDocuments'
+import {fetchGroupNews} from '../../actions/PublicDocuments'
 import {fetchGroupDoc} from '../../actions/PublicDocuments'
 import {fetchMeetingDocs} from '../../actions/PublicDocuments'
 
@@ -37,7 +37,7 @@ const mapStateToProps = (state, ownProps) => {
             if ( newGroup.length > 0 && oldGroup.length >  0) {
                 ownProps.store.dispatch(fetchOrganizationalUnitData(groupName))
                 ownProps.store.dispatch(fetchPageAsides(groupName));
-                ownProps.store.dispatch(fetchGroupNotices(groupName));
+                ownProps.store.dispatch(fetchGroupNews(groupName));
                 ownProps.store.dispatch(fetchGroupDoc(groupName));
                 ownProps.store.dispatch(fetchMeetingDocs(groupName));
 
@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchData: (groupName) => {
           dispatch(fetchOrganizationalUnitData(groupName))
           dispatch(fetchPageAsides(groupName));
-          dispatch(fetchGroupNotices(groupName));
+          dispatch(fetchGroupNews(groupName));
           dispatch(fetchGroupDoc(groupName));
           dispatch(fetchMeetingDocs(groupName));
        }
