@@ -11,5 +11,6 @@ PATH=$PATH:$HOME/bin
 
 #export NODE_ENV=production
 cd $DIR
+node_modules/nodemon/bin/nodemon.js app.js $NODE_ENV $DIR &
+#node app.js $NODE_ENV $DIR &
 # npm run start $DIR
-node app.js $NODE_ENV $DIR &
