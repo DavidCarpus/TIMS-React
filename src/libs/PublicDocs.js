@@ -6,12 +6,11 @@ const cleanURI = (uri) => { // Merge references to parent directories
     return uri.replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '')
 }
 
-const fullPathFormLink = (link) => {
+const fullPathFromLink = (link) => {
     if(link === null) return link
     let fullPath = link;
     if (!fullPath.startsWith('http')) {
-        let attachmentPath= configuration.PRIVATE_DIR + '/Attachments/'
-        fullPath = attachmentPath + fullPath
+        fullPath = configuration.PRIVATE_DIR + '/Attachments/' + fullPath
     }
     return cleanURI(fullPath)
 }
