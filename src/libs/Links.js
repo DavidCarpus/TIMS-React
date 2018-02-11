@@ -24,6 +24,7 @@ function pullLinksFromDB(dbConn) {
             pullMenuLinks(dbConn)
             .then(menuLinks=>
                 listData.concat(publicRecords).concat(menuLinks)
+                .concat( [{desc:'Contact Us', link:'/ContactUs'}, {desc:'Employment', link:'/Employment'}] )
             )
         )
     )
