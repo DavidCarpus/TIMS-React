@@ -15,38 +15,70 @@ const fullPathFromLink = (link) => {
     return cleanURI(fullPath)
 }
 //=================================================
-function getPublicDocData(dbConn, id) {
-    return dbConn('PublicRecords')
-    .leftJoin('FileAttachments','PublicRecords.id', 'FileAttachments.parentId')
-    .select( [
-        'PublicRecords.*',
-    'FileAttachments.fileLink as attachmentLink', 'FileAttachments.id as attachmentID'
-    ])
-    .where({'PublicRecords.id':id})
-    .then(dbRecords => {
-        return dbRecords.reduce( (acc,val)=>
-            val.attachmentID>0?
-            Object.assign(acc,  {attachments:acc.attachments.concat(
-                {fileLink:fullPathFormLink(val.attachmentLink), id:val.attachmentID}
-            )})
-            :acc
-        , {
-            id:dbRecords[0].id,
-            recorddesc:dbRecords[0].recorddesc,
-            recordtype:dbRecords[0].recordtype,
-            fileLink:fullPathFormLink(dbRecords[0].fileLink),
-            datePosted:dbRecords[0].date,
-            attachments:[]
-        })
+function getPublicDocDataWithAttachments(dbConn, keyField = "PublicRecords", key) {
+    let query=null
+    const fieldList = [
+        'PublicRecords.*', 'PageText.html', "Groups.groupDescription",
+        'FileAttachments.fileLink as attachmentLink', 'FileAttachments.id as attachmentID'
+    ]
+    switch (keyField) {
+        case "PublicRecords":
+            query = dbConn('PublicRecords')
+            .leftJoin('PageText','PageText.id', 'PublicRecords.PageTextID')
+            .leftJoin('FileAttachments','PublicRecords.id', 'FileAttachments.parentId')
+            .leftJoin('Groups','PublicRecords.pageLink', 'Groups.pageLink')
+            .select( fieldList)
+            .where({'PublicRecords.id':key})
+            break;
+        case "FileAttachments":
+            query =  dbConn('FileAttachments')
+            .leftJoin('PublicRecords','PublicRecords.id', 'FileAttachments.parentId')
+            .leftJoin('PageText','PageText.id', 'FileAttachments.parentId')
+            .leftJoin('Groups','PublicRecords.pageLink', 'Groups.pageLink')
+            .select( fieldList)
+            .where({'FileAttachments.id':key})
+            break;
+        case "GroupName":
+            query =  dbConn('Groups')
+            .leftJoin('PublicRecords','PublicRecords.pageLink', 'Groups.pageLink')
+            .leftJoin('PageText','PageText.id', 'PublicRecords.PageTextID')
+            .leftJoin('FileAttachments','PublicRecords.id', 'FileAttachments.parentId')
+            .select( fieldList)
+            .where({'Groups.pageLink':key})
+            break;
+        default:
+
+    }
+    // console.log('query', query.toString());
+    const addAttachmentRecord =(acc, val)=> val.attachmentID<=0 || val.fileLink
+    ? acc:
+        Object.assign(acc,  {attachments:acc.attachments.concat(
+            {fileLink:fullPathFromLink(val.attachmentLink), id:val.attachmentID}
+        )})
+    return query.then(dbRecords =>{
+        const db2 = dbRecords.map(rec=> rec.id).filter(onlyUnique)
+        .map(id=> dbRecords.filter(rec=>rec.id === id).map(meta => ({
+            id:meta.id, recorddesc:meta.recorddesc, recordtype:meta.recordtype, datePosted:meta.date,
+            html:meta.html, groupDescription:meta.groupDescription,
+            fileLink:fullPathFromLink(meta.fileLink), attachments:[]
+        }))[0] )
+        return db2.map(rec => {
+            return Object.assign( rec, {
+                attachments: dbRecords.filter(origRec=> origRec.id === rec.id && origRec.attachmentID !== null)
+                .map(rec=> ({ id:rec.attachmentID, fileLink:fullPathFromLink(rec.attachmentLink)}) )
+            })
+        } )
     })
 }
 //=================================================
-function getFileData(dbConn, id) {
-    return dbConn('FileAttachments')
-    .select( ['FileAttachments.id','FileAttachments.fileLink as type','fileLink as link','FileAttachments.recorddesc'])
-    .where({id:id})
+function getPublicDocData(dbConn, id) {
+    return getPublicDocDataWithAttachments(dbConn, "PublicRecords", id)
 }
-
+//=================================================
+function getFileData(dbConn, id) {
+    return getPublicDocDataWithAttachments(dbConn, "FileAttachments", id)
+}
+//=================================================
 function getRecordYearRange(records, keyField) {
     const years = records.map(record=> (new Date(record[keyField])).getUTCFullYear() ).filter(onlyUnique)
     return years.length > 1? years.slice(0,years.length): [years[0], years[0]]
@@ -174,9 +206,13 @@ if (require.main === module) {
 
     // fetchPublicRecordPage(knex, 'cemetery-fees')
     // fetchPublicDocsDataFromDB(knex, {recordType:'News'}, 100)
-    getPublicDocData(knex, 3383)
+    // getPublicDocData(knex, 3383) // 3383 , 3374, 115 , 3395, 115
+//    getPublicDocDataWithAttachments(knex, 'GroupName', 'TransferStation') // BoardofSelectmen , TransferStation
+    getPublicDocDataWithAttachments(knex, 'FileAttachments', 165) // BoardofSelectmen , TransferStation
+    // getFileData(knex, 2)
+
     .then( (results) => {
-        console.log('Done: fetchPublicDocs', results )
+        console.log('Done: publicDocs test:', require('util').inspect(results, { depth: null }));
         // console.log(addAPIPrefixToFetchFileHref(makeHrefsOpenNew(results.html)));
     })
     .then( ()=>process.exit() )
@@ -187,3 +223,4 @@ if (require.main === module) {
 module.exports.fetchPublicDocsDataFromDB = fetchPublicDocsDataFromDB;
 module.exports.fetchPublicRecordPage = fetchPublicRecordPage;
 module.exports.getPublicDocData = getPublicDocData;
+module.exports.getPublicDocDataWithAttachments = getPublicDocDataWithAttachments;
