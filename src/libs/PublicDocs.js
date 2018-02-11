@@ -70,6 +70,33 @@ function getPublicDocDataWithAttachments(dbConn, keyField = "PublicRecords", key
         } )
     })
 }
+
+//=================================================
+function getGroupMeetingDocuments(dbConn, groupName) {
+    const fieldList = ['id','recordtype as type','fileLink as link','date','recorddesc as description']
+    const query =  dbConn('PublicRecords')
+    .select( fieldList)
+    .where({'pageLink':groupName})
+    .andWhere( function () {
+        this.where({recordtype:'Minutes'})
+        .orWhere({recordtype:'Agenda'})
+        .orWhere({recordtype:'Video'})
+        .orWhere({recordtype:'Decision'})
+    })
+    .andWhere( function () {
+        this.whereNull('expiredate').orWhere('expiredate', '>' , new Date())
+    })
+    .orderBy(["date", "recordtype"])
+
+    return query
+    .then(rows => rows.reduce( (newArray, row) => {
+            let key = row.date;
+            delete row.date;
+            (newArray[key] = newArray[key] || []).push(row);
+            return newArray;
+        }, {})
+    )
+}
 //=================================================
 function getPublicDocData(dbConn, id) {
     return getPublicDocDataWithAttachments(dbConn, "PublicRecords", id)
@@ -208,9 +235,9 @@ if (require.main === module) {
     // fetchPublicDocsDataFromDB(knex, {recordType:'News'}, 100)
     // getPublicDocData(knex, 3383) // 3383 , 3374, 115 , 3395, 115
 //    getPublicDocDataWithAttachments(knex, 'GroupName', 'TransferStation') // BoardofSelectmen , TransferStation
-    getPublicDocDataWithAttachments(knex, 'FileAttachments', 165) // BoardofSelectmen , TransferStation
+    // getPublicDocDataWithAttachments(knex, 'FileAttachments', 165) // BoardofSelectmen , TransferStation
     // getFileData(knex, 2)
-
+    getGroupMeetingDocuments(knex, "BudgetCommittee")
     .then( (results) => {
         console.log('Done: publicDocs test:', require('util').inspect(results, { depth: null }));
         // console.log(addAPIPrefixToFetchFileHref(makeHrefsOpenNew(results.html)));
@@ -224,3 +251,4 @@ module.exports.fetchPublicDocsDataFromDB = fetchPublicDocsDataFromDB;
 module.exports.fetchPublicRecordPage = fetchPublicRecordPage;
 module.exports.getPublicDocData = getPublicDocData;
 module.exports.getPublicDocDataWithAttachments = getPublicDocDataWithAttachments;
+module.exports.getGroupMeetingDocuments = getGroupMeetingDocuments;

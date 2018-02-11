@@ -26,7 +26,7 @@ const privateDir = configuration.mode === 'development' ? '../../private/'+proce
 // var connection;
 var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
-var {getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
+var {getGroupMeetingDocuments, getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
 var {pullMenusFromDB} = require('../../libs/Menus');
 
@@ -263,29 +263,15 @@ router.get('/Records/PublicDocs/filtered', function(req, res) {
     // console.log('req.query', req.query.recordType);
     fetchPublicDocsDataFromDB(knex, req.query, 100)
     .then( toSend => {
-        // console.log('toSend', toSend);
         res.json(toSend);
     })
 });
 // ==========================================================
 router.get('/Records/Meetings/:groupName', function(req, res) {
-    // query = "Select id, recordtype as type, fileLink as link,DATE_FORMAT(date,'%m/%d/%Y') as date from PublicRecords where pageLink='" + req.params.groupName +"'";
-    query = "Select id, recordtype as type, fileLink as link, date, recorddesc as description from PublicRecords where pageLink='" + req.params.groupName +"'";
-    query += " and ( recordtype='Minutes'  or recordtype='Agenda'  or recordtype='Agendas'  or recordtype='Video'   or recordtype='Decision' )";
-    query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
-    query += "  ORDER BY date, recordtype ";
-    // console.log('/Records/Meetings/:groupName', query);
-    simpleDBQuery(query)
-    .then(rows => {
-        var toSend = rows.reduce( (newArray, row) => {
-            let key = row.date;
-            delete row.date;
-            (newArray[key] = newArray[key] || []).push(row);
-            return newArray;
-        }, {})
-        // console.log('Meetings:' + JSON.stringify(toSend));
+    getGroupMeetingDocuments(knex,req.params.groupName)
+    .then( toSend => {
         res.json(toSend);
-    });
+    })
 });
 
 // ==========================================================
