@@ -28,6 +28,8 @@ var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
 var {getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
+var {pullMenusFromDB} = require('../../libs/Menus');
+
 var {submitAlertRequestData} = require('../libs/AlertRequests');
 var {getHomeCalendarDateRange} = require('../libs/date');
 var {pullAgendaIDFromDB, getCalendarDataForMonth, getCalendarDataForRange} = require('../libs/calendar/ICSCalendar');
@@ -58,25 +60,8 @@ const cleanURI = (uri) => { // Merge references to parent directories
     return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
 }
 
-
-// ==========================================================
-function flattenMenus(parent, menus, results) {
-    let links = menus.map(level1 => {
-        if (level1.menus) {
-            return flattenMenus(level1.link, level1.menus, results)
-        }
-        if (level1.link.startsWith('http')) {
-            return results.push({desc:level1.desc, link:level1.link})
-        } else {
-            return results.push({desc:level1.desc, link:parent+level1.link})
-        }
-    })
-        return results;
-}
 // ==========================================================
 router.get('/Links', function(req, res) {
-    // let menus = JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8'));
-    // let links =flattenMenus('',menus, [])
     let links = [];
     console.log(links);
     links.push({desc:'Contact Us', link:'/ContactUs'})
@@ -134,45 +119,10 @@ router.get('/Links', function(req, res) {
 });
 // ==========================================================
 router.get('/Menus', function(req, res) {
-    var query = "Select * from Menus";
-     simpleDBQuery(query)
-     .then(rows => {
-         let groupedMenus = rows.reduce( (acc, curr, i) => {
-             let topMenu = curr.fullLink;
-             let subMenus = []
-
-             if (curr.fullLink !== curr.pageLink) {
-                 topMenu = topMenu.replace(curr.pageLink, '')
-             }
-             if (topMenu.endsWith('/') && curr.fullLink !== '/' ) {
-                 topMenu = topMenu.substring(0, topMenu.length - 1);
-             }
-
-             acc[topMenu] = (acc[topMenu] && typeof acc[topMenu] !== undefined) ? acc[topMenu]: {};
-
-             if (curr.fullLink !== curr.pageLink && acc[topMenu].menus) {
-                 acc[topMenu]['menus'].push( {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description})
-             }
-
-             if (curr.fullLink !== curr.pageLink && !acc[topMenu].menus) {
-                 acc[topMenu]['menus'] = [{id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description}]
-             }
-
-             if (curr.fullLink === curr.pageLink) {
-                 acc[topMenu] = Object.assign(acc[topMenu], {id:curr.id, pageLink:curr.pageLink, fullLink:curr.fullLink, description:curr.description})
-             }
-             return acc;
-         }, {})
-        //  res.status(200).send('<pre>' + JSON.stringify(groupedMenus, null, 2) + '</pre>');
-        //  console.log('groupedMenus:' + JSON.stringify(groupedMenus));
-         res.json(groupedMenus);
-     });
-});
-// ==========================================================
-router.get('/Menus1', function(req, res) {
-        // console.log(fs.readFileSync('Menus.json', 'utf8'));
-        // TODO: Add error checking if file not there ar move data to db
-        res.json(JSON.parse(fs.readFileSync('./private/Menus.json', 'utf8')));
+    pullMenusFromDB(knex)
+    .then(groupedMenus =>{
+        res.json(groupedMenus);
+    })
 });
 // ==========================================================
 router.get('/Asides/:groupName', function(req, res) {
