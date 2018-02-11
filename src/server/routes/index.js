@@ -7,11 +7,6 @@ var startOfWeek = require('date-fns/start_of_week')
 var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
-var {getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
-var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News')
-
-var submitAlertRequestData = require('../libs/AlertRequests').submitAlertRequestData;
-
 var knexConfig = require('../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
@@ -31,10 +26,11 @@ const privateDir = configuration.mode === 'development' ? '../../private/'+proce
 // var connection;
 var mysql_pool = require('../libs/db/mysql').mysql_pool;
 
-var getCalendarDataForMonth = require('../libs/calendar/ICSCalendar').getCalendarDataForMonth;
-var getCalendarDataForRange = require('../libs/calendar/ICSCalendar').getCalendarDataForRange;
-var pullAgendaIDFromDB = require('../libs/calendar/ICSCalendar').pullAgendaIDFromDB;
+var {getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
+var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
+var {submitAlertRequestData} = require('../libs/AlertRequests');
 var {getHomeCalendarDateRange} = require('../libs/date');
+var {pullAgendaIDFromDB, getCalendarDataForMonth, getCalendarDataForRange} = require('../libs/calendar/ICSCalendar');
 
 router.use(cors());
 // ==========================================================
@@ -58,6 +54,11 @@ function simpleDBQuery(query){
         })
     });
 }
+const cleanURI = (uri) => { // Merge references to parent directories
+    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
+}
+
+
 // ==========================================================
 function flattenMenus(parent, menus, results) {
     let links = menus.map(level1 => {
@@ -210,95 +211,40 @@ router.get('/CalendarEvents/:year/:month', function(req, res) {
 })
 // ==========================================================
 router.get('/NewsAttachment/:fileID', function(req, res) {
-    var query = "Select id, fileLink as link from FileAttachments where id = '" + req.params.fileID +"' ";
-    let cnt=0
-    const fullAttachmentPath = __dirname+'/'+privateDir+ "/Attachments/"
-
-    console.log('NewsAttachment',query);
-     simpleDBQuery(query)
-     .then(rows => {
-         let fullPath = rows[0].link;
-         if (!fullPath.startsWith('http')) {
-             fullPath = fullAttachmentPath + fullPath
-         }
-         let filename =  fullPath.replace(/^.*[\\\/]/, '')
-         console.log('fetchFile:' + filename+ ' from ' + fullPath );
-         var mimetype = mime.lookup(fullPath);
-         console.log('mimetype:' + mimetype);
-
-         // this is only if you want to 'force' a 'download' and NOT let browser open the file
-        //  res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-
-        res.setHeader('Content-type', mimetype);
-        // res.sendFile(fullPath)
-        console.log('download...',fullPath, filename);
-        res.download(fullPath, filename)
-        //  res.json(rows);
-     });
-
+    getPublicDocDataWithAttachments(knex, "FileAttachments", req.params.fileID)
+    .then(docData => {
+        const fileToSend = docData.fileLink ||  docData.attachments[0].fileLink
+        res.setHeader('Content-type', mime.lookup(fileToSend));
+        res.download(fileToSend, fileToSend.replace(/^.*[\\\/]/, ''))
+         // res.json(docData);
+    })
 })
 // ==========================================================
 router.get('/ViewFile/:fileID', function(req, res) {
-    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
-    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
-    query += " where id = '" + req.params.fileID +"' ";
-
-    simpleDBQuery(query)
-    .then(rows => {
-        let fullPath = rows[0].link;
-        if (!fullPath.startsWith('http')) {
-            // console.log('configuration',configuration);
-            let attachmentPath=configuration.PRIVATE_DIR + '/Attachments/';
-            fullPath = attachmentPath+fullPath
-        }
-        fullPath = cleanURI(fullPath)
-        const metaData = {FileType:mime.lookup(fullPath), id:req.params.fileID, path: fullPath,
-            filename:fullPath.replace(/^.*[\\\/]/, ''), Description:rows[0].recorddesc
-        }
-        console.log('ViewFile:' , metaData );
-        // res.json(metaData })
-
-        fs.readFile(fullPath, function(err, contents) {
-            res.json(Object.assign({}, metaData, {FileData:contents?contents.toString('base64'):""}))
-            // if (contents) {
-            // } else {
-            //     res.json(Object.assign({}, metaData, {FileData:""}))
-            // }
+    getPublicDocDataWithAttachments(knex, "FileAttachments", req.params.fileID)
+    .then(docData => {
+        const fileToSend =  docData[0].attachments[0].fileLink || docData[0].fileLink
+        fs.readFile(fileToSend, function(err, contents) {
+            res.json(Object.assign({},
+                {
+                    FileType:mime.lookup(fileToSend), id:req.params.fileID, path: fileToSend,
+                    filename:fileToSend.replace(/^.*[\\\/]/, ''), Description:docData.recorddesc
+                }
+                ,{FileData:contents?contents.toString('base64'):""}
+            ))
         });
-    });
+     })
 })
-const cleanURI = (uri) => { // Merge references to parent directories
-    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
-}
-
 // ==========================================================
 router.get('/SendFile/:fileID', function(req, res) {
-    var query = "Select id, fileLink as link, recorddesc from FileAttachments ";
-    // query += " left join PublicRecords on PublicRecords.id = FileAttachments.parentId"
-    query += " where id = '" + req.params.fileID +"' ";
-
-    simpleDBQuery(query)
-    .then(rows => {
-        let fullPath = rows[0].link;
-        if (!fullPath.startsWith('http')) {
-            // console.log('configuration',configuration);
-            let attachmentPath=configuration.PRIVATE_DIR + '/Attachments/';
-            fullPath = attachmentPath+fullPath
-        }
-        fullPath = cleanURI(fullPath)
-        let filename =  fullPath.replace(/^.*[\\\/]/, '')
-        console.log('ViewFile:' + filename+ ' from ' + fullPath );
-        var mimetype = mime.lookup(fullPath);
-        console.log('mimetype:' + mimetype);
-        res.setHeader('Content-type', mimetype);
-        res.sendFile(fullPath)
-        // fs.readFile(fullPath, function(err, contents) {
-        //     console.log(contents.toString('base64').length);
-        //     res.json({mimetype:mimetype, filename:filename, fileData:contents.toString('base64')});
-        // });
-    });
+    getPublicDocDataWithAttachments(knex, "FileAttachments", req.params.fileID)
+    .then(docData => {
+        const fileToSend = docData.fileLink ||  docData.attachments[0].fileLink
+        res.setHeader('Content-type', mime.lookup(fileToSend));
+        res.download(fileToSend, fileToSend.replace(/^.*[\\\/]/, ''))
+         // res.json(docData);
+    })
 })
-//
 // ==========================================================
 router.get('/fetchFile/:fileID', function(req, res) {
     getPublicDocData(knex, req.params.fileID)
@@ -389,18 +335,10 @@ router.get('/Records/NoticesFull/:groupName', function(req, res) {
 });
 // ==========================================================
 router.get('/Records/Notice/:noticeID', function(req, res) {
-        // query = "Select id, recorddesc as description, fileLink as link from PublicRecords where id=" + req.params.noticeID;
-        query = "Select PublicRecords.id, recorddesc as description, fileLink as link, PageText.html, Groups.groupDescription, recordtype "
-        query += " from PublicRecords "
-        query += " left join PageText on PageText.id = PublicRecords.PageTextID "
-        query += " left join Groups on PublicRecords.pageLink = Groups.pageLink "
-        query += " where PublicRecords.id=" + req.params.noticeID;
-        console.log(query);
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('Notices:' + JSON.stringify(rows));
-             res.json(rows);
-         });
+    getPublicDocDataWithAttachments(knex, "FileAttachments", req.params.noticeID)
+    .then(docData => {
+         res.json(docData);
+    })
 });
 // ==========================================================
 router.get('/PublicRecordPage/:pageURL', function(req, res) {
