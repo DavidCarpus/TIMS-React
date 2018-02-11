@@ -24,11 +24,6 @@ var {pullAgendaIDFromDB, getCalendarDataForMonth, getCalendarDataForRange} = req
 
 router.use(cors());
 // ==========================================================
-const cleanURI = (uri) => { // Merge references to parent directories
-    return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
-}
-
-// ==========================================================
 router.get('/Links', function(req, res) {
     pullLinksFromDB(knex)
     .then( toSend => {
