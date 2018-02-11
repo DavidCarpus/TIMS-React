@@ -1,22 +1,17 @@
 var Config = require('../server/config');
 configuration = new Config();
 
-// var addHours = require( 'date-fns/add_hours');
-// var isSameDay = require( 'date-fns/is_same_day');
 const onlyUnique = (value, index, self) => self.indexOf(value) === index;
 const cleanURI = (uri) => { // Merge references to parent directories
     return uri.replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '').replace(/\/[^\/]+\/\.\./, '')
 }
 
 const fullPathFormLink = (link) => {
-    // return "href"+link
     if(link === null) return link
     let fullPath = link;
     if (!fullPath.startsWith('http')) {
         let attachmentPath= configuration.PRIVATE_DIR + '/Attachments/'
         fullPath = attachmentPath + fullPath
-        // fullPath = fullPath.replace('routes','') ;
-        // fullPath = fullPath.replace('//', '/');
     }
     return cleanURI(fullPath)
 }
@@ -68,16 +63,10 @@ function fetchPublicDocsTypes(knex) {
 }
 
 function fetchPublicDocsGroups(knex) {
-// select distinct Groups.pageLink, Groups.groupDescription from PublicRecords
-// left join Groups on Groups.pageLink = PublicRecords.pageLink
     return knex('PublicRecords')
     .leftJoin('Groups','Groups.pageLink', 'PublicRecords.pageLink')
     .distinct(["Groups.pageLink", "Groups.groupDescription  as description"])
     .orderBy("Groups.groupDescription")
-    // .then(results=> {
-    //     console.log('results',results);
-    //     return results.map(rec=>({group:rec.pageLink, description:rec.description}))
-    // })
 }
 
 function fetchPublicDocsYearRange(knex) {
@@ -101,16 +90,9 @@ function fetchPublicDocsDataFromDB(knex, filter, limit=50) {
         .then(types => Object.assign({}, recordData, {types:types} ) ) )
     .then( (recordData)=> fetchPublicDocsGroups(knex)
         .then(groups => Object.assign({}, recordData, {groups:groups} ) ) )
-
 }
 
 function fetchPublicRecordPage(knex, pageURI) {
-    console.log( knex('PublicRecords')
-        .select( ['PublicRecords.id','date','Groups.groupDescription','PublicRecords.recorddesc', 'PageText.html'])
-        .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
-        .leftJoin('PageText','PageText.id', 'PublicRecords.pageTextID')
-        .where({filelink:"/"+pageURI, recordtype:'page'}).toString());
-
     return knex('PublicRecords')
     .select( ['PublicRecords.id','date','Groups.groupDescription','PublicRecords.recorddesc', 'PageText.html'])
     .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
@@ -120,10 +102,7 @@ function fetchPublicRecordPage(knex, pageURI) {
         Object.assign({}, recordData[0],
             {html:makeHrefsOpenNew(recordData[0].html)}
         )
-
-    //     Promise.resolve(JSON.stringify(recordData))
     )
-
 }
 
 function fetchPublicDocsFromDB(knex, filter) {

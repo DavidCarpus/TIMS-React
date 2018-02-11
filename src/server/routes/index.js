@@ -325,30 +325,6 @@ router.get('/EB2Services/:groupName', function(req, res) {
 
 });
 // ==========================================================
-router.get('/Records/DocumentsForMonth/:groupName/:documentType/:year/:month', function(req, res) {
-        console.log("groupName:",req.params.groupName );
-        query = "Select id, recorddesc as description, fileLink as link, date, expiredate from PublicRecords ";
-        query += " where pageLink='"  + req.params.groupName +"' and recordtype='" + req.params.documentType + "'";
-        query += " and year(date)='"  + req.params.year +"' and month(date)='" + req.params.month + "'";
-        console.log("query:",query);
-        simpleDBQuery(query)
-        .then(rows => {
-            // console.log('Documents:' + JSON.stringify(rows));
-            res.json(rows);
-        });
-});
-// ==========================================================
-router.get('/Records/Documents/:groupName', function(req, res) {
-        query = "Select id, viewcount, recorddesc as description, fileLink as link, expiredate, date from PublicRecords ";
-        query += " where pageLink='"  + req.params.groupName +"' and recordtype='Document'";
-
-        simpleDBQuery(query)
-        .then(rows => {
-            // console.log('Documents:' + JSON.stringify(rows));
-            res.json(rows);
-        });
-});
-// ==========================================================
 router.get('/FAQ/:groupName', function(req, res) {
         query = "Select question, answer from FAQ where pageLink='"+ req.params.groupName + "' ";
          simpleDBQuery(query)
@@ -372,7 +348,6 @@ router.get('/Records/NewsDetails/:id', function(req, res) {
 })
 // ==========================================================
 router.get('/Records/News/:groupName', function(req, res) {
-    console.log('req.params.groupName', req.params.groupName);
     pullNewsListForGroup(knex, req.params.groupName)
     .then(records => {
         res.json(records);
@@ -406,10 +381,6 @@ router.get('/Records/NoticesFull/:groupName', function(req, res) {
         query += " where pageLink='" + req.params.groupName +"'";
     }
 
-        // query = "Select id, recorddesc as description, fileLink as link from PublicRecords where pageLink='" + req.params.groupName +"' and recordtype='Notice'";
-        // if (  req.params.groupName == 'Home') {
-        //     query = "Select id, recorddesc as description, fileLink as link from PublicRecords where mainpage=1 and recordtype='Notice'";
-        // }
          simpleDBQuery(query)
          .then(rows => {
             //  console.log('Notices:' + JSON.stringify(rows));
