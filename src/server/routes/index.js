@@ -24,8 +24,6 @@ configuration = new Config();
 const privateDir = configuration.mode === 'development' ? '../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../private/'
 
 // var connection;
-var mysql_pool = require('../libs/db/mysql').mysql_pool;
-
 var {getGroupMeetingDocuments, getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
 var {pullMenusFromDB} = require('../../libs/Menus');
@@ -38,26 +36,6 @@ var {pullAgendaIDFromDB, getCalendarDataForMonth, getCalendarDataForRange} = req
 
 router.use(cors());
 // ==========================================================
-function simpleDBQuery(query){
-    return new Promise(function(resolve, reject) {
-        // console.log('mysql_pool', mysql_pool);
-        mysql_pool.getConnection(function(err, connection) {
-    		if (err) {
-    			connection.release();
-    	  		reject(' Error getting mysql_pool connection: ' + err);
-    	  		throw err;
-    	  	}
-            connection.query(query, function(err, rows){
-                if (err) {
-                    console.log(require('util').inspect(err, { depth: null }));
-                    reject(err)
-                }
-                connection.release();
-                resolve( rows);
-            });
-        })
-    });
-}
 const cleanURI = (uri) => { // Merge references to parent directories
     return uri.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
 }
@@ -75,16 +53,6 @@ router.get('/Menus', function(req, res) {
     .then(groupedMenus =>{
         res.json(groupedMenus);
     })
-});
-// ==========================================================
-router.get('/Asides/:groupName', function(req, res) {
-    var query = "Select id, html as description, link from PageAsides where pageLink= '" +req.params.groupName +"' ";
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('Asides:' + JSON.stringify(rows));
-             res.json(rows);
-         });
-        //  res.json([]);
 });
 // ==========================================================
 router.get('/CalendarEvents/:year/:month', function(req, res) {
@@ -160,32 +128,25 @@ router.get('/fetchFile/:fileID', function(req, res) {
 });
 // ==========================================================
 router.get('/EB2Services/:groupName', function(req, res) {
-        if ( req.params.groupName == 'Home' || (req.params.groupName ==  'TownClerk')) {
-            query = "Select * from ExternalServices where servicetype='EB2Service' ";
-        }else {
-            query = "Select * from ExternalServices where servicetype='EB2Service' and  pageLink= '" + req.params.groupName +"' ";
+    var groupName = req.params.groupName;
+    return dbConn('ExternalServices').select(["*"])
+    .where({'servicetype': 'EB2Service'})
+    .then(data =>
+        if ( groupName === 'Home' || groupName ===  'TownClerk' ){
+            res.json(data);
+        } else {
+            res.json(data.filter(row => row.pageLink));
         }
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('ExternalServices:' + JSON.stringify(rows));
-             res.json(rows);
-         });
-
+    )
 });
 // ==========================================================
 router.get('/FAQ/:groupName', function(req, res) {
-        query = "Select question, answer from FAQ where pageLink='"+ req.params.groupName + "' ";
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('FAQ:' + JSON.stringify(rows));
-             res.json(rows);
-         })
-         .catch(err => {
-             // res.json('Error', JSON.stringify(err))
-             console.log('Fetch data error');
-             console.log(require('util').inspect(err, { depth: null }));
-             res.status(404).json(err);
-         });
+    var groupName = req.params.groupName;
+    return dbConn('FAQ').select(["question", "answer"])
+    .where({'pageLink': groupName})
+    .then(data =>
+        res.json(data);
+    )
 });
 // ==========================================================
 router.get('/Records/NewsDetails/:id', function(req, res) {
