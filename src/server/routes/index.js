@@ -1,29 +1,17 @@
 var express = require('express');
 var router = express.Router();              // get an instance of the express Router
 var cors = require('cors');
-var startOfMonth = require('date-fns/start_of_month')
-var endOfMonth = require('date-fns/end_of_month');
-var startOfWeek = require('date-fns/start_of_week')
-var addWeeks = require('date-fns/add_weeks')
 var addMonths = require('date-fns/add_months')
 
 var knexConfig = require('../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
-var mysql = require('mysql');
 var fs = require('fs');
 var mime = require('mime');
-var marked = require('marked');
-var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-var emailValidate = require("email-validator");
-
-var addDays = require('date-fns/add_days')
 
 var Config = require('../config');
 configuration = new Config();
-const privateDir = configuration.mode === 'development' ? '../../private/'+process.env.REACT_APP_MUNICIPALITY: '../../private/'
 
-// var connection;
 var {getGroupMeetingDocuments, getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
 var {pullMenusFromDB} = require('../../libs/Menus');
@@ -131,22 +119,22 @@ router.get('/EB2Services/:groupName', function(req, res) {
     var groupName = req.params.groupName;
     return dbConn('ExternalServices').select(["*"])
     .where({'servicetype': 'EB2Service'})
-    .then(data =>
+    .then(data =>{
         if ( groupName === 'Home' || groupName ===  'TownClerk' ){
             res.json(data);
         } else {
             res.json(data.filter(row => row.pageLink));
         }
-    )
+    })
 });
 // ==========================================================
 router.get('/FAQ/:groupName', function(req, res) {
     var groupName = req.params.groupName;
     return dbConn('FAQ').select(["question", "answer"])
     .where({'pageLink': groupName})
-    .then(data =>
+    .then(data =>{
         res.json(data);
-    )
+    })
 });
 // ==========================================================
 router.get('/Records/NewsDetails/:id', function(req, res) {
