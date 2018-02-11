@@ -30,6 +30,7 @@ var {getGroupMeetingDocuments, getPublicDocDataWithAttachments, getPublicDocData
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
 var {pullMenusFromDB} = require('../../libs/Menus');
 var {pullGroupData} = require('../../libs/Groups');
+var {pullLinksFromDB} = require('../../libs/Links');
 
 var {submitAlertRequestData} = require('../libs/AlertRequests');
 var {getHomeCalendarDateRange} = require('../libs/date');
@@ -63,60 +64,10 @@ const cleanURI = (uri) => { // Merge references to parent directories
 
 // ==========================================================
 router.get('/Links', function(req, res) {
-    let links = [];
-    console.log(links);
-    links.push({desc:'Contact Us', link:'/ContactUs'})
-    links.push({desc:'Employment', link:'/Employment'})
-
-    let query = "Select datadesc as description, fileLink as link from ListData where listName='HelpfulLinks'";
-    simpleDBQuery(query)
-    .then(rows => {
-        rows.map(row => {
-            links.push({desc: row.description, link:row.link});
-        })
+    pullLinksFromDB(knex)
+    .then( toSend => {
+        res.json(toSend.sort((a,b) =>  (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0) ) );
     })
-    .then(rows => {
-        // console.log('Add Menus from DB');
-        let query = "Select description, pageLink, fullLink as link from Menus";
-        simpleDBQuery(query)
-        .then(rows => {
-            // console.log('rows:', rows);
-            rows.map(row => {
-                let link = row.link;
-                if (row.pageLink.startsWith('http')) {
-                    link = row.pageLink;
-                }
-                links.push({desc: row.description, link:link});
-            })
-        })
-        .then(rows => {
-            return links.sort((a,b) => {
-                return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
-            })
-        })
-        .then(rows => {
-            let query = "Select recorddesc as description, pageLink, fileLink as link from PublicRecords where recordtype='HelpfulInformation'";
-            return simpleDBQuery(query)
-            .then(rows => {
-                rows.map(row => {
-                    links.push({desc: row.description, link:row.link});
-                })
-                return links
-            })
-        })
-        .then(allLinks => {
-            let sorted = allLinks.sort((a,b) => {
-                return (a.desc > b.desc) ? 1 : ((b.desc > a.desc) ? -1 : 0);
-            })
-            // res.status(200).send('<pre>' + JSON.stringify(links, null, 2) + '</pre>');
-            res.json(sorted);
-        })
-    })
-
-    .catch(err => {
-        console.log('HelpfulLinks Err:', err);
-    })
-    // res.json(links);
 });
 // ==========================================================
 router.get('/Menus', function(req, res) {
