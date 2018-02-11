@@ -36,7 +36,8 @@ export default function DefaultDepartment({group, store, loading, id, agendasAnd
             <Col  md={{size:10, push:1}}>
                 <div className="blockSection">
                     <h1 style={{textAlign:'center'}}>{title}</h1>
-                    <RawText id='description' groupPageText={group.pagetext} block='description' />
+                        <RawText id='description' groupPageText={group.pagetext} block='description' />
+                        <RawText id='description' groupPageText={group.pagetext} block='desc' />
                 </div>
 
                 {(groupMembers.length > 0 ) && <GroupMembers group={group}  title={' Contacts'}  showTerm={false} />}

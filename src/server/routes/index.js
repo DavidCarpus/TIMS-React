@@ -29,6 +29,7 @@ var mysql_pool = require('../libs/db/mysql').mysql_pool;
 var {getGroupMeetingDocuments, getPublicDocDataWithAttachments, getPublicDocData, fetchPublicRecordPage, fetchPublicDocsDataFromDB} = require('../../libs/PublicDocs');
 var {pullNewsListForGroup, pullNewsDetailsWithAttachmentMeta} = require('../../libs/News');
 var {pullMenusFromDB} = require('../../libs/Menus');
+var {pullGroupData} = require('../../libs/Groups');
 
 var {submitAlertRequestData} = require('../libs/AlertRequests');
 var {getHomeCalendarDateRange} = require('../libs/date');
@@ -276,132 +277,11 @@ router.get('/Records/Meetings/:groupName', function(req, res) {
 
 // ==========================================================
 router.get('/GroupData/:groupName', function(req, res) {
-        var groupName = req.params.groupName;
-
-        // query = "Select id, datadesc as description from ListData where pageLink='" + groupName + "' and listName='OrganizationalUnits'";
-        query = "Select *, id, groupDescription as description from Groups where pageLink='" + groupName + "'";
-        // console.log(query);
-        var finalResult = simpleDBQuery(query)
-        .then( groupData =>{
-            groupData[0].link = groupName;
-            query = "Select id, html  as text1 from PageText where sectionName='text1' and pageLink='" + groupData[0].link +"'";
-            return simpleDBQuery(query).
-            then(pageTextData => {
-                if (pageTextData.length > 0) {
-                    groupData[0].pagetext = groupData[0].pagetext? groupData[0].pagetext: [];
-                    groupData[0].pagetext.push(pageTextData[0])
-                }
-                return groupData[0];
-            })
-        })
-        .then( groupDataWithText =>{
-            // console.log(Object.keys(groupDataWithText));
-            query = "Select id, html  as description from PageText where sectionName='desc' and pageLink='" + groupDataWithText.link +"'";
-            // console.log('Appending desc query?: ', query);
-            return simpleDBQuery(query).
-            then(pageDescriptionData => {
-                // console.log('Appending desc data?');
-                if (pageDescriptionData.length > 0) {
-                    // console.log('Appending desc data');
-                    groupDataWithText.pagetext = groupDataWithText.pagetext? groupDataWithText.pagetext: [];
-                    groupDataWithText.pagetext.push(pageDescriptionData[0])
-                }
-                return groupDataWithText;
-            })
-        })
-
-        .then(groupDataWithPageText =>{
-            // query = "Select id,name,term,phone, email, office from GroupMembers where pageLink='" + groupDataWithPageText.link +"' ";
-            query = "Select GroupMembers.id, concat(firstName, ' ', lastName) as name ,term,Users.phone, Users.emailAddress as email, GroupMembers.office from GroupMembers " +
-            " left Join Groups on Groups.id = GroupMembers.groupID " +
-            " left Join Users on Users.id = GroupMembers.userID " +
-            " where Groups.pageLink='" + groupDataWithPageText.link +"' ";
-            // console.log(query);
-            return simpleDBQuery(query).
-            then(members => {
-                if (members.length > 0) {
-                    groupDataWithPageText.members = members;
-                }
-                return groupDataWithPageText;
-            })
-        })
-        .then(groupData =>{
-            query = "Select id, datatext as wasteType from ListData where pageLink='" + groupData.link +"' and listName='WasteTypes'";
-            return simpleDBQuery(query).
-            then(wasteTypes => {
-                return Promise.all( wasteTypes.map(wasteType => {
-                    query = "Select datatext as rule from ListData where listParentID='" + wasteType.id + "' and listName='WasteTypesRules'";
-                    return simpleDBQuery(query).
-                    then(rules => {
-                        var ruleStringArray = rules.map(  rule => {
-                            return rule.rule;
-                        });
-                            wasteType.rules = ruleStringArray;
-                            return wasteType;
-                    })
-                }) // map wasteTypes
-            ) //  Promise All
-            .catch(err => {
-                // res.json('Error', JSON.stringify(err))
-                console.log('Fetch WasteTypesRules error', JSON.stringify(err));
-                res.status(404).json(err);
-            })
-        })
-        .then(wasteTypesWithRules =>{
-            if (wasteTypesWithRules.length > 0) {
-                groupData.wastetypes = wasteTypesWithRules;
-            }
-            return groupData
-        })
-    })
-    .then(groupDataWithWasteTypes =>{
-        query = "Select id, recorddesc as description,fileLink from PublicRecords where pageLink='"  + groupDataWithWasteTypes.link +"' and recordtype='Newsletter'";
-        return simpleDBQuery(query).
-        then(newsletters => {
-            if (newsletters.length > 0) {
-                groupDataWithWasteTypes.newsletters = newsletters;
-            }
-            return groupDataWithWasteTypes;
-        })
-        .catch(err => {
-            // res.json('Error', JSON.stringify(err))
-            console.log('Fetch newsletters error', JSON.stringify(err));
-            res.status(404).json(err);
-        })
-    })
-    .then(groupDataWithNewsletters =>{
-        query = "Select id, recorddesc as description,fileLink from PublicRecords where pageLink='"  +
-            groupDataWithNewsletters.link +"' and (recordtype='HelpfulInformation' or recordtype='Page')";
-        return simpleDBQuery(query).
-        then(helpfulinformation => {
-            if (helpfulinformation.length > 0) {
-                groupDataWithNewsletters.helpfulinformation = helpfulinformation;
-            }
-            return groupDataWithNewsletters;
-        })
-    })
-    .then(groupData =>{
-        if (groupData.link == 'PublicWorks' || groupData.link == 'TransferStationRules') {
-            query = "Select id, pricedesc as description, price from Prices";
-            return simpleDBQuery(query).
-            then(feeschedule => {
-                if (feeschedule.length > 0) {
-                    groupData.feeschedule = feeschedule;
-                }
-                return groupData;
-            })
-        } else {
-            return groupData;
-        }
-    })
-    .then(final => {
-        // res.status(200).send('<pre>' + JSON.stringify(final, null, 2) + '</pre>');
-        res.json(final);
-    } )
-    .catch(err => {
-        // res.json('Error', JSON.stringify(err))
-        console.log('Fetch group data error', JSON.stringify(err));
-        res.status(404).json(err);
+    var groupName = req.params.groupName;
+    pullGroupData(knex, groupName)
+    .then( toSend => {
+        // console.log('toSend',toSend);
+        res.json(toSend);
     })
 });
 

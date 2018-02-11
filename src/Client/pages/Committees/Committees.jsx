@@ -32,6 +32,7 @@ export default class Committees extends React.Component {
         if (this.props.documents.length > 0 ) {
             pageNavMenus = addMenu(pageNavMenus, {text:'Docs', target:'DocumentList-bookmark', fontAwsomeIcon:'fa-file-text'});
         }
+        // console.log('this.props.groupPageText', this.props.groupPageText);
 
         return (
                 <Row id='Committees'>
@@ -42,6 +43,7 @@ export default class Committees extends React.Component {
                                 <h1 style={{textAlign:'center'}}>{this.props.groupLabel}</h1>
 
                                 <RawText groupPageText={this.props.groupPageText} block='description' />
+                                <RawText groupPageText={this.props.groupPageText} block='desc' />
                                 <RawText groupPageText={this.props.groupPageText} block='text1' />
                             </div>
 

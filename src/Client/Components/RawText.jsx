@@ -1,30 +1,19 @@
 import React from 'react';
 
 export default function RawText({groupPageText, block }){
-    var rawText = ''
-    if (groupPageText ) {
-        if (Array.isArray(groupPageText)) {
-            rawText = groupPageText.filter(item => typeof item[block] !== 'undefined')[0];
-            if (typeof rawText !== 'undefined') {
-                rawText = rawText[block]
-                rawText =  {__html: rawText}
-            }
-        } else {
-            // console.log("groupPageText:", groupPageText);
-            if (block in groupPageText) {
-                rawText =groupPageText[block];
-                rawText =  {__html: rawText}
-            }
-        }
-    }
+    if(groupPageText === null || typeof groupPageText === 'undefined') return null
 
-    if (rawText) {
-        return (
-            <p  dangerouslySetInnerHTML={rawText} ></p>
-        )
-    }else {
-        return (
-            <p></p>
-        )
+    var rawText = ''
+    if (Array.isArray(groupPageText)) {
+        const blockData = groupPageText.filter(item => item.sectionName === block);
+        if (blockData.length > 0) {
+            rawText = blockData[0].html
+            rawText =  {__html: rawText}
+            return (<p  dangerouslySetInnerHTML={rawText} ></p>)
+        }
+    } else {
+        console.log("groupPageText not array:", groupPageText);
+        return (<p></p>)
     }
+    return null
 }
