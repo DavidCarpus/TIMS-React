@@ -300,47 +300,6 @@ router.get('/Records/News/:groupName', function(req, res) {
     });
 })
 // ==========================================================
-router.get('/Records/Notices/:groupName', function(req, res) {
-        query   = "Select id, recorddesc as description, fileLink as link, recordtype, date, expiredate, pageLink from PublicRecords "
-        if (  req.params.groupName == 'Home') {
-            query += " where mainpage=1 ";
-        } else {
-            query += " where pageLink='" + req.params.groupName +"'";
-        }
-
-        query += " and (recordtype='Notice' or recordtype='RFP')";
-        query += "  and (isnull(expiredate) or date(expiredate) > date(now()) ) ";
-        // query += " and (expiredate is null or expiredate > now() ) ";
-// console.log('Records/Notice:query:', query);
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('Notices:' + JSON.stringify(rows));
-             res.json(rows);
-         });
-});
-// ==========================================================
-router.get('/Records/NoticesFull/:groupName', function(req, res) {
-    query   = "Select id, recorddesc as description, fileLink as link, recordtype,date, expiredate from PublicRecords "
-    if (  req.params.groupName == 'Home') {
-        query += " where mainpage=1 ";
-    } else {
-        query += " where pageLink='" + req.params.groupName +"'";
-    }
-
-         simpleDBQuery(query)
-         .then(rows => {
-            //  console.log('Notices:' + JSON.stringify(rows));
-             res.json(rows);
-         });
-});
-// ==========================================================
-router.get('/Records/Notice/:noticeID', function(req, res) {
-    getPublicDocDataWithAttachments(knex, "FileAttachments", req.params.noticeID)
-    .then(docData => {
-         res.json(docData);
-    })
-});
-// ==========================================================
 router.get('/PublicRecordPage/:pageURL', function(req, res) {
     // console.log('req.query', req.params);
     fetchPublicRecordPage(knex, req.params.pageURL)
