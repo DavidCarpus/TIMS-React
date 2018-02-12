@@ -18,6 +18,9 @@
         text-align: center;
         color: $baseFontColor;
         background-color: $baseBackgroundSolid;
+        i {
+            padding-top: 0.5em;
+        }
     }
     .hoverable .hover {
         display:none;
