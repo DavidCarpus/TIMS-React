@@ -6,6 +6,7 @@ const mapStateToProps = (state, ownProps) => {
     const newsData = (ownProps.limit > 0)? ownProps.news.slice(0,ownProps.limit): ownProps.news
     return {
         newsData: newsData,
+        totalCount:ownProps.news.length,
         title: ownProps.title || 'NewsListing',
         loading: state.FAQ.loading,
         groupName: ownProps.groupName,

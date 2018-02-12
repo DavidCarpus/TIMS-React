@@ -1,15 +1,14 @@
 import React from 'react';
  import  './GroupMembers.css'
 
-function memberBlock(member, index, cols){
-    return (
-        <div key={index} className="memberBlock">
-            {cols.map((col, colNum) =>
-                <div key={colNum} className={col.toLowerCase()}>{member[col.toLowerCase()]}&nbsp;</div>)}
-        </div>
-    )
-}
-function addressBlock(addressstr) {
+const memberBlock=(member, index, cols) => (
+    <div key={index} className="memberBlock">
+        {cols.map((col, colNum) =>
+            <div key={colNum} className={col.toLowerCase()}>{member[col.toLowerCase()]}&nbsp;</div>)}
+    </div>
+)
+
+const addressBlock = (addressstr) => {
     if (typeof addressstr === 'undefined' || addressstr.length === 0) {        return(null);    }
     let addressElements =  addressstr.split('\n');
     return (
