@@ -1,10 +1,6 @@
 import React from 'react';
  import  './PageNavbar.css'
- import {
-     NavLink,
-     NavItem,
-     Nav,
- } from 'reactstrap';
+ import { NavLink, NavItem, Nav,} from 'reactstrap';
 
 export function addMenu(currentMenus, newMenu) {
      const matchText = (text, menu) => menu.text === text;

@@ -2,12 +2,10 @@ import GroupMembersUI from './GroupMembers'
  import { connect } from 'react-redux'
 
 const mapStateToProps = (state, ownProps) => {
-    const  members = ownProps.group.members || []
-    const showTerm= typeof ownProps.showTerm !== 'undefined' ? ownProps.showTerm :false
   return {
-      members: members,
+      members: ownProps.group.members || [],
       loading: state.OrganizationalUnits.loading,
-      showTerm: showTerm,
+      showTerm: typeof ownProps.showTerm !== 'undefined' ? ownProps.showTerm :false,
       hourstr: ownProps.group.hours || '',
       addressstr: ownProps.group.address || '',
   };
