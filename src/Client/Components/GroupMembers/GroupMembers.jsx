@@ -37,7 +37,7 @@ function hourBlock(hourstr) {
 }
 
 
-export default function GroupMembers({groupName, title, members, loading, addressstr, hourstr, groupEmail, showTerm=true, showEmail}){
+export default function GroupMembers({groupName, title, members, loading, addressstr, hourstr, groupEmail, showTerm=true, showEmail=false}){
     if ( loading) {         return (<div>Loading</div>)     }
     if (members.length === 0) {        return(null);    }
 
