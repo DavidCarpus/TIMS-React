@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import NewsDetailsUI from './NewsDetails'
-import {fetchNewsList} from '../../actions/News'
 
 const mapStateToProps = (state, ownProps) => {
     const stateData = state.NewsData
@@ -14,11 +13,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 }
 const mapDispatchToProps = (dispatch) => {
-  return {
-      fetchNewsList: (groupName) => {
-          dispatch(fetchNewsList(groupName))
-     },
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsDetailsUI);

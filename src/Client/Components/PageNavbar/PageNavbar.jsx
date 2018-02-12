@@ -6,9 +6,6 @@ import React from 'react';
      Nav,
  } from 'reactstrap';
 
- // if (this.props.notices.length > 0 && pageNavMenus.filter(menu => matchText('Notices',menu)).length  === 0 ) {
- //     pageNavMenus.push({text:'Notices', target:'Notices-bookmark', fontAwsomeIcon:'fa-bell'},);
- // }
 export function addMenu(currentMenus, newMenu) {
      const matchText = (text, menu) => menu.text === text;
      if (currentMenus.filter(menu => matchText(newMenu.text,menu)).length  === 0 ) {
