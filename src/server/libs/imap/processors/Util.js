@@ -49,8 +49,8 @@ function expireableMessageData(groupNames, message, textLines){
         subject:message.header.subject,
         body:message.bodyData.trim().split('\n'),
         groupName:groupNames.reduce( (acc,val)=> val !== null? val:acc),
-        attachmentCount: message.attachmentPromises.length,
-        attachmentPromises: message.attachmentPromises
+        attachmentCount: message.attachments && message.attachments.length,
+        attachments: message.attachments
         // action: 'ADD',
     }
 }
