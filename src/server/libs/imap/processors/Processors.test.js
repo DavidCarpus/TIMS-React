@@ -5,6 +5,9 @@ const GroupDocuments = require('./GroupDocuments').default
 const GroupHelpfulInformation = require('./GroupHelpfulInformation').default
 const Notices = require('./Notices').default
 
+const {     senderAuthenticate, emailFromEnvBlock} = require('./Util')
+
+const logUnprocessedEmails = false
 
 const processors = [
     new AlertRequests(),
@@ -23,6 +26,9 @@ function processData(testData) {
             return processor.validData(testCase)
             .then(valid => {
                 if(valid){
+                    if(processor.requiresAuthentication(testCase) && !senderAuthenticate(testCase)){
+                        return Promise.resolve({processor:processor.name, error:"Invalid Sender", testCase:testCase})
+                    }
                     return processor.processMessage(testCase)
                     .then(processorResults => {
                         return {processor:processor.name,
@@ -34,21 +40,21 @@ function processData(testData) {
                 }
                 return Promise.resolve({processor:processor.name, testCase:testCase})
             })
+            .catch(err=> {
+                return Promise.resolve({processor:processor.name, error:err, testCase:testCase})
+            })
         }))
-        .catch(err=> {
-            console.log('Err in ', testCase, '\n***', err);
-        })
     }))
     .then(processResults =>{
         const processed = (testCaseResults)=> testCaseResults.filter(r=>r.results).length > 0
         const unprocessed = (testCaseResults)=> !processed(testCaseResults)
-        const unprocessedResults = processResults.filter(unprocessed).map(entry=> entry[0].testCase )
-        const processedResults = processResults.filter(processed).map(entry=> entry.filter(e=>e.results))
-        // return 1
-        // return {unprocessedResults:unprocessedResults}
-        return {processedResults:processedResults, unprocessedResults:unprocessedResults}
+        const badMessage = (testCaseResults)=> testCaseResults.filter(r=>r.error).length > 0
 
-        // return processResults
+        return {
+            processedResults:processResults.filter(processed).map(entry=> entry.filter(e=>e.results)),
+            unprocessedResults:processResults.filter(unprocessed).map(entry=> entry[0].testCase ),
+            badMessages:processResults.filter(badMessage).map(entry=> entry.filter(e=>e.error))
+        }
     })
 }
 //=======================================================
@@ -60,13 +66,19 @@ if (require.main === module) {
         processData(testData)
         .then(complete => {
             console.log(require('util').inspect(complete.processedResults, { depth: null, colors:true }));
-            // console.log(require('util').inspect(complete.unprocessedResults, { depth: null, colors:true }));
-            if(complete.unprocessedResults.length > 0){
+
+            if(logUnprocessedEmails && complete.unprocessedResults.length > 0){
                 console.log('***************');
                 console.log('unprocessedResults');
                 console.log(complete.unprocessedResults);
+                // console.log(require('util').inspect(complete.unprocessedResults, { depth: null, colors:true }));
                 console.log('***************');
             }
+            const errors = complete.badMessages.map(message=>({error:message[0].error, from:emailFromEnvBlock(message[0].testCase.header.from) }))
+            if(errors.length > 0){
+                console.log('badMessages:', require('util').inspect(errors, { depth: null, colors:true }));
+            }
+
             return process.exit()
         }
         )

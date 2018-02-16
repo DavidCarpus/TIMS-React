@@ -1,7 +1,11 @@
 var addMonths = require('date-fns/add_months')
 var addDays = require('date-fns/add_days')
+var Config = require('../../../config'),
+configuration = new Config();
 
 let loadedGroupNames=[]
+
+const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
 function loadGroupNames() {
     if(loadedGroupNames.length === 0){
@@ -49,8 +53,8 @@ function expireableMessageData(groupNames, message, textLines){
         subject:message.header.subject,
         body:message.bodyData.trim().split('\n'),
         groupName:groupNames.reduce( (acc,val)=> val !== null? val:acc),
-        attachmentCount: message.attachments && message.attachments.length,
-        attachments: message.attachments
+        attachmentCount: message.attachments ? message.attachments.length:0,
+        attachments: message.attachments || []
         // action: 'ADD',
     }
 }
@@ -103,6 +107,18 @@ function getGroupNameFromTextLine(textLine) {
     })
 }
 
+function senderAuthenticate(message) {
+    const thisEmalHost = configuration.imapProcess.imapcredentials.user.replace(/.*@/,'')
+    if(message.header.from[0].host.toUpperCase() === thisEmalHost.toUpperCase()){
+        return true
+    }
+    // if(message.header.from[0].mailbox.toUpperCase() === 'DAVID.CARPUS'){
+    //     return true
+    // }
+    // console.log('sender', message.header.from[0]);
+    return false
+}
+
 if (require.main === module) {
     // getGroupNameFromTextLine("BoardofSelectmen")
     // console.log('extractExpirationDateFromLine', extractExpirationDateFromLine(new Date(), 'Expires 20'));
@@ -128,3 +144,5 @@ module.exports.extractExpirationDateFromLine = extractExpirationDateFromLine
 module.exports.extractDateFromLines = extractDateFromLines
 module.exports.mainPageFlagSet = mainPageFlagSet
 module.exports.expireableMessageData = expireableMessageData
+module.exports.senderAuthenticate = senderAuthenticate
+module.exports.emailFromEnvBlock = emailFromEnvBlock
