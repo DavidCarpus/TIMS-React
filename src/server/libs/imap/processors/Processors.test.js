@@ -32,7 +32,6 @@ function processData(testData) {
                     return processor.processMessage(testCase)
                     .then(processorResults => {
                         return {processor:processor.name,
-                            requiresAuthentication:processor.requiresAuthentication(testCase),
                             results:processorResults,
                             from:testCase.header.from
                         }
