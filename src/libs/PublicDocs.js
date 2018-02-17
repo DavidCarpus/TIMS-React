@@ -283,3 +283,4 @@ module.exports.getPublicDocData = getPublicDocData;
 module.exports.getPublicDocDataWithAttachments = getPublicDocDataWithAttachments;
 module.exports.getGroupMeetingDocuments = getGroupMeetingDocuments;
 module.exports.logGroupDocumentRecord = logGroupDocumentRecord;
+module.exports.logHelpfulInformationRecord = logHelpfulInformationRecord;

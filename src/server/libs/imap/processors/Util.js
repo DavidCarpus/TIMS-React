@@ -95,7 +95,25 @@ function extractExpirationDateFromLine(baseDate, line) {
     }
     return new Date(Date.parse(remainder))
 }
+//==========================================
+function getURLLinkFromTextLine(textLine) {
+    const linkStartIndex = textLine.trim().toUpperCase().indexOf('HTTP')
+    if(linkStartIndex >= 0){
+        const url = textLine.slice(linkStartIndex)
+        if(url.indexOf(' ') > 0)
+        return url.slice(0, url.indexOf(' '))
 
+        return url
+    }
+    return null
+}
+//==========================================
+function getURLFromTextLine(textLine) {
+    const link = getURLLinkFromTextLine(textLine)
+    const desc = textLine.replace(link, '').trim()
+    return {link:link, desc:desc}
+}
+//==========================================
 function getGroupNameFromTextLine(textLine) {
     let testLine = textLine.toUpperCase().split(' ').join(''); // Remove spaces from the line
     return loadGroupNames()
@@ -153,6 +171,10 @@ if (require.main === module) {
     // console.log('extractExpirationDateFromLine', extractExpirationDateFromLine(new Date(), 'Expires 20 days'));
     // console.log('extractExpirationDateFromLine:addMonths:', extractExpirationDateFromLine(new Date(), 'Expires ' + addMonths(new Date(), 1)));
 
+    console.log('getURLFromTextLine', getURLFromTextLine('Some description for a web link to a file http://google.com/SomePath/To/Some/File.pdf'));
+    console.log('getURLFromTextLine', getURLFromTextLine('http://google.com/SomePath/To/Some/PostDescFile.pdf Some POST description of a link'));
+    console.log('getURLFromTextLine', getURLFromTextLine('http://google.com/SomePath/To/Some/NoDesc.pdf'));
+
     // console.log(require('util').inspect(extractPossibleDatesFromLine('2017-09-25'), { depth: null }));
     // console.log(require('util').inspect(extractPossibleDatesFromLine('Expires 2017-09-25'), { depth: null }));
     // console.log(require('util').inspect(mainPageFlagSet(['mainpage']), { depth: null }));
@@ -175,3 +197,4 @@ module.exports.expireableMessageData = expireableMessageData
 module.exports.senderAuthenticate = senderAuthenticate
 module.exports.emailFromEnvBlock = emailFromEnvBlock
 module.exports.moveAttachments = moveAttachments
+module.exports.getURLFromTextLine = getURLFromTextLine

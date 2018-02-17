@@ -1,7 +1,14 @@
 const {
     getGroupNameFromTextLine,
     expireableMessageData,
+    getURLFromTextLine,
 } = require('./Util')
+
+var logHelpfulInformationRecord = require('../../../../libs/PublicDocs').logHelpfulInformationRecord;
+
+var knexConfig = require('../../../libs/db/knexfile.js')
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
+
 
 //==============================================
 class Processor {
@@ -35,8 +42,39 @@ function validData(message) {
     })
 }
 //==============================================
+function getLinks(bodyTextLines) {
+    const links = bodyTextLines.map(getURLFromTextLine).filter(line=>line!==null)
+    if(links.length > 0 ){
+        if(bodyTextLines.length > links.length ){
+            // TODO:
+            const TODO = 'Fetch descriptions from other lines'
+            console.log(TODO);
+            throw new Error(TODO)
+        }
+    }
+    const results = links.map(link=>{
+        if(link.desc !== null && link.desc.length > 0) return link
+        return Object.assign(link, {desc:link.link.slice(link.link.lastIndexOf('/')+1)})
+    })
+    return results
+}
+//==============================================
 function processMessage(message) {
     return extractRequestFromEmail(message)
+    .then(messageData=> Promise.all(getLinks(messageData.body).map(link=> {
+        const record = {
+            pageLink:messageData.groupName,
+            date:messageData.date || messageData.submitDate,
+            expiredate:messageData.expires,
+            recordType: "HelpfulInformation",
+            fileLink: link.link,
+            recorddesc:link.desc.length > 0? link.desc: null,
+            mainpage: messageData.mainpage,
+        }
+        // console.log('messageData', record);
+        // return Promise.resolve(record)
+        return logHelpfulInformationRecord(knex, record)
+    })))
 }
 //==============================================
 function extractRequestFromEmail(message) {
