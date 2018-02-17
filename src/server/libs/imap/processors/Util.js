@@ -21,7 +21,7 @@ function loadGroupNames() {
     }
     return Promise.resolve(loadedGroupNames)
 }
-
+//==========================================
 function extractPossibleDatesFromLine(line) {
     const dateExpressions = [
         /(\d\d\d\d)-(\d\d)-(\d\d)/,
@@ -48,6 +48,7 @@ function extractPossibleDatesFromLine(line) {
     return dateMatches
 }
 
+//==========================================
 function expireableMessageData(groupNames, message, textLines){
     const submitDate = new Date(message.header.date)
     const baseDate =  extractDateFromLines(textLines)
@@ -65,9 +66,8 @@ function expireableMessageData(groupNames, message, textLines){
         // action: 'ADD',
     }
 }
-
+//==========================================
 function mainPageFlagSet(lines) {
-    // console.log('mainPageFlagSet');
     return lines.reduce( (acc,val)=> {
         if(val.toUpperCase().indexOf('MAINPAGE') >= 0){
             if (val.trim().length === 'MAINPAGE'.length) acc=acc||true
@@ -78,15 +78,14 @@ function mainPageFlagSet(lines) {
         return acc
     }, false)
 }
-
-
+//==========================================
 function extractDateFromLines( lines) {
     const potentialDates = lines.filter(line=> line.toUpperCase().indexOf('EXPIRES') === -1 )
     .map(extractPossibleDatesFromLine)
     .filter(possibles=>possibles.length > 0)
     return (potentialDates.length > 0 && potentialDates[0].length > 0) ? potentialDates[0][0]: null
 }
-
+//==========================================
 function extractExpirationDateFromLine(baseDate, line) {
     if(line.toUpperCase().indexOf('EXPIRES') === -1 ) return null
     const remainder = line.toUpperCase().replace('EXPIRES', '')
@@ -145,7 +144,9 @@ function senderAuthenticate(message) {
     // console.log('sender', message.header.from[0]);
     return false
 }
-
+//==========================================
+//==========================================
+//==========================================
 if (require.main === module) {
     // getGroupNameFromTextLine("BoardofSelectmen")
     // console.log('extractExpirationDateFromLine', extractExpirationDateFromLine(new Date(), 'Expires 20'));
