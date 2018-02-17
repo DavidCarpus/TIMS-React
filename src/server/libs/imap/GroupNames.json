@@ -17,5 +17,5 @@
     {"primary":"EconomicDevelopment", "alternatives":["Economic Development"]},
     {"primary":"PlanningBoard", "alternatives":["PlanningBoard"]},
     {"primary":"Recreation", "alternatives":["Recreation", "Rec"]},
-    {"primary":"Selectmen", "alternatives":["Selectmen", "BOS"]}
+    {"primary":"BoardofSelectmen", "alternatives":["Selectmen", "BOS"]}
 ]
