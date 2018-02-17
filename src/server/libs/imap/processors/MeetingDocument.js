@@ -4,7 +4,13 @@ const {
     extractExpirationDateFromLine,
     mainPageFlagSet,
     expireableMessageData,
+    moveAttachments,
 } = require('./Util')
+
+var logGroupDocumentRecord = require('../../../../libs/PublicDocs').logGroupDocumentRecord;
+
+var knexConfig = require('../../../libs/db/knexfile.js')
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 class Processor {
     constructor(){
@@ -23,6 +29,8 @@ module.exports = {
 }
 //==============================================
 //==============================================
+const jsUcfirst=(string) => string.charAt(0).toUpperCase() + string.slice(1);
+//==============================================
 function requiresAuthentication(message){
     return true
 }
@@ -36,8 +44,35 @@ function validData(message) {
     })
 }
 //==============================================
+function getAttachmentDestinationPath(message, filename) {
+    const keyDate = message.date || message.submitDate
+    return `${jsUcfirst(message.documentType.toLowerCase())}/${keyDate.getUTCFullYear()}/`+
+        `${message.groupName}_${keyDate.getUTCFullYear()}_${keyDate.getUTCMonth()+1}_${keyDate.getDate()}.${filename.replace(/.*\./,'')}`
+}
+//==============================================
+//==============================================
 function processMessage(message) {
     return extractRequestFromEmail(message)
+    .then(messageData=> {
+        return moveAttachments(getAttachmentDestinationPath, messageData)
+        .then( attachmentLocations => {
+            messageData.attachmentLocations = attachmentLocations
+            return messageData
+        })
+        .then(readyForDB=> Promise.all(readyForDB.attachmentLocations.map(location=> {
+            const record = {
+                pageLink:readyForDB.groupName,
+                date:readyForDB.date || readyForDB.submitDate,
+                expiredate:readyForDB.expires,
+                recordType: jsUcfirst(readyForDB.documentType.toLowerCase()),
+                fileLink: location.relativePath,
+                recorddesc:location.description || jsUcfirst(readyForDB.documentType.toLowerCase()),
+                mainpage: readyForDB.mainpage,
+            }
+            return logGroupDocumentRecord(knex, record);
+        })))
+    })
+
 }
 //==============================================
 function getDocumentTypeFromLines(lines) {
