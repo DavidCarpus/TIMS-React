@@ -3,10 +3,17 @@ var addDays = require('date-fns/add_days')
 var Config = require('../../../config'),
 configuration = new Config();
 
+var getServerFilePath = require('../../../serverIO').getServerFilePath;
+var pullNewServerDirs = require('../../../serverIO').pullNewServerDirs;
+var getSourceServerHost = require('../../../serverIO').getSourceServerHost;
+var pushFileToServer = require('../../../serverIO').pushFileToServer;
+
 let loadedGroupNames=[]
 
+const mergeArrays = (arrays) => [].concat.apply([], arrays)
 const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
+//==========================================
 function loadGroupNames() {
     if(loadedGroupNames.length === 0){
         // console.log(' *** loading GroupNames');
@@ -106,7 +113,27 @@ function getGroupNameFromTextLine(textLine) {
         return foundGroup.length > 0 ? foundGroup[0].primary: null;
     })
 }
+//==========================================
+function moveAttachments(getDestinationPath, message  ) {
+    return pullNewServerDirs(getServerFilePath(), ['Documents'] )
+    .then( serverDirs => {
+        let allPaths= mergeArrays(serverDirs)
+        const notOnServer = (attachment) => !allPaths.includes(getDestinationPath(message, attachment.filename))
 
+        const toPush = message.attachments.filter(notOnServer)
+
+        return Promise.all(toPush.map(attachment => {
+            const dest = getDestinationPath(message, attachment.filename)
+            return pushFileToServer(attachment.tmpPath, getServerFilePath()+ dest , true)
+            .then( pushReq => attachment)
+            .catch(err => console.log(err, attachment))
+        }))
+    })
+    .then(pushedFiles=> {
+        return message.attachments.map(attachment => ({ filename:attachment.filename , relativePath: getDestinationPath(message, attachment.filename)}))
+    })
+}
+//==========================================
 function senderAuthenticate(message) {
     const thisEmalHost = configuration.imapProcess.imapcredentials.user.replace(/.*@/,'')
     if(message.header.from[0].host.toUpperCase() === thisEmalHost.toUpperCase()){
@@ -146,3 +173,4 @@ module.exports.mainPageFlagSet = mainPageFlagSet
 module.exports.expireableMessageData = expireableMessageData
 module.exports.senderAuthenticate = senderAuthenticate
 module.exports.emailFromEnvBlock = emailFromEnvBlock
+module.exports.moveAttachments = moveAttachments

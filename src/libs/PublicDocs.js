@@ -15,6 +15,36 @@ const fullPathFromLink = (link) => {
     return cleanURI(fullPath)
 }
 //=================================================
+function logGroupDocumentRecord(knexConnection, entry) {
+    return logPublicRecordInsertOnly(knexConnection, entry)
+}
+//=================================================
+function logHelpfulInformationRecord(knexConnection, entry) {
+    return logPublicRecordInsertOnly(knexConnection, entry)
+}
+//=================================================
+function logPublicRecordInsertOnly(knexConnection, entry) {
+    // console.log('logPublicRecordInsertOnly',entry);
+    return knexConnection('PublicRecords').select('*').where({fileLink:entry.fileLink})
+    .then(results => {
+        if (results.length === 0) {
+            // console.log('logPublicRecordInsertOnly:Inserting.',entry);
+            return knexConnection("PublicRecords").insert(entry)
+            .then(results => {
+                entry.id = results[0];
+                return Promise.resolve(entry);
+            })
+            .catch(err => {
+                return Promise.reject(err);
+            })
+        } else {
+            // console.log('logPublicRecordInsertOnly:Already exists.',entry);
+            entry.id = results[0];
+            return Promise.resolve(entry);
+        }
+    })
+}
+//=================================================
 function getPublicDocDataWithAttachments(dbConn, keyField = "PublicRecords", key) {
     let query=null
     const fieldList = [
@@ -252,3 +282,4 @@ module.exports.fetchPublicRecordPage = fetchPublicRecordPage;
 module.exports.getPublicDocData = getPublicDocData;
 module.exports.getPublicDocDataWithAttachments = getPublicDocDataWithAttachments;
 module.exports.getGroupMeetingDocuments = getGroupMeetingDocuments;
+module.exports.logGroupDocumentRecord = logGroupDocumentRecord;

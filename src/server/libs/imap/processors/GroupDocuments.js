@@ -2,7 +2,13 @@ const {
     extractDateFromLines,
     getGroupNameFromTextLine,
     expireableMessageData,
+    moveAttachments,
 } = require('./Util')
+
+var logGroupDocumentRecord = require('../../../../libs/PublicDocs').logGroupDocumentRecord;
+
+var knexConfig = require('../../../libs/db/knexfile.js')
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
@@ -36,8 +42,36 @@ function validData(message) {
     })
 }
 //==============================================
+function getAttachmentDestinationPath(message, filename) {
+    return `Documents/${message.groupName}_${message.submitDate.getUTCFullYear()}_${message.submitDate.getUTCMonth()+1}_${filename}`
+}
+//==============================================
 function processMessage(message) {
     return extractRequestFromEmail(message)
+    .then(messageData=> {
+        return moveAttachments(getAttachmentDestinationPath, messageData)
+        .then( attachmentLocations => {
+            messageData.attachmentLocations = attachmentLocations
+            return messageData
+        })
+        .then(readyForDB=> {
+            delete readyForDB.body
+            delete readyForDB.attachmentCount
+            delete readyForDB.attachments
+
+            return Promise.all(readyForDB.attachmentLocations.map(location=> {
+                return logGroupDocumentRecord(knex, {
+                    pageLink:readyForDB.groupName,
+                    date:readyForDB.date || readyForDB.submitDate,
+                    expiredate:readyForDB.expires,
+                    recordType: "Document",
+                    fileLink: location.relativePath,
+                    recorddesc:location.description || location.filename,
+                    mainpage: readyForDB.mainpage,
+                });
+            }))
+        })
+    })
 }
 //==============================================
 function extractRequestFromEmail(message) {
