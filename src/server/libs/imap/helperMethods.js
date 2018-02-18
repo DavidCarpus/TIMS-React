@@ -1,6 +1,6 @@
 
 const groupNames = require('./GroupNames.json');
-let cellCarriers = require('../AlertRequests/cellCarriers.json')
+let cellCarriers = require('../../../libs/AlertRequests/cellCarriers.json')
 
 //=======================================
 function extractHeaderData(email) {

@@ -137,13 +137,12 @@ function _sendEmail(
                 reject(error);
             }else{
                 // console.log('info',info);
-                resolve('Message sent: ' + emailAddresses);
+                resolve({messageSent: emailAddresses, messageId:info.messageId});
             }
         });
     })
     .then(info => {
-        console.log('Emailed :' , emailAddresses , '-', emailContent.subject )
-        return Promise.resolve(emailContent);
+        return Promise.resolve({emailContent:emailContent, messageId:info.messageId});
     })   // if successful
     .catch(err => {
         console.log('sendAutomationEmail error');

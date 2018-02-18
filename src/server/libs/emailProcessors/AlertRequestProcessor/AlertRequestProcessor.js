@@ -4,7 +4,8 @@ var fs = require('fs');
 var Config = require('../../../config'),
 configuration = new Config();
 
-let cellCarriers = require('../../AlertRequests/cellCarriers.json')
+let cellCarriers = require('../../../../libs/AlertRequests/cellCarriers.json')
+
 
 // var knexConfig = require('../../db/knexfile.js')
 // var knex = require('knex')(knexConfig[configuration.mode]);
@@ -14,7 +15,7 @@ var dbDateFormat = require('../common').dbDateFormat;
 
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var emailValidate = require("email-validator");
-const validateAlertRequest  = require("../../AlertRequests").validateAlertRequest;
+const validateAlertRequest  = require("../../../../libs/AlertRequests").validateAlertRequest;
 
 // var mysql_pool = require('../../db/mysql').mysql_pool;
 

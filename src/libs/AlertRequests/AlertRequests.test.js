@@ -1,7 +1,7 @@
 var {
     verifyAlertRequests, validateAlertRequest
 } = require('./AlertRequests.js')
-var knexConnection = require('../db/common').getKnexConnection()
+var knexConnection = require('../../server/libs/db/common').getKnexConnection()
 //===========================================
 //===========================================
 if (require.main === module) {

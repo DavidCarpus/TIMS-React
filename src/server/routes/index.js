@@ -18,7 +18,7 @@ var {pullMenusFromDB} = require('../../libs/Menus');
 var {pullGroupData} = require('../../libs/Groups');
 var {pullLinksFromDB} = require('../../libs/Links');
 
-var {submitAlertRequestData} = require('../libs/AlertRequests');
+var {submitAlertRequestData} = require('../../libs/AlertRequests');
 var {getHomeCalendarDateRange} = require('../libs/date');
 var {pullAgendaIDFromDB, getCalendarDataForMonth, getCalendarDataForRange} = require('../libs/calendar/ICSCalendar');
 

@@ -1,7 +1,7 @@
 var Config = require('../../config'),
 configuration = new Config();
 
-let cellCarriers = require('../AlertRequests/cellCarriers.json')
+let cellCarriers = require('../../../libs/AlertRequests/cellCarriers.json')
 
 var validWebsiteHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
 // var validHostOrigins=['carpusconsulting.com', 'miltonnh-us.com', 'miltonnh.us', 'dev.miltonnh.us', 'test.miltonnh.us']
