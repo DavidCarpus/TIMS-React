@@ -3,24 +3,25 @@ const Organizations = require('./Organizations').default
 const MeetingDocument = require('./MeetingDocument').default
 const GroupDocuments = require('./GroupDocuments').default
 const GroupHelpfulInformation = require('./GroupHelpfulInformation').default
-const Notices = require('./Notices').default
+const News = require('./News').default
 
 const {     senderAuthenticate, emailFromEnvBlock} = require('./Util')
 
 const logUnprocessedEmails = false
 
 const processors = [
-    new AlertRequests(),
-    new Organizations(),
-    new MeetingDocument(),
-    new GroupDocuments(),
-    new GroupHelpfulInformation(),
-    new Notices(),
+    // new AlertRequests(),
+    // new GroupDocuments(),
+    // new GroupHelpfulInformation(),
+
+    // new MeetingDocument(),
+    // new Organizations(),
+    new News(),
 ]
 
 //=======================================================
 function processData(testData) {
-    // const start=3 .slice(start,start+1)
+    const start=0 // .slice(start,start+1)
     return Promise.all(testData.map( testCase =>{
         return Promise.all(processors.map( processor => {
             return processor.validData(testCase)
@@ -73,7 +74,9 @@ if (require.main === module) {
                 // console.log(require('util').inspect(complete.unprocessedResults, { depth: null, colors:true }));
                 console.log('***************');
             }
-            const errors = complete.badMessages.map(message=>({error:message[0].error, from:emailFromEnvBlock(message[0].testCase.header.from) }))
+            const errors = complete.badMessages.map(message=>({
+                error:message[0].error, from:emailFromEnvBlock(message[0].testCase.header.from) , subject:message[0].testCase.header.subject
+            }))
             if(errors.length > 0){
                 console.log('badMessages:', require('util').inspect(errors, { depth: null, colors:true }));
             }
