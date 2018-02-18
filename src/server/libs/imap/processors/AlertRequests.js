@@ -1,3 +1,7 @@
+var logAlertRequestConfirmation = require('../../../../libs/AlertRequests').logAlertRequestConfirmation;
+
+var knexConfig = require('../../../libs/db/knexfile.js')
+var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
 
 const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
@@ -55,6 +59,7 @@ function validData(message) {
 //==============================================
 function processMessage(message) {
     return extractRequestFromEmail(message)
+    .then(extractedEmail => logAlertRequestConfirmation(knex, extractedEmail))
 }
 //==============================================
 function getOptionsFromMessage(origEmailLines) {
