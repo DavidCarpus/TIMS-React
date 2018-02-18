@@ -201,13 +201,16 @@ function fetchPublicDocsFromDB(knex, filter) {
     if(filter.year) rawFilter = "YEAR(date) = "+filter.year
     delete filter.year
 
-    return knex('PublicRecords')
+    const query =  knex('PublicRecords')
     .select( ['PublicRecords.id','recordtype as type','fileLink as link','date','PublicRecords.pageLink as groupName','Groups.groupDescription','PublicRecords.recorddesc'])
     .leftJoin('Groups','Groups.groupName', 'PublicRecords.pageLink')
     .where(filter)
     .whereRaw(rawFilter)
     .orderBy("date","desc")
     .orderBy("recordtype")
+
+    // console.log('query', query.toString());
+    return query
 }
 
 function normalizeRecordType(recordType) {
