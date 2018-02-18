@@ -88,12 +88,6 @@ function extractRequestFromEmail(message) {
     const textLines = message.bodyData.split('\n').concat(message.header.subject)
     return Promise.all( textLines.map( getGroupNameFromTextLine ))
     .then( groupNames => {
-        const documentType = getDocumentTypeFromLines(textLines)
-        if(documentType==='NEWS'){
-            console.log(arguments.callee.name,message);
-            console.log('----------');
-        }
-        // console.log('extractRequestFromEmail:message', message);
         return Object.assign(
             expireableMessageData(groupNames, message, textLines),
             {documentType: getDocumentTypeFromLines(textLines)}
