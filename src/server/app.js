@@ -52,12 +52,11 @@ passport.use('local-signup', localSignupStrategy);
 passport.use('local-login', localLoginStrategy);
 
 //===============================================
-var IMapProcessor = require('./libs/imap').IMapProcessor;
-let imap = new IMapProcessor(configuration.imapProcess);
-
-var emailSubmit = require('./libs/emailProcessors').submit;
-var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
-var sendVerifications = require('./libs/AlertRequests').sendVerifications;
+// var IMapProcessor = require('./libs/imap').IMapProcessor;
+// let imap = new IMapProcessor(configuration.imapProcess);
+// var emailSubmit = require('./libs/emailProcessors').submit;
+// var sendAutomationEmail = require('./libs/emailProcessors/common').sendAutomationEmail;
+// var sendVerifications = require('../libs/AlertRequests').sendVerifications;
 
 //===============================================
 function sleep(ms) {
