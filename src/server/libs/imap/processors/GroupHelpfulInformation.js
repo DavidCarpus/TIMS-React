@@ -46,10 +46,9 @@ function getLinks(bodyTextLines) {
     const links = bodyTextLines.map(getURLFromTextLine).filter(line=>line!==null)
     if(links.length > 0 ){
         if(bodyTextLines.length > links.length ){
-            // TODO:
-            const TODO = 'Fetch descriptions from other lines'
-            console.log(TODO);
-            throw new Error(TODO)
+            //TODO: Fetch descriptions from other lines
+            console.log('--------------'); console.trace('TDB: Fetch descriptions from other lines'); console.log('--------------');;
+            throw new Error('TDB: Fetch descriptions from other lines' );
         }
     }
     const results = links.map(link=>{
