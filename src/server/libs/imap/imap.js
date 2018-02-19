@@ -6,7 +6,7 @@ const partIsPlainText = (part) => part.type == 'text' && part.subtype == 'plain'
 const partIsHTML = (part) => part.type == 'text' && part.subtype == 'html'
 const messageIDasFileName = (messageID) => messageID.replace('.','_').replace('@','_').replace('<','').replace('>','').trim()
 //============================================================
-function processMessages(credentials, processRoutine, mailbox='INBOX') {
+function processMessages(credentials, private_dir, processRoutine, mailbox='INBOX') {
     return imaps.connect( credentials )
     .then( sconnection => {
         return sconnection.openBox(mailbox)
@@ -22,7 +22,7 @@ function processMessages(credentials, processRoutine, mailbox='INBOX') {
                         if(partIsAttachment(part)){
                             return {
                                 filename: part.disposition.params.filename,
-                                tmpPath: configuration.PRIVATE_DIR + '/emailTmp/'
+                                tmpPath: private_dir + '/emailTmp/'
                                 + messageIDasFileName(message.attributes.envelope.messageId)
                                 + '_'+part.disposition.params.filename,
                                 data : partData
@@ -83,33 +83,4 @@ function processMessages(credentials, processRoutine, mailbox='INBOX') {
     })
 }
 //===============================================
-// =================================================
-if (require.main === module) {
-    const processEmailMessage = require('./processors/Processing').processEmailMessage
-    var Config = require('../../config'),
-    configuration = new Config();
-    const credentials = {imap: configuration.imapProcess.imapcredentials}
-    const stdout = (message) => console.log(JSON.stringify(message) + ',')
-
-    if (process.argv[2] === 'stdout') {
-        console.log('[');
-        processMessages(credentials, stdout, "INBOX")
-        .then( ()=>{
-            console.log('{}]');
-            return process.exit()
-        })
-    } else {
-        processMessages(credentials, processEmailMessage, "INBOX") // "INBOX.Tests.Alerts"
-        .then(messagesProcessed=> {
-            messagesProcessed.map(messageResult => {
-                const result = messageResult.filter(result=>typeof result.results !== 'undefined')
-                if(result.length > 0) console.log('processed ',require('util').inspect(result, { depth: null, colors:true }));
-            })
-            messagesProcessed.map(messageResult => {
-                const result = messageResult.filter(result=>typeof result.error !== 'undefined')
-                if(result.length > 0) console.log('Invalid ',require('util').inspect(result, { depth: null, colors:true }));
-            })
-        })
-        .then( ()=> process.exit() )
-    }
-}
+module.exports.processMessages = processMessages;
