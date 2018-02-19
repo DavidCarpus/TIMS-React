@@ -1,6 +1,6 @@
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 var emailValidate = require("email-validator");
-var sendAutomationEmail = require('../../server/libs/emailProcessors/common').sendAutomationEmail;
+var sendAutomationEmail = require('../../server/libs/common').sendAutomationEmail;
 
 let cellCarriers = require('./cellCarriers.json')
 
