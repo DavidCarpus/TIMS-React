@@ -39,7 +39,7 @@ function logPublicRecordInsertOnly(knexConnection, entry) {
             })
         } else {
             // console.log('logPublicRecordInsertOnly:Already exists.',entry);
-            entry.id = results[0];
+            entry.id = results[0].id;
             return Promise.resolve(entry);
         }
     })
