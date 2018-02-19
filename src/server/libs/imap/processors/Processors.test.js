@@ -1,50 +1,12 @@
-const AlertRequests = require('./AlertRequests').default
-const Organizations = require('./Organizations').default
-const MeetingDocument = require('./MeetingDocument').default
-const GroupDocuments = require('./GroupDocuments').default
-const GroupHelpfulInformation = require('./GroupHelpfulInformation').default
-const News = require('./News').default
-
-const {     senderAuthenticate, emailFromEnvBlock} = require('./Util')
+const processEmailMessage = require('./Processing').processEmailMessage
 
 const logUnprocessedEmails = false
 
-const processors = [
-    // new AlertRequests(),
-    // new GroupDocuments(),
-    // new GroupHelpfulInformation(),
-
-    // new MeetingDocument(),
-    // new Organizations(),
-    new News(),
-]
-
+//=======================================================
 //=======================================================
 function processData(testData) {
     const start=0 // .slice(start,start+1)
-    return Promise.all(testData.map( testCase =>{
-        return Promise.all(processors.map( processor => {
-            return processor.validData(testCase)
-            .then(valid => {
-                if(valid){
-                    if(processor.requiresAuthentication(testCase) && !senderAuthenticate(testCase)){
-                        return Promise.resolve({processor:processor.name, error:"Invalid Sender", testCase:testCase})
-                    }
-                    return processor.processMessage(testCase)
-                    .then(processorResults => {
-                        return {processor:processor.name,
-                            results:processorResults,
-                            from:testCase.header.from
-                        }
-                    })
-                }
-                return Promise.resolve({processor:processor.name, testCase:testCase})
-            })
-            .catch(err=> {
-                return Promise.resolve({processor:processor.name, error:err, testCase:testCase})
-            })
-        }))
-    }))
+    return Promise.all(testData.filter(msg=>typeof msg.header !== 'undefined' ).map( processEmailMessage) )
     .then(processResults =>{
         const processed = (testCaseResults)=> testCaseResults.filter(r=>r.results).length > 0
         const unprocessed = (testCaseResults)=> !processed(testCaseResults)
@@ -52,7 +14,7 @@ function processData(testData) {
 
         return {
             processedResults:processResults.filter(processed).map(entry=> entry.filter(e=>e.results)),
-            unprocessedResults:processResults.filter(unprocessed).map(entry=> entry[0].testCase ),
+            unprocessedResults:processResults.filter(unprocessed).map(entry=> entry[0].emailMessageData ),
             badMessages:processResults.filter(badMessage).map(entry=> entry.filter(e=>e.error))
         }
     })
