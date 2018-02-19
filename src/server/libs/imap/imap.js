@@ -53,7 +53,7 @@ function processMessages(credentials, private_dir, processRoutine, mailbox='INBO
                         }
                         // console.log('acc', acc);
                         return acc
-                    }, {header: message.attributes.envelope, seqNo: message.seqNo, attachments:[]} )
+                    }, {header: message.attributes.envelope, seqNo: message.seqNo, uid: message.attributes.uid, attachments:[]} )
                 })
                 .then(allEmailDataRetrieved => {
                     // console.log('--------------------');
