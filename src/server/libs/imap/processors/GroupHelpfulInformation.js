@@ -16,6 +16,7 @@ class Processor {
     requiresAuthentication(message){ return requiresAuthentication(message) }
     validData(message) {return validData(message)}
     processMessage(message) {return processMessage(message)}
+    successEmail(message) {return successEmail(message)}
 }
 //==============================================
 module.exports = {
@@ -29,6 +30,10 @@ module.exports = {
 function requiresAuthentication(message){
     return true
 }
+function successEmail(message) {
+    return `Successfully submitted a HelpfulInformation link for ${message.results[0].pageLink}.`
+}
+
 //==============================================
 function validData(message) {
     return extractRequestFromEmail(message)

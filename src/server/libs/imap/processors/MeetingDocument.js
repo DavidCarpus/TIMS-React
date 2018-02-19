@@ -19,6 +19,7 @@ class Processor {
     requiresAuthentication(message){ return requiresAuthentication(message) }
     validData(message) {return validData(message)}
     processMessage(message) {return processMessage(message)}
+    successEmail(message) {return successEmail(message)}
 }
 
 module.exports = {
@@ -34,6 +35,11 @@ const jsUcfirst=(string) => string.charAt(0).toUpperCase() + string.slice(1);
 function requiresAuthentication(message){
     return true
 }
+function successEmail(message) {
+    const mdy = `${message.results[0].date.getUTCMonth()+1}/${message.results[0].date.getDate()}/${message.results[0].date.getUTCFullYear()}`
+    return `Successfully submitted ${message.results[0].recordType} for ${mdy} ${message.results[0].pageLink} meeting.`
+}
+
 //==============================================
 function validData(message) {
     return extractRequestFromEmail(message)
