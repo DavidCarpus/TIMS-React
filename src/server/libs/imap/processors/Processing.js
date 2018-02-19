@@ -38,11 +38,7 @@ function processEmailMessage(emailMessageData) {
             return Promise.resolve({processor:processor.name, emailMessageData:emailMessageData})
         })
         .catch(err=> {
-            //TODO: Process error in processEmailMessage
-            console.log('--------------'); console.trace('TDB: Process error in processEmailMessage'); console.log('--------------');;
-            throw new Error('TDB: Process error in processEmailMessage' );
-            // console.log('err', err);
-            // return Promise.resolve({processor:processor.name, error:err, emailMessageData:emailMessageData})
+            return Promise.resolve({processor:processor.name, error:err, emailMessageData:emailMessageData})
         })
     }))
 }

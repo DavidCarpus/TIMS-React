@@ -1,4 +1,5 @@
 const processEmailMessage = require('./Processing').processEmailMessage
+const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
 const logUnprocessedEmails = false
 
@@ -27,7 +28,7 @@ if (require.main === module) {
 
         processData(testData)
         .then(complete => {
-            console.log(require('util').inspect(complete.processedResults, { depth: null, colors:true }));
+            if(complete.processedResults.length > 0) console.log(require('util').inspect(complete.processedResults, { depth: null, colors:true }));
 
             if(logUnprocessedEmails && complete.unprocessedResults.length > 0){
                 console.log('***************');
@@ -37,7 +38,7 @@ if (require.main === module) {
                 console.log('***************');
             }
             const errors = complete.badMessages.map(message=>({
-                error:message[0].error, from:emailFromEnvBlock(message[0].testCase.header.from) , subject:message[0].testCase.header.subject
+                    error:message[0].error, from:emailFromEnvBlock(message[0].emailMessageData.header.from) , subject:message[0].emailMessageData.header.subject
             }))
             if(errors.length > 0){
                 console.log('badMessages:', require('util').inspect(errors, { depth: null, colors:true }));
@@ -46,5 +47,6 @@ if (require.main === module) {
             return process.exit()
         }
         )
+        .catch(err=> console.log('err',err))
     }
 }
