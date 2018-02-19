@@ -43,21 +43,16 @@ function processMessages(credentials, private_dir, processRoutine, mailbox='INBO
                     })
                 ))
                 .then(partsRetrieved =>{
-                    // console.log('partsRetrieved', partsRetrieved.length);
-                    // console.log('----------');
                     return partsRetrieved.filter(item=>item!==null).reduce( (acc, val) => {
                         if(typeof val.filename  !== 'undefined'){
                             acc.attachments.push(val)
                         }else {
                             acc = Object.assign({}, acc, val)
                         }
-                        // console.log('acc', acc);
                         return acc
                     }, {header: message.attributes.envelope, seqNo: message.seqNo, uid: message.attributes.uid, attachments:[]} )
                 })
                 .then(allEmailDataRetrieved => {
-                    // console.log('--------------------');
-                    // console.log('allEmailDataRetrieved',allEmailDataRetrieved);
                     return Promise.all(allEmailDataRetrieved.attachments.map( attachment => {
                         return new Promise(function(resolve, reject) {
                             let writeStream = fs.createWriteStream(attachment.tmpPath);

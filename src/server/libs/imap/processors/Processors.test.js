@@ -23,7 +23,6 @@ function processData(testData) {
 //=======================================================
 if (require.main === module) {
     if (process.argv[2] !== undefined) {
-        // console.log('process', process.cwd()+'/'+process.argv[2]);
         const testData = require(process.cwd()+'/'+process.argv[2]);
 
         processData(testData)

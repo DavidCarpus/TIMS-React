@@ -68,6 +68,7 @@ function processMessage(message) {
                 fileLink: location.relativePath,
                 recorddesc:location.description || jsUcfirst(readyForDB.documentType.toLowerCase()),
                 mainpage: readyForDB.mainpage,
+                // TODO:  // action: ['ADD','REPLACE']
             }
             return logGroupDocumentRecord(knex, record);
         })))
