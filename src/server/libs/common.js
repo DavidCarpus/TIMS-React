@@ -1,9 +1,9 @@
-var Config = require('../../config'),
+var Config = require('../config'),
 configuration = new Config();
 
 var mailer = require('nodemailer-promise');
 
-var knexConfig = require('../db/knexfile.js')
+var knexConfig = require('./db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
 var nodemailer = require('nodemailer');
