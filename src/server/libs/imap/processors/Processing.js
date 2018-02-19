@@ -18,17 +18,12 @@ const processors = [
 ]
 
 function successEmail(emailMessageData) {
-    // processors.map( processor => {
-    //     return processor.successEmail(emailMessageData)
-    // })
-    //TODO: Check with each processor to see if success email needed
-    // console.log('--------------'); console.trace('TODO: Check with each processor to see if success email needed'); console.log('--------------');;
-    // throw new Error('TODO: Check with each processor to see if success email needed' );
-    if(emailMessageData.processor === 'MeetingDocument')
-        return "Submission Successful"
-    else {
-        return ''
-    }
+    // console.log('successEmail:emailMessageData', emailMessageData);
+    return processors.filter(processor=>processor.successEmail && emailMessageData.processor === processor.name)
+    .reduce( (acc, processor) => {
+        return acc+(emailMessageData.processor === processor.name)? processor.successEmail(emailMessageData):""
+    // }, emailMessageData.processor)
+    }, "")
 }
 
 function processEmailMessage(emailMessageData) {
