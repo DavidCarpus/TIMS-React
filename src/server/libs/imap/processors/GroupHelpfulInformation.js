@@ -8,8 +8,6 @@ var logHelpfulInformationRecord = require('../../../../libs/PublicDocs').logHelp
 
 var knexConfig = require('../../../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[ process.env.NODE_ENV || 'development']);
-
-
 //==============================================
 class Processor {
     constructor(){
@@ -70,8 +68,6 @@ function processMessage(message) {
             recorddesc:link.desc.length > 0? link.desc: null,
             mainpage: messageData.mainpage,
         }
-        // console.log('messageData', record);
-        // return Promise.resolve(record)
         return logHelpfulInformationRecord(knex, record)
     })))
 }
@@ -84,17 +80,3 @@ function extractRequestFromEmail(message) {
     })
 }
 //==============================================
-//==============================================
-if (require.main === module) {
-    if (process.argv[2] !== undefined) {
-        console.log('process', process.argv[2]);
-        const testData = require(process.cwd()+'/'+process.argv[2]);
-        const processor = new Processor()
-        // testData.filter( validData).map( testCase =>{
-        //     processMessage(testCase)
-        // })
-        testData.filter( processor.validData).map( testCase =>{
-            processor.processMessage(testCase)
-        })
-    }
-}

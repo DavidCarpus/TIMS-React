@@ -101,13 +101,13 @@ if (require.main === module) {
     } else {
         processMessages(credentials, processEmailMessage, "INBOX") // "INBOX.Tests.Alerts"
         .then(messagesProcessed=> {
-            // console.log('processed', messagesProcessed);
             messagesProcessed.map(messageResult => {
                 const result = messageResult.filter(result=>typeof result.results !== 'undefined')
-                if(result.length > 0){
-                    // console.log('processed **',result[0].processor, '**\n',require('util').inspect(result[0].results, { depth: null, colors:true }));
-                    console.log('processed ',require('util').inspect(result, { depth: null, colors:true }));
-                }
+                if(result.length > 0) console.log('processed ',require('util').inspect(result, { depth: null, colors:true }));
+            })
+            messagesProcessed.map(messageResult => {
+                const result = messageResult.filter(result=>typeof result.error !== 'undefined')
+                if(result.length > 0) console.log('Invalid ',require('util').inspect(result, { depth: null, colors:true }));
             })
         })
         .then( ()=> process.exit() )
