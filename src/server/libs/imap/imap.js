@@ -75,6 +75,13 @@ function processMessages(credentials, private_dir, processRoutine, mailbox='INBO
                 })
             }))
         })
+        .then( (processResults)=> {
+            sconnection.end()
+            return processResults
+        })
+        .catch(err=> {
+            console.log('Process err', err);
+        })
     })
 }
 //===============================================
