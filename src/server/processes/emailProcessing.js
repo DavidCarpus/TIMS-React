@@ -11,9 +11,6 @@ var imaps = require('imap-simple');
 var knexConfig = require('../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
-var IMapProcessor = require('../libs/imap').IMapProcessor;
-let imap = new IMapProcessor(configuration.imapProcess);
-var emailSubmit = require('../libs/emailProcessors').submit;
 var sendAutomationEmail = require('../libs/emailProcessors/common').sendAutomationEmail;
 
 var verifyAlertRequests = require('../libs/AlertRequests').verifyAlertRequests
