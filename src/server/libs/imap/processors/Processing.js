@@ -9,15 +9,30 @@ const {     senderAuthenticate, emailFromEnvBlock} = require('./Util')
 
 const processors = [
     new AlertRequests(),
-    // new GroupDocuments(),
-    // new GroupHelpfulInformation(),
-    // new News(),
-    // new MeetingDocument(),
+    new GroupDocuments(),
+    new GroupHelpfulInformation(),
+    new News(),
+    new MeetingDocument(),
 
     // new Organizations(),
 ]
 
+function successEmail(emailMessageData) {
+    // processors.map( processor => {
+    //     return processor.successEmail(emailMessageData)
+    // })
+    //TODO: Check with each processor to see if success email needed
+    // console.log('--------------'); console.trace('TODO: Check with each processor to see if success email needed'); console.log('--------------');;
+    // throw new Error('TODO: Check with each processor to see if success email needed' );
+    if(emailMessageData.processor === 'MeetingDocument')
+        return "Submission Successful"
+    else {
+        return ''
+    }
+}
+
 function processEmailMessage(emailMessageData) {
+    // console.log('emailMessageData',emailMessageData);
     return Promise.all(processors.map( processor => {
         return processor.validData(emailMessageData)
         .then(valid => {
@@ -30,7 +45,8 @@ function processEmailMessage(emailMessageData) {
                     // console.log('processorResults',require('util').inspect(processorResults, { depth: null }));
                     return {processor:processor.name,
                         results:processorResults,
-                        from:emailMessageData.header.from
+                        from:emailMessageData.header.from,
+                        uid: emailMessageData.uid,
                     }
                 })
                 // .catch(err=> {console.log('processMessage err', err); return err})
@@ -44,3 +60,4 @@ function processEmailMessage(emailMessageData) {
 }
 
 module.exports.processEmailMessage = processEmailMessage;
+module.exports.successEmail = successEmail;

@@ -83,4 +83,30 @@ function processMessages(credentials, private_dir, processRoutine, mailbox='INBO
     })
 }
 //===============================================
+function moveMessage(credentials, uid, destFolder) {
+    // console.log(arguments.callee.name,'moveMessage', uid, destFolder);
+    return imaps.connect( credentials )
+    .then( sconnection => {
+        return sconnection.openBox('INBOX').then( box => {
+            return sconnection.moveMessage(uid, 'INBOX.'+destFolder)
+            .then(movedMsg => {
+               return Promise.resolve(uid);
+           })
+           .catch(mvErr => {
+               return Promise.reject('mvErr:' + uid +':'+ mvErr);
+           })
+       })
+       .then(movedMsg => {
+          // return Promise.resolve(uid);
+          return Promise.resolve('Moved ' + uid + ' to ' + destFolder + '?')
+      })
+      .then( (processResults)=> {
+          sconnection.end()
+          return processResults
+      })
+   })
+
+}
+//===============================================
 module.exports.processMessages = processMessages;
+module.exports.moveMessage = moveMessage;

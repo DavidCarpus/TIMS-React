@@ -6,14 +6,14 @@ configuration = new Config();
 
 const launchedViaCLI = () =>  typeof process.env.SPAWNED === 'undefined'
 
-var fs      = require('fs');
-var imaps = require('imap-simple');
 var knexConfig = require('../libs/db/knexfile.js')
 var knex = require('knex')(knexConfig[configuration.mode]);
 
-var sendAutomationEmail = require('../libs/emailProcessors/common').sendAutomationEmail;
+const {processMessages, moveMessage} = require('../libs/imap')
+const {processEmailMessage, successEmail} = require('../libs/imap/processors/Processing')
 
-var verifyAlertRequests = require('../libs/AlertRequests').verifyAlertRequests
+var sendAutomationEmail = require('../libs/common').sendAutomationEmail;
+var verifyAlertRequests = require('../../libs/AlertRequests').verifyAlertRequests
 
 const emailProcessPort = configuration.expressPort+1
 
@@ -49,8 +49,49 @@ router.get('/alertVerificationProcess', function(req, res) {
 });
 
 app.use('/api', router);
-//---------------------------------------------
+
+//===================================
+function fileValidMessage(message) {
+    const credentials = {imap: configuration.imapProcess.imapcredentials}
+    const emailUID = message.uid
+    // console.log(message.processor, emailUID , require('util').inspect(message.results, { depth: null, colors:true }));
+    debugLog(arguments.callee.name, message.processor, emailUID , message.results);
+    const emailResponse = successEmail(message)
+    if(emailResponse.length > 0) debugLog('emailResponse', emailResponse );
+    return moveMessage(credentials, emailUID, 'Processed')
+}
+//===================================
+function fileInValidMessage(message) {
+    const credentials = {imap: configuration.imapProcess.imapcredentials}
+    const emailUID = message.emailMessageData.uid
+    debugLog(arguments.callee.name, message.processor, emailUID , message.error);
+    // debugLog('*** Err ***:', emailUID , message.processor,require('util').inspect(message.error, { depth: null, colors:true }));
+    return moveMessage(credentials, emailUID, 'Errors')
+}
+//===================================
 function imapProcess(delay, count=2) {
+    const credentials = {imap: configuration.imapProcess.imapcredentials}
+    processMessages(credentials, configuration.PRIVATE_DIR , processEmailMessage, "INBOX") // "INBOX.Tests.Alerts"
+    .then(messagesProcessed=> {
+        // console.log('messagesProcessed', messagesProcessed);
+        return Promise.all(messagesProcessed.map(messageResult=> Promise.all(
+            messageResult.filter(message=>typeof message.results !== 'undefined').map(fileValidMessage)
+            .concat(messageResult.filter(message=>typeof message.error !== 'undefined').map(fileInValidMessage))
+        )))
+    })
+    .then( (result)=> {
+        // if(configuration.mode === 'development')
+        if(result.length > 0) debugLog('imapProcess:result:cnt:'+count, result);
+        return sleep(delay).then(out =>{
+            if (count > 0) {
+                return imapProcess(delay, ++count)
+            }
+        })
+    })
+
+}
+//---------------------------------------------
+function old_imapProcess(delay, count=2) {
     // debugLog('imapProcess', count);
     imap.process()
     .then(pulledEmails => {
