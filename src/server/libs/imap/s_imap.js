@@ -1,113 +1,115 @@
 var imaps = require('imap-simple');
 var fs      = require('fs');
 
-var Config = require('../../config'),
-configuration = new Config();
-
 const partIsAttachment = (part) => part.disposition && part.disposition.type.toUpperCase() === 'ATTACHMENT'
 const partIsPlainText = (part) => part.type == 'text' && part.subtype == 'plain'
+const partIsHTML = (part) => part.type == 'text' && part.subtype == 'html'
 const messageIDasFileName = (messageID) => messageID.replace('.','_').replace('@','_').replace('<','').replace('>','').trim()
-
-function retrieveMessages(credentials, mailbox='INBOX') {
+//============================================================
+function processMessages(credentials, processRoutine, mailbox='INBOX') {
     return imaps.connect( credentials )
     .then( sconnection => {
-        return sconnection.openBox(mailbox).then( box =>
+        return sconnection.openBox(mailbox)
+        .then( box =>
             sconnection.search(['ALL'], { bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'], struct: true, envelope:true })
         )
-        .then(messages =>
-            messages.map(message => {
+        .then(messages =>{
+            return Promise.all(messages.map(message => {
                 var parts = imaps.getParts(message.attributes.struct);
-                return {// message: message,
-                    header: message.attributes.envelope,
-                    seqNo: message.seqNo,
-                    attachmentPromises : parts.filter( partIsAttachment)
-                    .map( part =>sconnection.getPartData(message, part).then( partData => ( {
-                            filename: part.disposition.params.filename,
-                            tmpPath:configuration.PRIVATE_DIR + '/emailTmp/'
+                return Promise.all(parts.map( part =>
+                    sconnection.getPartData(message, part)
+                    .then(partData => {
+                        if(partIsAttachment(part)){
+                            return {
+                                filename: part.disposition.params.filename,
+                                tmpPath: configuration.PRIVATE_DIR + '/emailTmp/'
                                 + messageIDasFileName(message.attributes.envelope.messageId)
                                 + '_'+part.disposition.params.filename,
-                            data: partData,
-                        }))
-                    ),
-                    bodyPromise: parts.filter( partIsPlainText )
-                    .map( part =>sconnection.getPartData(message, part).then( partData=>({
-                        // lines: partData.split('\n'),
-                        lines: partData.split('\n').map(line=>line.trim()).join('\n'),
-                        }))
-                    )
+                                data : partData
+                            }
+                        }
+                        else if (partIsPlainText(part)) {
+                            return {
+                                bodyData: partData.split('\n').map(line=>line.trim()).join('\n')
+                            }
+                        }
+                        else if (partIsHTML(part)) {
+                            return null
+                        }
+                        else {
+                            console.log(' ****** Unknown email part ****',{type:part.type , subtype:part.subtype} );
+                            return null
+                        }
+                    })
+                ))
+                .then(partsRetrieved =>{
+                    // console.log('partsRetrieved', partsRetrieved.length);
+                    // console.log('----------');
+                    return partsRetrieved.filter(item=>item!==null).reduce( (acc, val) => {
+                        if(typeof val.filename  !== 'undefined'){
+                            acc.attachments.push(val)
+                        }else {
+                            acc = Object.assign({}, acc, val)
+                        }
+                        // console.log('acc', acc);
+                        return acc
+                    }, {header: message.attributes.envelope, seqNo: message.seqNo, attachments:[]} )
+                })
+                .then(allEmailDataRetrieved => {
+                    // console.log('--------------------');
+                    // console.log('allEmailDataRetrieved',allEmailDataRetrieved);
+                    return Promise.all(allEmailDataRetrieved.attachments.map( attachment => {
+                        return new Promise(function(resolve, reject) {
+                            let writeStream = fs.createWriteStream(attachment.tmpPath);
+                            writeStream.on('error', function (err) { reject(err); });
+
+                            writeStream.on('open', function (fd) {
+                                writeStream.write(attachment.data);
+                                writeStream.end();
+                            })
+                            writeStream.on('finish', function () {
+                                delete attachment.data;
+                                resolve(attachment);
+                            });
+                        })
+                    }))
+                    .then( attachmentsWritten => Object.assign({}, allEmailDataRetrieved, {attachments:attachmentsWritten}) )
+                })
+                .then(readyToProcess => {
+                    return processRoutine(readyToProcess)
+                })
+            }))
+        })
+    })
+}
+//===============================================
+// =================================================
+if (require.main === module) {
+    const processEmailMessage = require('./processors/Processing').processEmailMessage
+    var Config = require('../../config'),
+    configuration = new Config();
+    const credentials = {imap: configuration.imapProcess.imapcredentials}
+    const stdout = (message) => console.log(JSON.stringify(message) + ',')
+
+    if (process.argv[2] === 'stdout') {
+        console.log('[');
+        processMessages(credentials, stdout, "INBOX")
+        .then( ()=>{
+            console.log('{}]');
+            return process.exit()
+        })
+    } else {
+        processMessages(credentials, processEmailMessage, "INBOX") // "INBOX.Tests.Alerts"
+        .then(messagesProcessed=> {
+            // console.log('processed', messagesProcessed);
+            messagesProcessed.map(messageResult => {
+                const result = messageResult.filter(result=>typeof result.results !== 'undefined')
+                if(result.length > 0){
+                    // console.log('processed **',result[0].processor, '**\n',require('util').inspect(result[0].results, { depth: null, colors:true }));
+                    console.log('processed ',require('util').inspect(result, { depth: null, colors:true }));
                 }
             })
-        )
-    })
-    .then(pulledMessages => {
-        return Promise.all(pulledMessages.map(pulledMessage => {
-            if(pulledMessage.bodyPromise )
-                return pulledMessage.bodyPromise[0]
-                .then(bodyData => {
-                    delete pulledMessage.bodyPromise
-                    return Object.assign({},pulledMessage, {bodyData:bodyData.lines})
-                })
-            else {
-                return Promise.resolve(pulledMessages)
-            }
-        }))
-    })
-    .then(pulledMessagesWithBodies => Promise.all(pulledMessagesWithBodies.map(pullAttachments)) )
-    .catch(err=> {
-        console.log('Err fetching attachments:', '\n***', err);
-    })
-}
-// =================================================
-function pullAttachments(message) {
-    if(typeof message.attachmentPromises==='undefined' || message.attachmentPromises.length <=0 ) return message
-
-    return Promise.all(message.attachmentPromises.map(attachmentPromise => {
-        return attachmentPromise.then(bodyData => (
-            {filename:bodyData.filename, tmpPath:bodyData.tmpPath, data:bodyData.data}
-        ))
-        .then(attachment => new Promise(function(resolve, reject) {
-            let writeStream = fs.createWriteStream(attachment.tmpPath);
-            writeStream.on('error', function (err) { reject(err); });
-
-            writeStream.on('open', function (fd) {
-                writeStream.write(attachment.data);
-                writeStream.end();
-            })
-            writeStream.on('finish', function () {
-                delete attachment.data;
-                resolve(attachment);
-            });
-        }))
-    }))
-    .then(pulledAttachments => {
-        delete message.attachmentPromises
-        return Object.assign({},message, {attachments:pulledAttachments})
-    })
-}
-
-const requiresAuthentication = (message) => message.header.subject.indexOf('alert registration') === -1
-const doesNotRequireAuthentication = (message) => ! requiresAuthentication(message)
-
-if (require.main === module) {
-    const credentials = {imap: configuration.imapProcess.imapcredentials}
-    // retrieveMessages(credentials, "INBOX.Tests.Alerts")
-
-    console.log('[');
-    retrieveMessages(credentials, "INBOX")
-    .then( (results) => {
-        // const emailsToProcess = results.filter(doesNotRequireAuthentication)
-        const emailsToProcess = results
-        emailsToProcess.map( (messageWithPart, index ) => {
-            console.log(JSON.stringify(messageWithPart));
-            // console.log(require('util').inspect(messageWithPart, { depth: null }));
-
-            if(index+1 !==  emailsToProcess.length) console.log(',');
-            return 1
         })
-        // console.log('results', require('util').inspect(results, { depth: null }));
-    })
-    .then( ()=>{
-        console.log(']');
-        return process.exit()
-    })
+        .then( ()=> process.exit() )
+    }
 }
