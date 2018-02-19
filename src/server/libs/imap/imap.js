@@ -1,236 +1,115 @@
-var fs      = require('fs');
 var imaps = require('imap-simple');
-var extractHeaderData = require('./helperMethods').extractHeaderData;
-var extractDBData = require('./helperMethods').extractDBData;
+var fs      = require('fs');
 
-var imapValidator = require('../imapValidator');
-
-var Config = require('../../config'),
-configuration = new Config();
-
-// const privateDir = '../../../private/'+process.env.REACT_APP_MUNICIPALITY;
-const privateDir = configuration.PRIVATE_DIR
-
-// console.log('__dirname',__dirname);
-
-const mergeParents = (path) => { // Merge references to parent directories
-    return path.replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '').replace(/\/[\w]+\/\.\./, '')
-}
-
-const downloadPathsToPrivate = (paths) =>
-Object.keys(paths).map(key=> ({[key]:mergeParents(__dirname+'/'+privateDir+'/'+paths[key])}))[0]
-
-//===============================================
-class IMapProcessor {
-    constructor(imapConf){
-        this.config = imapConf.imapcredentials;
-        this.downloadPaths = imapConf.downloadPath;
-    }
-    process(config=this.config, paths=this.downloadPaths) {
-        return processSimpleEmail(imaps, {imap: this.config}, downloadPathsToPrivate(paths))
-    }
-    archiveMessage(uid, destFolder='Processed'){ //destFolder element of {Processed','Errors'}
-        return imaps.connect({imap: this.config})
-        .then( sconnection => {
-            return sconnection.openBox('INBOX').then( box => {
-                return sconnection.moveMessage(uid, 'INBOX.'+destFolder)
-                .then(movedMsg => {
-                   return Promise.resolve(uid);
-               })
-               .catch(mvErr => {
-                   return Promise.reject('mvErr:' + uid +':'+ mvErr);
-               })
-           })
-           .then(movedMsg => {
-              return Promise.resolve(uid);
-          })
-       })
-   }
-}
-
-module.exports.IMapProcessor = IMapProcessor;
-//===============================================
-//===============================================
-function processSimpleEmail(imapLib, credentials, paths) {
-    // console.log('processSimpleEmail:',paths,credentials);
-    return imapLib.connect(credentials)
+const partIsAttachment = (part) => part.disposition && part.disposition.type.toUpperCase() === 'ATTACHMENT'
+const partIsPlainText = (part) => part.type == 'text' && part.subtype == 'plain'
+const partIsHTML = (part) => part.type == 'text' && part.subtype == 'html'
+const messageIDasFileName = (messageID) => messageID.replace('.','_').replace('@','_').replace('<','').replace('>','').trim()
+//============================================================
+function processMessages(credentials, processRoutine, mailbox='INBOX') {
+    return imaps.connect( credentials )
     .then( sconnection => {
-
-        return sconnection.openBox('INBOX').then( box => {
-            var searchCriteria = ['ALL'];
-            var fetchOptions = { bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'], struct: true, envelope:true };
-            return sconnection.search(searchCriteria, fetchOptions);
-        })
-
-        .then(messages => { //Pull header data and store promises to retrieve message body and attachments
+        return sconnection.openBox(mailbox)
+        .then( box =>
+            sconnection.search(['ALL'], { bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)'], struct: true, envelope:true })
+        )
+        .then(messages =>{
             return Promise.all(messages.map(message => {
-                attachmentPromises = [];
-                bodyPromises = [];
                 var parts = imaps.getParts(message.attributes.struct);
-                attachmentPromises = attachmentPromises.concat(parts.filter(function (part) {
-                    return part.disposition && part.disposition.type.toUpperCase() === 'ATTACHMENT';
-                }).map(function (part) {
-                    return sconnection.getPartData(message, part)
-                    .then(function (partData) {
-                        return {
-                            filename: part.disposition.params.filename,
-                            data: partData,
-                            uid: message.attributes.uid,
-                            msg: message.attributes
-                        };
-                    });
-                }));
-                bodyPromises = bodyPromises.concat(parts.filter( part => {
-                    return part.type == 'text' && part.subtype == 'plain';
-                }).
-                map(function (part) {
-                    return sconnection.getPartData(message, part)
-                    .then(function (partData) {
-                        return {
-                            data: partData,
-                            uid: message.attributes.uid,
-                            msg: message.attributes
-                        };
-                    });
+                return Promise.all(parts.map( part =>
+                    sconnection.getPartData(message, part)
+                    .then(partData => {
+                        if(partIsAttachment(part)){
+                            return {
+                                filename: part.disposition.params.filename,
+                                tmpPath: configuration.PRIVATE_DIR + '/emailTmp/'
+                                + messageIDasFileName(message.attributes.envelope.messageId)
+                                + '_'+part.disposition.params.filename,
+                                data : partData
+                            }
+                        }
+                        else if (partIsPlainText(part)) {
+                            return {
+                                bodyData: partData.split('\n').map(line=>line.trim()).join('\n')
+                            }
+                        }
+                        else if (partIsHTML(part)) {
+                            return null
+                        }
+                        else {
+                            console.log(' ****** Unknown email part ****',{type:part.type , subtype:part.subtype} );
+                            return null
+                        }
+                    })
+                ))
+                .then(partsRetrieved =>{
+                    // console.log('partsRetrieved', partsRetrieved.length);
+                    // console.log('----------');
+                    return partsRetrieved.filter(item=>item!==null).reduce( (acc, val) => {
+                        if(typeof val.filename  !== 'undefined'){
+                            acc.attachments.push(val)
+                        }else {
+                            acc = Object.assign({}, acc, val)
+                        }
+                        // console.log('acc', acc);
+                        return acc
+                    }, {header: message.attributes.envelope, seqNo: message.seqNo, attachments:[]} )
                 })
-            )
-            let out = {header:message, bodyPromises: bodyPromises, attachmentPromises: attachmentPromises,uid: message.attributes.uid, }
-            return Promise.resolve(out);
-            })); // End Promise.all messages
-        })
+                .then(allEmailDataRetrieved => {
+                    // console.log('--------------------');
+                    // console.log('allEmailDataRetrieved',allEmailDataRetrieved);
+                    return Promise.all(allEmailDataRetrieved.attachments.map( attachment => {
+                        return new Promise(function(resolve, reject) {
+                            let writeStream = fs.createWriteStream(attachment.tmpPath);
+                            writeStream.on('error', function (err) { reject(err); });
 
-        // .then(withAttachPromises => { // quick validate email envelope
-        //     return imapValidator.validateHostOrigins(withAttachPromises);
-        // })
-
-        .then(validSender => { // Fetch email text body form server
-            return Promise.all(validSender.map(attach => {
-                delete attach.header.attributes.struct // We do not need this as we now have promises to request needed data
-                return Promise.all(attach.bodyPromises)
-                .then(bodyData => {
-                    // TODO: ?? Check to make sure bodyData array is len 1??
-                    attach.bodyData = bodyData[0].data;
-                    delete attach.bodyPromises;
-                    return Promise.resolve(attach);
+                            writeStream.on('open', function (fd) {
+                                writeStream.write(attachment.data);
+                                writeStream.end();
+                            })
+                            writeStream.on('finish', function () {
+                                delete attachment.data;
+                                resolve(attachment);
+                            });
+                        })
+                    }))
+                    .then( attachmentsWritten => Object.assign({}, allEmailDataRetrieved, {attachments:attachmentsWritten}) )
+                })
+                .then(readyToProcess => {
+                    return processRoutine(readyToProcess)
                 })
             }))
         })
-
-        .then(withBodies => { // Extract out data from message body for database
-            return Promise.resolve(withBodies.map(msgWithBody => {
-                msgWithBody.DBData = extractDBData(msgWithBody);
-                msgWithBody.header = extractHeaderData(msgWithBody);
-                return msgWithBody;
-            }))
-        })
-
-        .then(withExtractedBodies=>{ // Validate database field data and write out attachments
-            return Promise.all(withExtractedBodies.map(msgWithBody => {
-                // if (! imapValidator.hasAllRequiredData(msgWithBody) ){
-                //     msgWithBody.err = (msgWithBody.err  || '') + 'Missing required information.(date, type, group, etc..).\n';
-                // }
-                // if (! imapValidator.requiredAttachmentsPresent(msgWithBody, configuration) ){
-                //     msgWithBody.err = (msgWithBody.err  || '') +'Missing required attachments.\n';
-                // }
-
-                if (typeof msgWithBody.err != 'undefined') {
-                    delete msgWithBody.attachmentPromises;
-                    return Promise.resolve(msgWithBody);
-                }
-
-                msgWithBody.attachmentCnt = msgWithBody.attachmentPromises.length;
-                return retrieveAttachmentData(msgWithBody, paths.notices);
-            }))
-        })
-
-        .then(done => {
-            if (done.length == 0) {
-                sconnection.end();
-            }
-            // console.log('Done:', done);
-            return Promise.resolve(done);
-        })
-        .catch(Err => {
-            console.log('messages Err:', Err);
-        })
-    }) // Connection was successful
-    .then(res =>{
-        // console.log('Done res:', res);
-        return Promise.resolve(res);
-    })
-    .catch(connErr => {
-        return Promise.reject('connErr:'+ connErr);
     })
 }
-//=======================================
-function retrieveAttachmentData(msgWithBody, paths) {
-    if (msgWithBody.attachmentPromises && msgWithBody.attachmentPromises.length > 0) {
-        return Promise.all(msgWithBody.attachmentPromises)
-        .then(retrievedAttachmentData => {
-            delete msgWithBody.bodyData;  //No need to keep as we have required field data
-            msgWithBody.attachmentLocations = [];
-            return Promise.all(retrievedAttachmentData.map(attach => {
-                return writeAttachment(attach, paths)
-                .then(writtenAttachment => {
-                    msgWithBody.attachmentLocations = msgWithBody.attachmentLocations.concat(writtenAttachment.filename);
-                    return Promise.resolve(msgWithBody);
-                })
-            }))
-        })
-        .then(retrieved => {
-            let promisesRemoved = retrieved.map( singleRetrieval => {
-                delete singleRetrieval.attachmentPromises;
-                return singleRetrieval;
-            })
-            return Promise.resolve(msgWithBody);
-        });
-    } else {
-        delete msgWithBody.attachmentPromises;
-        return Promise.resolve(msgWithBody);
-    }
-}
+//===============================================
 // =================================================
-function writeAttachment(attachment, path) {
-    if (typeof attachment.filename != 'undefined') {
-        let filename = ""+path + attachment.uid + '_' + attachment.filename
-        return new Promise(function(resolve, reject) {
-            let writeStream = fs.createWriteStream(filename);
-            writeStream.on('error', function (err) {
-                reject(err);
-            });
-            writeStream.on('open', function (fd) {
-                writeStream.write(attachment.data);
-                writeStream.end();
-                attachment.filename = filename;
-                delete attachment.data;
-                resolve(attachment);
-            })
-
-        })
-    } else {
-        let err = "No attachment for msg: " + attachment.uid;
-        return Promise.resolve(Object.assign(attachment,  {error: err}))
-    }
-}
-// =================================================
-// https://stackoverflow.com/questions/6398196/node-js-detect-if-called-through-require-or-directly-by-command-line
 if (require.main === module) {
-    console.log('called directly');
-    let imapConf = configuration.imapProcess;
-    console.log('imapConf.downloadPath',imapConf.downloadPath, downloadPathsToPrivate(imapConf.downloadPath));
-    processSimpleEmail(imaps, {imap: imapConf.imapcredentials}, downloadPathsToPrivate(imapConf.downloadPath) )
-    .then(emails => {
-        console.log('emails',emails);
-        emails.map(email => {
-            console.log('======================');
-            console.log('Processed simple email:' + require('util').inspect(email, { depth: null }));
+    const processEmailMessage = require('./processors/Processing').processEmailMessage
+    var Config = require('../../config'),
+    configuration = new Config();
+    const credentials = {imap: configuration.imapProcess.imapcredentials}
+    const stdout = (message) => console.log(JSON.stringify(message) + ',')
+
+    if (process.argv[2] === 'stdout') {
+        console.log('[');
+        processMessages(credentials, stdout, "INBOX")
+        .then( ()=>{
+            console.log('{}]');
+            return process.exit()
         })
-        // console.log('*** Done.', done);
-        process.exit();
-    })
-    .catch(err => {
-        console.log('err:', err);
-    })
-// } else {
-//     console.log('required as a module');
+    } else {
+        processMessages(credentials, processEmailMessage, "INBOX") // "INBOX.Tests.Alerts"
+        .then(messagesProcessed=> {
+            messagesProcessed.map(messageResult => {
+                const result = messageResult.filter(result=>typeof result.results !== 'undefined')
+                if(result.length > 0) console.log('processed ',require('util').inspect(result, { depth: null, colors:true }));
+            })
+            messagesProcessed.map(messageResult => {
+                const result = messageResult.filter(result=>typeof result.error !== 'undefined')
+                if(result.length > 0) console.log('Invalid ',require('util').inspect(result, { depth: null, colors:true }));
+            })
+        })
+        .then( ()=> process.exit() )
+    }
 }
