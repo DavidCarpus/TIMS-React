@@ -38,10 +38,10 @@ function successEmail(message) {
 function validData(message) {
     return extractRequestFromEmail(message)
     .then(extractedData=> {
-        if(extractedData.attachmentCount > 0) return false;
-        if(extractedData.body.join('\n').trim().length === 0) return false;
-        if(extractedData.body.join('\n').trim().toUpperCase().indexOf('HTTP') === -1) return false
-        return true
+        if(extractedData.attachmentCount > 0) return Promise.resolve(false);
+        if(extractedData.body.join('\n').trim().length === 0) return Promise.resolve(false);
+        if(extractedData.body.join('\n').trim().toUpperCase().indexOf('HTTP') === -1) return Promise.resolve(false);
+        return Promise.resolve(message);
     })
 }
 //==============================================

@@ -1,16 +1,20 @@
 const {processEmailMessage, successEmail} = require('./Processing')
 const emailFromEnvBlock = (block) => block[0].mailbox + '@' + block[0].host
 
-const logUnprocessedEmails = false
+const logUnprocessedEmails = true
 
 //=======================================================
 //=======================================================
 function processData(testData) {
-    const start=0 // .slice(start,start+1)
-    return Promise.all(testData.filter(msg=>typeof msg.header !== 'undefined' ).map( processEmailMessage) )
+    const start=2 // .slice(start,start+1)
+    return Promise.all(testData.filter(msg=>typeof msg.header !== 'undefined' )
+    // .slice(2)
+    // .slice(start,start+1)
+    .map( processEmailMessage) )
     .then(processResults =>{
+        // console.log('processResults', processResults);
         const processed = (testCaseResults)=> testCaseResults.filter(r=>r.results).length > 0
-        const unprocessed = (testCaseResults)=> !processed(testCaseResults)
+        const unprocessed = (testCaseResults)=> !processed(testCaseResults) && !badMessage(testCaseResults)
         const badMessage = (testCaseResults)=> testCaseResults.filter(r=>r.error).length > 0
 
         return {
@@ -30,11 +34,13 @@ if (require.main === module) {
                 break;
             case 'ERR':
                 console.log('ERROR:', require('util').inspect(
-                    { error:msg.error, from:emailFromEnvBlock(msg.emailMessageData.header.from) ,
-                        subject:msg.emailMessageData.header.subject}, { depth: null, colors:true }));
+                    // msg
+                    { error:msg.error, from:emailFromEnvBlock(msg.emailMessageData.header.from) ,subject:msg.emailMessageData.header.subject}
+                    , { depth: null, colors:true }));
                 break;
             case 'UNPROCESSED':
                 if(logUnprocessedEmails) console.log('***** unprocessedResults *****\n', msg, '\n*****');
+                // if(logUnprocessedEmails) console.log('***** unprocessedResults *****\n', require('util').inspect(msg, { depth: null, colors:true }), '\n*****');
                 break;
             default:
         }
@@ -45,9 +51,8 @@ if (require.main === module) {
     .then(complete => {
         // complete.processedResults.map(msg=>logResult('SUCCESS', msg))
         console.log('getSuccessMail', complete.processedResults.map(getSuccessMail));
-
-        // complete.unprocessedResults.map(msg=>logResult('UNPROCESSED', msg))
-        // complete.badMessages.map(msg=>logResult('ERR', msg[0]))
+        complete.unprocessedResults.map(msg=>logResult('UNPROCESSED', msg))
+        complete.badMessages.map(msg=>logResult('ERR', msg[0]))
         return process.exit()
     }
     )

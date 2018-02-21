@@ -50,9 +50,9 @@ function validData(message) {
     .then(extractedData=> {
         // console.log('validData?');
         // console.log('extractedData.options: ', Object.keys(extractedData.options).length);
-        if (extractedData.alertRequestID <= 0) return false
-        if (Object.keys(extractedData.options).length > 0 ) return true
-        return false
+        if (extractedData.alertRequestID <= 0) return Promise.resolve(false);
+        if (Object.keys(extractedData.options).length > 0 ) return Promise.resolve(message);
+        return Promise.resolve(false);
     })
     // return Promise.resolve(message.header.subject.indexOf('alert registration') !== -1)
 }

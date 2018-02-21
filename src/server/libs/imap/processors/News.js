@@ -2,6 +2,7 @@ const {
     getGroupNameFromTextLine,
     expireableMessageData,
     moveAttachments,
+    documentTypeFromBodyLines,
 } = require('./Util')
 
 var logGroupDocumentRecord = require('../../../../libs/PublicDocs').logGroupDocumentRecord;
@@ -39,9 +40,11 @@ function successEmail(message) {
 function validData(message) {
     return extractRequestFromEmail(message)
     .then(extractedData=> {
-        if(extractedData.attachmentCount <= 0) return false;
-        if(!extractedData.documentType) return false;
-        return true
+        if(extractedData.attachmentCount <= 0) return Promise.resolve(false);
+        if(!extractedData.documentType) return Promise.resolve(false);
+        if(documentTypeFromBodyLines(extractedData.body) !== 'NEWS')  Promise.resolve(false);
+
+        return Promise.resolve(message);
     })
 }
 //======================================================

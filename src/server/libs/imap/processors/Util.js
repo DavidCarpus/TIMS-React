@@ -47,6 +47,19 @@ function extractPossibleDatesFromLine(line) {
     // console.log('dateMatches',dateMatches);
     return dateMatches
 }
+//==========================================
+function documentTypeFromBodyLines(bodyLines){
+    return bodyLines.reduce( (acc,val) => {
+        if([
+            'AGENDA',
+            'MINUTES',
+            'NEWS'
+        ].includes(val.toUpperCase() ))
+            acc = val.toUpperCase()
+        return acc
+    }, "")
+}
+
 
 //==========================================
 function expireableMessageData(groupNames, message, textLines){
@@ -198,3 +211,4 @@ module.exports.senderAuthenticate = senderAuthenticate
 module.exports.emailFromEnvBlock = emailFromEnvBlock
 module.exports.moveAttachments = moveAttachments
 module.exports.getURLFromTextLine = getURLFromTextLine
+module.exports.documentTypeFromBodyLines = documentTypeFromBodyLines
