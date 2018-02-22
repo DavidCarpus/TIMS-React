@@ -13,8 +13,7 @@ const processors = [
     new GroupHelpfulInformation(),
     new News(),
     new MeetingDocument(),
-
-    // new Organizations(),
+    new Organizations(),
 ]
 
 function successEmail(emailMessageData) {

@@ -1,5 +1,57 @@
 
 //================================================
+function updateOrganization(dbConn, orgData) {
+    const groupsData = {pageLink:orgData.name, groupName:orgData.name, groupDescription:orgData.description}
+    const menuData = {
+        pageLink:"/"+orgData.name,
+        fullLink:  (orgData.type=== 'Board' || orgData.type=== 'Committee' ) ?  `/BoardsAndCommittees/${orgData.name}`: orgData.name,
+        description:orgData.description
+    }
+    console.log('updateOrganization', groupsData);
+    return  dbConn('Groups')
+    .where({pageLink:orgData.name})
+    .update( groupsData)
+    .then(updateResults => Object.assign({}, orgData, menuData) )
+
+    //TODO: Implementation of updateOrganization needed
+    console.log('--------------'); console.trace(`TODO: Implementation of updateOrganization needed`); console.log('--------------');;
+    throw new Error('TODO: Implementation of updateOrganization needed' );
+}
+//================================================
+function createNewOrganization(dbConn, orgData) {
+    // console.log('orgData', orgData);
+    const groupsData = {pageLink:orgData.name, groupName:orgData.name, groupDescription:orgData.description}
+    const menuData = {
+        pageLink:"/"+orgData.name,
+        fullLink:  (orgData.type=== 'Board' || orgData.type=== 'Committee' ) ?  `/BoardsAndCommittees/${orgData.name}`: orgData.name,
+        description:orgData.description
+    }
+    return  dbConn('Groups')
+    .select( 'groupName')
+    .where( {groupName: groupsData.groupName} )
+    .then(existingGroupData => {
+        if(existingGroupData.length > 0) return Promise.reject(`Organization ${groupsData.groupName} already exists.`)
+
+        return dbConn.transaction(function (t) {
+            return dbConn("Groups")
+            .transacting(t)
+            .insert(groupsData)
+            .then(function (response) {
+                return dbConn('Menus')
+                .transacting(t)
+                .insert(menuData)
+                .then(()=>response[0]) //return the GROUP ID, not menu
+            })
+            .then((gid)=> {
+                t.commit;
+                return gid
+            })
+            .then( id => Object.assign({}, orgData, menuData, {id:id}) )
+            .catch(t.rollback)
+        })
+    })
+}
+//================================================
 function pullGroupData(dbConn, groupName) {
     return pullGroupPageText(dbConn, groupName)
     .then(pageText =>
@@ -74,3 +126,5 @@ if (require.main === module) {
 }
 //================================================
 module.exports.pullGroupData = pullGroupData;
+module.exports.createNewOrganization = createNewOrganization;
+module.exports.updateOrganization = updateOrganization;
